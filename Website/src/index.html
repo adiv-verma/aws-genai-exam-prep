@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AWS Certified Generative AI Developer – Professional (AIP-C01) | Exam Guide</title>
+<meta name="description" content="What the AWS Certified Generative AI Developer – Professional (AIP-C01) exam covers, how to prepare, and what to study — domain breakdown, format, and a study plan.">
+<style>
+  :root{
+    --ink:#0b1524;
+    --ink-soft:#3a4a5e;
+    --paper:#f7f8fa;
+    --card:#ffffff;
+    --line:#e3e7ee;
+    --accent:#e8622c;
+    --accent-dark:#c94f1f;
+    --navy:#0f2540;
+    --navy-2:#16345c;
+    --good:#1a7f5a;
+    color-scheme: light;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:var(--paper);
+    color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    line-height:1.55;
+  }
+  a{color:var(--accent-dark);}
+  .wrap{max-width:1080px;margin:0 auto;padding:0 24px;}
+
+  /* NAV */
+  .nav{
+    position:sticky;top:0;z-index:50;
+    background:rgba(15,37,64,.96);
+    backdrop-filter:blur(6px);
+    border-bottom:1px solid rgba(255,255,255,.08);
+  }
+  .nav .wrap{display:flex;align-items:center;justify-content:space-between;height:56px;}
+  .nav-brand{color:#fff;font-weight:700;font-size:14px;letter-spacing:.02em;}
+  .nav-brand span{color:var(--accent);}
+  .nav-links{display:flex;gap:22px;list-style:none;margin:0;padding:0;}
+  .nav-links a{color:#cdd8e6;text-decoration:none;font-size:13.5px;font-weight:500;}
+  .nav-links a:hover{color:#fff;}
+  .nav-cta{
+    background:var(--accent);color:#fff;text-decoration:none;font-size:13px;font-weight:700;
+    padding:8px 14px;border-radius:6px;white-space:nowrap;
+  }
+  @media (max-width:720px){ .nav-links{display:none;} }
+
+  /* HERO */
+  .hero{
+    background:
+      radial-gradient(900px 420px at 85% -10%, rgba(232,98,44,.35), transparent 60%),
+      linear-gradient(180deg,var(--navy) 0%, var(--navy-2) 100%);
+    color:#fff;
+    padding:64px 0 48px;
+  }
+  .eyebrow{
+    display:inline-block;font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;
+    color:#ffd8c4;background:rgba(232,98,44,.18);border:1px solid rgba(232,98,44,.4);
+    padding:5px 10px;border-radius:999px;margin-bottom:18px;
+  }
+  .hero h1{
+    font-size:clamp(28px,4.2vw,44px);line-height:1.12;margin:0 0 14px;font-weight:800;letter-spacing:-.01em;
+  }
+  .hero .code{color:var(--accent);font-family:ui-monospace,SFMono-Regular,Menlo,monospace;}
+  .hero p.lead{
+    font-size:17px;color:#c9d5e3;max-width:640px;margin:0 0 28px;
+  }
+  .stat-row{
+    display:grid;grid-template-columns:repeat(5,1fr);gap:1px;
+    background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.12);
+    border-radius:12px;overflow:hidden;margin-top:8px;
+  }
+  .stat{background:rgba(255,255,255,.04);padding:16px 14px;text-align:center;}
+  .stat .n{font-size:20px;font-weight:800;color:#fff;}
+  .stat .l{font-size:11.5px;color:#a9b8cb;text-transform:uppercase;letter-spacing:.04em;margin-top:3px;}
+  @media (max-width:720px){
+    .stat-row{grid-template-columns:repeat(2,1fr);}
+  }
+
+  /* SECTION shell */
+  section{padding:56px 0;}
+  section.alt{background:#eef1f6;}
+  h2.h{
+    font-size:26px;font-weight:800;letter-spacing:-.01em;margin:0 0 8px;color:var(--ink);
+  }
+  .kicker{
+    font-size:12.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--accent-dark);
+    margin:0 0 8px;
+  }
+  .section-lead{color:var(--ink-soft);max-width:680px;margin:0 0 32px;font-size:15.5px;}
+
+  /* WHAT IS IT */
+  .grid-2{display:grid;grid-template-columns:1.1fr .9fr;gap:32px;}
+  @media (max-width:820px){.grid-2{grid-template-columns:1fr;}}
+  .card{
+    background:var(--card);border:1px solid var(--line);border-radius:14px;padding:22px 24px;
+  }
+  .card h3{margin:0 0 12px;font-size:15px;font-weight:700;}
+  ul.tick{list-style:none;margin:0;padding:0;}
+  ul.tick li{
+    position:relative;padding-left:24px;margin-bottom:10px;font-size:14.5px;color:var(--ink-soft);
+  }
+  ul.tick li::before{
+    content:"";position:absolute;left:0;top:6px;width:9px;height:9px;border-radius:2px;
+    background:var(--accent);
+  }
+  ul.cross li::before{background:#9aa6b5;}
+  .badge-row{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px;}
+  .pill{
+    font-size:12px;font-weight:600;background:#fff2ec;color:var(--accent-dark);border:1px solid #f6cdb8;
+    padding:4px 10px;border-radius:999px;
+  }
+
+  /* DOMAINS */
+  .domain{
+    background:var(--card);border:1px solid var(--line);border-radius:14px;
+    padding:20px 24px;margin-bottom:14px;
+  }
+  .domain-head{display:flex;align-items:center;gap:14px;flex-wrap:wrap;justify-content:space-between;}
+  .domain-title{display:flex;align-items:baseline;gap:10px;}
+  .domain-num{
+    font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:13px;color:#9aa6b5;font-weight:700;
+  }
+  .domain-title h3{margin:0;font-size:16.5px;font-weight:700;}
+  .domain-weight{font-size:15px;font-weight:800;color:var(--accent-dark);white-space:nowrap;}
+  .bar-track{height:8px;background:#eef0f4;border-radius:5px;margin:12px 0 14px;overflow:hidden;}
+  .bar-fill{height:100%;background:linear-gradient(90deg,var(--accent),var(--accent-dark));border-radius:5px;}
+  .task-list{display:flex;flex-wrap:wrap;gap:8px;}
+  .task-chip{
+    font-size:12.5px;color:var(--ink-soft);background:var(--paper);border:1px solid var(--line);
+    padding:5px 10px;border-radius:8px;
+  }
+
+  /* PREP TIMELINE */
+  .steps{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;}
+  @media (max-width:900px){.steps{grid-template-columns:repeat(2,1fr);}}
+  @media (max-width:560px){.steps{grid-template-columns:1fr;}}
+  .step{
+    background:var(--card);border:1px solid var(--line);border-radius:14px;padding:20px;position:relative;
+  }
+  .step .num{
+    width:30px;height:30px;border-radius:8px;background:var(--navy);color:#fff;font-weight:800;font-size:13px;
+    display:flex;align-items:center;justify-content:center;margin-bottom:12px;
+  }
+  .step h4{margin:0 0 8px;font-size:14.5px;font-weight:700;}
+  .step p{margin:0;font-size:13.5px;color:var(--ink-soft);}
+
+  /* SERVICES */
+  .svc-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;}
+  @media (max-width:820px){.svc-grid{grid-template-columns:repeat(2,1fr);}}
+  @media (max-width:560px){.svc-grid{grid-template-columns:1fr;}}
+  .svc-card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px 20px;}
+  .svc-card h4{
+    margin:0 0 10px;font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.03em;color:var(--navy-2);
+  }
+  .svc-chips{display:flex;flex-wrap:wrap;gap:6px;}
+  .svc-chip{
+    font-size:12.5px;background:var(--paper);border:1px solid var(--line);color:var(--ink);
+    padding:4px 9px;border-radius:7px;
+  }
+
+  /* CTA band */
+  .cta-band{
+    background:linear-gradient(135deg,var(--navy),var(--navy-2));color:#fff;border-radius:16px;
+    padding:36px 32px;display:flex;align-items:center;justify-content:space-between;gap:24px;flex-wrap:wrap;
+  }
+  .cta-band h3{margin:0 0 6px;font-size:20px;font-weight:800;}
+  .cta-band p{margin:0;color:#c9d5e3;font-size:14px;max-width:480px;}
+  .btn{
+    background:var(--accent);color:#fff;text-decoration:none;font-weight:700;font-size:14px;
+    padding:12px 20px;border-radius:8px;white-space:nowrap;
+  }
+  .btn:hover{background:var(--accent-dark);}
+
+  footer{padding:32px 0 48px;color:#8b96a5;font-size:12.5px;}
+  footer .wrap{border-top:1px solid var(--line);padding-top:22px;}
+  footer a{color:#6b7686;}
+  footer p{max-width:760px;margin:0 0 6px;}
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="wrap">
+    <div class="nav-brand">AIP-C01 <span>Guide</span></div>
+    <ul class="nav-links">
+      <li><a href="#overview">Overview</a></li>
+      <li><a href="#domains">Domains</a></li>
+      <li><a href="#prepare">How to Prepare</a></li>
+      <li><a href="#services">What to Study</a></li>
+      <li><a href="tasks/index.html">Build Log</a></li>
+    </ul>
+    <a class="nav-cta" href="https://aws.amazon.com/certification/certified-generative-ai-developer-professional/" target="_blank" rel="noopener">Official Page ↗</a>
+  </div>
+</nav>
+
+<header class="hero" id="overview">
+  <div class="wrap">
+    <span class="eyebrow">Unofficial Exam Companion</span>
+    <h1>AWS Certified Generative AI<br>Developer – Professional <span class="code">(AIP-C01)</span></h1>
+    <p class="lead">
+      A professional-level certification that validates your ability to design, build, secure, and
+      operate production-grade generative AI applications on AWS — integrating foundation models,
+      RAG pipelines, agents, and guardrails into real business workflows.
+    </p>
+    <div class="stat-row">
+      <div class="stat"><div class="n">75</div><div class="l">Questions (65 scored)</div></div>
+      <div class="stat"><div class="n">180 min</div><div class="l">Duration</div></div>
+      <div class="stat"><div class="n">750 / 1000</div><div class="l">Passing score</div></div>
+      <div class="stat"><div class="n">$300</div><div class="l">USD, standard pricing</div></div>
+      <div class="stat"><div class="n">3 yrs</div><div class="l">Validity</div></div>
+    </div>
+  </div>
+</header>
+
+<section>
+  <div class="wrap">
+    <p class="kicker">What Is This Exam</p>
+    <h2 class="h">A developer-focused GenAI certification</h2>
+    <p class="section-lead">
+      AIP-C01 is aimed at people who <em>build</em> GenAI applications on AWS — not at data scientists
+      who train models. It tests practical, production-oriented skills across the full lifecycle of a
+      GenAI application.
+    </p>
+    <div class="grid-2">
+      <div class="card">
+        <h3>The exam validates your ability to</h3>
+        <ul class="tick">
+          <li>Design solutions using vector stores, Retrieval Augmented Generation (RAG), and knowledge bases</li>
+          <li>Integrate foundation models (FMs) into applications and business workflows</li>
+          <li>Apply prompt engineering and prompt management techniques</li>
+          <li>Implement agentic AI solutions and tool integrations</li>
+          <li>Optimize GenAI applications for cost, performance, and business value</li>
+          <li>Implement security, governance, and Responsible AI practices</li>
+          <li>Troubleshoot, monitor, and evaluate FMs for quality and safety</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>Target candidate</h3>
+        <ul class="tick">
+          <li>2+ years building production-grade applications on AWS or open-source tech</li>
+          <li>General AI/ML or data engineering experience</li>
+          <li>1+ year of hands-on experience implementing GenAI solutions</li>
+        </ul>
+        <h3 style="margin-top:20px;">Out of scope</h3>
+        <ul class="tick cross">
+          <li>Model development &amp; training</li>
+          <li>Advanced ML techniques</li>
+          <li>Data &amp; feature engineering</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="alt" id="domains">
+  <div class="wrap">
+    <p class="kicker">Content Outline</p>
+    <h2 class="h">Five domains, weighted by importance</h2>
+    <p class="section-lead">
+      Score contribution is compensatory — you only need to pass overall, not each domain — but the
+      weighting tells you where to spend your study time. Domains 1 and 2 alone make up 57% of the exam.
+    </p>
+
+    <div class="domain">
+      <div class="domain-head">
+        <div class="domain-title"><span class="domain-num">01</span><h3>Foundation Model Integration, Data Management &amp; Compliance</h3></div>
+        <div class="domain-weight">31%</div>
+      </div>
+      <div class="bar-track"><div class="bar-fill" style="width:31%"></div></div>
+      <div class="task-list">
+        <span class="task-chip">Analyze requirements &amp; design GenAI solutions</span>
+        <span class="task-chip">Select &amp; configure FMs</span>
+        <span class="task-chip">Data validation &amp; processing pipelines for FM consumption</span>
+        <span class="task-chip">Design &amp; implement vector stores</span>
+        <span class="task-chip">Design retrieval (RAG) mechanisms</span>
+        <span class="task-chip">Prompt engineering strategies &amp; governance</span>
+      </div>
+    </div>
+
+    <div class="domain">
+      <div class="domain-head">
+        <div class="domain-title"><span class="domain-num">02</span><h3>Implementation and Integration</h3></div>
+        <div class="domain-weight">26%</div>
+      </div>
+      <div class="bar-track"><div class="bar-fill" style="width:26%"></div></div>
+      <div class="task-list">
+        <span class="task-chip">Agentic AI solutions &amp; tool integrations</span>
+        <span class="task-chip">Model deployment strategies</span>
+        <span class="task-chip">Enterprise integration architectures</span>
+        <span class="task-chip">FM API integrations</span>
+        <span class="task-chip">Application integration patterns &amp; dev tools</span>
+      </div>
+    </div>
+
+    <div class="domain">
+      <div class="domain-head">
+        <div class="domain-title"><span class="domain-num">03</span><h3>AI Safety, Security, and Governance</h3></div>
+        <div class="domain-weight">20%</div>
+      </div>
+      <div class="bar-track"><div class="bar-fill" style="width:20%"></div></div>
+      <div class="task-list">
+        <span class="task-chip">Input &amp; output safety controls</span>
+        <span class="task-chip">Data security &amp; privacy controls</span>
+        <span class="task-chip">AI governance &amp; compliance mechanisms</span>
+        <span class="task-chip">Responsible AI principles</span>
+      </div>
+    </div>
+
+    <div class="domain">
+      <div class="domain-head">
+        <div class="domain-title"><span class="domain-num">04</span><h3>Operational Efficiency &amp; Optimization for GenAI Applications</h3></div>
+        <div class="domain-weight">12%</div>
+      </div>
+      <div class="bar-track"><div class="bar-fill" style="width:12%"></div></div>
+      <div class="task-list">
+        <span class="task-chip">Cost optimization &amp; resource efficiency</span>
+        <span class="task-chip">Application performance optimization</span>
+        <span class="task-chip">Monitoring systems for GenAI applications</span>
+      </div>
+    </div>
+
+    <div class="domain">
+      <div class="domain-head">
+        <div class="domain-title"><span class="domain-num">05</span><h3>Testing, Validation, and Troubleshooting</h3></div>
+        <div class="domain-weight">11%</div>
+      </div>
+      <div class="bar-track"><div class="bar-fill" style="width:11%"></div></div>
+      <div class="task-list">
+        <span class="task-chip">Evaluation systems for GenAI</span>
+        <span class="task-chip">Troubleshoot GenAI applications</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="prepare">
+  <div class="wrap">
+    <p class="kicker">How To Prepare</p>
+    <h2 class="h">A four-stage study plan</h2>
+    <p class="section-lead">
+      This is a hands-on, scenario-heavy exam — reading alone won't cut it. Pair every concept with a
+      small build.
+    </p>
+    <div class="steps">
+      <div class="step">
+        <div class="num">1</div>
+        <h4>Learn the fundamentals</h4>
+        <p>Work through the official AIP-C01 exam guide, AWS Skill Builder's GenAI learning plan, the Bedrock user guide, and the AWS Well-Architected Generative AI Lens.</p>
+      </div>
+      <div class="step">
+        <div class="num">2</div>
+        <h4>Build one project per domain</h4>
+        <p>Stand up a real RAG app with Knowledge Bases + OpenSearch, an agent with Bedrock Agents, a guardrail policy, and a deployed API — don't just read about them.</p>
+      </div>
+      <div class="step">
+        <div class="num">3</div>
+        <h4>Go deep on security &amp; governance</h4>
+        <p>Domain 3 is scenario-based: least-privilege IAM, KMS encryption, PII redaction, audit logging with CloudTrail, and Responsible AI guardrails come up constantly.</p>
+      </div>
+      <div class="step">
+        <div class="num">4</div>
+        <h4>Practice under exam conditions</h4>
+        <p>Take full-length, timed practice exams. Review every wrong answer against the task statement it maps to, and weight your final review toward Domains 1 &amp; 2.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="alt" id="services">
+  <div class="wrap">
+    <p class="kicker">What To Prepare</p>
+    <h2 class="h">Core AWS services to know cold</h2>
+    <p class="section-lead">
+      The exam is service-agnostic in its wording but scenario questions are built around these.
+      You should know what each does, when to reach for it, and how it's secured.
+    </p>
+    <div class="svc-grid">
+      <div class="svc-card">
+        <h4>Foundation Models &amp; GenAI</h4>
+        <div class="svc-chips">
+          <span class="svc-chip">Amazon Bedrock</span>
+          <span class="svc-chip">Bedrock Knowledge Bases</span>
+          <span class="svc-chip">Bedrock Agents</span>
+          <span class="svc-chip">Bedrock Guardrails</span>
+          <span class="svc-chip">Bedrock Prompt Management</span>
+          <span class="svc-chip">SageMaker</span>
+        </div>
+      </div>
+      <div class="svc-card">
+        <h4>Retrieval &amp; Data</h4>
+        <div class="svc-chips">
+          <span class="svc-chip">OpenSearch Service / Serverless</span>
+          <span class="svc-chip">Amazon Kendra</span>
+          <span class="svc-chip">S3</span>
+          <span class="svc-chip">Glue</span>
+          <span class="svc-chip">DynamoDB</span>
+          <span class="svc-chip">Aurora / RDS</span>
+        </div>
+      </div>
+      <div class="svc-card">
+        <h4>Integration &amp; Compute</h4>
+        <div class="svc-chips">
+          <span class="svc-chip">Lambda</span>
+          <span class="svc-chip">API Gateway</span>
+          <span class="svc-chip">Step Functions</span>
+          <span class="svc-chip">ECS / EKS</span>
+          <span class="svc-chip">EventBridge</span>
+        </div>
+      </div>
+      <div class="svc-card">
+        <h4>Security &amp; Governance</h4>
+        <div class="svc-chips">
+          <span class="svc-chip">IAM</span>
+          <span class="svc-chip">KMS</span>
+          <span class="svc-chip">Macie</span>
+          <span class="svc-chip">CloudTrail</span>
+          <span class="svc-chip">AWS Config</span>
+        </div>
+      </div>
+      <div class="svc-card">
+        <h4>Operations &amp; Cost</h4>
+        <div class="svc-chips">
+          <span class="svc-chip">CloudWatch</span>
+          <span class="svc-chip">X-Ray</span>
+          <span class="svc-chip">Cost Explorer</span>
+          <span class="svc-chip">AWS Budgets</span>
+        </div>
+      </div>
+      <div class="svc-card">
+        <h4>Delivery &amp; Networking</h4>
+        <div class="svc-chips">
+          <span class="svc-chip">CloudFront</span>
+          <span class="svc-chip">VPC Endpoints</span>
+          <span class="svc-chip">Application Load Balancer</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="cta-band">
+      <div>
+        <h3>Get the official exam guide</h3>
+        <p>This page summarizes the AWS-published exam guide. Read the full document for skill-level detail, in-scope/out-of-scope service lists, and the survey section.</p>
+      </div>
+      <a class="btn" href="https://docs.aws.amazon.com/pdfs/aws-certification/latest/ai-professional-01/ai-professional-01.pdf" target="_blank" rel="noopener">Download PDF ↗</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <p>This is an independent, unofficial study resource and is not affiliated with, endorsed by, or sponsored by Amazon Web Services, Inc. AWS, Amazon Bedrock, and all related marks are trademarks of Amazon.com, Inc. or its affiliates. Exam details (format, pricing, weightings) are sourced from the official AWS exam guide and are subject to change — always verify against <a href="https://aws.amazon.com/certification/certified-generative-ai-developer-professional/" target="_blank" rel="noopener">aws.amazon.com/certification</a>.</p>
+    <p>Hosted on Amazon S3 + Amazon CloudFront.</p>
+  </div>
+</footer>
+
+</body>
+</html>

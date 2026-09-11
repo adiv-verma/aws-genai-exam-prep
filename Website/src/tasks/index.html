@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Build Log | AIP-C01 Guide</title>
+<meta name="description" content="Hands-on build logs for the AWS Certified Generative AI Developer - Professional (AIP-C01) exam prep project: what was built, real errors hit, and exam takeaways.">
+<style>
+  :root{
+    --ink:#0b1524; --ink-soft:#3a4a5e; --paper:#f7f8fa; --card:#ffffff; --line:#e3e7ee;
+    --accent:#e8622c; --accent-dark:#c94f1f; --navy:#0f2540; --navy-2:#16345c; --good:#1a7f5a;
+    color-scheme: light;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;background:var(--paper);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;line-height:1.55;}
+  a{color:var(--accent-dark);}
+  .wrap{max-width:1080px;margin:0 auto;padding:0 24px;}
+  .nav{position:sticky;top:0;z-index:50;background:rgba(15,37,64,.96);backdrop-filter:blur(6px);border-bottom:1px solid rgba(255,255,255,.08);}
+  .nav .wrap{display:flex;align-items:center;justify-content:space-between;height:56px;}
+  .nav-brand{color:#fff;font-weight:700;font-size:14px;letter-spacing:.02em;text-decoration:none;}
+  .nav-brand span{color:var(--accent);}
+  .nav-links{display:flex;gap:22px;list-style:none;margin:0;padding:0;}
+  .nav-links a{color:#cdd8e6;text-decoration:none;font-size:13.5px;font-weight:500;}
+  .nav-links a:hover{color:#fff;}
+  @media (max-width:720px){ .nav-links{display:none;} }
+  header.hero{background:linear-gradient(180deg,var(--navy) 0%, var(--navy-2) 100%);color:#fff;padding:48px 0 36px;}
+  .eyebrow{display:inline-block;font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#ffd8c4;background:rgba(232,98,44,.18);border:1px solid rgba(232,98,44,.4);padding:5px 10px;border-radius:999px;margin-bottom:16px;}
+  h1{font-size:clamp(24px,3.6vw,36px);line-height:1.15;margin:0 0 10px;font-weight:800;}
+  header.hero p{font-size:16px;color:#c9d5e3;max-width:640px;margin:0;}
+  section{padding:44px 0;}
+  .task-card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:22px 24px;margin-bottom:16px;display:block;text-decoration:none;color:inherit;transition:border-color .15s;}
+  .task-card:hover{border-color:var(--accent);}
+  .task-card .meta{font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--accent-dark);margin-bottom:6px;}
+  .task-card h3{margin:0 0 8px;font-size:18px;font-weight:800;color:var(--ink);}
+  .task-card p{margin:0 0 12px;font-size:14px;color:var(--ink-soft);}
+  .stat-chips{display:flex;flex-wrap:wrap;gap:8px;}
+  .chip{font-size:12px;font-weight:600;background:var(--paper);border:1px solid var(--line);color:var(--ink-soft);padding:4px 10px;border-radius:999px;}
+  .chip.good{background:#e9f7f1;color:var(--good);border-color:#bfe6d6;}
+  footer{padding:32px 0 48px;color:#8b96a5;font-size:12.5px;}
+  footer .wrap{border-top:1px solid var(--line);padding-top:22px;}
+  footer a{color:#6b7686;}
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="wrap">
+    <a class="nav-brand" href="../index.html">AIP-C01 <span>Guide</span></a>
+    <ul class="nav-links">
+      <li><a href="../index.html#domains">Domains</a></li>
+      <li><a href="../index.html#prepare">How to Prepare</a></li>
+      <li><a href="index.html">Build Log</a></li>
+    </ul>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="wrap">
+    <span class="eyebrow">Hands-On Build Log</span>
+    <h1>Real PoCs, real errors, real fixes</h1>
+    <p>Every task below was actually deployed in a live AWS account, not just described. Each write-up covers what was built, the real errors hit along the way (with root causes, not guesses), how to verify it in the console, and the exam concepts each bug maps to.</p>
+  </div>
+</header>
+
+<section>
+  <div class="wrap">
+    <a class="task-card" href="task-1-1.html">
+      <div class="meta">Domain 1 &middot; Task 1.1 &middot; Bonus Assignment</div>
+      <h3>Customer Support AI Assistant — Architecture &amp; Governance PoC</h3>
+      <p>A full Bedrock-based customer support assistant for AWS EC2 troubleshooting: persona &amp; scenario prompts, Guardrails, Step Functions orchestration, a QA test harness, and CloudWatch regression monitoring — 29 resources, 9 real bugs found and fixed.</p>
+      <div class="stat-chips">
+        <span class="chip">29 resources deployed</span>
+        <span class="chip">9 real bugs fixed</span>
+        <span class="chip good">5/5 QA tests passing</span>
+      </div>
+    </a>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <p>This is an independent, unofficial study resource and is not affiliated with, endorsed by, or sponsored by Amazon Web Services, Inc. AWS, Amazon Bedrock, and all related marks are trademarks of Amazon.com, Inc. or its affiliates.</p>
+    <p>Hosted on Amazon S3 + Amazon CloudFront.</p>
+  </div>
+</footer>
+
+</body>
+</html>
