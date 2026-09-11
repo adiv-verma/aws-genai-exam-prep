@@ -27,6 +27,35 @@ In addition, every resource must include the **domain-task number** it belongs t
 
 Example: for Task 1.1 (Domain 1, Task 1) → `adi-1-1-prompt-templates`, `adi-1-1-lambda-role`, `adi-1-1-support-conversations`. For Task 2.3 → `adi-2-3-integration-queue`.
 
+## GitHub
+
+This project is version-controlled at **https://github.com/adiv-verma/aws-genai-exam-prep** (public), remote `origin`.
+
+- Commit and push at the end of every task (or every session that makes meaningful progress on a task) — don't let work sit uncommitted across sessions.
+- Before committing: run a quick scan for anything that looks like a real credential (access keys, secrets, tokens) — none of this project's own content should ever contain one, but double-check before `git add -A` regardless.
+- Use a real commit message describing what was built/changed, ending with the standard `Co-Authored-By: Claude Sonnet 5 <noreply@anthropic.com>` trailer.
+
+## Companion Website
+
+A static study-guide site lives at `Website/src/` and is deployed to:
+
+- **S3 bucket:** `adi-genai-exam-site-269737522732`
+- **CloudFront distribution:** `E3883M6668QGYO` → **https://dwllzc5nxt67o.cloudfront.net**
+
+Structure:
+- `Website/src/index.html` — the main AIP-C01 exam-overview landing page.
+- `Website/src/tasks/index.html` — the "Build Log" hub, one card per completed task.
+- `Website/src/tasks/task-<domain>-<task>.html` — one deep-dive page per task (e.g. `task-1-1.html`), covering: what was built (by phase, **with actual resource names and a one-two line description of what each one does/why it's there** — mirror `progress.md`'s level of detail, not a vague summary), real errors hit and how they were actually fixed (root cause, not guesses), how to verify each piece in the console, and exam-relevant takeaways tied to the concepts the task exercised.
+
+**Update the task's page progressively, phase by phase, as work happens** — the same way `progress.md` is appended to after every confirmed step, not written once at the end. When a phase/step's resources are deployed, add them (names, not just categories) to that task's page in the same pass as the `progress.md` update, so the site and the progress log never drift out of sync.
+
+Deploy after any change:
+```bash
+aws s3 sync Website/src/ s3://adi-genai-exam-site-269737522732/ --profile awsgenai --delete
+aws cloudfront create-invalidation --distribution-id E3883M6668QGYO --paths "/*" --profile awsgenai
+```
+(Scope the sync/invalidation to just the changed file(s) for a quick mid-task update; do a full `/*` sync+invalidation as the final step of a task.)
+
 ## Task Workflow & Resumability
 
 Each `Domain-*/Task-*/` folder is a self-contained project with three files:

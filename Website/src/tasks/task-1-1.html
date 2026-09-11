@@ -57,6 +57,7 @@
   .phase p{margin:0 0 12px;font-size:14px;color:var(--ink-soft);}
   .chip-row{display:flex;flex-wrap:wrap;gap:7px;}
   .chip{font-size:12.5px;color:var(--ink-soft);background:var(--paper);border:1px solid var(--line);padding:4px 10px;border-radius:8px;}
+  .chip.res{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:11.5px;color:var(--navy-2);background:#eef3fa;border-color:#d6e2f0;}
 
   .bug-card{background:var(--card);border:1px solid var(--line);border-left:4px solid var(--bad);border-radius:10px;padding:20px 22px;margin-bottom:18px;}
   .bug-head{display:flex;align-items:center;gap:10px;margin-bottom:12px;flex-wrap:wrap;}
@@ -124,6 +125,7 @@
   <div class="wrap">
     <div class="toc">
       <a href="#built">Architecture by phase</a>
+      <a href="#resources">Full resource inventory</a>
       <a href="#bugs">9 errors &amp; real fixes</a>
       <a href="#verify">Console verification</a>
       <a href="#tips">Exam takeaways</a>
@@ -144,10 +146,10 @@
       <div class="phase-head"><span class="phase-num">Phase 1</span><h3>Foundation</h3></div>
       <p>Confirmed Bedrock model access, then stood up the storage/compute base everything else builds on.</p>
       <div class="chip-row">
-        <span class="chip">Bedrock model access (Claude Haiku 4.5)</span>
-        <span class="chip">S3 bucket, versioned — prompt templates</span>
-        <span class="chip">DynamoDB table + TTL — conversation history</span>
-        <span class="chip">IAM role — least-privilege Lambda execution role</span>
+        <span class="chip res">Claude Haiku 4.5 — model access confirmed</span>
+        <span class="chip res">adi-1-1-prompt-templates (S3, versioned)</span>
+        <span class="chip res">adi-1-1-support-conversations (DynamoDB, TTL)</span>
+        <span class="chip res">adi-1-1-bedrock-lambda-role (IAM)</span>
       </div>
     </div>
 
@@ -155,10 +157,15 @@
       <div class="phase-head"><span class="phase-num">Phase 2</span><h3>Prompt Management &amp; Governance</h3></div>
       <p>A base persona (role boundaries, tone, response format) plus three parameterized scenario templates, all versioned in Bedrock Prompt Management — with CloudTrail/CloudWatch tracking and a separate RBAC role for editing prompts.</p>
       <div class="chip-row">
-        <span class="chip">Persona prompt (versioned)</span>
-        <span class="chip">Diagnostic / Clarification / Escalation prompts</span>
-        <span class="chip">CloudTrail trail -&gt; S3 + CloudWatch Logs</span>
-        <span class="chip">Prompt-editor IAM role (can edit, cannot invoke)</span>
+        <span class="chip res">adi-1-1-support-assistant-persona (Prompt, v2)</span>
+        <span class="chip res">adi-1-1-scenario-diagnostic (Prompt)</span>
+        <span class="chip res">adi-1-1-scenario-clarification (Prompt)</span>
+        <span class="chip res">adi-1-1-scenario-escalation (Prompt)</span>
+        <span class="chip res">adi-1-1-cloudtrail-logs (S3)</span>
+        <span class="chip res">/aws/cloudtrail/adi-1-1-support-assistant (Logs)</span>
+        <span class="chip res">adi-1-1-cloudtrail-cwlogs-role (IAM)</span>
+        <span class="chip res">adi-1-1-support-assistant-trail (CloudTrail)</span>
+        <span class="chip res">adi-1-1-prompt-editor-role (IAM, RBAC)</span>
       </div>
     </div>
 
@@ -166,20 +173,20 @@
       <div class="phase-head"><span class="phase-num">Phase 3</span><h3>Guardrails</h3></div>
       <p>An independent safety layer, enforced outside the model — three semantic denied topics, PII/credential blocking, content filters, and contextual-grounding thresholds for future RAG use.</p>
       <div class="chip-row">
-        <span class="chip">Denied topics: credentials, future features, competitors</span>
-        <span class="chip">PII: AWS_ACCESS_KEY / AWS_SECRET_KEY / PASSWORD</span>
-        <span class="chip">Content filters incl. PROMPT_ATTACK</span>
-        <span class="chip">Contextual grounding (ready for RAG)</span>
+        <span class="chip res">adi-1-1-support-assistant-guardrail (v2)</span>
       </div>
+      <p style="margin-top:10px;font-size:13.5px;">Denied topics: <code>CredentialSharing</code>, <code>FutureAWSFeatures</code>, <code>CompetitorDiscussion</code> &middot; PII: <code>AWS_ACCESS_KEY</code>, <code>AWS_SECRET_KEY</code>, <code>PASSWORD</code> (block), <code>EMAIL</code>/<code>PHONE</code> (anonymize) &middot; Content filters incl. <code>PROMPT_ATTACK</code> (tuned to LOW — see bug #6) &middot; Contextual grounding configured, ready for a future RAG step.</p>
     </div>
 
     <div class="phase">
       <div class="phase-head"><span class="phase-num">Phase 4</span><h3>Orchestration</h3></div>
       <p>Two Lambda functions (detect intent/sentiment via Comprehend, then generate a guardrail-checked response) wired together by a Step Functions state machine that makes every routing decision explicit and auditable.</p>
       <div class="chip-row">
-        <span class="chip">Lambda: detect-intent (+ Comprehend sentiment)</span>
-        <span class="chip">Lambda: invoke-model (prompt + guardrail + persistence)</span>
-        <span class="chip">Step Functions: capture -&gt; detect -&gt; choice -&gt; generate -&gt; respond</span>
+        <span class="chip res">adi-1-1-detect-intent (Lambda, Python 3.13)</span>
+        <span class="chip res">adi-1-1-invoke-model (Lambda, Python 3.13)</span>
+        <span class="chip res">/aws/vendedlogs/states/adi-1-1-support-assistant-sm (Logs)</span>
+        <span class="chip res">adi-1-1-stepfunctions-role (IAM)</span>
+        <span class="chip res">adi-1-1-support-assistant-sm (Step Functions, STANDARD)</span>
       </div>
     </div>
 
@@ -187,16 +194,65 @@
       <div class="phase-head"><span class="phase-num">Phase 5</span><h3>QA &amp; Monitoring</h3></div>
       <p>A declarative regression suite (5 edge cases, including two that are supposed to fail safely) plus a CloudWatch dashboard and 5 alarms — two built on brand-new custom metrics specifically to catch the kind of guardrail regression found while building this project.</p>
       <div class="chip-row">
-        <span class="chip">Validator Lambda + Step Functions test harness</span>
-        <span class="chip">EMF custom metrics (no new IAM needed)</span>
-        <span class="chip">5 CloudWatch alarms -&gt; SNS</span>
-        <span class="chip">Full operational dashboard</span>
+        <span class="chip res">adi-1-1-validate-output (Lambda)</span>
+        <span class="chip res">/aws/vendedlogs/states/adi-1-1-test-harness-sm (Logs)</span>
+        <span class="chip res">adi-1-1-test-harness-role (IAM)</span>
+        <span class="chip res">adi-1-1-test-harness-sm (Step Functions)</span>
+        <span class="chip res">adi-1-1-alerts (SNS)</span>
+        <span class="chip res">adi-1-1-invoke-model-errors (Alarm)</span>
+        <span class="chip res">adi-1-1-support-assistant-sm-failures (Alarm)</span>
+        <span class="chip res">adi-1-1-bedrock-throttles (Alarm)</span>
+        <span class="chip res">adi-1-1-validation-failures (Alarm)</span>
+        <span class="chip res">adi-1-1-guardrail-interventions (Alarm)</span>
+        <span class="chip res">adi-1-1-support-assistant-dashboard (CloudWatch)</span>
       </div>
     </div>
   </div>
 </section>
 
-<section class="alt" id="bugs">
+<section class="alt" id="resources">
+  <div class="wrap">
+    <p class="kicker">Full Resource Inventory</p>
+    <h2 class="h">All 29 resources deployed, in build order</h2>
+    <p class="section-lead">Same table kept in this task's <code>progress.md</code> for resumability — reproduced here for reference. All in <code>us-east-1</code>, account <code>269737522732</code>, prefixed <code>adi-1-1-</code>.</p>
+    <div class="verify-wrap">
+      <table class="verify">
+        <tr><th>#</th><th>Type</th><th>Name</th><th>Purpose</th></tr>
+        <tr><td>1</td><td>S3 Bucket</td><td>adi-1-1-prompt-templates</td><td>Versioned storage for prompt templates — rollback is a version-ID change, not a redeploy.</td></tr>
+        <tr><td>2</td><td>DynamoDB Table</td><td>adi-1-1-support-conversations</td><td>Per-turn conversation history with TTL, so the assistant has multi-turn context and stale sessions auto-expire.</td></tr>
+        <tr><td>3</td><td>IAM Role</td><td>adi-1-1-bedrock-lambda-role</td><td>Least-privilege execution role the pipeline's Lambda functions run as.</td></tr>
+        <tr><td>4</td><td>Bedrock Prompt</td><td>adi-1-1-support-assistant-persona</td><td>Base persona — role boundaries, tone, and response format, defined once and versioned centrally.</td></tr>
+        <tr><td>5</td><td>Bedrock Prompt</td><td>adi-1-1-scenario-diagnostic</td><td>Used when there's enough detail (instance ID + symptom) to actually diagnose the issue.</td></tr>
+        <tr><td>6</td><td>Bedrock Prompt</td><td>adi-1-1-scenario-clarification</td><td>Used when details are missing — asks exactly one targeted question, doesn't guess.</td></tr>
+        <tr><td>7</td><td>Bedrock Prompt</td><td>adi-1-1-scenario-escalation</td><td>Used to hand off to a human agent with an empathetic summary of the case so far.</td></tr>
+        <tr><td>8</td><td>S3 Bucket</td><td>adi-1-1-cloudtrail-logs</td><td>Durable, immutable long-term storage for the CloudTrail audit trail.</td></tr>
+        <tr><td>9</td><td>CloudWatch Logs Group</td><td>/aws/cloudtrail/adi-1-1-support-assistant</td><td>Near-real-time delivery target for CloudTrail events, so they're queryable without Athena.</td></tr>
+        <tr><td>10</td><td>IAM Role</td><td>adi-1-1-cloudtrail-cwlogs-role</td><td>Lets the CloudTrail service deliver events into that CloudWatch Logs group.</td></tr>
+        <tr><td>11</td><td>CloudTrail Trail</td><td>adi-1-1-support-assistant-trail</td><td>Audits every Bedrock/IAM/S3 API call touching this project — the "who did what, when" record.</td></tr>
+        <tr><td>12</td><td>IAM Role</td><td>adi-1-1-prompt-editor-role</td><td>RBAC role: can create/edit/version prompts, but is explicitly denied model invocation.</td></tr>
+        <tr><td>13</td><td>Bedrock Guardrail</td><td>adi-1-1-support-assistant-guardrail</td><td>Independent safety layer — blocks credential sharing, future-feature talk, competitor discussion, and PII.</td></tr>
+        <tr><td>14</td><td>Lambda Function</td><td>adi-1-1-detect-intent</td><td>Extracts symptom category, instance ID, a confidence score, and sentiment (via Comprehend) from the raw query.</td></tr>
+        <tr><td>15</td><td>Lambda Function</td><td>adi-1-1-invoke-model</td><td>Picks the right prompt, calls Bedrock with the guardrail applied, validates the response, persists it to DynamoDB.</td></tr>
+        <tr><td>16</td><td>CloudWatch Logs Group</td><td>/aws/vendedlogs/states/adi-1-1-support-assistant-sm</td><td>Full execution logs for the main orchestration state machine.</td></tr>
+        <tr><td>17</td><td>IAM Role</td><td>adi-1-1-stepfunctions-role</td><td>Lets the orchestration state machine invoke the two pipeline Lambdas.</td></tr>
+        <tr><td>18</td><td>Step Functions State Machine</td><td>adi-1-1-support-assistant-sm</td><td>The orchestration graph itself: capture &rarr; detect &rarr; choice &rarr; generate &rarr; respond.</td></tr>
+        <tr><td>19</td><td>Lambda Function</td><td>adi-1-1-validate-output</td><td>Checks one execution's output against a test case's pass/fail criteria (expected scenario, required/forbidden phrases).</td></tr>
+        <tr><td>20</td><td>CloudWatch Logs Group</td><td>/aws/vendedlogs/states/adi-1-1-test-harness-sm</td><td>Full execution logs for the QA test-harness state machine.</td></tr>
+        <tr><td>21</td><td>IAM Role</td><td>adi-1-1-test-harness-role</td><td>Lets the test harness run the main state machine synchronously and call the validator Lambda.</td></tr>
+        <tr><td>22</td><td>Step Functions State Machine</td><td>adi-1-1-test-harness-sm</td><td>Runs 5 embedded edge-case tests through the assistant and validates each result — the regression suite.</td></tr>
+        <tr><td>23</td><td>SNS Topic</td><td>adi-1-1-alerts</td><td>Notification target for all 5 alarms below (left unsubscribed — that's the account owner's call).</td></tr>
+        <tr><td>24</td><td>CloudWatch Alarm</td><td>adi-1-1-invoke-model-errors</td><td>Fires on Lambda exceptions/timeouts in the response-generation step.</td></tr>
+        <tr><td>25</td><td>CloudWatch Alarm</td><td>adi-1-1-support-assistant-sm-failures</td><td>Fires when an execution falls through to the system-error fallback path.</td></tr>
+        <tr><td>26</td><td>CloudWatch Alarm</td><td>adi-1-1-bedrock-throttles</td><td>Early warning for Bedrock throttling, before it turns into user-facing latency or errors.</td></tr>
+        <tr><td>27</td><td>CloudWatch Alarm</td><td>adi-1-1-validation-failures</td><td>Fires on a spike in failed output validation, summed across all scenarios — the prompt-regression signal.</td></tr>
+        <tr><td>28</td><td>CloudWatch Alarm</td><td>adi-1-1-guardrail-interventions</td><td>Fires on a spike in guardrail blocks — could be an attack wave, or a false-positive regression like bug #6.</td></tr>
+        <tr><td>29</td><td>CloudWatch Dashboard</td><td>adi-1-1-support-assistant-dashboard</td><td>One view combining Bedrock, Lambda, Step Functions, and the custom regression-signal metrics.</td></tr>
+      </table>
+    </div>
+  </div>
+</section>
+
+<section id="bugs">
   <div class="wrap">
     <p class="kicker">Errors We Hit — And How We Actually Fixed Them</p>
     <h2 class="h">9 real bugs, not hypothetical ones</h2>
