@@ -54,6 +54,12 @@ Structure:
 
 **Update the task's page progressively, phase by phase, as work happens** — the same way `progress.md` is appended to after every confirmed step, not written once at the end. When a step's resource(s) are deployed (and after any bug is found/fixed during that step), add that step's card to the task's page in the same pass as the `progress.md` update, so the site and the progress log never drift out of sync.
 
+- `Website/src/notes/index.html` — "Study Notes": the user's own condensed exam cheat-sheets, kept **separate from the Build Log** (Build Log = what was actually deployed; Notes = personal study material, often describing a broader reference architecture than any one PoC builds). Organized hierarchically: a Domain heading (`Domain 1`, `Domain 2`, ...), then a `.task-notes` block per task inside it (`id="notes-<domain>-<task>"`, e.g. `notes-1-1`), in task-number order. **When a task folder contains a `notes.md` and/or an `architecture_diagram.jpg`** (or similarly named image), that's the signal to add/update that task's block on this page:
+  - Copy the image to `Website/src/assets/task-<domain>-<task>-architecture.<ext>` (flat, mirroring the `task-<domain>-<task>.html` naming) and embed it via `<figure class="arch">` with a real, descriptive `alt` text (not just a filename) and a one-sentence `<figcaption>`.
+  - Render the notes content as a grid of `.note-card` blocks (one per top-level heading in the source `notes.md`, using `<dl>`/`<dt>`/`<dd>` for term:description pairs) — reflow/tighten the prose for a card format, don't just dump raw markdown into a `<pre>`.
+  - Cross-link: the task's Build Log page should link to `../notes/index.html#notes-<domain>-<task>`, and the notes block should link back to `../tasks/task-<domain>-<task>.html`.
+  - `notes.md` / `architecture_diagram.jpg` themselves stay in the task folder (source material, like `project.md`) — they are not deleted after being folded into the site.
+
 Deploy after any change:
 ```bash
 aws s3 sync Website/src/ s3://adi-genai-exam-site-269737522732/ --profile awsgenai --delete
