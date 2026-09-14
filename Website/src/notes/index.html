@@ -12,11 +12,8 @@
     color-scheme: light;
   }
   *{box-sizing:border-box;}
-  html{scroll-behavior:smooth;}
-  body{margin:0;background:var(--paper);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;line-height:1.6;}
+  body{margin:0;background:var(--paper);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;line-height:1.55;}
   a{color:var(--accent-dark);}
-  code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;background:#eef1f6;padding:1px 5px;border-radius:4px;font-size:.92em;}
-  img{max-width:100%;}
   .wrap{max-width:1080px;margin:0 auto;padding:0 24px;}
 
   .nav{position:sticky;top:0;z-index:50;background:rgba(15,37,64,.96);backdrop-filter:blur(6px);border-bottom:1px solid rgba(255,255,255,.08);}
@@ -32,35 +29,26 @@
   .eyebrow{display:inline-block;font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#ffd8c4;background:rgba(232,98,44,.18);border:1px solid rgba(232,98,44,.4);padding:5px 10px;border-radius:999px;margin-bottom:16px;}
   h1{font-size:clamp(24px,3.6vw,36px);line-height:1.15;margin:0 0 10px;font-weight:800;}
   header.hero p{font-size:16px;color:#c9d5e3;max-width:680px;margin:0;}
+  header.hero p a{color:#ffd8c4;}
 
   section{padding:44px 0;}
 
-  .domain-head{margin:0 0 28px;}
+  .domain-head{display:flex;align-items:center;gap:12px;margin:36px 0 16px;}
+  .domain-head:first-child{margin-top:0;}
   .domain-head .dnum{
-    display:inline-block;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px;font-weight:700;
-    color:#fff;background:var(--navy);padding:5px 11px;border-radius:7px;margin-bottom:10px;
+    font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px;font-weight:700;
+    color:#fff;background:var(--navy);padding:5px 11px;border-radius:7px;white-space:nowrap;
   }
-  .domain-head h2{margin:0;font-size:22px;font-weight:800;color:var(--ink);}
+  .domain-head h2{margin:0;font-size:17px;font-weight:800;color:var(--ink);}
+  .domain-head .dline{flex:1;height:1px;background:var(--line);}
 
-  .task-notes{margin-bottom:52px;}
-  .task-notes:last-child{margin-bottom:0;}
-  .task-head{display:flex;align-items:baseline;gap:10px;margin-bottom:18px;padding-bottom:10px;border-bottom:2px solid var(--line);}
-  .task-head h3{margin:0;font-size:18px;font-weight:800;color:var(--navy-2);}
-  .task-head .thref{font-size:12px;color:var(--ink-soft);}
-  .task-head .thref a{color:var(--accent-dark);}
+  .task-card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:20px 22px;margin-bottom:12px;display:block;text-decoration:none;color:inherit;transition:border-color .15s;}
+  .task-card:hover{border-color:var(--accent);}
+  .task-card h3{margin:0 0 6px;font-size:15.5px;font-weight:700;color:var(--ink);}
+  .task-card p{margin:0;font-size:13.5px;color:var(--ink-soft);}
+  .task-card .tref{display:block;margin-top:8px;font-size:12px;color:var(--accent-dark);font-weight:600;}
 
-  figure.arch{margin:0 0 24px;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px;}
-  figure.arch img{display:block;border-radius:8px;width:100%;height:auto;}
-  figure.arch figcaption{margin-top:10px;font-size:12.5px;color:var(--ink-soft);}
-
-  .note-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;}
-  @media (max-width:760px){.note-grid{grid-template-columns:1fr;}}
-  .note-card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:18px 20px;}
-  .note-card h4{margin:0 0 12px;font-size:13px;font-weight:800;text-transform:uppercase;letter-spacing:.03em;color:var(--accent-dark);}
-  .note-card dl{margin:0;}
-  .note-card dt{font-size:13.5px;font-weight:700;color:var(--ink);margin:0 0 3px;}
-  .note-card dt:not(:first-child){margin-top:12px;}
-  .note-card dd{margin:0;font-size:13px;color:var(--ink-soft);line-height:1.55;}
+  .empty-note{font-size:14px;color:var(--ink-soft);font-style:italic;padding:4px 2px 28px;}
 
   footer{padding:32px 0 48px;color:#8b96a5;font-size:12.5px;}
   footer .wrap{border-top:1px solid var(--line);padding-top:22px;}
@@ -73,6 +61,7 @@
   <div class="wrap">
     <a class="nav-brand" href="../index.html">AIP-C01 <span>Guide</span></a>
     <ul class="nav-links">
+      <li><a href="../index.html#domains">Domains</a></li>
       <li><a href="../tasks/index.html">Build Log</a></li>
       <li><a href="index.html">Study Notes</a></li>
     </ul>
@@ -83,7 +72,7 @@
   <div class="wrap">
     <span class="eyebrow">Personal Cheat Sheets</span>
     <h1>Study Notes</h1>
-    <p>Reference architectures and condensed exam notes, taken while studying each task — kept separate from the <a href="../tasks/index.html" style="color:#ffd8c4;">Build Log</a>, which documents what was actually deployed. These notes describe the fuller "ideal reference architecture" AWS exam scenarios point at, which is often broader than what any one PoC builds.</p>
+    <p>Condensed exam notes and reference architecture diagrams, one page per task, organized by domain. Kept separate from the <a href="../tasks/index.html">Build Log</a> (what was actually deployed) &#8212; these describe the fuller reference architecture an exam scenario points at, which is often broader than any one PoC builds.</p>
   </div>
 </header>
 
@@ -93,115 +82,14 @@
     <div class="domain-head">
       <span class="dnum">Domain 1</span>
       <h2>Foundation Model Integration, Data Management &amp; Compliance</h2>
+      <span class="dline"></span>
     </div>
 
-    <div class="task-notes" id="notes-1-1">
-      <div class="task-head">
-        <h3>Task 1.1 &mdash; Architecture &amp; PoC</h3>
-        <span class="thref">(see the <a href="../tasks/task-1-1.html">Build Log</a> for what was actually deployed)</span>
-      </div>
-
-      <figure class="arch">
-        <img src="../assets/task-1-1-architecture.jpg" alt="Reference architecture diagram: Task 1.1 - Global Low-Latency RAG and Compliance Platform on AWS, showing an Entry and Auth layer (Global Accelerator, AppSync, Cognito), a Core RAG Processing Plane (Lambda, Bedrock Knowledge Base, vector store, Bedrock Guardrails, Bedrock model), a Deterministic Orchestration lane (Bedrock Flows), a Synchronous Response Path back through AppSync to the client, and an Asynchronous Post-Processing and Audit Plane (EventBridge fanning out to CRM sync, audit logging, a low-confidence compliance queue, and X-Ray monitoring).">
-        <figcaption>Reference architecture for the exam scenario behind Task 1.1: a global, low-latency RAG + compliance platform. Broader in scope than the PoC actually built (see Build Log) &mdash; this is the "if it were a real multinational bank deployment" picture the exam notes are built around.</figcaption>
-      </figure>
-
-      <div class="note-grid">
-
-        <div class="note-card">
-          <h4>1 &middot; Entry, Networking &amp; Auth</h4>
-          <dl>
-            <dt>AWS Global Accelerator</dt>
-            <dd>2 static anycast IPs, routes over the AWS private backbone. Use for global users needing low-latency WebSocket/TCP streaming and static-IP whitelisting (bypasses public-internet jitter).</dd>
-            <dt>AppSync &amp; WebSockets</dt>
-            <dd>Real-time token streaming via GraphQL subscriptions. To beat AppSync's 30s integration timeout on long LLM responses: an async mutation returns a <code>conversationId</code> immediately, then a persistent WebSocket subscription streams tokens.</dd>
-            <dt>Amazon Cognito &amp; JWT</dt>
-            <dd>Stateless token verification at the AppSync layer. For instant session revocation, pair short-lived JWT TTLs with a revocation check against a fast key-value store (Redis/DynamoDB).</dd>
-          </dl>
-        </div>
-
-        <div class="note-card">
-          <h4>2 &middot; Core RAG &amp; Knowledge Base</h4>
-          <dl>
-            <dt>Bedrock Knowledge Base</dt>
-            <dd>Fully managed, serverless RAG orchestration &mdash; handles ingestion, chunking, and embedding generation.</dd>
-            <dt>Multilingual Embeddings</dt>
-            <dd>No explicit translation step needed &mdash; queries map directly into a cross-lingual vector space, so a query in one language matches document chunks in another.</dd>
-          </dl>
-        </div>
-
-        <div class="note-card">
-          <h4>3 &middot; Vector Store Decision Matrix</h4>
-          <dl>
-            <dt>OpenSearch Serverless</dt>
-            <dd>The default, ultra-low-latency vector engine. <strong>Critical exam rule:</strong> mandatory when a Bedrock KB ingests SaaS sources like SharePoint, Salesforce, or Confluence.</dd>
-            <dt>Amazon S3 Vectors</dt>
-            <dd>Cost-optimized for massive-scale datasets where sub-second latency is acceptable.</dd>
-            <dt>Aurora (pgvector)</dt>
-            <dd>When the app must keep leveraging an existing relational PostgreSQL database.</dd>
-            <dt>Neptune Analytics</dt>
-            <dd>GraphRAG &mdash; multi-hop relationship traversal, entity-connection discovery (e.g. fraud networks) via nodes/edges.</dd>
-          </dl>
-        </div>
-
-        <div class="note-card">
-          <h4>4 &middot; Safety, Governance &amp; Guardrails</h4>
-          <dl>
-            <dt>Bedrock Guardrails</dt>
-            <dd>An independent safety net outside the raw inference path &mdash; filters both input and output.</dd>
-            <dt>PII Masking</dt>
-            <dd>Auto-detects and redacts sensitive data (SSNs, phone numbers, credit cards) from inputs and outputs.</dd>
-            <dt>Contextual Grounding</dt>
-            <dd>Scores hallucination risk by checking whether the response is actually supported by the retrieved KB chunks.</dd>
-          </dl>
-        </div>
-
-        <div class="note-card">
-          <h4>5 &middot; Async Integration &amp; Audit Plane</h4>
-          <dl>
-            <dt>Amazon EventBridge</dt>
-            <dd>Decoupled, multi-target, content-based router via <code>PutEvents</code> (fire-and-forget) &mdash; triggers parallel, non-blocking post-processing.</dd>
-            <dt>Amazon SQS</dt>
-            <dd>A shock absorber / rate limiter &mdash; buffers traffic spikes, and routes flagged low-confidence interactions into a compliance review queue without taking down downstream workers.</dd>
-          </dl>
-        </div>
-
-        <div class="note-card">
-          <h4>6 &middot; Orchestration Patterns</h4>
-          <dl>
-            <dt>Bedrock Flows</dt>
-            <dd>Deterministic, node-based. Use when the execution path must be a rigid, 100% predictable sequence (regulatory compliance, audit pipelines).</dd>
-            <dt>Bedrock Agents</dt>
-            <dd>Non-deterministic (ReAct pattern). Use when the LLM must dynamically reason about which tools/Lambda APIs to call at runtime.</dd>
-          </dl>
-        </div>
-
-        <div class="note-card">
-          <h4>7 &middot; Build vs. Buy</h4>
-          <dl>
-            <dt>Amazon Q Business</dt>
-            <dd>Fully managed, turn-key enterprise search with built-in connectors &mdash; zero custom pipeline for rapid employee-search needs.</dd>
-            <dt>Amazon Bedrock</dt>
-            <dd>Managed serverless APIs for frontier models (Claude, Llama, Titan) + custom RAG/Guardrails/Agents.</dd>
-            <dt>SageMaker JumpStart/Training</dt>
-            <dd>Deep custom fine-tuning (LoRA, RLHF) and full control over the underlying GPU infrastructure.</dd>
-          </dl>
-        </div>
-
-        <div class="note-card">
-          <h4>8 &middot; GenAIOps, Observability &amp; Monitoring</h4>
-          <dl>
-            <dt>AWS X-Ray</dt>
-            <dd>End-to-end distributed tracing across AppSync &rarr; Lambda &rarr; Bedrock KB &rarr; vector store &rarr; LLM, to isolate latency bottlenecks.</dd>
-            <dt>Bedrock Model Invocation Logs</dt>
-            <dd>Captures raw prompts and completions to S3/CloudWatch Logs for audit and compliance.</dd>
-            <dt>Model Evaluation</dt>
-            <dd>Automated metrics (ROUGE/BLEU, toxicity scripts) plus structured human evaluation loops.</dd>
-          </dl>
-        </div>
-
-      </div>
-    </div>
+    <a class="task-card" href="task-1-1.html">
+      <h3>Task 1.1 &#8212; Architecture &amp; PoC</h3>
+      <p>Global low-latency RAG + compliance platform: entry/auth layer, core RAG pipeline, vector store decision matrix, guardrails, async audit plane, orchestration patterns, build-vs-buy, and GenAIOps &#8212; 8 cheat-sheet cards plus the reference architecture diagram.</p>
+      <span class="tref">View notes &rarr;</span>
+    </a>
 
   </div>
 </section>
@@ -209,7 +97,7 @@
 <footer>
   <div class="wrap">
     <p>This is an independent, unofficial study resource and is not affiliated with, endorsed by, or sponsored by Amazon Web Services, Inc. AWS, Amazon Bedrock, and all related marks are trademarks of Amazon.com, Inc. or its affiliates.</p>
-    <p>Hosted on Amazon S3 + Amazon CloudFront. &middot; <a href="../index.html">&larr; Back to Guide</a></p>
+    <p>Hosted on Amazon S3 + Amazon CloudFront.</p>
   </div>
 </footer>
 
