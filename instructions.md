@@ -45,9 +45,14 @@ A static study-guide site lives at `Website/src/` and is deployed to:
 Structure:
 - `Website/src/index.html` — the main AIP-C01 exam-overview landing page.
 - `Website/src/tasks/index.html` — the "Build Log" hub, one card per completed task.
-- `Website/src/tasks/task-<domain>-<task>.html` — one deep-dive page per task (e.g. `task-1-1.html`), covering: what was built (by phase, **with actual resource names and a one-two line description of what each one does/why it's there** — mirror `progress.md`'s level of detail, not a vague summary), real errors hit and how they were actually fixed (root cause, not guesses), how to verify each piece in the console, and exam-relevant takeaways tied to the concepts the task exercised.
+- `Website/src/tasks/task-<domain>-<task>.html` — one deep-dive page per task (e.g. `task-1-1.html`). **Structure it as a chronological step log, mirroring `progress.md`'s Step Log directly — do not split "what we built" / "errors" / "exam tips" into separate flat sections.** Concretely (see `task-1-1.html` as the reference example):
+  - Group steps under phase dividers (Phase 1, Phase 2, ...), same phase names as `progress.md`.
+  - One card per step, in order, each with: the resource name(s) it created, **What** (what got built, with actual resource names, not categories), **Where** (exact console path), **Why** (the concept it teaches).
+  - Any error/bug hit *during that step* goes inline in that same step's card, immediately after the What/Where/Why — symptom, root cause, and the actual fix. Number bugs sequentially across the whole page (Bug 1, Bug 2, ...) so the hero stat count stays accurate.
+  - An exam tip goes inline in that same step's card too — one per step, tied to what that step actually taught (not just the steps that had bugs).
+  - Keep a compact resource-index table (name + type + one-line purpose) at the end as a quick-reference appendix, but it is *not* where the explanation lives — the step cards are the primary content.
 
-**Update the task's page progressively, phase by phase, as work happens** — the same way `progress.md` is appended to after every confirmed step, not written once at the end. When a phase/step's resources are deployed, add them (names, not just categories) to that task's page in the same pass as the `progress.md` update, so the site and the progress log never drift out of sync.
+**Update the task's page progressively, phase by phase, as work happens** — the same way `progress.md` is appended to after every confirmed step, not written once at the end. When a step's resource(s) are deployed (and after any bug is found/fixed during that step), add that step's card to the task's page in the same pass as the `progress.md` update, so the site and the progress log never drift out of sync.
 
 Deploy after any change:
 ```bash
