@@ -1,0 +1,46 @@
+{
+  "primary_model": "nova-micro",
+  "primary_model_id": "amazon.nova-micro-v1:0",
+  "fallback_models": [
+    "nova-lite",
+    "claude-haiku-4.5"
+  ],
+  "model_scores": {
+    "nova-micro": {
+      "model_id": "amazon.nova-micro-v1:0",
+      "provider": "Amazon",
+      "avg_quality_score_0_5": 4.917,
+      "avg_latency_s": 1.228,
+      "avg_cost_per_request_usd": 1.706e-05,
+      "compliance_pass_rate": 1.0,
+      "qa_cases_scored": 12,
+      "compliance_cases_scored": 5,
+      "overall_score": 0.9173
+    },
+    "nova-lite": {
+      "model_id": "amazon.nova-lite-v1:0",
+      "provider": "Amazon",
+      "avg_quality_score_0_5": 4.917,
+      "avg_latency_s": 1.462,
+      "avg_cost_per_request_usd": 2.453e-05,
+      "compliance_pass_rate": 1.0,
+      "qa_cases_scored": 12,
+      "compliance_cases_scored": 5,
+      "overall_score": 0.9024
+    },
+    "claude-haiku-4.5": {
+      "model_id": "us.anthropic.claude-haiku-4-5-20251001-v1:0",
+      "provider": "Anthropic",
+      "avg_quality_score_0_5": 5.0,
+      "avg_latency_s": 3.284,
+      "avg_cost_per_request_usd": 0.00129671,
+      "compliance_pass_rate": 1.0,
+      "qa_cases_scored": 12,
+      "compliance_cases_scored": 5,
+      "overall_score": 0.7
+    }
+  },
+  "use_case_models": {
+    "product_question": "nova-micro"
+  }
+}
