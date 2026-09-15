@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Task 1.2 Notes | AIP-C01 Guide</title>
-<meta name="description" content="Domain 1, Task 1.2 study notes: model selection, HIPAA-compliant dataset prep, LoRA fine-tuning, the three-tier evaluation gate, and drift monitoring for a healthcare document analysis system on AWS.">
+<meta name="description" content="Domain 1, Task 1.2 study notes.">
 <style>
   :root{
     --ink:#0b1524; --ink-soft:#3a4a5e; --paper:#f7f8fa; --card:#ffffff; --line:#e3e7ee;
@@ -29,30 +29,26 @@
   .nav-links a:hover{color:#fff;}
   @media (max-width:720px){ .nav-links{display:none;} }
 
-  header.hero{background:linear-gradient(180deg,var(--navy) 0%, var(--navy-2) 100%);color:#fff;padding:48px 0 36px;}
-  .eyebrow{display:inline-block;font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#ffd8c4;background:rgba(232,98,44,.18);border:1px solid rgba(232,98,44,.4);padding:5px 10px;border-radius:999px;margin-bottom:16px;}
-  h1{font-size:clamp(24px,3.6vw,34px);line-height:1.15;margin:0 0 10px;font-weight:800;}
-  header.hero p{font-size:15.5px;color:#c9d5e3;max-width:680px;margin:0;}
-  header.hero p a{color:#ffd8c4;}
+  header.hero{background:linear-gradient(180deg,var(--navy) 0%, var(--navy-2) 100%);color:#fff;padding:36px 0 28px;}
+  .eyebrow{display:inline-block;font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#ffd8c4;background:rgba(232,98,44,.18);border:1px solid rgba(232,98,44,.4);padding:5px 10px;border-radius:999px;margin-bottom:14px;}
+  h1{font-size:clamp(22px,3.4vw,30px);line-height:1.15;margin:0;font-weight:800;}
 
-  section{padding:44px 0;}
+  section{padding:36px 0;}
 
-  figure.arch{margin:0 0 28px;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px;}
+  figure.arch{margin:0 0 24px;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px;}
   figure.arch img{display:block;border-radius:8px;width:100%;height:auto;}
-  figure.arch figcaption{margin-top:10px;font-size:12.5px;color:var(--ink-soft);}
 
   .note-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;}
   @media (max-width:760px){.note-grid{grid-template-columns:1fr;}}
   .note-card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:18px 20px;}
   .note-card.wide{grid-column:1 / -1;}
-  .note-card h4{margin:0 0 12px;font-size:13px;font-weight:800;text-transform:uppercase;letter-spacing:.03em;color:var(--accent-dark);}
+  .note-card h4{margin:0 0 12px;font-size:13px;font-weight:800;color:var(--navy-2);}
   .note-card dl{margin:0;}
   .note-card dt{font-size:13.5px;font-weight:700;color:var(--ink);margin:0 0 3px;}
   .note-card dt:not(:first-child){margin-top:12px;}
   .note-card dd{margin:0;font-size:13px;color:var(--ink-soft);line-height:1.55;}
 
   .trap{background:var(--trap-bg);border:1px solid var(--trap-line);border-radius:8px;padding:12px 14px;margin-top:14px;}
-  .trap .trap-head{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.05em;color:var(--accent-dark);margin:0 0 4px;}
   .trap p{margin:0;font-size:13px;color:var(--ink);}
 
   footer{padding:32px 0 48px;color:#8b96a5;font-size:12.5px;}
@@ -73,9 +69,8 @@
 
 <header class="hero">
   <div class="wrap">
-    <span class="eyebrow">Domain 1 &middot; Task 1.2 &middot; Study Notes</span>
-    <h1>FM Selection &amp; Lifecycle &#8212; Cheat Sheet</h1>
-    <p>End-to-end architectural lifecycle notes, worked through a healthcare document analysis scenario: model selection criteria, HIPAA-safe dataset prep, LoRA fine-tuning mechanics, the three-tier evaluation gate, and production drift monitoring. No Build Log yet for this task &#8212; notes only, taken ahead of building it.</p>
+    <span class="eyebrow">Domain 1 &middot; Task 1.2</span>
+    <h1>End-to-End Architectural Lifecycle: Healthcare Document Analysis System</h1>
   </div>
 </header>
 
@@ -83,77 +78,83 @@
   <div class="wrap">
 
     <figure class="arch">
-      <img src="../assets/task-1-2-architecture.jpg" alt="AWS Generative AI Architecture diagram: Secure Healthcare Document Analysis at 50k documents per day, showing five stages left to right - Data Sources and Ingestion (hospital EHR, scanned PDFs, clinical notes into an S3 secure data lake), Data Preparation and Security (PHI de-identification via Lambda and Glue, KMS-encrypted sanitized data, JSONL training dataset curation by clinical experts), LoRA Fine-Tuning and Model Registry (a frozen base foundation model with a trainable LoRA adapter, producing custom fine-tuned model artifacts in the Bedrock Model Registry), Evaluation and Deployment Pipeline (a three-tier gate: automatic Lambda-based ROUGE/BLEU/JSON-schema evaluation, LLM-as-a-judge, and human clinical review board, gating a Bedrock Provisioned Throughput deployment), and Production Inference and Monitoring (EHR system requests hitting the fine-tuned model endpoint, with CloudWatch and SNS driving failure-mode and drift monitoring plus a human-in-the-loop review and retraining loop for low-confidence cases).">
-      <figcaption>Reference architecture for the exam scenario behind Task 1.2: a secure healthcare document analysis pipeline processing 50k documents/day, from ingestion through fine-tuning, evaluation, and production drift monitoring.</figcaption>
+      <img src="../assets/task-1-2-architecture.jpg" alt="Task 1.2 architecture diagram">
     </figure>
 
     <div class="note-grid">
 
       <div class="note-card">
-        <h4>Step 1 &middot; Model Selection &amp; Capability Filtering</h4>
+        <h4>Step 1: Model Selection, Criteria Definition &amp; Capabilities</h4>
         <dl>
-          <dt>Define metrics first</dt>
-          <dd>Compliance, medical boards, and engineering leadership set strict thresholds <em>before</em> testing any models, to prevent post-hoc bias.</dd>
-          <dt>Key healthcare metrics</dt>
-          <dd>PHI detection &gt;99% (mandatory for HIPAA), medical accuracy &gt;90%, JSON validity &gt;95% (EHR integration), p95 latency &lt;3s, cost/document &lt;$0.02.</dd>
-          <dt>Capability filtering (pre-benchmarking)</dt>
-          <dd>Hard technical cutoffs before any scoring: multimodal support (scanned PDFs/handwriting/images &rarr; text-only models auto-fail) and a large context window (100k+ tokens, for a 50-page patient history in one call).</dd>
+          <dt>Defining Metrics First</dt>
+          <dd>Before testing any models, compliance teams, medical boards, and engineering leadership must establish strict performance and regulatory thresholds to prevent post-hoc bias.</dd>
+          <dt>Key Healthcare Metrics</dt>
+          <dd>PHI Detection &gt; 99% (mandatory for HIPAA), Medical Accuracy &gt; 90%, JSON Validity &gt; 95% (for seamless EHR system integration), p95 Latency &lt; 3s, and Cost per document &lt; $0.02.</dd>
+          <dt>Capability Filtering (Pre-Benchmarking)</dt>
+          <dd>Systems are filtered based on hard technical requirements before scoring.</dd>
+          <dt>Multimodal Support</dt>
+          <dd>If inputs include scanned PDFs, handwritten notes, or medical images, the model must support multimodal processing (e.g., Anthropic Claude 3/3.5). Text-only models will automatically fail.</dd>
+          <dt>Context Window (Input + Output Tokens)</dt>
+          <dd>Large enterprise workloads feed massive dossiers (e.g., a patient's 50-page history plus prompts) into a single call. Models must feature large context windows (100k+ tokens) to prevent system crashes caused by token overflow.</dd>
         </dl>
       </div>
 
       <div class="note-card">
-        <h4>Step 2 &middot; Dataset Prep &amp; HIPAA Security</h4>
+        <h4>Step 2: Dataset Preparation &amp; HIPAA Security</h4>
         <dl>
-          <dt>Human-in-the-loop, JSONL on S3</dt>
-          <dd>Clinicians + data engineers curate 100&ndash;300 high-quality pairs (de-identified prompt + ideal <code>referenceResponse</code>) in JSON Lines format.</dd>
-          <dt>Prompting vs. fine-tuning</dt>
-          <dd>Few-shot prompting burns tokens/latency every call and risks being ignored; fine-tuning burns the structural style into the model once, for minimal prompt overhead in production.</dd>
-          <dt>HIPAA &amp; PHI compliance</dt>
-          <dd>Names/SSNs/addresses de-identified <em>before</em> touching S3 or training pipelines; S3 datasets encrypted with KMS to maintain BAA compliance.</dd>
+          <dt>Human-in-the-Loop &amp; JSONL Format</dt>
+          <dd>To teach the model a specific behavior or structural style, domain experts (clinicians/doctors) and data engineers curate 100 to 300 high-quality training pairs stored in JSONL (JSON Lines) format on AWS S3, where each line contains a de-identified prompt and an ideal referenceResponse.</dd>
+          <dt>Few-shot Prompting</dt>
+          <dd>Writing long instructions into queries wastes tokens, increases latency, and risks instructions being ignored.</dd>
+          <dt>Fine-Tuning</dt>
+          <dd>Burning examples into the model permanently instills the structural style, requiring minimal prompt overhead in production.</dd>
+          <dt>HIPAA &amp; PHI Compliance</dt>
+          <dd>Patient Health Information (names, SSNs, exact addresses) must be strictly de-identified (masked) before data touches S3 or training pipelines. Furthermore, S3 datasets must be encrypted using AWS KMS (Key Management Service) to maintain legal BAA compliance.</dd>
         </dl>
       </div>
 
       <div class="note-card">
-        <h4>Step 3 &middot; LoRA Mechanics</h4>
+        <h4>Step 3: LoRA (Low-Rank Adaptation) Mechanics</h4>
         <dl>
-          <dt>The "deck extension" analogy</dt>
-          <dd>Full fine-tuning alters billions of parameters &mdash; heavy, slow, expensive. LoRA doesn't.</dd>
-          <dt>Base model (the house)</dt>
-          <dd>Completely frozen and untouched &mdash; core capabilities and safety guardrails preserved.</dd>
-          <dt>Adapter (the deck)</dt>
-          <dd>A tiny trainable layer (&lt;1% of model size), attached and trained on the JSONL medical dataset to master clinical JSON formatting.</dd>
+          <dt>The "Deck Extension" Analogy</dt>
+          <dd>Full fine-tuning alters billions of parameters in a base model, making it heavy, slow, and expensive.</dd>
+          <dt>Base Model (Main House)</dt>
+          <dd>The original foundation model is completely frozen and untouched, preserving its core capabilities and safety guardrails.</dd>
+          <dt>Adapter (The Deck)</dt>
+          <dd>A tiny, trainable layer (less than 1% of the model size) is attached to the base model. Only this adapter is trained using the JSONL medical dataset to master clinical JSON formatting.</dd>
           <dt>Benefit</dt>
-          <dd>Modular, fast, cheap &mdash; swap the adapter without rebuilding the base model.</dd>
+          <dd>It is modular, fast, and cost-effective. If an adapter requires changes, it can be swapped out without rebuilding the base architecture.</dd>
         </dl>
       </div>
 
       <div class="note-card">
-        <h4>Step 4 &middot; The Three-Tier Evaluation Gate</h4>
+        <h4>Step 4: Comprehensive Model Evaluation (The Three-Tier Gate)</h4>
         <dl>
-          <dt>Tier 1 &mdash; automatic (fast, cheap)</dt>
-          <dd>BLEU (word-overlap precision) + ROUGE (reference-coverage recall) + JSON schema validators. Checks syntax/word-matching, not meaning &mdash; filters 15&ndash;20 candidate models down to a shortlist.</dd>
-          <dt>Tier 2 &mdash; LLM-as-a-judge</dt>
-          <dd>A high-end judge model (e.g. Claude 3.5 Sonnet) checks semantic correctness, clinical logic, hallucinations against a strict rubric.</dd>
-          <dt>Tier 3 &mdash; human clinical sign-off</dt>
-          <dd>Hospital doctors / domain experts do the final, non-negotiable regulatory review.</dd>
+          <dt>Tier 1: Automatic Evaluation (Fast &amp; Cheap)</dt>
+          <dd>Uses metrics like BLEU (measures Precision or word-by-word overlap) and ROUGE (measures Recall or coverage of key reference elements in summaries), alongside JSON schema validators. Limitation: Checks syntax and word matching, not semantic meaning (e.g., missing the clinical difference between "has pain" vs. "has no pain"). Used strictly to filter 15&ndash;20 initial models down to a shortlist.</dd>
+          <dt>Tier 2: LLM-as-a-Judge (Deep Semantic Check)</dt>
+          <dd>Shortlisted outputs are evaluated by a high-end judge model (like Claude 3.5 Sonnet) using a strict rubric to check semantic correctness, clinical logic, and hallucinations.</dd>
+          <dt>Tier 3: Human Clinical Sign-off (Non-Negotiable)</dt>
+          <dd>Hospital doctors and medical domain experts manually review outputs for final regulatory approval.</dd>
         </dl>
         <div class="trap">
-          <p class="trap-head">Exam trap</p>
-          <p>Latency (p95) and cost are <strong>not</strong> part of model evaluation. Evaluation tests quality/accuracy only &mdash; speed and expense need separate load-testing scripts and CloudWatch metrics (<code>InvocationLatency</code>, token counts).</p>
+          <p>Crucial Exam Trap Note: Latency (p95) and Cost are not part of Model Evaluation. Evaluating a model only tests its quality and accuracy. Speed and expense require separate load-testing scripts and CloudWatch metrics (InvocationLatency, token counts).</p>
         </div>
       </div>
 
       <div class="note-card wide">
-        <h4>Step 5 &middot; Adversarial Testing &amp; Drift Monitoring</h4>
+        <h4>Step 5: Limitation Analysis, Adversarial Testing &amp; Drift Monitoring</h4>
         <dl>
-          <dt>Adversarial testing (red teaming)</dt>
-          <dd>Feed tricky/contradictory inputs (e.g. a contradicted patient history mid-note) to check whether the model tracks shifting updates or falls into the trap.</dd>
-          <dt>Slice &amp; OCR failure analysis</dt>
-          <dd>Test performance separately on messy scanned documents / heavy medical abbreviations vs. clean text &mdash; aggregate accuracy can hide a failing slice.</dd>
-          <dt>Failure mode &amp; data drift</dt>
-          <dd>Proactively watch for JSON parsing crashes (e.g. markdown breaking the EHR parser), clinical hallucinations, confidence drops, and drift from real-world change (new medications, billing codes, shifting doctor shorthand) months after deployment.</dd>
-          <dt>AWS tooling</dt>
-          <dd>CloudWatch tracks error rates and triggers SNS alarms on JSON failure-rate spikes; low-confidence outputs route to human clinicians for review (feeding a retraining loop).</dd>
+          <dt>Adversarial Testing (Red Teaming)</dt>
+          <dd>Intentionally feeding the model tricky or contradictory inputs (e.g., "Patient has no history of stroke... wait, actually scratch that, patient experienced a severe ischemic stroke last week") to check if it tracks shifting updates or falls into traps.</dd>
+          <dt>Slice &amp; OCR Failure Analysis</dt>
+          <dd>Testing performance across messy, low-quality scanned documents or heavy medical abbreviations compared to clean text.</dd>
+          <dt>Tracking Failures</dt>
+          <dd>Proactively monitoring JSON parsing crashes (e.g., if markdown tags break the EHR parser), clinical hallucinations, or model confidence drops.</dd>
+          <dt>Data Drift</dt>
+          <dd>Accounting for real-world changes over time (such as new medications, updated billing codes, or shifting doctor shorthand styles) that can degrade model performance months after deployment.</dd>
+          <dt>AWS Operational Tooling</dt>
+          <dd>Leveraging Amazon CloudWatch to track error rates and trigger alarms via Amazon SNS (Simple Notification Service) if JSON failure rates spike, alongside routing low-confidence outputs to human clinicians for manual review.</dd>
         </dl>
       </div>
 

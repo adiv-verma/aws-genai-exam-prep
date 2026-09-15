@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Task 1.1 Notes | AIP-C01 Guide</title>
-<meta name="description" content="Domain 1, Task 1.1 study notes: condensed exam cheat sheet and reference architecture diagram for a global, low-latency RAG and compliance platform on AWS.">
+<meta name="description" content="Domain 1, Task 1.1 study notes.">
 <style>
   :root{
     --ink:#0b1524; --ink-soft:#3a4a5e; --paper:#f7f8fa; --card:#ffffff; --line:#e3e7ee;
@@ -28,22 +28,19 @@
   .nav-links a:hover{color:#fff;}
   @media (max-width:720px){ .nav-links{display:none;} }
 
-  header.hero{background:linear-gradient(180deg,var(--navy) 0%, var(--navy-2) 100%);color:#fff;padding:48px 0 36px;}
-  .eyebrow{display:inline-block;font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#ffd8c4;background:rgba(232,98,44,.18);border:1px solid rgba(232,98,44,.4);padding:5px 10px;border-radius:999px;margin-bottom:16px;}
-  h1{font-size:clamp(24px,3.6vw,34px);line-height:1.15;margin:0 0 10px;font-weight:800;}
-  header.hero p{font-size:15.5px;color:#c9d5e3;max-width:680px;margin:0;}
-  header.hero p a{color:#ffd8c4;}
+  header.hero{background:linear-gradient(180deg,var(--navy) 0%, var(--navy-2) 100%);color:#fff;padding:36px 0 28px;}
+  .eyebrow{display:inline-block;font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#ffd8c4;background:rgba(232,98,44,.18);border:1px solid rgba(232,98,44,.4);padding:5px 10px;border-radius:999px;margin-bottom:14px;}
+  h1{font-size:clamp(22px,3.4vw,30px);line-height:1.15;margin:0;font-weight:800;}
 
-  section{padding:44px 0;}
+  section{padding:36px 0;}
 
-  figure.arch{margin:0 0 28px;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px;}
+  figure.arch{margin:0 0 24px;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px;}
   figure.arch img{display:block;border-radius:8px;width:100%;height:auto;}
-  figure.arch figcaption{margin-top:10px;font-size:12.5px;color:var(--ink-soft);}
 
   .note-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;}
   @media (max-width:760px){.note-grid{grid-template-columns:1fr;}}
   .note-card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:18px 20px;}
-  .note-card h4{margin:0 0 12px;font-size:13px;font-weight:800;text-transform:uppercase;letter-spacing:.03em;color:var(--accent-dark);}
+  .note-card h4{margin:0 0 12px;font-size:13px;font-weight:800;color:var(--navy-2);}
   .note-card dl{margin:0;}
   .note-card dt{font-size:13.5px;font-weight:700;color:var(--ink);margin:0 0 3px;}
   .note-card dt:not(:first-child){margin-top:12px;}
@@ -68,9 +65,8 @@
 
 <header class="hero">
   <div class="wrap">
-    <span class="eyebrow">Domain 1 &middot; Task 1.1 &middot; Study Notes</span>
-    <h1>Architecture &amp; PoC &#8212; Cheat Sheet</h1>
-    <p>Condensed exam notes and a reference architecture, kept separate from the <a href="../tasks/task-1-1.html">Build Log</a> (what was actually deployed). This describes the fuller "if it were a real multinational bank" reference architecture the exam scenario points at &#8212; broader in scope than the PoC.</p>
+    <span class="eyebrow">Domain 1 &middot; Task 1.1</span>
+    <h1>Comprehensive Architectural Summary &amp; Exam Cheat Sheet: Task 1.1</h1>
   </div>
 </header>
 
@@ -78,101 +74,100 @@
   <div class="wrap">
 
     <figure class="arch">
-      <img src="../assets/task-1-1-architecture.jpg" alt="Reference architecture diagram: Task 1.1 - Global Low-Latency RAG and Compliance Platform on AWS, showing an Entry and Auth layer (Global Accelerator, AppSync, Cognito), a Core RAG Processing Plane (Lambda, Bedrock Knowledge Base, vector store, Bedrock Guardrails, Bedrock model), a Deterministic Orchestration lane (Bedrock Flows), a Synchronous Response Path back through AppSync to the client, and an Asynchronous Post-Processing and Audit Plane (EventBridge fanning out to CRM sync, audit logging, a low-confidence compliance queue, and X-Ray monitoring).">
-      <figcaption>Reference architecture for the exam scenario behind Task 1.1: a global, low-latency RAG + compliance platform.</figcaption>
+      <img src="../assets/task-1-1-architecture.jpg" alt="Task 1.1 architecture diagram">
     </figure>
 
     <div class="note-grid">
 
       <div class="note-card">
-        <h4>1 &middot; Entry, Networking &amp; Auth</h4>
+        <h4>1. Entry, Networking &amp; Authentication Layer</h4>
         <dl>
           <dt>AWS Global Accelerator</dt>
-          <dd>2 static anycast IPs, routes over the AWS private backbone. Use for global users needing low-latency WebSocket/TCP streaming and static-IP whitelisting (bypasses public-internet jitter).</dd>
+          <dd>Provides 2 Static Anycast IPs and utilizes the AWS private backbone network. Use this for global users requiring low-latency WebSocket/TCP streaming and static IP whitelisting (bypassing public internet jitter).</dd>
           <dt>AppSync &amp; WebSockets</dt>
-          <dd>Real-time token streaming via GraphQL subscriptions. To beat AppSync's 30s integration timeout on long LLM responses: an async mutation returns a <code>conversationId</code> immediately, then a persistent WebSocket subscription streams tokens.</dd>
+          <dd>Powers real-time token streaming via GraphQL subscriptions. To overcome AppSync's 30-second integration timeout limit for heavy LLM responses, implement an Async Mutation pattern that immediately returns a conversationId, followed by persistent WebSocket subscriptions to stream tokens.</dd>
           <dt>Amazon Cognito &amp; JWT</dt>
-          <dd>Stateless token verification at the AppSync layer. For instant session revocation, pair short-lived JWT TTLs with a revocation check against a fast key-value store (Redis/DynamoDB).</dd>
+          <dd>Handles stateless token verification at the AppSync layer. For immediate session revocation requirements, combine short-lived JWT TTLs with a revocation check against a fast key-value store (e.g., Redis or DynamoDB).</dd>
         </dl>
       </div>
 
       <div class="note-card">
-        <h4>2 &middot; Core RAG &amp; Knowledge Base</h4>
+        <h4>2. Core RAG &amp; Knowledge Base Pipeline</h4>
         <dl>
-          <dt>Bedrock Knowledge Base</dt>
-          <dd>Fully managed, serverless RAG orchestration &mdash; handles ingestion, chunking, and embedding generation.</dd>
+          <dt>Bedrock Knowledge Base (KB)</dt>
+          <dd>Fully managed, serverless RAG orchestration that manages document ingestion, chunking, and vector embedding generation.</dd>
           <dt>Multilingual Embeddings</dt>
-          <dd>No explicit translation step needed &mdash; queries map directly into a cross-lingual vector space, so a query in one language matches document chunks in another.</dd>
+          <dd>Eliminates the need for explicit translation steps. Queries map directly within a cross-lingual vector space, allowing a query in one language to match relevant document chunks in another.</dd>
         </dl>
       </div>
 
       <div class="note-card">
-        <h4>3 &middot; Vector Store Decision Matrix</h4>
+        <h4>3. Vector Stores &amp; Storage Decision Matrix</h4>
         <dl>
           <dt>OpenSearch Serverless</dt>
-          <dd>The default, ultra-low-latency vector engine. <strong>Critical exam rule:</strong> mandatory when a Bedrock KB ingests SaaS sources like SharePoint, Salesforce, or Confluence.</dd>
+          <dd>The default, ultra-low latency vector engine. CRITICAL EXAM RULE: OpenSearch Serverless is mandatory when integrating SaaS data sources such as SharePoint, Salesforce, or Confluence into Bedrock KBs.</dd>
           <dt>Amazon S3 Vectors</dt>
-          <dd>Cost-optimized for massive-scale datasets where sub-second latency is acceptable.</dd>
-          <dt>Aurora (pgvector)</dt>
-          <dd>When the app must keep leveraging an existing relational PostgreSQL database.</dd>
-          <dt>Neptune Analytics</dt>
-          <dd>GraphRAG &mdash; multi-hop relationship traversal, entity-connection discovery (e.g. fraud networks) via nodes/edges.</dd>
+          <dd>A cost-optimized storage choice for massive-scale datasets where sub-second latency is acceptable.</dd>
+          <dt>Amazon Aurora (pgvector)</dt>
+          <dd>Ideal when applications must retain and leverage an existing relational PostgreSQL database infrastructure.</dd>
+          <dt>Amazon Neptune Analytics</dt>
+          <dd>Designed for GraphRAG, multi-hop relationship traversals, and uncovering complex entity connections (e.g., fraud networks) using nodes and edges.</dd>
         </dl>
       </div>
 
       <div class="note-card">
-        <h4>4 &middot; Safety, Governance &amp; Guardrails</h4>
+        <h4>4. Safety, Governance &amp; Guardrails</h4>
         <dl>
           <dt>Bedrock Guardrails</dt>
-          <dd>An independent safety net outside the raw inference path &mdash; filters both input and output.</dd>
+          <dd>Acts as an independent safety net placed outside the raw model inference path to filter both inputs and outputs.</dd>
           <dt>PII Masking</dt>
-          <dd>Auto-detects and redacts sensitive data (SSNs, phone numbers, credit cards) from inputs and outputs.</dd>
-          <dt>Contextual Grounding</dt>
-          <dd>Scores hallucination risk by checking whether the response is actually supported by the retrieved KB chunks.</dd>
+          <dd>Automatically detects and redacts sensitive data (like SSNs, phone numbers, or credit cards) from user inputs and model outputs.</dd>
+          <dt>Contextual Grounding Checks</dt>
+          <dd>Evaluates hallucination risks by mathematically verifying whether the generated response is strictly supported by the retrieved Knowledge Base chunks.</dd>
         </dl>
       </div>
 
       <div class="note-card">
-        <h4>5 &middot; Async Integration &amp; Audit Plane</h4>
+        <h4>5. Asynchronous Integration &amp; Auditing Plane</h4>
         <dl>
           <dt>Amazon EventBridge</dt>
-          <dd>Decoupled, multi-target, content-based router via <code>PutEvents</code> (fire-and-forget) &mdash; triggers parallel, non-blocking post-processing.</dd>
+          <dd>A decoupled, multi-target content-based router utilizing PutEvents (fire-and-forget). Use it to trigger parallel, non-blocking post-processing tasks instantly.</dd>
           <dt>Amazon SQS</dt>
-          <dd>A shock absorber / rate limiter &mdash; buffers traffic spikes, and routes flagged low-confidence interactions into a compliance review queue without taking down downstream workers.</dd>
+          <dd>Serves as a shock absorber and rate-limiting queue. Used to buffer high-throughput traffic spikes and securely route flagged, low-confidence interactions into a dedicated compliance review queue without crashing downstream worker systems.</dd>
         </dl>
       </div>
 
       <div class="note-card">
-        <h4>6 &middot; Orchestration Patterns</h4>
+        <h4>6. Orchestration &amp; Framework Patterns</h4>
         <dl>
           <dt>Bedrock Flows</dt>
-          <dd>Deterministic, node-based. Use when the execution path must be a rigid, 100% predictable sequence (regulatory compliance, audit pipelines).</dd>
+          <dd>Deterministic (Node-Based). Use this when the execution path must follow a rigid, 100% predictable, step-by-step sequence (e.g., strict regulatory compliance or audit pipelines).</dd>
           <dt>Bedrock Agents</dt>
-          <dd>Non-deterministic (ReAct pattern). Use when the LLM must dynamically reason about which tools/Lambda APIs to call at runtime.</dd>
+          <dd>Non-Deterministic (ReAct Pattern). Use this when the LLM needs to dynamically reason and choose which tools or Lambda-backed APIs to invoke at runtime based on user intent.</dd>
         </dl>
       </div>
 
       <div class="note-card">
-        <h4>7 &middot; Build vs. Buy</h4>
+        <h4>7. Platform Selection: Build vs. Buy Matrix</h4>
         <dl>
           <dt>Amazon Q Business</dt>
-          <dd>Fully managed, turn-key enterprise search with built-in connectors &mdash; zero custom pipeline for rapid employee-search needs.</dd>
+          <dd>Fully managed, turn-key enterprise search application featuring built-in native connectors. Choose this for rapid employee search solutions requiring zero custom pipeline building.</dd>
           <dt>Amazon Bedrock</dt>
-          <dd>Managed serverless APIs for frontier models (Claude, Llama, Titan) + custom RAG/Guardrails/Agents.</dd>
-          <dt>SageMaker JumpStart/Training</dt>
-          <dd>Deep custom fine-tuning (LoRA, RLHF) and full control over the underlying GPU infrastructure.</dd>
+          <dd>Managed serverless APIs for frontier models (Claude, Llama, Titan) paired with custom RAG, Guardrails, and Agents.</dd>
+          <dt>SageMaker JumpStart / Training</dt>
+          <dd>Provides deep custom fine-tuning (LoRA, RLHF) and full infrastructure control over underlying GPU instances.</dd>
         </dl>
       </div>
 
       <div class="note-card">
-        <h4>8 &middot; GenAIOps, Observability &amp; Monitoring</h4>
+        <h4>8. GenAI Ops, Observability &amp; Monitoring</h4>
         <dl>
           <dt>AWS X-Ray</dt>
-          <dd>End-to-end distributed tracing across AppSync &rarr; Lambda &rarr; Bedrock KB &rarr; vector store &rarr; LLM, to isolate latency bottlenecks.</dd>
+          <dd>Provides end-to-end distributed tracing across AppSync &rarr; Lambda &rarr; Bedrock KB &rarr; Vector Store &rarr; LLM to isolate latency bottlenecks.</dd>
           <dt>Bedrock Model Invocation Logs</dt>
-          <dd>Captures raw prompts and completions to S3/CloudWatch Logs for audit and compliance.</dd>
+          <dd>Captures raw user prompts and model completions, persisting them to Amazon S3 or CloudWatch Logs for audit and compliance tracking.</dd>
           <dt>Model Evaluation</dt>
-          <dd>Automated metrics (ROUGE/BLEU, toxicity scripts) plus structured human evaluation loops.</dd>
+          <dd>Utilizes automated metrics (such as ROUGE/BLEU for text overlap and custom toxicity scripts) alongside structured human evaluation loops.</dd>
         </dl>
       </div>
 
