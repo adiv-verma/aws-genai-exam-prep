@@ -25,10 +25,35 @@ Crucial Exam Note: Latency and Cost are not part of model evaluation. Evaluating
 Shortlisted model outputs are evaluated by a high-end judge model (like Claude 3.5 Sonnet) using a strict grading rubric to check semantic correctness, clinical logic, and hallucination risks.
 3. Tier 3: Human Clinical Sign-off (Non-Negotiable)
 Hospital medical boards and clinicians manually review outputs for final regulatory approval before live deployment.
-Step 5: Limitation Analysis, Adversarial Testing & Drift Monitoring
-Red Teaming (Adversarial Testing): Intentionally feeding contradictory inputs (e.g., "Patient has no history of stroke... wait, actually scratch that, patient suffered a severe ischemic stroke last week") to check if the model tracks shifting updates or falls into traps.
-Slice & OCR Failure Analysis: Testing model performance across messy scanned documents, heavy medical abbreviations, or low-quality OCR text vs. clean text.
-Failure Mode & Drift Monitoring: Tracking runtime issues (JSON parsing crashes, hallucinations, confidence drops) and Data Drift (real-world shifts like new medications or billing codes over time). Managed via Amazon CloudWatch alarms, Amazon SNS alerts, and Human-in-the-Loop retraining loops.
+Step 5: Limitation Analysis, Adversarial Testing, Failure Modes, Data Drift & Operational Tooling
+Even after passing rigorous automatic evaluations, LLM-as-a-Judge gates, and clinical sign-offs, a production-grade healthcare architecture must account for real-world edge cases, runtime failures, and long-term system degradation.
+1. Red Teaming (Adversarial Testing)
+Definition: Intentionally trying to break, confuse, or trick the model by feeding it unusual, malicious, or contradictory inputs that standard users rarely submit.
+Mechanism: Designed to test whether the model correctly processes shifting instructions or falls into contextual traps.
+Clinical Example:
+Input Prompt: "Patient reports no history of hypertension... wait, actually scratch that, patient presented with acute severe hypertension and unstable angina during triage."
+Objective: Verify whether the model correctly registers the final corrected update or gets stuck on the initial negated statement.
+2. Slice & Slice-Based Failure Analysis
+Slice Analysis: Splitting the test evaluation dataset into distinct operational slices—such as Routine Outpatient Notes, Emergency Room Trauma Cases, and Complex Surgical Histories—to pinpoint exactly where model accuracy drops.
+OCR (Optical Character Recognition) Failure Analysis:
+In healthcare, source documents often consist of low-quality scanned paper charts, legacy PDF forms, or erratic doctor handwriting converted via OCR.
+OCR errors frequently alter critical characters (e.g., misreading "mg" as "ml" or blurring numerical digits).
+Objective: Testing how the model handles imperfect, noisy, or truncated text without collapsing or failing to output valid structured JSON.
+3. Production Failure Mode Tracking
+When processing 50,000 documents per day live in a hospital environment, specific runtime failure modes must be tracked continuously:
+JSON Parsing Crashes: If the model appends conversational filler or markdown code blocks (e.g., ```json) to its output, the downstream Electronic Health Record (EHR) parser breaks instantly.
+Clinical Hallucinations: When the model generates a medical diagnosis, dosage, or pharmaceutical name that did not exist in the source text.
+Internal Confidence Drops: Monitoring internal probability distributions where the model signals uncertainty regarding its generated fields.
+4. Data Drift Monitoring
+Definition: The gradual degradation of model accuracy over time because real-world production inputs diverge from the historical dataset used during original training.
+Clinical Example: Months after deployment, hospitals introduce newly approved medications, updated medical billing codes (ICD-10 revisions), or shifts in how physicians write shorthand notes. If unmonitored, the model's extraction quality drifts downward as it encounters unfamiliar clinical patterns.
+5. AWS Operational Tooling & Automated Mitigation
+Managing errors and retraining loops at a 50k doc/day scale requires fully integrated cloud operational services:
+Amazon CloudWatch: Tracks custom operational metrics in real time, including API error rates, invocation latency (p95), token consumption, and JSON validation success ratios.
+Amazon SNS (Simple Notification Service): Configured with CloudWatch alarms. If a critical metric spikes—such as JSON parsing failures exceeding 1% within a one-hour window—SNS instantly dispatches automated alerts via SMS or email to the on-call data engineering team.
+Human-in-the-Loop & Retraining Loops:
+When the model flags low internal confidence or triggers a validation error, the system automatically routes that specific document to a human clinician for manual review.
+These failure cases and edge examples are logged and added back into the training dataset to periodically retrain and update the LoRA adapter to version 2, version 3, and beyond.
 Detailed Deep-Dive: Automatic Evaluation Metrics (BLEU & ROUGE)
 During automatic testing (Tier 1), model outputs are compared against expert-curated reference answers using two core metrics:
 1. BLEU (Bilingual Evaluation Understudy)

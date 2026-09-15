@@ -159,15 +159,43 @@
         </dl>
       </div>
 
-      <div class="note-card">
-        <h4>Step 5: Limitation Analysis, Adversarial Testing &amp; Drift Monitoring</h4>
+      <div class="note-card wide">
+        <h4>Step 5: Limitation Analysis, Adversarial Testing, Failure Modes, Data Drift &amp; Operational Tooling</h4>
+        <p class="sub">Even after passing rigorous automatic evaluations, LLM-as-a-Judge gates, and clinical sign-offs, a production-grade healthcare architecture must account for real-world edge cases, runtime failures, and long-term system degradation.</p>
+
         <dl>
-          <dt>Red Teaming (Adversarial Testing)</dt>
-          <dd>Intentionally feeding contradictory inputs (e.g., "Patient has no history of stroke... wait, actually scratch that, patient suffered a severe ischemic stroke last week") to check if the model tracks shifting updates or falls into traps.</dd>
-          <dt>Slice &amp; OCR Failure Analysis</dt>
-          <dd>Testing model performance across messy scanned documents, heavy medical abbreviations, or low-quality OCR text vs. clean text.</dd>
-          <dt>Failure Mode &amp; Drift Monitoring</dt>
-          <dd>Tracking runtime issues (JSON parsing crashes, hallucinations, confidence drops) and Data Drift (real-world shifts like new medications or billing codes over time). Managed via Amazon CloudWatch alarms, Amazon SNS alerts, and Human-in-the-Loop retraining loops.</dd>
+          <dt>1. Red Teaming (Adversarial Testing)</dt>
+          <dd>Definition: Intentionally trying to break, confuse, or trick the model by feeding it unusual, malicious, or contradictory inputs that standard users rarely submit. Mechanism: Designed to test whether the model correctly processes shifting instructions or falls into contextual traps.</dd>
+        </dl>
+        <div class="example">
+          <p>Input Prompt: "Patient reports no history of hypertension... wait, actually scratch that, patient presented with acute severe hypertension and unstable angina during triage."</p>
+          <p>Objective: Verify whether the model correctly registers the final corrected update or gets stuck on the initial negated statement.</p>
+        </div>
+
+        <dl>
+          <dt>2. Slice &amp; Slice-Based Failure Analysis</dt>
+          <dd><strong>Slice Analysis:</strong> Splitting the test evaluation dataset into distinct operational slices&mdash;such as Routine Outpatient Notes, Emergency Room Trauma Cases, and Complex Surgical Histories&mdash;to pinpoint exactly where model accuracy drops.</dd>
+          <dd><strong>OCR (Optical Character Recognition) Failure Analysis:</strong> In healthcare, source documents often consist of low-quality scanned paper charts, legacy PDF forms, or erratic doctor handwriting converted via OCR. OCR errors frequently alter critical characters (e.g., misreading "mg" as "ml" or blurring numerical digits). Objective: Testing how the model handles imperfect, noisy, or truncated text without collapsing or failing to output valid structured JSON.</dd>
+
+          <dt>3. Production Failure Mode Tracking</dt>
+          <dd>When processing 50,000 documents per day live in a hospital environment, specific runtime failure modes must be tracked continuously:</dd>
+          <dd><strong>JSON Parsing Crashes:</strong> If the model appends conversational filler or markdown code blocks (e.g., <code>```json</code>) to its output, the downstream Electronic Health Record (EHR) parser breaks instantly.</dd>
+          <dd><strong>Clinical Hallucinations:</strong> When the model generates a medical diagnosis, dosage, or pharmaceutical name that did not exist in the source text.</dd>
+          <dd><strong>Internal Confidence Drops:</strong> Monitoring internal probability distributions where the model signals uncertainty regarding its generated fields.</dd>
+
+          <dt>4. Data Drift Monitoring</dt>
+          <dd>Definition: The gradual degradation of model accuracy over time because real-world production inputs diverge from the historical dataset used during original training.</dd>
+        </dl>
+        <div class="example">
+          <p>Clinical Example: Months after deployment, hospitals introduce newly approved medications, updated medical billing codes (ICD-10 revisions), or shifts in how physicians write shorthand notes. If unmonitored, the model's extraction quality drifts downward as it encounters unfamiliar clinical patterns.</p>
+        </div>
+
+        <dl>
+          <dt>5. AWS Operational Tooling &amp; Automated Mitigation</dt>
+          <dd>Managing errors and retraining loops at a 50k doc/day scale requires fully integrated cloud operational services:</dd>
+          <dd><strong>Amazon CloudWatch:</strong> Tracks custom operational metrics in real time, including API error rates, invocation latency (p95), token consumption, and JSON validation success ratios.</dd>
+          <dd><strong>Amazon SNS (Simple Notification Service):</strong> Configured with CloudWatch alarms. If a critical metric spikes&mdash;such as JSON parsing failures exceeding 1% within a one-hour window&mdash;SNS instantly dispatches automated alerts via SMS or email to the on-call data engineering team.</dd>
+          <dd><strong>Human-in-the-Loop &amp; Retraining Loops:</strong> When the model flags low internal confidence or triggers a validation error, the system automatically routes that specific document to a human clinician for manual review. These failure cases and edge examples are logged and added back into the training dataset to periodically retrain and update the LoRA adapter to version 2, version 3, and beyond.</dd>
         </dl>
       </div>
 
