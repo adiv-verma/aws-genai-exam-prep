@@ -47,6 +47,13 @@
   .note-card dt{font-size:13.5px;font-weight:700;color:var(--ink);margin:0 0 3px;}
   .note-card dt:not(:first-child){margin-top:12px;}
   .note-card dd{margin:0;font-size:13px;color:var(--ink-soft);line-height:1.55;}
+  .note-card .lead{font-size:13.5px;font-weight:700;color:var(--ink);margin:0 0 8px;}
+  .note-card .lead:not(:first-child){margin-top:12px;}
+  .note-card .sub{font-size:13px;color:var(--ink-soft);line-height:1.55;margin:0 0 8px;}
+
+  .example{background:var(--paper);border:1px solid var(--line);border-radius:8px;padding:10px 12px;margin:8px 0;font-size:12.5px;}
+  .example p{margin:0 0 4px;color:var(--ink-soft);}
+  .example p:last-child{margin-bottom:0;}
 
   .trap{background:var(--trap-bg);border:1px solid var(--trap-line);border-radius:8px;padding:12px 14px;margin-top:14px;}
   .trap p{margin:0;font-size:13px;color:var(--ink);}
@@ -87,15 +94,16 @@
         <h4>Step 1: Model Selection, Criteria Definition &amp; Capabilities</h4>
         <dl>
           <dt>Defining Metrics First</dt>
-          <dd>Before testing any models, compliance teams, medical boards, and engineering leadership must establish strict performance and regulatory thresholds to prevent post-hoc bias.</dd>
+          <dd>Before testing any models, establish strict business, clinical, and compliance thresholds to prevent post-hoc bias.</dd>
           <dt>Key Healthcare Metrics</dt>
-          <dd>PHI Detection &gt; 99% (mandatory for HIPAA), Medical Accuracy &gt; 90%, JSON Validity &gt; 95% (for seamless EHR system integration), p95 Latency &lt; 3s, and Cost per document &lt; $0.02.</dd>
-          <dt>Capability Filtering (Pre-Benchmarking)</dt>
-          <dd>Systems are filtered based on hard technical requirements before scoring.</dd>
+          <dd>PHI Detection &gt; 99% (HIPAA non-negotiable), Medical Accuracy &gt; 90%, JSON Validity &gt; 95% (for Electronic Health Record integration), p95 Latency &lt; 3s, and Cost &lt; $0.02/doc.</dd>
+        </dl>
+        <p class="lead">Capability Filtering (Pre-Benchmarking Hard Filters):</p>
+        <dl>
           <dt>Multimodal Support</dt>
-          <dd>If inputs include scanned PDFs, handwritten notes, or medical images, the model must support multimodal processing (e.g., Anthropic Claude 3/3.5). Text-only models will automatically fail.</dd>
-          <dt>Context Window (Input + Output Tokens)</dt>
-          <dd>Large enterprise workloads feed massive dossiers (e.g., a patient's 50-page history plus prompts) into a single call. Models must feature large context windows (100k+ tokens) to prevent system crashes caused by token overflow.</dd>
+          <dd>If inputs include scanned PDF medical charts, doctor handwriting, or medical images, the model must be multimodal (e.g., Claude 3/3.5). Text-only models fail instantly on images and are filtered out prior to testing.</dd>
+          <dt>Context Window</dt>
+          <dd>High-scale enterprise pipelines process massive dossiers (e.g., a patient's 50-page history plus prompts). Models must feature large context windows (100k+ tokens) to prevent system crashes caused by token overflow.</dd>
         </dl>
       </div>
 
@@ -103,59 +111,94 @@
         <h4>Step 2: Dataset Preparation &amp; HIPAA Security</h4>
         <dl>
           <dt>Human-in-the-Loop &amp; JSONL Format</dt>
-          <dd>To teach the model a specific behavior or structural style, domain experts (clinicians/doctors) and data engineers curate 100 to 300 high-quality training pairs stored in JSONL (JSON Lines) format on AWS S3, where each line contains a de-identified prompt and an ideal referenceResponse.</dd>
+          <dd>Domain experts (clinicians/doctors) and data engineers curate 100&ndash;300 high-quality training pairs saved in JSONL (JSON Lines) format on Amazon S3, pairing de-identified prompts with ideal referenceResponses.</dd>
+        </dl>
+        <p class="lead">Prompting vs. Fine-Tuning:</p>
+        <dl>
           <dt>Few-shot Prompting</dt>
-          <dd>Writing long instructions into queries wastes tokens, increases latency, and risks instructions being ignored.</dd>
+          <dd>Writing instructions into queries wastes tokens, increases latency, and risks instruction drift.</dd>
           <dt>Fine-Tuning</dt>
-          <dd>Burning examples into the model permanently instills the structural style, requiring minimal prompt overhead in production.</dd>
+          <dd>Baking examples into the model permanently instills the structural style, requiring minimal prompt overhead in production.</dd>
           <dt>HIPAA &amp; PHI Compliance</dt>
-          <dd>Patient Health Information (names, SSNs, exact addresses) must be strictly de-identified (masked) before data touches S3 or training pipelines. Furthermore, S3 datasets must be encrypted using AWS KMS (Key Management Service) to maintain legal BAA compliance.</dd>
+          <dd>Patient Health Information (names, SSNs, exact addresses) is strictly de-identified (masked) before data touches training pipelines, and S3 buckets are encrypted using AWS KMS (Key Management Service) to maintain legal BAA compliance.</dd>
         </dl>
       </div>
 
       <div class="note-card">
         <h4>Step 3: LoRA (Low-Rank Adaptation) Mechanics</h4>
         <dl>
-          <dt>The "Deck Extension" Analogy</dt>
+          <dt>LoRA Architecture</dt>
           <dd>Full fine-tuning alters billions of parameters in a base model, making it heavy, slow, and expensive.</dd>
-          <dt>Base Model (Main House)</dt>
-          <dd>The original foundation model is completely frozen and untouched, preserving its core capabilities and safety guardrails.</dd>
-          <dt>Adapter (The Deck)</dt>
-          <dd>A tiny, trainable layer (less than 1% of the model size) is attached to the base model. Only this adapter is trained using the JSONL medical dataset to master clinical JSON formatting.</dd>
+        </dl>
+        <p class="lead">How LoRA Works:</p>
+        <dl>
+          <dt>Base Model</dt>
+          <dd>The original foundation model weights are completely frozen and untouched, preserving core capabilities and safety guardrails.</dd>
+          <dt>Trainable Adapter</dt>
+          <dd>A tiny, trainable layer (&lt;1% of parameters) is attached to the base model. Only this adapter is trained using the JSONL medical dataset to master clinical JSON formatting and styling.</dd>
           <dt>Benefit</dt>
-          <dd>It is modular, fast, and cost-effective. If an adapter requires changes, it can be swapped out without rebuilding the base architecture.</dd>
+          <dd>It is modular, fast, and cost-effective; if adapters require updates, they can be swapped out without rebuilding the base architecture.</dd>
         </dl>
       </div>
 
       <div class="note-card">
         <h4>Step 4: Comprehensive Model Evaluation (The Three-Tier Gate)</h4>
+        <p class="sub">Once trained, the model passes through a multi-tier evaluation pipeline:</p>
         <dl>
-          <dt>Tier 1: Automatic Evaluation (Fast &amp; Cheap)</dt>
-          <dd>Uses metrics like BLEU (measures Precision or word-by-word overlap) and ROUGE (measures Recall or coverage of key reference elements in summaries), alongside JSON schema validators. Limitation: Checks syntax and word matching, not semantic meaning (e.g., missing the clinical difference between "has pain" vs. "has no pain"). Used strictly to filter 15&ndash;20 initial models down to a shortlist.</dd>
-          <dt>Tier 2: LLM-as-a-Judge (Deep Semantic Check)</dt>
-          <dd>Shortlisted outputs are evaluated by a high-end judge model (like Claude 3.5 Sonnet) using a strict rubric to check semantic correctness, clinical logic, and hallucinations.</dd>
-          <dt>Tier 3: Human Clinical Sign-off (Non-Negotiable)</dt>
-          <dd>Hospital doctors and medical domain experts manually review outputs for final regulatory approval.</dd>
+          <dt>1. Tier 1: Automatic Evaluation (Fast &amp; Cheap)</dt>
+          <dd>Uses automated scripts, schema validators, and statistical text metrics to filter 15&ndash;20 baseline models down to a shortlist.</dd>
         </dl>
         <div class="trap">
-          <p>Crucial Exam Trap Note: Latency (p95) and Cost are not part of Model Evaluation. Evaluating a model only tests its quality and accuracy. Speed and expense require separate load-testing scripts and CloudWatch metrics (InvocationLatency, token counts).</p>
+          <p>Crucial Exam Note: Latency and Cost are not part of model evaluation. Evaluating a model only tests its quality and accuracy; speed and expense require separate load tests and CloudWatch metrics (InvocationLatency, token counts).</p>
         </div>
+        <dl>
+          <dt>2. Tier 2: LLM-as-a-Judge (Deep Semantic Check)</dt>
+          <dd>Shortlisted model outputs are evaluated by a high-end judge model (like Claude 3.5 Sonnet) using a strict grading rubric to check semantic correctness, clinical logic, and hallucination risks.</dd>
+          <dt>3. Tier 3: Human Clinical Sign-off (Non-Negotiable)</dt>
+          <dd>Hospital medical boards and clinicians manually review outputs for final regulatory approval before live deployment.</dd>
+        </dl>
+      </div>
+
+      <div class="note-card">
+        <h4>Step 5: Limitation Analysis, Adversarial Testing &amp; Drift Monitoring</h4>
+        <dl>
+          <dt>Red Teaming (Adversarial Testing)</dt>
+          <dd>Intentionally feeding contradictory inputs (e.g., "Patient has no history of stroke... wait, actually scratch that, patient suffered a severe ischemic stroke last week") to check if the model tracks shifting updates or falls into traps.</dd>
+          <dt>Slice &amp; OCR Failure Analysis</dt>
+          <dd>Testing model performance across messy scanned documents, heavy medical abbreviations, or low-quality OCR text vs. clean text.</dd>
+          <dt>Failure Mode &amp; Drift Monitoring</dt>
+          <dd>Tracking runtime issues (JSON parsing crashes, hallucinations, confidence drops) and Data Drift (real-world shifts like new medications or billing codes over time). Managed via Amazon CloudWatch alarms, Amazon SNS alerts, and Human-in-the-Loop retraining loops.</dd>
+        </dl>
       </div>
 
       <div class="note-card wide">
-        <h4>Step 5: Limitation Analysis, Adversarial Testing &amp; Drift Monitoring</h4>
+        <h4>Detailed Deep-Dive: Automatic Evaluation Metrics (BLEU &amp; ROUGE)</h4>
+        <p class="sub">During automatic testing (Tier 1), model outputs are compared against expert-curated reference answers using two core metrics:</p>
+
         <dl>
-          <dt>Adversarial Testing (Red Teaming)</dt>
-          <dd>Intentionally feeding the model tricky or contradictory inputs (e.g., "Patient has no history of stroke... wait, actually scratch that, patient experienced a severe ischemic stroke last week") to check if it tracks shifting updates or falls into traps.</dd>
-          <dt>Slice &amp; OCR Failure Analysis</dt>
-          <dd>Testing performance across messy, low-quality scanned documents or heavy medical abbreviations compared to clean text.</dd>
-          <dt>Tracking Failures</dt>
-          <dd>Proactively monitoring JSON parsing crashes (e.g., if markdown tags break the EHR parser), clinical hallucinations, or model confidence drops.</dd>
-          <dt>Data Drift</dt>
-          <dd>Accounting for real-world changes over time (such as new medications, updated billing codes, or shifting doctor shorthand styles) that can degrade model performance months after deployment.</dd>
-          <dt>AWS Operational Tooling</dt>
-          <dd>Leveraging Amazon CloudWatch to track error rates and trigger alarms via Amazon SNS (Simple Notification Service) if JSON failure rates spike, alongside routing low-confidence outputs to human clinicians for manual review.</dd>
+          <dt>1. BLEU (Bilingual Evaluation Understudy)</dt>
+          <dd>Core Focus: Precision (Exact word and phrase matching). Mechanism: Measures how many words in the model's output match the reference answer based on n-grams (unigrams, bigrams).</dd>
         </dl>
+        <div class="example">
+          <p>Reference Answer: "Patient has a severe headache."</p>
+          <p>Model Output: "Patient has severe headache." &rarr; High BLEU Score (Precise word overlap).</p>
+          <p>Model Output: "Patient is suffering from a severe headache." &rarr; Lower BLEU Score (Extra words lower precision, despite similar meaning).</p>
+        </div>
+        <p class="sub">Role in Pipeline: Fast syntax and exact phrase matching to check structural adherence.</p>
+
+        <dl>
+          <dt>2. ROUGE (Recall-Oriented Understudy for Gisting Evaluation)</dt>
+          <dd>Core Focus: Recall (Information coverage and content capture). Mechanism: Measures how many essential keywords or summary elements from the reference answer are successfully covered in the model's output.</dd>
+        </dl>
+        <div class="example">
+          <p>Reference Summary: "Diagnosis: Migraine. Prescription: Sumatriptan. Follow up in 1 week."</p>
+          <p>Model Output: "Migraine diagnosed. Sumatriptan prescribed." &rarr; High ROUGE Score (Captured all vital clinical entities/recall points).</p>
+        </div>
+        <p class="sub">Role in Pipeline: Evaluates clinical summarization tasks to ensure no critical diagnostic data is omitted.</p>
+
+        <div class="trap">
+          <p>Critical Shared Limitation of BLEU &amp; ROUGE: Both metrics perform text-matching rather than true semantic evaluation. Failure Scenario: If a reference states "Patient does not have chest pain" and a flawed model outputs "Patient has chest pain", basic ROUGE/BLEU scripts can still return a deceptively passing score due to high word overlap&mdash;highlighting why LLM-as-a-Judge and Human Sign-off are mandatory.</p>
+        </div>
       </div>
 
     </div>
