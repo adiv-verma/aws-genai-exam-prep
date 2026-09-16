@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Task 1.2 Build Log | AIP-C01 Guide</title>
-<meta name="description" content="Domain 1, Task 1.2 bonus assignment, step by step: a Bedrock model-selection and lifecycle system for a financial-services assistant — benchmarking, AppConfig-driven dynamic routing, a cross-region circuit breaker, and Bedrock fine-tuning. What was built, the real errors hit, and where the task stopped by design.">
+<meta name="description" content="Domain 1, Task 1.2 bonus assignment, step by step: a system that picks the best AI model, keeps working if one fails, and gets trained for a specific business. Written in plain English — what was built, what broke, and where the task stopped on purpose.">
 <style>
   :root{
     --ink:#0b1524; --ink-soft:#3a4a5e; --paper:#f7f8fa; --card:#ffffff; --line:#e3e7ee;
@@ -124,14 +124,14 @@
 <header class="hero">
   <div class="wrap">
     <span class="eyebrow">Domain 1 &middot; Task 1.2 &middot; Bonus Assignment</span>
-    <h1>Foundation Model Selection<br>&amp; Lifecycle Management</h1>
+    <h1>Picking the Right AI Model<br>&amp; Keeping It Running</h1>
     <p class="lead">
-      A dynamic model-selection system for a financial-services customer assistant, benchmarked, deployed
-      across two regions, and fine-tuned — logged step by step, including exactly where the task stopped
-      by deliberate cost decision rather than technical limit.
+      The goal: build a system for a bank's customer-service AI that automatically picks the best model,
+      keeps answering even if that model goes down, and gets specially trained for banking questions.
+      Here's what was actually built, step by step, in plain English.
     </p>
     <div class="stat-row">
-      <div class="stat"><div class="n">13</div><div class="l">Steps executed live</div></div>
+      <div class="stat"><div class="n">13</div><div class="l">Steps built and tested</div></div>
       <div class="stat"><div class="n">22</div><div class="l">Resources deployed</div></div>
       <div class="stat"><div class="n">6</div><div class="l">Real bugs, fixed</div></div>
       <div class="stat"><div class="n">2</div><div class="l">Live regions (east/west)</div></div>
@@ -143,10 +143,10 @@
   <div class="wrap">
     <div class="toc">
       <a href="#architecture">How it runs</a>
-      <a href="#phase-1">Phase 1: Benchmarking</a>
-      <a href="#phase-2">Phase 2: Dynamic Selection</a>
-      <a href="#phase-3">Phase 3: Resilience</a>
-      <a href="#phase-4">Phase 4: Lifecycle</a>
+      <a href="#phase-1">Phase 1: Comparing Models</a>
+      <a href="#phase-2">Phase 2: Auto-Switching</a>
+      <a href="#phase-3">Phase 3: Staying Up</a>
+      <a href="#phase-4">Phase 4: Custom Training</a>
       <a href="#resources">Resource Index</a>
     </div>
   </div>
@@ -155,17 +155,17 @@
 <section class="alt" id="architecture">
   <div class="wrap-wide">
     <p class="kicker">How It Runs</p>
-    <h2 class="h">Two live regions, one benchmark-driven routing decision</h2>
+    <h2 class="h">Two copies of the system, running in two different places</h2>
     <p class="section-lead">
-      Solid arrows are the synchronous path a client request actually takes; dashed arrows are health
-      monitoring happening continuously alongside it. The circuit breaker (bottom) is a real, separately
-      tested Step Functions state machine — built and verified standalone, not yet wired in front of the
-      live API path shown above it. All resource names drop the shared <code>adi-1-2-</code> prefix for space.
+      Solid arrows show the path a real question takes. Dashed arrows show background health checks.
+      The backup plan at the bottom (the "circuit breaker") was built and tested on its own — it isn't
+      wired in front of the live path above it yet. Resource names below drop the shared
+      <code>adi-1-2-</code> prefix to save space.
     </p>
 
     <figure class="diagram">
       <div class="svg-scroll">
-      <svg viewBox="0 0 1300 700" role="img" aria-label="Architecture diagram: a client calls one of two regional API Gateway endpoints, each proxying to a model-abstraction Lambda that reads a region-local AppConfig strategy and invokes Amazon Bedrock (Nova Micro primary, Nova Lite and Claude Haiku 4.5 as fallbacks). Route 53 health checks watch both regions' /health endpoints continuously. A separate, standalone Step Functions circuit breaker chains TryPrimaryModel, TryFallbackModel, and GracefulDegradation Lambdas, tested independently of the live API path.">
+      <svg viewBox="0 0 1300 700" role="img" aria-label="Diagram: a customer's question can go to either of two copies of the system, one in the US East region and one in the US West region. Each copy has a web entry point, a small program that checks a settings file to decide which AI model to use, and then asks Amazon Bedrock for an answer. A health-check service watches both copies all the time. A separate backup system tries a main model first, then a backup model, then a canned safe reply if both fail — tested on its own, not yet connected to the live path.">
         <defs>
           <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
             <path d="M0,0 L10,5 L0,10 z" fill="var(--navy-2)"/>
@@ -179,7 +179,7 @@
 
           <!-- Client -->
           <rect x="560" y="16" width="180" height="42" rx="10" fill="var(--card)" stroke="var(--line)" stroke-width="1.5"/>
-          <text x="650" y="42" text-anchor="middle" font-size="12" font-weight="700" fill="var(--ink)">Client &#8212; POST /generate</text>
+          <text x="650" y="42" text-anchor="middle" font-size="12" font-weight="700" fill="var(--ink)">A customer's question</text>
 
           <!-- Client -> east -->
           <line x1="600" y1="58" x2="330" y2="112" stroke="var(--navy-2)" stroke-width="1.6" marker-end="url(#arrow)"/>
@@ -188,41 +188,41 @@
 
           <!-- us-east-1 region box -->
           <rect x="110" y="115" width="440" height="190" rx="14" fill="none" stroke="var(--navy-2)" stroke-width="1.2"/>
-          <text x="130" y="136" font-size="10.5" font-weight="700" letter-spacing="0.4" fill="var(--navy-2)">US-EAST-1 &#183; PRIMARY REGION</text>
+          <text x="130" y="136" font-size="10.5" font-weight="700" letter-spacing="0.4" fill="var(--navy-2)">US EAST &#183; MAIN COPY</text>
 
           <rect x="140" y="155" width="150" height="54" rx="8" fill="var(--card)" stroke="var(--line)" stroke-width="1.5"/>
-          <text x="215" y="177" text-anchor="middle" font-size="12" font-weight="700" fill="var(--ink)">API Gateway</text>
-          <text x="215" y="195" text-anchor="middle" font-size="9.5" fill="var(--ink-soft)">api &#183; prod stage</text>
+          <text x="215" y="177" text-anchor="middle" font-size="12" font-weight="700" fill="var(--ink)">Web entry point</text>
+          <text x="215" y="195" text-anchor="middle" font-size="9.5" fill="var(--ink-soft)">API Gateway</text>
 
           <line x1="290" y1="182" x2="330" y2="182" stroke="var(--navy-2)" stroke-width="1.6" marker-end="url(#arrow)"/>
 
           <rect x="332" y="155" width="180" height="54" rx="8" fill="var(--card)" stroke="var(--line)" stroke-width="1.5"/>
-          <text x="422" y="177" text-anchor="middle" font-size="12" font-weight="700" fill="var(--ink)">model-abstraction</text>
-          <text x="422" y="195" text-anchor="middle" font-size="9.5" fill="var(--ink-soft)">Lambda</text>
+          <text x="422" y="177" text-anchor="middle" font-size="12" font-weight="700" fill="var(--ink)">Model picker</text>
+          <text x="422" y="195" text-anchor="middle" font-size="9.5" fill="var(--ink-soft)">Lambda function</text>
 
           <line x1="422" y1="209" x2="422" y2="245" stroke="var(--navy-2)" stroke-width="1.6" marker-end="url(#arrow)"/>
           <rect x="332" y="247" width="180" height="46" rx="8" fill="var(--card)" stroke="var(--line)" stroke-width="1.5"/>
-          <text x="422" y="266" text-anchor="middle" font-size="11.5" font-weight="700" fill="var(--ink)">AppConfig</text>
-          <text x="422" y="282" text-anchor="middle" font-size="9.5" fill="var(--ink-soft)">model-config (east replica)</text>
+          <text x="422" y="266" text-anchor="middle" font-size="11.5" font-weight="700" fill="var(--ink)">Settings file</text>
+          <text x="422" y="282" text-anchor="middle" font-size="9.5" fill="var(--ink-soft)">AppConfig (east copy)</text>
 
           <!-- us-west-2 region box -->
           <rect x="750" y="115" width="440" height="190" rx="14" fill="none" stroke="var(--navy-2)" stroke-width="1.2"/>
-          <text x="770" y="136" font-size="10.5" font-weight="700" letter-spacing="0.4" fill="var(--navy-2)">US-WEST-2 &#183; SECONDARY REGION</text>
+          <text x="770" y="136" font-size="10.5" font-weight="700" letter-spacing="0.4" fill="var(--navy-2)">US WEST &#183; BACKUP COPY</text>
 
           <rect x="1010" y="155" width="150" height="54" rx="8" fill="var(--card)" stroke="var(--line)" stroke-width="1.5"/>
-          <text x="1085" y="177" text-anchor="middle" font-size="12" font-weight="700" fill="var(--ink)">API Gateway</text>
-          <text x="1085" y="195" text-anchor="middle" font-size="9.5" fill="var(--ink-soft)">api &#183; prod stage</text>
+          <text x="1085" y="177" text-anchor="middle" font-size="12" font-weight="700" fill="var(--ink)">Web entry point</text>
+          <text x="1085" y="195" text-anchor="middle" font-size="9.5" fill="var(--ink-soft)">API Gateway</text>
 
           <line x1="1010" y1="182" x2="970" y2="182" stroke="var(--navy-2)" stroke-width="1.6" marker-end="url(#arrow)"/>
 
           <rect x="788" y="155" width="180" height="54" rx="8" fill="var(--card)" stroke="var(--line)" stroke-width="1.5"/>
-          <text x="878" y="177" text-anchor="middle" font-size="12" font-weight="700" fill="var(--ink)">model-abstraction</text>
-          <text x="878" y="195" text-anchor="middle" font-size="9.5" fill="var(--ink-soft)">Lambda (CloudFormation)</text>
+          <text x="878" y="177" text-anchor="middle" font-size="12" font-weight="700" fill="var(--ink)">Model picker</text>
+          <text x="878" y="195" text-anchor="middle" font-size="9.5" fill="var(--ink-soft)">Same code, own copy</text>
 
           <line x1="878" y1="209" x2="878" y2="245" stroke="var(--navy-2)" stroke-width="1.6" marker-end="url(#arrow)"/>
           <rect x="788" y="247" width="180" height="46" rx="8" fill="var(--card)" stroke="var(--line)" stroke-width="1.5"/>
-          <text x="878" y="266" text-anchor="middle" font-size="11.5" font-weight="700" fill="var(--ink)">AppConfig</text>
-          <text x="878" y="282" text-anchor="middle" font-size="9.5" fill="var(--ink-soft)">model-config (west replica)</text>
+          <text x="878" y="266" text-anchor="middle" font-size="11.5" font-weight="700" fill="var(--ink)">Settings file</text>
+          <text x="878" y="282" text-anchor="middle" font-size="9.5" fill="var(--ink-soft)">AppConfig (west copy)</text>
 
           <!-- both -> Bedrock -->
           <line x1="422" y1="293" x2="580" y2="345" stroke="var(--navy-2)" stroke-width="1.6" marker-end="url(#arrow)"/>
@@ -230,49 +230,48 @@
 
           <!-- Bedrock -->
           <rect x="440" y="347" width="420" height="80" rx="10" fill="var(--card)" stroke="var(--line)" stroke-width="1.5"/>
-          <text x="650" y="371" text-anchor="middle" font-size="12.5" font-weight="700" fill="var(--ink)">Amazon Bedrock &#8212; Converse API</text>
-          <text x="650" y="390" text-anchor="middle" font-size="10" fill="var(--ink-soft)">Primary: Nova Micro &#183; Fallback: Nova Lite, Claude Haiku 4.5</text>
-          <text x="650" y="407" text-anchor="middle" font-size="10" fill="var(--ink-soft)">Custom: adi-1-2-nova-micro-financial-qa (fine-tuned, Step 13)</text>
+          <text x="650" y="371" text-anchor="middle" font-size="12.5" font-weight="700" fill="var(--ink)">Amazon Bedrock &mdash; the AI models</text>
+          <text x="650" y="390" text-anchor="middle" font-size="10" fill="var(--ink-soft)">First choice: Nova Micro &middot; Backups: Nova Lite, Claude Haiku 4.5</text>
+          <text x="650" y="407" text-anchor="middle" font-size="10" fill="var(--ink-soft)">Custom-trained version also exists (Step 13), not yet switched on</text>
 
           <!-- Route53 (dashed) watching both -->
           <path d="M 215 115 L 215 60 L 1085 60 L 1085 115" fill="none" stroke="var(--ink-soft)" stroke-width="1.4" stroke-dasharray="5,4"/>
           <rect x="480" y="30" width="340" height="42" rx="10" fill="var(--card)" stroke="var(--line)" stroke-width="1.5"/>
-          <text x="650" y="56" text-anchor="middle" font-size="11.5" font-weight="700" fill="var(--ink-soft)">Route 53 &#8212; health checks (both /health)</text>
+          <text x="650" y="56" text-anchor="middle" font-size="11.5" font-weight="700" fill="var(--ink-soft)">Health checks &mdash; watching both copies</text>
 
           <!-- Circuit breaker boundary -->
           <rect x="110" y="460" width="1080" height="160" rx="14" fill="none" stroke="var(--ink-soft)" stroke-width="1.2" stroke-dasharray="6,4"/>
-          <text x="130" y="482" font-size="10.5" font-weight="700" letter-spacing="0.3" fill="var(--ink-soft)">STEP FUNCTIONS &#183; circuit-breaker-sm &#8212; standalone, tested independently (not fronted by API Gateway above)</text>
+          <text x="130" y="482" font-size="10.5" font-weight="700" letter-spacing="0.3" fill="var(--ink-soft)">BACKUP PLAN &mdash; built and tested on its own, not yet wired to the live path above</text>
 
           <rect x="150" y="505" width="220" height="58" rx="8" fill="var(--card)" stroke="var(--line)" stroke-width="1.5"/>
-          <text x="260" y="528" text-anchor="middle" font-size="12" font-weight="700" fill="var(--ink)">TryPrimaryModel</text>
-          <text x="260" y="546" text-anchor="middle" font-size="9.5" fill="var(--ink-soft)">Catch &#8594; fallback</text>
+          <text x="260" y="528" text-anchor="middle" font-size="12" font-weight="700" fill="var(--ink)">Try the main model</text>
+          <text x="260" y="546" text-anchor="middle" font-size="9.5" fill="var(--ink-soft)">if it fails &#8594;</text>
 
           <line x1="370" y1="534" x2="420" y2="534" stroke="var(--ink-soft)" stroke-width="1.6" stroke-dasharray="4,3" marker-end="url(#arrowSoft)"/>
 
           <rect x="422" y="505" width="220" height="58" rx="8" fill="var(--card)" stroke="var(--line)" stroke-width="1.5"/>
-          <text x="532" y="528" text-anchor="middle" font-size="12" font-weight="700" fill="var(--ink)">TryFallbackModel</text>
-          <text x="532" y="546" text-anchor="middle" font-size="9.5" fill="var(--ink-soft)">Nova Lite, forced</text>
+          <text x="532" y="528" text-anchor="middle" font-size="12" font-weight="700" fill="var(--ink)">Try a backup model</text>
+          <text x="532" y="546" text-anchor="middle" font-size="9.5" fill="var(--ink-soft)">if that fails too &#8594;</text>
 
           <line x1="642" y1="534" x2="692" y2="534" stroke="var(--ink-soft)" stroke-width="1.6" stroke-dasharray="4,3" marker-end="url(#arrowSoft)"/>
 
           <rect x="694" y="505" width="220" height="58" rx="8" fill="var(--card)" stroke="var(--line)" stroke-width="1.5"/>
-          <text x="804" y="528" text-anchor="middle" font-size="12" font-weight="700" fill="var(--ink)">GracefulDegradation</text>
-          <text x="804" y="546" text-anchor="middle" font-size="9.5" fill="var(--ink-soft)">canned response, no Bedrock call</text>
+          <text x="804" y="528" text-anchor="middle" font-size="12" font-weight="700" fill="var(--ink)">Show a safe reply</text>
+          <text x="804" y="546" text-anchor="middle" font-size="9.5" fill="var(--ink-soft)">no AI call needed</text>
 
           <line x1="914" y1="534" x2="964" y2="534" stroke="var(--navy-2)" stroke-width="1.6" marker-end="url(#arrow)"/>
           <rect x="966" y="509" width="90" height="50" rx="8" fill="var(--good-bg)" stroke="var(--good-line)" stroke-width="1.5"/>
-          <text x="1011" y="538" text-anchor="middle" font-size="11" font-weight="700" fill="var(--good)">Success</text>
+          <text x="1011" y="538" text-anchor="middle" font-size="11" font-weight="700" fill="var(--good)">Done</text>
 
         </g>
       </svg>
       </div>
       <figcaption>
-        Solid = the synchronous client path in each region. Dashed = Route 53's continuous health monitoring
-        (top) and the circuit breaker's internal Catch-driven routing (bottom) &#8212; all 3 of its paths
-        (primary succeeds / falls to fallback / falls all the way to degradation) were verified via
-        <code>get-execution-history</code>, not just trusted from the final response. Not pictured: the
-        <code>financial_qa_dataset.jsonl</code> S3 bucket and the fine-tuning job itself, since the resulting
-        custom model was intentionally never wired into either live path (see Step 13).
+        Solid lines show the path a real question takes in each region. The top dashed box shows health
+        checks running all the time. The bottom dashed box is the backup-plan flowchart — all three of
+        its outcomes (main model works / backup model works / safe reply shown) were tested for real and
+        double-checked step by step, not just by looking at the final answer. Not pictured: the training
+        data and fine-tuning job from Step 13, since that custom model was never switched on for live use.
       </figcaption>
     </figure>
   </div>
@@ -283,234 +282,234 @@
     <p class="kicker">Step-by-Step Build Log</p>
     <h2 class="h">Every step, in the order it happened</h2>
     <p class="section-lead">
-      Scoped to a single narrowed scenario &mdash; personal-banking product Q&amp;A for a financial-services
-      assistant &mdash; per the brief's own "start narrow" advice. The last two steps were designed in full
-      but deliberately not executed; see why in Phase 4.
+      Kept to one topic on purpose &mdash; a bank's customer questions about everyday products like savings
+      accounts and credit cards &mdash; to keep things simple to build and test. The last two steps were
+      fully planned but not built; Phase 4 explains why.
     </p>
 
     <div class="phase-divider" id="phase-1">
       <span class="pd-num">Phase 1</span>
-      <div class="pd-text"><h3>FM Assessment &amp; Benchmarking</h3><p>Live-test access, build a test set, score 3 candidates on 4 axes</p></div>
+      <div class="pd-text"><h3>Comparing the Models</h3><p>Test 3 AI models on the same questions and score them</p></div>
       <span class="pd-line"></span>
     </div>
 
     <div class="step-card">
-      <div class="step-head"><span class="step-num">1</span><h4>Confirm access for 3 benchmark candidates</h4></div>
+      <div class="step-head"><span class="step-num">1</span><h4>Check that 3 models actually work</h4></div>
       <p class="step-res">Claude Haiku 4.5 &middot; Nova Lite &middot; Nova Micro</p>
       <div class="step-body">
-        <p><strong class="lbl">What:</strong> Live-tested <code>bedrock-runtime converse</code> for each. Claude Sonnet 5 was also tried and dropped &mdash; still not entitled on this account, same as Task 1.1.</p>
-        <p><strong class="lbl">Where:</strong> Console &rarr; Amazon Bedrock &rarr; Model access.</p>
-        <p><strong class="lbl">Why:</strong> A meaningful benchmark needs more than one model <em>provider</em>, not just two Claude tiers &mdash; Anthropic + Amazon gives a real cross-provider quality/latency/cost comparison.</p>
+        <p><strong class="lbl">What:</strong> Sent a real test message to each of the 3 candidate models to confirm they respond. A 4th model, Claude Sonnet 5, was tried and dropped since it wasn't available yet.</p>
+        <p><strong class="lbl">Where to check:</strong> AWS Console &rarr; Amazon Bedrock &rarr; Model access.</p>
+        <p><strong class="lbl">Why:</strong> A fair comparison needs models from more than one company, not just different sizes of the same one. Anthropic (Claude) and Amazon (Nova) gives a real side-by-side comparison.</p>
       </div>
     </div>
 
     <div class="step-card">
-      <div class="step-head"><span class="step-num">2</span><h4>Financial-domain benchmark dataset</h4></div>
-      <p class="step-res">data/benchmark_test_cases.json &middot; 12 QA + 5 compliance cases</p>
+      <div class="step-head"><span class="step-num">2</span><h4>Write test questions</h4></div>
+      <p class="step-res">data/benchmark_test_cases.json &middot; 12 normal questions + 5 tricky ones</p>
       <div class="step-body">
-        <p><strong class="lbl">What:</strong> 12 personal-banking QA pairs with ground-truth answers, plus 5 compliance cases (unauthorized investment advice, guaranteed returns, credential/PII sharing, competitor disparagement, prompt injection) each with an <code>expected_behavior</code>.</p>
-        <p><strong class="lbl">Where:</strong> repo &mdash; <code>data/benchmark_test_cases.json</code>.</p>
-        <p><strong class="lbl">Why:</strong> Gives the benchmark concrete ground truth to score quality against, and concrete pass/fail criteria for the guardrail-compliance axis.</p>
+        <p><strong class="lbl">What:</strong> Wrote 12 everyday banking questions with a correct-answer example for each, plus 5 tricky questions designed to see if the AI does something it shouldn't (like giving investment advice or asking for a password).</p>
+        <p><strong class="lbl">Where to check:</strong> repo &mdash; <code>data/benchmark_test_cases.json</code>.</p>
+        <p><strong class="lbl">Why:</strong> Gives the comparison something concrete to grade against, instead of just eyeballing the answers.</p>
       </div>
     </div>
 
     <div class="step-card">
-      <div class="step-head"><span class="step-num">3</span><h4>Benchmark script: latency, cost, LLM-as-judge quality</h4></div>
+      <div class="step-head"><span class="step-num">3</span><h4>Run the comparison</h4></div>
       <p class="step-res">benchmark.py</p>
       <div class="step-body">
-        <p><strong class="lbl">What:</strong> Runs via the <code>aws</code> CLI (no boto3 in this environment). Measures latency and per-request cost (published token pricing) for all 3 models on all 17 cases, and uses Claude Haiku 4.5 as an <strong>LLM-as-judge</strong> for QA quality and compliance pass/fail.</p>
-        <p><strong class="lbl">Where:</strong> repo &mdash; <code>benchmark.py</code>, <code>data/model_evaluation_results.csv</code>.</p>
-        <p><strong class="lbl">Why:</strong> Covers all 4 of the brief's comparison axes with a re-runnable script, not a one-time manual check.</p>
+        <p><strong class="lbl">What:</strong> A script that asks all 3 models all 17 questions, times each answer, works out the cost, and uses a 4th AI call to grade each answer's quality and safety.</p>
+        <p><strong class="lbl">Where to check:</strong> repo &mdash; <code>benchmark.py</code>, <code>data/model_evaluation_results.csv</code>.</p>
+        <p><strong class="lbl">Why:</strong> Covers all 4 things the assignment asked to compare: answer quality, speed, cost, and safety — with a script that can be re-run any time, not a one-off manual check.</p>
       </div>
       <div class="mini-tip">
-        <p class="mt-head">Exam tip</p>
-        <p>Using one of the candidates as its own judge risks mild self-preference bias &mdash; a real limitation, accepted here because no stronger independent judge (Sonnet 5) was accessible on this account. The same judge across all 3 candidates keeps the <em>relative</em> ranking fair even if the absolute scores aren't perfectly independent.</p>
+        <p class="mt-head">Good to know</p>
+        <p>Using one of the 3 models to also grade the others is a bit like a student grading their own test — it's not perfectly fair. It was still used here because a stronger, independent grading model wasn't available on this account, but it's worth knowing about as a limit of this approach.</p>
       </div>
     </div>
 
     <div class="step-card">
-      <div class="step-head"><span class="step-num">4</span><h4>Analysis &amp; model-selection strategy</h4></div>
-      <p class="step-res">data/model_selection_strategy.json &middot; primary = Nova Micro</p>
+      <div class="step-head"><span class="step-num">4</span><h4>Pick a winner</h4></div>
+      <p class="step-res">data/model_selection_strategy.json &middot; winner = Nova Micro</p>
       <div class="step-body">
-        <p><strong class="lbl">What:</strong> Weighted score (quality 0.40, compliance 0.30, latency 0.20, cost 0.10) across the 3 candidates. Result: Nova Micro (0.917) &gt; Nova Lite (0.902) &gt; Claude Haiku 4.5 (0.700) &mdash; quality was nearly saturated across all 3 (4.92&ndash;5.00/5), so latency and cost ended up the real differentiators.</p>
-        <p><strong class="lbl">Where:</strong> repo &mdash; <code>data/model_selection_strategy.json</code>.</p>
-        <p><strong class="lbl">Why:</strong> This exact file is what Step 5's AppConfig deployment is seeded from &mdash; the production routing decision is the one the benchmark actually justified.</p>
+        <p><strong class="lbl">What:</strong> Combined the 4 scores into one overall number, weighted toward quality and safety since this is a bank. Result: Nova Micro came out on top, then Nova Lite, then Claude Haiku 4.5. All 3 gave almost equally good answers, so the fastest and cheapest one won.</p>
+        <p><strong class="lbl">Where to check:</strong> repo &mdash; <code>data/model_selection_strategy.json</code>.</p>
+        <p><strong class="lbl">Why:</strong> This file is exactly what gets loaded into the settings system in Step 5 — the model actually used in production is the one the test results, not a guess, pointed to.</p>
       </div>
       <div class="mini-tip">
-        <p class="mt-head">Exam tip</p>
-        <p>All 3 models passed every compliance case at the prompt-instruction level alone &mdash; no Guardrail resource exists in this task. A real deployment would still want an independent Guardrail layer (per Task 1.1's own conclusion) rather than relying on prompt instructions as the only defense.</p>
+        <p class="mt-head">Good to know</p>
+        <p>All 3 models handled the tricky safety questions correctly, just from good instructions — no extra safety tool was added yet. A real bank system would still want a dedicated safety layer as backup, since instructions alone can sometimes be tricked.</p>
       </div>
     </div>
 
     <div class="phase-divider" id="phase-2">
       <span class="pd-num">Phase 2</span>
-      <div class="pd-text"><h3>Dynamic Model-Selection Architecture</h3><p>AppConfig-driven routing behind a Lambda and API Gateway</p></div>
+      <div class="pd-text"><h3>Auto-Switching Between Models</h3><p>A settings file decides which model to use, no code changes needed</p></div>
       <span class="pd-line"></span>
     </div>
 
     <div class="step-card">
-      <div class="step-head"><span class="step-num">5</span><h4>AWS AppConfig for model-selection rules</h4></div>
+      <div class="step-head"><span class="step-num">5</span><h4>A settings file for which model to use</h4></div>
       <p class="step-res">adi-1-2-model-config &middot; Production &middot; ModelSelectionStrategy</p>
       <div class="step-body">
-        <p><strong class="lbl">What:</strong> Application &rarr; Production environment &rarr; <code>AWS.Freeform</code> configuration profile (not <code>AWS.AppConfig.FeatureFlags</code>, despite the brief's own sample CLI using that type &mdash; the payload is a full strategy object, not on/off flags). Deployed Step 4's strategy JSON as version 1 via the predefined <code>AppConfig.AllAtOnce</code> strategy.</p>
-        <p><strong class="lbl">Where:</strong> Console &rarr; AWS AppConfig &rarr; adi-1-2-model-config &rarr; Production.</p>
-        <p><strong class="lbl">Why:</strong> Safe, monitored, gradual rollout &mdash; changing the primary model later is a new configuration version, not a Lambda redeploy, and a bad change is catchable/rollback-able during the bake window.</p>
+        <p><strong class="lbl">What:</strong> Set up AWS AppConfig, a service for storing settings separately from code, and loaded the winning model choice from Step 4 into it.</p>
+        <p><strong class="lbl">Where to check:</strong> Console &rarr; AWS AppConfig &rarr; adi-1-2-model-config &rarr; Production.</p>
+        <p><strong class="lbl">Why:</strong> This is what makes "switch to a different model" a settings change instead of a code change — safer, faster, and it can be undone instantly if something goes wrong.</p>
       </div>
     </div>
 
     <div class="step-card">
-      <div class="step-head"><span class="step-num">6</span><h4>IAM role for the model-abstraction Lambda</h4></div>
+      <div class="step-head"><span class="step-num">6</span><h4>Permissions for the model-picker program</h4></div>
       <p class="step-res">adi-1-2-bedrock-lambda-role</p>
       <div class="step-body">
-        <p><strong class="lbl">What:</strong> Least-privilege: <code>bedrock:InvokeModel</code>/<code>Converse</code> scoped to exactly the 3 candidate models, plus <code>appconfig:StartConfigurationSession</code>/<code>GetLatestConfiguration</code> scoped to this task's AppConfig profile.</p>
-        <p><strong class="lbl">Where:</strong> IAM &rarr; Roles &rarr; adi-1-2-bedrock-lambda-role.</p>
-        <p><strong class="lbl">Why:</strong> The shared execution role for this task's Lambda pipeline.</p>
+        <p><strong class="lbl">What:</strong> A permission set allowing only the 3 approved models to be called, and only this task's settings file to be read.</p>
+        <p><strong class="lbl">Where to check:</strong> IAM &rarr; Roles &rarr; adi-1-2-bedrock-lambda-role.</p>
+        <p><strong class="lbl">Why:</strong> Keeps this program's access as narrow as possible — it can only do exactly what it needs to.</p>
       </div>
       <div class="mini-bug">
-        <p class="mb-head">Bug 1 &middot; Wrong IAM action namespace for AppConfig data-plane calls</p>
-        <p><strong>Symptom:</strong> First policy used <code>appconfigdata:StartConfigurationSession</code>/<code>GetLatestConfiguration</code> &mdash; a reasonable guess, since config-retrieval calls do hit a separate <code>appconfigdata.&lt;region&gt;.amazonaws.com</code> API endpoint. Live Lambda test threw <code>AccessDeniedException</code> anyway.</p>
-        <p><strong>Fix:</strong> the real error named the actual required action: <strong><code>appconfig:StartConfigurationSession</code></strong> &mdash; the IAM action namespace stayed <code>appconfig:</code> even though the runtime endpoint is <code>appconfigdata</code>. Corrected both actions; confirmed via <code>iam simulate-principal-policy</code> before re-testing live.</p>
+        <p class="mb-head">Error 1 &middot; Slightly wrong permission name</p>
+        <p><strong>What happened:</strong> Used a permission name that seemed right based on which web address the settings service uses behind the scenes — but access was still denied.</p>
+        <p><strong>Fix:</strong> the real error message named the exact permission needed, which turned out to be spelled a bit differently than expected. Fixed the permission name and it worked.</p>
       </div>
       <div class="mini-tip">
-        <p class="mt-head">Exam tip</p>
-        <p>A service's control-plane/data-plane API endpoint split doesn't always imply a matching IAM action-namespace split. The authoritative source is the real <code>AccessDeniedException</code> message, not the SDK client name.</p>
+        <p class="mt-head">Good to know</p>
+        <p>An AWS service's web address and its permission name don't always match. When permission is denied, the error message itself usually names the exact permission needed — better to trust that than guess from the service name.</p>
       </div>
     </div>
 
     <div class="step-card">
-      <div class="step-head"><span class="step-num">7</span><h4>Lambda: model abstraction layer</h4></div>
+      <div class="step-head"><span class="step-num">7</span><h4>The model-picker program</h4></div>
       <p class="step-res">adi-1-2-model-abstraction</p>
       <div class="step-body">
-        <p><strong class="lbl">What:</strong> Reads the AppConfig strategy (session cached per warm container), selects a model by <code>use_case</code> (falling back to <code>primary_model</code>), invokes Bedrock Converse, returns <code>{model_used, response, latency_ms}</code>. Deliberately no retry/fallback logic of its own &mdash; that's Phase 3's job.</p>
-        <p><strong class="lbl">Where:</strong> Lambda &rarr; adi-1-2-model-abstraction &rarr; Monitor tab.</p>
-        <p><strong class="lbl">Why:</strong> The brief's "model abstraction layer" &mdash; which model gets called becomes a runtime AppConfig lookup, not something baked into client code.</p>
+        <p><strong class="lbl">What:</strong> A small program (Lambda function) that reads the settings file, picks the right model, asks it the question, and sends back the answer. On purpose, it doesn't try to handle failures itself — that's a separate job, done in Phase 3.</p>
+        <p><strong class="lbl">Where to check:</strong> Lambda &rarr; adi-1-2-model-abstraction &rarr; Monitor tab.</p>
+        <p><strong class="lbl">Why:</strong> This is the piece that makes "which model to use" a live setting instead of something baked into the code.</p>
       </div>
       <div class="mini-bug">
-        <p class="mb-head">Bug 2 &middot; Only parsed API-Gateway-shaped events</p>
-        <p><strong>Symptom:</strong> Found before Step 9 &mdash; the handler assumed <code>event["body"]</code> was always a JSON string. A direct Step Functions/Lambda invocation with a plain JSON payload would have silently dropped the request.</p>
-        <p><strong>Fix:</strong> added a <code>_parse_body()</code> helper that accepts either an API Gateway proxy event or a plain JSON payload, and redeployed before Step 9 needed it.</p>
+        <p class="mb-head">Error 2 &middot; Only understood one kind of request</p>
+        <p><strong>What happened:</strong> Found before Step 9 &mdash; the program only knew how to read requests shaped like a website request. A request from a different source (like the backup-plan flowchart) would have been silently ignored.</p>
+        <p><strong>Fix:</strong> updated it to understand both shapes of request, and re-deployed before it was needed.</p>
       </div>
     </div>
 
     <div class="step-card">
-      <div class="step-head"><span class="step-num">8</span><h4>API Gateway for client access</h4></div>
+      <div class="step-head"><span class="step-num">8</span><h4>A web address customers can call</h4></div>
       <p class="step-res">adi-1-2-api &middot; POST /generate &middot; prod stage</p>
       <div class="step-body">
-        <p><strong class="lbl">What:</strong> REST API, <code>AWS_PROXY</code> integration to the Step 7 Lambda, deployed to <code>prod</code>. Live-tested the actual public HTTPS endpoint with <code>curl</code>, not just <code>lambda invoke</code>.</p>
-        <p><strong class="lbl">Where:</strong> Console &rarr; API Gateway &rarr; adi-1-2-api &rarr; Stages &rarr; prod.</p>
-        <p><strong class="lbl">Why:</strong> Makes the assistant callable by a real client over plain HTTPS &mdash; closes out the "prompt in, response out" path end to end.</p>
+        <p><strong class="lbl">What:</strong> Set up a public web address that forwards requests straight to the Step 7 program. Tested it for real from outside AWS, not just from within the console.</p>
+        <p><strong class="lbl">Where to check:</strong> Console &rarr; API Gateway &rarr; adi-1-2-api &rarr; Stages &rarr; prod.</p>
+        <p><strong class="lbl">Why:</strong> This is what makes the assistant something a real app can actually call over the internet, finishing the "ask a question, get an answer" path end to end.</p>
       </div>
     </div>
 
     <div class="phase-divider" id="phase-3">
       <span class="pd-num">Phase 3</span>
-      <div class="pd-text"><h3>Resilient System Design</h3><p>Circuit breaker, a second live region, and real health checks</p></div>
+      <div class="pd-text"><h3>Staying Up If Something Fails</h3><p>A backup plan, a second copy in another region, and real health checks</p></div>
       <span class="pd-line"></span>
     </div>
 
     <div class="step-card">
-      <div class="step-head"><span class="step-num">9</span><h4>Step Functions circuit breaker</h4></div>
+      <div class="step-head"><span class="step-num">9</span><h4>The backup plan (circuit breaker)</h4></div>
       <p class="step-res">adi-1-2-circuit-breaker-sm</p>
       <div class="step-body">
-        <p><strong class="lbl">What:</strong> <code>TryPrimaryModel &rarr; TryFallbackModel &rarr; GracefulDegradation</code>, matching the brief's own example structure. Two new Lambdas built for the fallback and degradation stages; added fault-injection flags (<code>simulate_primary_failure</code>, <code>simulate_fallback_failure</code>) specifically to prove each <code>Catch</code> branch actually fires.</p>
-        <p><strong class="lbl">Where:</strong> Step Functions &rarr; adi-1-2-circuit-breaker-sm &rarr; Executions.</p>
-        <p><strong class="lbl">Why:</strong> A deterministic, inspectable failover graph, tested for all 3 real outcomes via <code>get-execution-history</code>: normal (primary only), forced-primary-failure (falls to Nova Lite), forced-both-failure (canned degraded response, no Bedrock call).</p>
+        <p><strong class="lbl">What:</strong> Built a flowchart: try the main model, and if that fails, try a backup model, and if that fails too, show a safe canned reply instead of an error. Added a way to fake a failure on purpose, specifically to prove each fallback step actually works.</p>
+        <p><strong class="lbl">Where to check:</strong> Step Functions &rarr; adi-1-2-circuit-breaker-sm &rarr; Executions.</p>
+        <p><strong class="lbl">Why:</strong> A clear, visible failover plan instead of hidden error-handling in code. Tested and confirmed all 3 outcomes really happen: normal answer, backup-model answer, and safe canned reply.</p>
       </div>
       <div class="mini-tip">
-        <p class="mt-head">Exam tip</p>
-        <p>The brief's own sample ASL retries and catches on <code>States.TaskFailed</code> for everything. A Lambda's own unhandled exception actually surfaces as <code>Lambda.Unhandled</code>/the exception class name, not literally <code>States.TaskFailed</code> &mdash; this build scoped <code>Retry</code> only to genuine transient Lambda service errors, and used broad <code>States.ALL</code> for <code>Catch</code>, so a real function-code error routes to fallback immediately instead of being retried twice first.</p>
+        <p class="mt-head">Good to know</p>
+        <p>It's not enough to write a flowchart that "should" fall back correctly — actually forcing a failure and watching it happen is the only way to be sure the fallback logic really works, not just that it looks right on paper.</p>
       </div>
     </div>
 
     <div class="step-card">
-      <div class="step-head"><span class="step-num">10</span><h4>Cross-region deployment (us-west-2)</h4></div>
+      <div class="step-head"><span class="step-num">10</span><h4>A second copy in another region</h4></div>
       <p class="step-res">adi-1-2-cross-region-stack (CloudFormation)</p>
       <div class="step-body">
-        <p><strong class="lbl">What:</strong> A second, fully independent AppConfig replica in us-west-2 (not a cross-region call back to us-east-1 &mdash; that would defeat the point), deployed via CloudFormation, reusing the existing global IAM role rather than duplicating it (IAM roles aren't regional).</p>
-        <p><strong class="lbl">Where:</strong> Console &rarr; CloudFormation &rarr; Stacks &rarr; adi-1-2-cross-region-stack (region: Oregon).</p>
-        <p><strong class="lbl">Why:</strong> "Cross-region model deployment for high availability" &mdash; the secondary region needs its own configuration source to actually survive a primary-region outage, not just a code copy.</p>
+        <p><strong class="lbl">What:</strong> Deployed a full second copy of the system in a different AWS region (Oregon), with its own settings file — not one that calls back to the first region, since that would defeat the purpose if the first region went down.</p>
+        <p><strong class="lbl">Where to check:</strong> Console &rarr; CloudFormation &rarr; Stacks &rarr; adi-1-2-cross-region-stack (region: Oregon).</p>
+        <p><strong class="lbl">Why:</strong> If one AWS region has an outage, the system needs its own independent copy elsewhere to keep working — not just a code copy that still depends on the region that's down.</p>
       </div>
       <div class="mini-bug">
-        <p class="mb-head">Bug 3 &middot; Same model, different on-demand availability by region</p>
-        <p><strong>Symptom:</strong> Nova Micro showed <code>ACTIVE</code> in <code>list-foundation-models --region us-west-2</code>, but the first live call failed: <code>ValidationException: ...on-demand throughput isn't supported...use an inference profile</code> &mdash; even though the bare model ID worked fine for the exact same model in us-east-1.</p>
-        <p><strong>Fix:</strong> confirmed via <code>list-inference-profiles</code> that <code>us.amazon.nova-micro-v1:0</code>/<code>nova-lite-v1:0</code> profiles exist in us-west-2. Deployed a region-specific strategy variant using those profile IDs, and extended the IAM role.</p>
+        <p class="mb-head">Error 3 &middot; Same model works differently in a different region</p>
+        <p><strong>What happened:</strong> Nova Micro showed as available in the new region, but calling it failed anyway, asking for a different kind of model ID.</p>
+        <p><strong>Fix:</strong> found the right ID format for that region and updated the settings and permissions to match. Confirmed it then worked correctly.</p>
       </div>
       <div class="mini-bug">
-        <p class="mb-head">Minor &middot; <code>stop-deployment</code> on a baking AppConfig deployment rolls back, doesn't finish early</p>
-        <p><strong>Symptom:</strong> Needed to start deploying strategy v2 while v1 was still in its 10-minute <code>BAKING</code> window; <code>stop-deployment</code> seemed like "finish now."</p>
-        <p><strong>Fix:</strong> it actually reverts to <code>ROLLED_BACK</code>, not "complete early." Harmless here since v2 immediately superseded it &mdash; but not the right tool if the in-flight config actually needed to stay live.</p>
+        <p class="mb-head">Minor &middot; A "stop" button didn't do what it sounded like</p>
+        <p><strong>What happened:</strong> Tried to quickly finish an in-progress settings update using what looked like a "stop and finish" button.</p>
+        <p><strong>Fix:</strong> it actually undoes the update instead of finishing it early. No harm here since a newer update was applied right after, but worth knowing for next time.</p>
       </div>
       <div class="mini-tip">
-        <p class="mt-head">Exam tip</p>
-        <p>"Listed as <code>ACTIVE</code> in this region" and "supports on-demand invocation in this region" are two different facts about a Bedrock model. A real multi-region design has to verify both, per region &mdash; not assume the primary region's behavior carries over.</p>
+        <p class="mt-head">Good to know</p>
+        <p>A model being "available" in a region and a model actually working the same way in that region are two different things. Always test for real in each region — don't assume it behaves like the first one.</p>
       </div>
     </div>
 
     <div class="step-card">
-      <div class="step-head"><span class="step-num">11</span><h4>Route 53 health checks + documented failover pattern</h4></div>
+      <div class="step-head"><span class="step-num">11</span><h4>Health checks + a documented backup plan for the web address</h4></div>
       <p class="step-res">adi-1-2-primary/secondary-health-check &middot; GET /health (both regions)</p>
       <div class="step-body">
-        <p><strong class="lbl">What:</strong> Added a <code>GET /health</code> mock route (no Lambda/Bedrock dependency) to both regional APIs, then created 2 real Route 53 health checks against them. The actual failover <code>A</code>/alias record set is documented, not deployed &mdash; this AWS account has no registered domain to attach one to.</p>
-        <p><strong class="lbl">Where:</strong> Console &rarr; Route 53 &rarr; Health checks; repo &mdash; <code>route53-failover-pattern.md</code> for the exact record set that would go live the moment a domain exists.</p>
-        <p><strong class="lbl">Why:</strong> "Set up Route 53 for cross-Region routing" &mdash; scoped honestly to what's actually deployable without buying a domain for a PoC. Nothing here is throwaway; the health checks are the real piece a failover record would reference.</p>
+        <p><strong class="lbl">What:</strong> Added a simple "are you alive?" check to both regions, then set up 2 real Route 53 health checks watching them. The full plan for automatically switching customer traffic to the backup region is written down, but not turned on — that needs a company's own website address, which this test account doesn't have.</p>
+        <p><strong class="lbl">Where to check:</strong> Console &rarr; Route 53 &rarr; Health checks; repo &mdash; <code>route53-failover-pattern.md</code> for the exact setup that would go live the moment a real domain is added.</p>
+        <p><strong class="lbl">Why:</strong> Covers what's actually possible to build without buying a domain name just for a test project. The health checks are real and ready to be used the moment that piece exists.</p>
       </div>
       <div class="mini-bug">
-        <p class="mb-head">Bug 4 &middot; API Gateway deployment propagation lag</p>
-        <p><strong>Symptom:</strong> Both new <code>/health</code> endpoints returned <code>403 MissingAuthenticationTokenException</code> immediately after deployment, despite <code>test-invoke-method</code> and the deployment's own snapshot confirming the route was configured correctly.</p>
-        <p><strong>Fix:</strong> resolved on its own after roughly 30&ndash;60s &mdash; the same propagation-lag pattern already seen for IAM (Step 6) and in Task 1.1 (trail creation). A resource being "created" and "actually live at the edge" are different moments.</p>
+        <p class="mb-head">Error 4 &middot; New web address took a minute to go live</p>
+        <p><strong>What happened:</strong> Both new health-check web addresses returned an error right after being created, even though everything looked correctly set up.</p>
+        <p><strong>Fix:</strong> waited about 30&ndash;60 seconds and it started working on its own. New AWS resources sometimes take a short moment to become fully live.</p>
       </div>
     </div>
 
     <div class="phase-divider" id="phase-4">
       <span class="pd-num">Phase 4</span>
-      <div class="pd-text"><h3>Model Customization &amp; Lifecycle</h3><p>Fine-tuning data, a real training job, and where this task chose to stop</p></div>
+      <div class="pd-text"><h3>Custom Training</h3><p>Training data, a real training job, and where this task stopped</p></div>
       <span class="pd-line"></span>
     </div>
 
     <div class="step-card">
-      <div class="step-head"><span class="step-num">12</span><h4>Financial-domain fine-tuning dataset</h4></div>
+      <div class="step-head"><span class="step-num">12</span><h4>Write training examples</h4></div>
       <p class="step-res">adi-1-2-finetuning-data (S3) &middot; 35 examples</p>
       <div class="step-body">
-        <p><strong class="lbl">What:</strong> 35 synthetic <code>{prompt, completion}</code> pairs covering personal-banking topics beyond the benchmark set (wires, disputes, POA, IRA limits, PMI, HELOC, credit utilization), each completion written in the same consistent tone/structure the assistant already uses &mdash; the actual point of fine-tuning is instilling that style so it's baked in, not re-specified per prompt.</p>
-        <p><strong class="lbl">Where:</strong> S3 &rarr; adi-1-2-finetuning-data.</p>
-        <p><strong class="lbl">Why:</strong> "Prepare a fine-tuning dataset" &mdash; a real, checked-in training set, format-agnostic to the eventual platform choice.</p>
+        <p><strong class="lbl">What:</strong> Wrote 35 example question-and-answer pairs about banking topics not already covered in Step 2's test questions (wire transfers, disputes, credit scores, and more), each written in the same tone the assistant should always use.</p>
+        <p><strong class="lbl">Where to check:</strong> S3 &rarr; adi-1-2-finetuning-data.</p>
+        <p><strong class="lbl">Why:</strong> Fine-tuning means teaching the model a consistent style by example, so that style becomes automatic — instead of having to explain it in every single question.</p>
       </div>
     </div>
 
     <div class="step-card">
-      <div class="step-head"><span class="step-num">13</span><h4>Fine-tuning job &mdash; SageMaker blocked, pivoted to Bedrock</h4></div>
+      <div class="step-head"><span class="step-num">13</span><h4>Train a custom model &mdash; switched tools partway through</h4></div>
       <p class="step-res">amazon.nova-micro-v1:0:128k &rarr; adi-1-2-nova-micro-financial-qa</p>
       <div class="step-body">
-        <p><strong class="lbl">What:</strong> Started with SageMaker (the brief's literal instruction) &mdash; training script, IAM role, and a packaged <code>distilgpt2</code> job on a cheap CPU instance were all fully staged. Pivoted to <strong>Bedrock Custom Model fine-tuning</strong> after hitting a real account-level blocker (below), launching a job on <code>amazon.nova-micro-v1:0:128k</code> &mdash; the fine-tunable customization variant of the exact same model this task already benchmarked and picked as primary.</p>
-        <p><strong class="lbl">Where:</strong> Console &rarr; Amazon Bedrock &rarr; Custom models &rarr; Training jobs.</p>
-        <p><strong class="lbl">Why:</strong> "Fine-tune a model for financial domain" &mdash; still the same deliverable, via Bedrock's managed path instead of self-managed training, and arguably more idiomatic for a Bedrock-Converse-centric build like this one.</p>
+        <p><strong class="lbl">What:</strong> Started with Amazon SageMaker, the tool the assignment specifically asked for, and had everything ready to go. Hit a wall (below) and switched to Bedrock's own built-in training tool instead, training a special version of Nova Micro &mdash; the same model already picked as the winner in Phase 1.</p>
+        <p><strong class="lbl">Where to check:</strong> Console &rarr; Amazon Bedrock &rarr; Custom models &rarr; Training jobs.</p>
+        <p><strong class="lbl">Why:</strong> Still delivers what the assignment asked for &mdash; a model trained specifically for this bank's questions &mdash; just through a different, and arguably simpler, AWS tool. The training finished successfully.</p>
       </div>
       <div class="mini-bug">
-        <p class="mb-head">Bug 5 &middot; SageMaker training-instance quotas default to 0 on an unused account</p>
-        <p><strong>Symptom:</strong> <code>create-training-job</code> failed immediately: <code>ResourceLimitExceeded: ...'ml.m5.xlarge for training job usage' is 0 Instances</code>. Checked broadly across every training instance type (including smaller ones like <code>ml.m5.large</code>) &mdash; all 0, confirming it isn't size-dependent.</p>
-        <p><strong>Fix:</strong> submitted Service Quotas increase requests; both moved to <code>CASE_OPENED</code> (manual AWS review, unpredictable timeline &mdash; hours to longer, not minutes) rather than auto-approving. Rather than wait on an unbounded queue, pivoted the whole step to Bedrock fine-tuning instead.</p>
+        <p class="mb-head">Error 5 &middot; New accounts start with zero training capacity</p>
+        <p><strong>What happened:</strong> Trying to start the SageMaker training job failed right away: AWS said the allowed number of training computers for this account was zero &mdash; for every size of computer available, not just one.</p>
+        <p><strong>Fix:</strong> asked AWS to raise that limit. Both requests went into a manual review queue with no fixed wait time &mdash; possibly hours, possibly longer. Rather than wait on that, switched the whole step over to Bedrock's built-in training instead.</p>
       </div>
       <div class="mini-tip">
-        <p class="mt-head">Exam tip</p>
-        <p>Unlike most EC2-family quotas, SageMaker training-job instance quotas start at <strong>0</strong> for an account that's never run a training job &mdash; regardless of instance size. A <code>ResourceLimitExceeded</code> here means "file a Service Quotas request," not an IAM or config fix, and that request can land in a manual review queue with no guaranteed turnaround.</p>
+        <p class="mt-head">Good to know</p>
+        <p>A brand-new AWS account often starts with zero allowed usage for SageMaker training, no matter how small the request. This isn't a broken permission — it's a limit that has to be raised by asking AWS, and that request can take an unpredictable amount of time to get approved.</p>
       </div>
     </div>
 
     <div class="step-card unbuilt">
-      <div class="step-head"><span class="step-num">14</span><h4>Model versioning + deployment workflow</h4><span class="unbuilt-badge">Designed, not built</span></div>
-      <p class="step-res">Would extend: model_selection_strategy.json &middot; AppConfig</p>
+      <div class="step-head"><span class="step-num">14</span><h4>Turn the custom model on for real use</h4><span class="unbuilt-badge">Planned, not built</span></div>
+      <p class="step-res">Would update: model_selection_strategy.json &middot; AppConfig</p>
       <div class="step-body">
-        <p><strong class="lbl">What it would have been:</strong> Provision Bedrock Provisioned Throughput for the Step 13 custom model, add a <code>"financial_qa_specialist"</code> entry to the AppConfig strategy so <code>adi-1-2-model-abstraction</code> could route to it with zero Lambda code changes, re-run the Step 3 benchmark against it for a real before/after comparison, then promote via a new AppConfig deployment version &mdash; the same safe-rollout mechanism already used in Step 5.</p>
-        <p><strong class="lbl">Why not built:</strong> Bedrock custom models cannot run on the normal pay-per-request tier at all &mdash; they require <strong>Provisioned Throughput</strong>, billed hourly per model unit (roughly $4&ndash;50/hr, no on-demand alternative), the first cost commitment in this task that isn't pay-per-request. Stopped here rather than spend on that for a PoC, by explicit choice.</p>
+        <p><strong class="lbl">What this would have been:</strong> Switch on the newly trained model for live use, add it as an option in the settings file from Step 5 (no code changes needed, since the model-picker program already reads its choice from settings), re-run the Step 3 comparison to see if it's actually better, and if so, make it the new default &mdash; with the old settings still saved, so undoing it is instant.</p>
+        <p><strong class="lbl">Why it wasn't built:</strong> Turning on a custom-trained model for live use isn't pay-per-question like everything else in this project &mdash; it needs a dedicated, always-on slot that costs money every hour it's switched on, whether or not anyone's using it (roughly $4&ndash;50 an hour). That's a real ongoing cost, and the decision was made to stop here rather than spend on that for a test project.</p>
       </div>
     </div>
 
     <div class="step-card unbuilt">
-      <div class="step-head"><span class="step-num">15</span><h4>Automated testing + rollback</h4><span class="unbuilt-badge">Designed, not built</span></div>
-      <p class="step-res">Would reuse: Task 1.1's validator-Lambda + Step Functions Map pattern</p>
+      <div class="step-head"><span class="step-num">15</span><h4>Automatic testing before switching models</h4><span class="unbuilt-badge">Planned, not built</span></div>
+      <p class="step-res">Would reuse: the same test-suite pattern from Task 1.1</p>
       <div class="step-body">
-        <p><strong class="lbl">What it would have been:</strong> A Step Functions test harness running the Step 3 benchmark's 17 test cases against both the base and fine-tuned models, gating promotion so AppConfig only gets updated if the fine-tuned model beats the base model's scores on every axis, not just on average. Rollback would be identical to Step 14's mechanism &mdash; AppConfig's own version history.</p>
-        <p><strong class="lbl">Why not built:</strong> Directly depends on Step 14's custom model actually being live behind Provisioned Throughput, which this task stopped short of for the same cost reason.</p>
+        <p><strong class="lbl">What this would have been:</strong> An automatic test that runs the Step 3 comparison questions against both the old and new model, and only switches the settings file to the new one if it actually scores better on every measure &mdash; not just on average. Undoing a bad switch would just mean going back to the previous saved settings.</p>
+        <p><strong class="lbl">Why it wasn't built:</strong> This step only makes sense once Step 14's custom model is actually switched on for live use, which didn't happen for the cost reason above.</p>
       </div>
     </div>
   </div>
@@ -520,32 +519,32 @@
   <div class="wrap">
     <p class="kicker">Full Resource Index</p>
     <h2 class="h">All 22 resources, for quick reference</h2>
-    <p class="section-lead">Account <code>269737522732</code>, prefixed <code>adi-1-2-</code>, spanning <code>us-east-1</code> (primary) and <code>us-west-2</code> (secondary). See the step log above for what each one is doing and why.</p>
+    <p class="section-lead">Account <code>269737522732</code>, named starting with <code>adi-1-2-</code>, spread across <code>us-east-1</code> (main) and <code>us-west-2</code> (backup). See the step log above for what each one does and why.</p>
     <div class="verify-wrap">
       <table class="verify">
-        <tr><th>#</th><th>Type</th><th>Name</th><th>Purpose</th></tr>
-        <tr><td>1</td><td>AppConfig Application</td><td>adi-1-2-model-config (us-east-1)</td><td>Holds the benchmark-derived model-selection strategy, safely versioned and deployed.</td></tr>
-        <tr><td>2</td><td>AppConfig Environment</td><td>Production (us-east-1)</td><td>Deployment target for the strategy configuration.</td></tr>
-        <tr><td>3</td><td>AppConfig Configuration Profile</td><td>ModelSelectionStrategy (us-east-1)</td><td>Freeform JSON profile carrying primary/fallback model choices and scores.</td></tr>
-        <tr><td>4</td><td>IAM Role</td><td>adi-1-2-bedrock-lambda-role</td><td>Shared least-privilege role for all pipeline Lambdas &mdash; Bedrock invoke + AppConfig read.</td></tr>
-        <tr><td>5</td><td>Lambda Function</td><td>adi-1-2-model-abstraction (us-east-1)</td><td>Reads AppConfig, selects a model, invokes Bedrock, returns the response.</td></tr>
-        <tr><td>6</td><td>API Gateway REST API</td><td>adi-1-2-api (us-east-1)</td><td>Client-facing HTTPS endpoint &mdash; POST /generate.</td></tr>
-        <tr><td>7</td><td>Lambda Function</td><td>adi-1-2-invoke-fallback</td><td>Circuit-breaker fallback stage &mdash; explicitly invokes the first fallback model.</td></tr>
-        <tr><td>8</td><td>Lambda Function</td><td>adi-1-2-graceful-degradation</td><td>Final circuit-breaker stage &mdash; canned response, no Bedrock dependency.</td></tr>
-        <tr><td>9</td><td>CloudWatch Logs Group</td><td>/aws/vendedlogs/states/adi-1-2-circuit-breaker-sm</td><td>Full execution logs for the circuit-breaker state machine.</td></tr>
-        <tr><td>10</td><td>IAM Role</td><td>adi-1-2-stepfunctions-role</td><td>Lets the circuit breaker invoke its 3 Lambdas.</td></tr>
-        <tr><td>11</td><td>Step Functions State Machine</td><td>adi-1-2-circuit-breaker-sm</td><td>TryPrimaryModel &rarr; TryFallbackModel &rarr; GracefulDegradation.</td></tr>
-        <tr><td>12</td><td>AppConfig Application</td><td>adi-1-2-model-config (us-west-2)</td><td>Independent regional replica of the strategy &mdash; not a cross-region call back to us-east-1.</td></tr>
-        <tr><td>13</td><td>AppConfig Environment</td><td>Production (us-west-2)</td><td>Deployment target for the west-region strategy.</td></tr>
-        <tr><td>14</td><td>AppConfig Configuration Profile</td><td>ModelSelectionStrategy (us-west-2)</td><td>West-region strategy, using inference-profile model IDs (Bug 3).</td></tr>
-        <tr><td>15</td><td>CloudFormation Stack</td><td>adi-1-2-cross-region-stack (us-west-2)</td><td>Deploys the Lambda + API Gateway replica declaratively.</td></tr>
-        <tr><td>16</td><td>Lambda Function</td><td>adi-1-2-model-abstraction (us-west-2)</td><td>Regional replica, env-var-driven AppConfig IDs so one codebase serves both regions.</td></tr>
-        <tr><td>17</td><td>API Gateway REST API</td><td>adi-1-2-api (us-west-2)</td><td>Second live regional endpoint.</td></tr>
-        <tr><td>18</td><td>Route 53 Health Check</td><td>adi-1-2-primary-health-check</td><td>Monitors the us-east-1 /health endpoint every 30s.</td></tr>
-        <tr><td>19</td><td>Route 53 Health Check</td><td>adi-1-2-secondary-health-check</td><td>Monitors the us-west-2 /health endpoint every 30s.</td></tr>
-        <tr><td>20</td><td>S3 Bucket</td><td>adi-1-2-finetuning-data</td><td>Versioned, encrypted store for the fine-tuning dataset and training/output artifacts.</td></tr>
-        <tr><td>21</td><td>IAM Role</td><td>adi-1-2-bedrock-customization-role</td><td>Scoped role for the Bedrock model-customization job, with confused-deputy trust conditions.</td></tr>
-        <tr><td>22</td><td>Bedrock Model Customization Job</td><td>adi-1-2-nova-micro-financial-qa</td><td>Fine-tunes Nova Micro's 128k variant on the financial Q&amp;A dataset &mdash; left running, not promoted to inference.</td></tr>
+        <tr><th>#</th><th>Type</th><th>Name</th><th>What it's for</th></tr>
+        <tr><td>1</td><td>AppConfig Application</td><td>adi-1-2-model-config (us-east-1)</td><td>Holds the model choice that came out of the Phase 1 comparison, safely updatable.</td></tr>
+        <tr><td>2</td><td>AppConfig Environment</td><td>Production (us-east-1)</td><td>Where the live settings get published to.</td></tr>
+        <tr><td>3</td><td>AppConfig Configuration Profile</td><td>ModelSelectionStrategy (us-east-1)</td><td>The actual settings file — which model is first choice, which are backups.</td></tr>
+        <tr><td>4</td><td>IAM Role</td><td>adi-1-2-bedrock-lambda-role</td><td>Shared permission set for this project's programs — can only call the 3 approved models and read the settings.</td></tr>
+        <tr><td>5</td><td>Lambda Function</td><td>adi-1-2-model-abstraction (us-east-1)</td><td>Reads the settings, picks a model, asks it the question, returns the answer.</td></tr>
+        <tr><td>6</td><td>API Gateway REST API</td><td>adi-1-2-api (us-east-1)</td><td>The public web address customers actually call — POST /generate.</td></tr>
+        <tr><td>7</td><td>Lambda Function</td><td>adi-1-2-invoke-fallback</td><td>The backup-plan's second try — calls the backup model on purpose.</td></tr>
+        <tr><td>8</td><td>Lambda Function</td><td>adi-1-2-graceful-degradation</td><td>The backup-plan's last resort — a safe canned reply, no AI call needed.</td></tr>
+        <tr><td>9</td><td>CloudWatch Logs Group</td><td>/aws/vendedlogs/states/adi-1-2-circuit-breaker-sm</td><td>Full logs for every run of the backup-plan flowchart.</td></tr>
+        <tr><td>10</td><td>IAM Role</td><td>adi-1-2-stepfunctions-role</td><td>Lets the backup-plan flowchart call its 3 programs.</td></tr>
+        <tr><td>11</td><td>Step Functions State Machine</td><td>adi-1-2-circuit-breaker-sm</td><td>Try main model &rarr; try backup model &rarr; show a safe reply.</td></tr>
+        <tr><td>12</td><td>AppConfig Application</td><td>adi-1-2-model-config (us-west-2)</td><td>An independent copy of the settings for the backup region — not linked back to the main one.</td></tr>
+        <tr><td>13</td><td>AppConfig Environment</td><td>Production (us-west-2)</td><td>Where the backup region's live settings get published.</td></tr>
+        <tr><td>14</td><td>AppConfig Configuration Profile</td><td>ModelSelectionStrategy (us-west-2)</td><td>The backup region's settings file, using the region-specific model IDs (Error 3).</td></tr>
+        <tr><td>15</td><td>CloudFormation Stack</td><td>adi-1-2-cross-region-stack (us-west-2)</td><td>Deploys the whole backup-region copy from one file, repeatably.</td></tr>
+        <tr><td>16</td><td>Lambda Function</td><td>adi-1-2-model-abstraction (us-west-2)</td><td>The same program as Step 7, running in the backup region.</td></tr>
+        <tr><td>17</td><td>API Gateway REST API</td><td>adi-1-2-api (us-west-2)</td><td>A second, independent public web address in the backup region.</td></tr>
+        <tr><td>18</td><td>Route 53 Health Check</td><td>adi-1-2-primary-health-check</td><td>Checks the main region is alive, every 30 seconds.</td></tr>
+        <tr><td>19</td><td>Route 53 Health Check</td><td>adi-1-2-secondary-health-check</td><td>Checks the backup region is alive, every 30 seconds.</td></tr>
+        <tr><td>20</td><td>S3 Bucket</td><td>adi-1-2-finetuning-data</td><td>Stores the training examples and the results of the training job, safely.</td></tr>
+        <tr><td>21</td><td>IAM Role</td><td>adi-1-2-bedrock-customization-role</td><td>Narrow permission set just for running the Bedrock training job.</td></tr>
+        <tr><td>22</td><td>Bedrock Model Customization Job</td><td>adi-1-2-nova-micro-financial-qa</td><td>Trains a banking-specialized version of Nova Micro. Finished successfully; not switched on for live use.</td></tr>
       </table>
     </div>
   </div>

@@ -58,8 +58,8 @@
 <header class="hero">
   <div class="wrap">
     <span class="eyebrow">Hands-On Build Log</span>
-    <h1>Real PoCs, real errors, real fixes</h1>
-    <p>Every task below was actually deployed in a live AWS account, not just described. Each write-up covers what was built, the real errors hit along the way (with root causes, not guesses), how to verify it in the console, and the exam concepts each bug maps to.</p>
+    <h1>Real projects, real mistakes, real fixes</h1>
+    <p>Everything below was actually built in a real AWS account — not just written about. Each page shows what was built, the real errors that came up along the way and how they were fixed, where to see it in the AWS console, and the exam idea behind each one, all in plain English.</p>
   </div>
 </header>
 
@@ -68,7 +68,7 @@
     <a class="task-card" href="task-1-1.html">
       <div class="meta">Domain 1 &middot; Task 1.1 &middot; Bonus Assignment</div>
       <h3>Customer Support AI Assistant — Architecture &amp; Governance PoC</h3>
-      <p>A full Bedrock-based customer support assistant for AWS EC2 troubleshooting, logged step by step: persona &amp; scenario prompts, Guardrails, Step Functions orchestration, a QA test harness, and CloudWatch regression monitoring — 14 steps, 29 resources, 10 real bugs found and fixed right where they happened.</p>
+      <p>A support chatbot that helps customers with AWS EC2 problems, built on Amazon Bedrock. Covers giving the AI clear instructions, adding safety guardrails, building a decision flowchart, automatic testing, and a dashboard that catches problems early — 14 steps, 29 resources, 10 real bugs found and fixed along the way.</p>
       <div class="stat-chips">
         <span class="chip">14 steps logged</span>
         <span class="chip">29 resources deployed</span>
@@ -80,7 +80,7 @@
     <a class="task-card" href="task-1-2.html">
       <div class="meta">Domain 1 &middot; Task 1.2 &middot; Bonus Assignment</div>
       <h3>Foundation Model Selection &amp; Lifecycle Management</h3>
-      <p>A dynamic model-selection system for a financial-services assistant: benchmarked 3 Bedrock models on quality/latency/cost/compliance, deployed AppConfig-driven routing across two live regions with a Step Functions circuit breaker and Route 53 health checks, then fine-tuned a custom model on Bedrock — stopping deliberately before the first hourly (not pay-per-request) cost commitment.</p>
+      <p>A system for a bank's AI assistant that picks the best AI model automatically, keeps working if a model fails, and gets custom-trained on banking questions. Compared 3 AI models, set up auto-switching with a settings file, deployed a working backup plan across two AWS regions, then trained a custom model — stopping on purpose right before the first cost that isn't pay-per-question.</p>
       <div class="stat-chips">
         <span class="chip">13 steps executed</span>
         <span class="chip">22 resources deployed</span>
