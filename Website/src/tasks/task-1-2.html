@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Task 1.2 Build Log | AIP-C01 Guide</title>
-<meta name="description" content="Domain 1, Task 1.2 bonus assignment, step by step: a system that picks the best AI model, keeps working if one fails, and gets trained for a specific business. Written in plain English — what was built, what broke, and where the task stopped on purpose.">
+<meta name="description" content="Domain 1, Task 1.2 bonus assignment, step by step: a system that picks the best AI model, keeps working if one fails, and gets trained for a specific business. Written in plain English, with the AWS ideas explained as they come up — what was built, what broke, and where the task stopped on purpose.">
 <style>
   :root{
     --ink:#0b1524; --ink-soft:#3a4a5e; --paper:#f7f8fa; --card:#ffffff; --line:#e3e7ee;
@@ -12,6 +12,7 @@
     --good:#1a7f5a; --good-bg:#e9f7f1; --good-line:#bfe6d6;
     --bad:#b3271f; --bad-bg:#fdecea; --bad-line:#f3c6c2;
     --unbuilt-bg:#f4f1fb; --unbuilt-line:#d8cdf0; --unbuilt:#5b3fa3;
+    --concept-bg:#eef6ff; --concept-line:#c9e0f7; --concept:#155a8a;
     color-scheme: light;
   }
   *{box-sizing:border-box;}
@@ -34,7 +35,7 @@
   header.hero{background:radial-gradient(900px 420px at 85% -10%, rgba(232,98,44,.3), transparent 60%), linear-gradient(180deg,var(--navy) 0%, var(--navy-2) 100%);color:#fff;padding:48px 0 36px;}
   .eyebrow{display:inline-block;font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#ffd8c4;background:rgba(232,98,44,.18);border:1px solid rgba(232,98,44,.4);padding:5px 10px;border-radius:999px;margin-bottom:16px;}
   h1{font-size:clamp(24px,3.6vw,36px);line-height:1.18;margin:0 0 12px;font-weight:800;}
-  header.hero p.lead{font-size:16px;color:#c9d5e3;max-width:700px;margin:0 0 22px;}
+  header.hero p.lead{font-size:16px;color:#c9d5e3;max-width:720px;margin:0 0 22px;}
   .stat-row{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.12);border-radius:12px;overflow:hidden;}
   .stat{background:rgba(255,255,255,.04);padding:14px 12px;text-align:center;}
   .stat .n{font-size:19px;font-weight:800;color:#fff;}
@@ -45,22 +46,22 @@
   section.alt{background:#eef1f6;}
   h2.h{font-size:24px;font-weight:800;letter-spacing:-.01em;margin:0 0 8px;color:var(--ink);}
   .kicker{font-size:12.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--accent-dark);margin:0 0 8px;}
-  .section-lead{color:var(--ink-soft);max-width:720px;margin:0 0 24px;font-size:15px;}
+  .section-lead{color:var(--ink-soft);max-width:740px;margin:0 0 24px;font-size:15px;}
 
   .toc{display:flex;flex-wrap:wrap;gap:10px;margin:0 0 8px;}
   .toc a{font-size:13px;font-weight:600;background:var(--card);border:1px solid var(--line);color:var(--ink-soft);padding:7px 13px;border-radius:999px;text-decoration:none;}
   .toc a:hover{border-color:var(--accent);color:var(--accent-dark);}
 
   /* PHASE DIVIDER */
-  .phase-divider{display:flex;align-items:center;gap:14px;margin:36px 0 16px;}
+  .phase-divider{display:flex;align-items:flex-start;gap:14px;margin:36px 0 16px;}
   .phase-divider:first-of-type{margin-top:4px;}
   .phase-divider .pd-num{
     background:var(--navy);color:#fff;font-weight:800;font-size:13px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;
-    padding:6px 12px;border-radius:8px;white-space:nowrap;
+    padding:6px 12px;border-radius:8px;white-space:nowrap;margin-top:2px;
   }
   .phase-divider .pd-text h3{margin:0;font-size:18px;font-weight:800;color:var(--ink);}
-  .phase-divider .pd-text p{margin:2px 0 0;font-size:13px;color:var(--ink-soft);}
-  .phase-divider .pd-line{flex:1;height:1px;background:var(--line);}
+  .phase-divider .pd-text p{margin:4px 0 0;font-size:13.5px;color:var(--ink-soft);max-width:640px;}
+  .phase-divider .pd-line{flex:1;height:1px;background:var(--line);margin-top:14px;}
 
   /* STEP CARD */
   .step-card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:20px 24px;margin-bottom:14px;}
@@ -74,6 +75,10 @@
   .step-res{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px;color:var(--navy-2);background:#eef3fa;border:1px solid #d6e2f0;padding:2px 8px;border-radius:6px;margin:0 0 12px;display:inline-block;}
   .step-body p{margin:0 0 8px;font-size:14px;color:var(--ink-soft);}
   .step-body p strong.lbl{color:var(--ink);font-weight:700;}
+
+  .concept{background:var(--concept-bg);border:1px solid var(--concept-line);border-radius:8px;padding:12px 15px;margin:0 0 14px;}
+  .concept p{margin:0;font-size:13.5px;color:var(--ink);}
+  .concept p strong{color:var(--concept);}
 
   .mini-bug{background:var(--bad-bg);border:1px solid var(--bad-line);border-radius:8px;padding:13px 16px;margin-top:10px;}
   .mini-bug .mb-head{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.05em;color:var(--bad);margin:0 0 6px;}
@@ -126,9 +131,11 @@
     <span class="eyebrow">Domain 1 &middot; Task 1.2 &middot; Bonus Assignment</span>
     <h1>Picking the Right AI Model<br>&amp; Keeping It Running</h1>
     <p class="lead">
-      The goal: build a system for a bank's customer-service AI that automatically picks the best model,
-      keeps answering even if that model goes down, and gets specially trained for banking questions.
-      Here's what was actually built, step by step, in plain English.
+      The goal of this project: build a system for a bank's customer-service AI that automatically picks
+      the best AI model to use, keeps answering questions even if that model goes down, and gets specially
+      trained on the bank's own kind of questions. This page walks through every step in the order it
+      happened. Each AWS idea is explained in plain terms the first time it comes up, so you don't need to
+      already know AWS to follow along.
     </p>
     <div class="stat-row">
       <div class="stat"><div class="n">13</div><div class="l">Steps built and tested</div></div>
@@ -155,12 +162,14 @@
 <section class="alt" id="architecture">
   <div class="wrap-wide">
     <p class="kicker">How It Runs</p>
-    <h2 class="h">Two copies of the system, running in two different places</h2>
+    <h2 class="h">Two full copies of the system, running in two different places</h2>
     <p class="section-lead">
-      Solid arrows show the path a real question takes. Dashed arrows show background health checks.
-      The backup plan at the bottom (the "circuit breaker") was built and tested on its own — it isn't
-      wired in front of the live path above it yet. Resource names below drop the shared
-      <code>adi-1-2-</code> prefix to save space.
+      Here's what happens when a customer asks a question, and what runs quietly in the background at
+      the same time. Solid arrows show the path a real question takes. Dashed arrows show health checks
+      running continuously in the background. The backup plan shown at the bottom (called a "circuit
+      breaker") was built and tested completely on its own — it isn't yet wired in front of the live path
+      shown above it. Resource names below leave off the shared <code>adi-1-2-</code> prefix that every
+      resource in this project starts with, just to save space.
     </p>
 
     <figure class="diagram">
@@ -268,10 +277,11 @@
       </div>
       <figcaption>
         Solid lines show the path a real question takes in each region. The top dashed box shows health
-        checks running all the time. The bottom dashed box is the backup-plan flowchart — all three of
-        its outcomes (main model works / backup model works / safe reply shown) were tested for real and
-        double-checked step by step, not just by looking at the final answer. Not pictured: the training
-        data and fine-tuning job from Step 13, since that custom model was never switched on for live use.
+        checks running continuously, watching whether each region is still responding. The bottom dashed
+        box is the backup-plan flowchart — all three of its possible outcomes (main model works, backup
+        model works, or a safe reply gets shown) were actually tested and double-checked step by step, not
+        just assumed to work because the flowchart looks right on paper. Not pictured: the training data
+        and fine-tuning job from Step 13, since that custom model was never switched on for live use.
       </figcaption>
     </figure>
   </div>
@@ -282,14 +292,16 @@
     <p class="kicker">Step-by-Step Build Log</p>
     <h2 class="h">Every step, in the order it happened</h2>
     <p class="section-lead">
-      Kept to one topic on purpose &mdash; a bank's customer questions about everyday products like savings
-      accounts and credit cards &mdash; to keep things simple to build and test. The last two steps were
-      fully planned but not built; Phase 4 explains why.
+      Each step below explains a new AWS idea in plain terms first (in the blue box, where it applies),
+      then says exactly what was built, where to see it in the AWS console, and why it mattered. Kept to
+      one topic on purpose &mdash; a bank's everyday customer questions about products like savings
+      accounts and credit cards &mdash; to keep the project simple enough to actually finish and test
+      properly. The last two steps were fully planned but not built, and Phase 4 explains exactly why.
     </p>
 
     <div class="phase-divider" id="phase-1">
       <span class="pd-num">Phase 1</span>
-      <div class="pd-text"><h3>Comparing the Models</h3><p>Test 3 AI models on the same questions and score them</p></div>
+      <div class="pd-text"><h3>Comparing the Models</h3><p>Test 3 different AI models on the same set of questions, and score them so the choice is based on real evidence, not a guess.</p></div>
       <span class="pd-line"></span>
     </div>
 
@@ -297,9 +309,12 @@
       <div class="step-head"><span class="step-num">1</span><h4>Check that 3 models actually work</h4></div>
       <p class="step-res">Claude Haiku 4.5 &middot; Nova Lite &middot; Nova Micro</p>
       <div class="step-body">
-        <p><strong class="lbl">What:</strong> Sent a real test message to each of the 3 candidate models to confirm they respond. A 4th model, Claude Sonnet 5, was tried and dropped since it wasn't available yet.</p>
+        <div class="concept">
+          <p><strong>In plain terms:</strong> Amazon Bedrock offers AI models from several different companies, not just one. Claude is made by Anthropic; Nova is made by Amazon itself. Using models from more than one company gives a fairer comparison than just comparing different sizes of the same company's model.</p>
+        </div>
+        <p><strong class="lbl">What was built:</strong> Sent a real test message to each of the 3 candidate models to confirm they actually respond. A 4th model, Claude Sonnet 5, was tried too but dropped, since it wasn't available on this account yet.</p>
         <p><strong class="lbl">Where to check:</strong> AWS Console &rarr; Amazon Bedrock &rarr; Model access.</p>
-        <p><strong class="lbl">Why:</strong> A fair comparison needs models from more than one company, not just different sizes of the same one. Anthropic (Claude) and Amazon (Nova) gives a real side-by-side comparison.</p>
+        <p><strong class="lbl">Why it matters:</strong> A fair comparison needs models from more than one company, not just different sizes of the same one — otherwise the "winner" might just reflect one company's general style rather than which model is actually best for this job.</p>
       </div>
     </div>
 
@@ -307,9 +322,9 @@
       <div class="step-head"><span class="step-num">2</span><h4>Write test questions</h4></div>
       <p class="step-res">data/benchmark_test_cases.json &middot; 12 normal questions + 5 tricky ones</p>
       <div class="step-body">
-        <p><strong class="lbl">What:</strong> Wrote 12 everyday banking questions with a correct-answer example for each, plus 5 tricky questions designed to see if the AI does something it shouldn't (like giving investment advice or asking for a password).</p>
+        <p><strong class="lbl">What was built:</strong> Wrote 12 everyday banking questions (things like "what's a savings account" or "how does a credit card work"), each with an example of a correct answer to compare against. Also wrote 5 tricky questions designed to test whether the AI does something it shouldn't — like giving personal investment advice, or asking the customer for a password.</p>
         <p><strong class="lbl">Where to check:</strong> repo &mdash; <code>data/benchmark_test_cases.json</code>.</p>
-        <p><strong class="lbl">Why:</strong> Gives the comparison something concrete to grade against, instead of just eyeballing the answers.</p>
+        <p><strong class="lbl">Why it matters:</strong> Without example correct answers, "how good is this answer" is just an opinion. Having a reference answer for every question is what makes the comparison in Step 3 something you can actually measure, not just eyeball.</p>
       </div>
     </div>
 
@@ -317,13 +332,16 @@
       <div class="step-head"><span class="step-num">3</span><h4>Run the comparison</h4></div>
       <p class="step-res">benchmark.py</p>
       <div class="step-body">
-        <p><strong class="lbl">What:</strong> A script that asks all 3 models all 17 questions, times each answer, works out the cost, and uses a 4th AI call to grade each answer's quality and safety.</p>
+        <div class="concept">
+          <p><strong>In plain terms:</strong> "LLM-as-judge" means using one AI model to grade another AI model's answers — comparing the answer against the reference answer and giving it a score, instead of a person reading every single answer by hand.</p>
+        </div>
+        <p><strong class="lbl">What was built:</strong> A script that asks all 3 models all 17 questions from Step 2, times how long each answer takes, works out roughly how much each answer costs (based on published pricing), and uses a 4th AI call to grade each answer's quality and check whether the tricky questions were handled safely.</p>
         <p><strong class="lbl">Where to check:</strong> repo &mdash; <code>benchmark.py</code>, <code>data/model_evaluation_results.csv</code>.</p>
-        <p><strong class="lbl">Why:</strong> Covers all 4 things the assignment asked to compare: answer quality, speed, cost, and safety — with a script that can be re-run any time, not a one-off manual check.</p>
+        <p><strong class="lbl">Why it matters:</strong> Covers all 4 things this assignment asked to compare — answer quality, speed, cost, and safety — using one script that can be re-run any time in the future, instead of a one-off manual check that goes stale.</p>
       </div>
       <div class="mini-tip">
         <p class="mt-head">Good to know</p>
-        <p>Using one of the 3 models to also grade the others is a bit like a student grading their own test — it's not perfectly fair. It was still used here because a stronger, independent grading model wasn't available on this account, but it's worth knowing about as a limit of this approach.</p>
+        <p>Using one of the 3 candidate models to also grade the others is a bit like a student grading their own test — it's not perfectly fair, since a model might unconsciously favor answers that sound like its own style. It was still used here because a stronger, independent grading model wasn't available on this account. Worth knowing as a real limit of this approach, not something to just take at face value.</p>
       </div>
     </div>
 
@@ -331,19 +349,19 @@
       <div class="step-head"><span class="step-num">4</span><h4>Pick a winner</h4></div>
       <p class="step-res">data/model_selection_strategy.json &middot; winner = Nova Micro</p>
       <div class="step-body">
-        <p><strong class="lbl">What:</strong> Combined the 4 scores into one overall number, weighted toward quality and safety since this is a bank. Result: Nova Micro came out on top, then Nova Lite, then Claude Haiku 4.5. All 3 gave almost equally good answers, so the fastest and cheapest one won.</p>
+        <p><strong class="lbl">What was built:</strong> Combined the 4 separate scores from Step 3 into one overall number for each model, weighted more heavily toward quality and safety than speed and cost, since this is a bank. Result: Nova Micro came out on top, then Nova Lite, then Claude Haiku 4.5. Interestingly, all 3 models gave almost equally good answers — so the fastest and cheapest one ended up winning, since there wasn't much quality difference to begin with.</p>
         <p><strong class="lbl">Where to check:</strong> repo &mdash; <code>data/model_selection_strategy.json</code>.</p>
-        <p><strong class="lbl">Why:</strong> This file is exactly what gets loaded into the settings system in Step 5 — the model actually used in production is the one the test results, not a guess, pointed to.</p>
+        <p><strong class="lbl">Why it matters:</strong> This exact file is what gets loaded into the settings system in Step 5. In other words, the model actually used in production is the one the test results pointed to — not a guess made ahead of time.</p>
       </div>
       <div class="mini-tip">
         <p class="mt-head">Good to know</p>
-        <p>All 3 models handled the tricky safety questions correctly, just from good instructions — no extra safety tool was added yet. A real bank system would still want a dedicated safety layer as backup, since instructions alone can sometimes be tricked.</p>
+        <p>All 3 models handled the tricky safety questions correctly, just from good written instructions — no extra safety tool was added yet in this project. A real bank system would still want a dedicated safety layer as a backup (like the Guardrail built in Task 1.1), since instructions alone can sometimes be tricked by a clever enough question.</p>
       </div>
     </div>
 
     <div class="phase-divider" id="phase-2">
       <span class="pd-num">Phase 2</span>
-      <div class="pd-text"><h3>Auto-Switching Between Models</h3><p>A settings file decides which model to use, no code changes needed</p></div>
+      <div class="pd-text"><h3>Auto-Switching Between Models</h3><p>Make "which model to use" a setting that can change instantly, instead of something buried in code that needs a redeploy.</p></div>
       <span class="pd-line"></span>
     </div>
 
@@ -351,9 +369,12 @@
       <div class="step-head"><span class="step-num">5</span><h4>A settings file for which model to use</h4></div>
       <p class="step-res">adi-1-2-model-config &middot; Production &middot; ModelSelectionStrategy</p>
       <div class="step-body">
-        <p><strong class="lbl">What:</strong> Set up AWS AppConfig, a service for storing settings separately from code, and loaded the winning model choice from Step 4 into it.</p>
+        <div class="concept">
+          <p><strong>In plain terms:</strong> AWS AppConfig is a service for storing settings — like "which model is the current default" — separately from your application's code. Instead of editing and redeploying code to change a setting, you update AppConfig, and the running application picks up the new value automatically.</p>
+        </div>
+        <p><strong class="lbl">What was built:</strong> Set up AWS AppConfig and loaded the winning model choice from Step 4 into it as a saved setting.</p>
         <p><strong class="lbl">Where to check:</strong> Console &rarr; AWS AppConfig &rarr; adi-1-2-model-config &rarr; Production.</p>
-        <p><strong class="lbl">Why:</strong> This is what makes "switch to a different model" a settings change instead of a code change — safer, faster, and it can be undone instantly if something goes wrong.</p>
+        <p><strong class="lbl">Why it matters:</strong> This is what turns "switch to a different model" into a quick settings change instead of a code change. If Step 4's comparison gets re-run later and a different model wins, switching to it takes seconds — and if anything goes wrong, going back to the old setting is just as fast.</p>
       </div>
     </div>
 
@@ -361,18 +382,18 @@
       <div class="step-head"><span class="step-num">6</span><h4>Permissions for the model-picker program</h4></div>
       <p class="step-res">adi-1-2-bedrock-lambda-role</p>
       <div class="step-body">
-        <p><strong class="lbl">What:</strong> A permission set allowing only the 3 approved models to be called, and only this task's settings file to be read.</p>
+        <p><strong class="lbl">What was built:</strong> A permission set (an IAM role, the same idea explained in Task 1.1's Step 4) that only allows calling the 3 approved models and only allows reading this one settings file — nothing broader.</p>
         <p><strong class="lbl">Where to check:</strong> IAM &rarr; Roles &rarr; adi-1-2-bedrock-lambda-role.</p>
-        <p><strong class="lbl">Why:</strong> Keeps this program's access as narrow as possible — it can only do exactly what it needs to.</p>
+        <p><strong class="lbl">Why it matters:</strong> Keeps this program's access as narrow as possible — it can only do exactly what it needs to do, and nothing more, which limits the damage if anything ever goes wrong.</p>
       </div>
       <div class="mini-bug">
         <p class="mb-head">Error 1 &middot; Slightly wrong permission name</p>
-        <p><strong>What happened:</strong> Used a permission name that seemed right based on which web address the settings service uses behind the scenes — but access was still denied.</p>
-        <p><strong>Fix:</strong> the real error message named the exact permission needed, which turned out to be spelled a bit differently than expected. Fixed the permission name and it worked.</p>
+        <p><strong>What happened:</strong> Used a permission name that seemed reasonable based on which internal web address the settings service uses behind the scenes — but access was still denied.</p>
+        <p><strong>Fix:</strong> the real error message named the exact permission needed, which turned out to be spelled a bit differently than expected, even though it does the same thing. Fixing the permission name to match the error message exactly solved it.</p>
       </div>
       <div class="mini-tip">
         <p class="mt-head">Good to know</p>
-        <p>An AWS service's web address and its permission name don't always match. When permission is denied, the error message itself usually names the exact permission needed — better to trust that than guess from the service name.</p>
+        <p>An AWS service's internal web address and its exact permission name don't always match up the way you'd expect. When access is denied, the error message itself usually names the exact permission that's actually needed — better to trust that message than to guess based on the service's name.</p>
       </div>
     </div>
 
@@ -380,14 +401,14 @@
       <div class="step-head"><span class="step-num">7</span><h4>The model-picker program</h4></div>
       <p class="step-res">adi-1-2-model-abstraction</p>
       <div class="step-body">
-        <p><strong class="lbl">What:</strong> A small program (Lambda function) that reads the settings file, picks the right model, asks it the question, and sends back the answer. On purpose, it doesn't try to handle failures itself — that's a separate job, done in Phase 3.</p>
+        <p><strong class="lbl">What was built:</strong> A small program (a Lambda function, the same idea explained in Task 1.1's Step 4) that reads the settings file from Step 5, picks the right model, asks it the customer's question, and sends back the answer. On purpose, it doesn't try to handle failures itself — that's a separate job, built in Phase 3.</p>
         <p><strong class="lbl">Where to check:</strong> Lambda &rarr; adi-1-2-model-abstraction &rarr; Monitor tab.</p>
-        <p><strong class="lbl">Why:</strong> This is the piece that makes "which model to use" a live setting instead of something baked into the code.</p>
+        <p><strong class="lbl">Why it matters:</strong> This is the actual piece that makes "which model to use" a live setting instead of something baked directly into the code — it's what connects Step 5's settings file to a real, working answer.</p>
       </div>
       <div class="mini-bug">
         <p class="mb-head">Error 2 &middot; Only understood one kind of request</p>
-        <p><strong>What happened:</strong> Found before Step 9 &mdash; the program only knew how to read requests shaped like a website request. A request from a different source (like the backup-plan flowchart) would have been silently ignored.</p>
-        <p><strong>Fix:</strong> updated it to understand both shapes of request, and re-deployed before it was needed.</p>
+        <p><strong>What happened:</strong> Found and fixed before Step 9 needed it &mdash; the program only knew how to read requests shaped like a website request coming through the web entry point. A request coming from somewhere else, like the backup-plan flowchart built later, would have been silently ignored instead of answered.</p>
+        <p><strong>Fix:</strong> updated the program to understand both shapes of request, and re-deployed it before Step 9 actually needed that to work.</p>
       </div>
     </div>
 
@@ -395,15 +416,18 @@
       <div class="step-head"><span class="step-num">8</span><h4>A web address customers can call</h4></div>
       <p class="step-res">adi-1-2-api &middot; POST /generate &middot; prod stage</p>
       <div class="step-body">
-        <p><strong class="lbl">What:</strong> Set up a public web address that forwards requests straight to the Step 7 program. Tested it for real from outside AWS, not just from within the console.</p>
+        <div class="concept">
+          <p><strong>In plain terms:</strong> Amazon API Gateway is AWS's service for creating a public web address that other applications can call over the internet. It's the front door — when a request comes in, API Gateway forwards it to a Lambda function (like the one built in Step 7) to actually handle it.</p>
+        </div>
+        <p><strong class="lbl">What was built:</strong> Set up a public web address that forwards incoming requests straight to the Step 7 program. Tested it for real from outside AWS entirely, not just from inside the AWS console.</p>
         <p><strong class="lbl">Where to check:</strong> Console &rarr; API Gateway &rarr; adi-1-2-api &rarr; Stages &rarr; prod.</p>
-        <p><strong class="lbl">Why:</strong> This is what makes the assistant something a real app can actually call over the internet, finishing the "ask a question, get an answer" path end to end.</p>
+        <p><strong class="lbl">Why it matters:</strong> This is what makes the assistant something a real customer-facing app can actually call over the internet — it finishes the "ask a question, get an answer" path from start to end.</p>
       </div>
     </div>
 
     <div class="phase-divider" id="phase-3">
       <span class="pd-num">Phase 3</span>
-      <div class="pd-text"><h3>Staying Up If Something Fails</h3><p>A backup plan, a second copy in another region, and real health checks</p></div>
+      <div class="pd-text"><h3>Staying Up If Something Fails</h3><p>Build a backup plan, a second full copy of the system in another region, and real health checks watching both.</p></div>
       <span class="pd-line"></span>
     </div>
 
@@ -411,13 +435,16 @@
       <div class="step-head"><span class="step-num">9</span><h4>The backup plan (circuit breaker)</h4></div>
       <p class="step-res">adi-1-2-circuit-breaker-sm</p>
       <div class="step-body">
-        <p><strong class="lbl">What:</strong> Built a flowchart: try the main model, and if that fails, try a backup model, and if that fails too, show a safe canned reply instead of an error. Added a way to fake a failure on purpose, specifically to prove each fallback step actually works.</p>
+        <div class="concept">
+          <p><strong>In plain terms:</strong> A "circuit breaker" pattern means trying a main option first, and automatically falling back to a backup option if it fails — and falling back again to something even simpler if that backup also fails. It's named after an electrical circuit breaker, which trips to stop a problem from spreading, instead of just letting everything fail at once.</p>
+        </div>
+        <p><strong class="lbl">What was built:</strong> Built a flowchart (using AWS Step Functions, the same tool explained in Task 1.1's Step 12): try the main model, and if that fails, try a backup model, and if that fails too, show a safe canned reply instead of an error message. Also added a way to deliberately fake a failure on purpose, specifically to prove each fallback step actually works — not just assume it would.</p>
         <p><strong class="lbl">Where to check:</strong> Step Functions &rarr; adi-1-2-circuit-breaker-sm &rarr; Executions.</p>
-        <p><strong class="lbl">Why:</strong> A clear, visible failover plan instead of hidden error-handling in code. Tested and confirmed all 3 outcomes really happen: normal answer, backup-model answer, and safe canned reply.</p>
+        <p><strong class="lbl">Why it matters:</strong> Gives the system a clear, visible failover plan instead of hidden error-handling buried in code somewhere. All 3 possible outcomes were tested and confirmed to really happen: a normal answer, a backup-model answer, and a safe canned reply when both models fail.</p>
       </div>
       <div class="mini-tip">
         <p class="mt-head">Good to know</p>
-        <p>It's not enough to write a flowchart that "should" fall back correctly — actually forcing a failure and watching it happen is the only way to be sure the fallback logic really works, not just that it looks right on paper.</p>
+        <p>Writing a flowchart that "should" fall back correctly isn't enough on its own — actually forcing a failure on purpose and watching what happens is the only way to be sure the fallback logic really works, rather than just looking correct on paper.</p>
       </div>
     </div>
 
@@ -425,23 +452,26 @@
       <div class="step-head"><span class="step-num">10</span><h4>A second copy in another region</h4></div>
       <p class="step-res">adi-1-2-cross-region-stack (CloudFormation)</p>
       <div class="step-body">
-        <p><strong class="lbl">What:</strong> Deployed a full second copy of the system in a different AWS region (Oregon), with its own settings file — not one that calls back to the first region, since that would defeat the purpose if the first region went down.</p>
+        <div class="concept">
+          <p><strong>In plain terms:</strong> An AWS "region" is a physically separate data center location — like Virginia (us-east-1) versus Oregon (us-west-2). If one region has an outage, a system deployed only in that region goes down with it. AWS CloudFormation is a tool for describing a whole set of AWS resources in one file, so the same setup can be deployed again elsewhere with one command instead of clicking through the console by hand each time.</p>
+        </div>
+        <p><strong class="lbl">What was built:</strong> Deployed a full second copy of the system in a different AWS region (Oregon), using CloudFormation so it could be built consistently in one step. Gave it its own independent settings file — not one that calls back to the first region, since that would defeat the whole purpose if the first region actually went down.</p>
         <p><strong class="lbl">Where to check:</strong> Console &rarr; CloudFormation &rarr; Stacks &rarr; adi-1-2-cross-region-stack (region: Oregon).</p>
-        <p><strong class="lbl">Why:</strong> If one AWS region has an outage, the system needs its own independent copy elsewhere to keep working — not just a code copy that still depends on the region that's down.</p>
+        <p><strong class="lbl">Why it matters:</strong> If one AWS region has an outage, the system needs a genuinely independent copy running somewhere else to keep answering questions — not just a code copy that secretly still depends on the region that's down.</p>
       </div>
       <div class="mini-bug">
         <p class="mb-head">Error 3 &middot; Same model works differently in a different region</p>
-        <p><strong>What happened:</strong> Nova Micro showed as available in the new region, but calling it failed anyway, asking for a different kind of model ID.</p>
-        <p><strong>Fix:</strong> found the right ID format for that region and updated the settings and permissions to match. Confirmed it then worked correctly.</p>
+        <p><strong>What happened:</strong> Nova Micro showed up as available in the new region, but actually calling it failed anyway, with an error asking for a different kind of model ID than what worked in the first region.</p>
+        <p><strong>Fix:</strong> found the correct ID format for that specific region (similar to the special ID format explained in Task 1.1's Step 1) and updated both the settings and the permissions to match. Confirmed it then worked correctly.</p>
       </div>
       <div class="mini-bug">
         <p class="mb-head">Minor &middot; A "stop" button didn't do what it sounded like</p>
-        <p><strong>What happened:</strong> Tried to quickly finish an in-progress settings update using what looked like a "stop and finish" button.</p>
-        <p><strong>Fix:</strong> it actually undoes the update instead of finishing it early. No harm here since a newer update was applied right after, but worth knowing for next time.</p>
+        <p><strong>What happened:</strong> Tried to quickly finish an in-progress settings update using what looked like a "stop and finish now" button.</p>
+        <p><strong>Fix:</strong> it actually undoes the update instead of finishing it early — the opposite of what the name suggested. No real harm here, since a newer update was applied right afterward anyway, but worth knowing for next time.</p>
       </div>
       <div class="mini-tip">
         <p class="mt-head">Good to know</p>
-        <p>A model being "available" in a region and a model actually working the same way in that region are two different things. Always test for real in each region — don't assume it behaves like the first one.</p>
+        <p>A model being listed as "available" in a region and that model actually working the same way in that region are two different things. Always test each region for real — don't assume a second region behaves exactly like the first one just because the setup looks identical.</p>
       </div>
     </div>
 
@@ -449,20 +479,23 @@
       <div class="step-head"><span class="step-num">11</span><h4>Health checks + a documented backup plan for the web address</h4></div>
       <p class="step-res">adi-1-2-primary/secondary-health-check &middot; GET /health (both regions)</p>
       <div class="step-body">
-        <p><strong class="lbl">What:</strong> Added a simple "are you alive?" check to both regions, then set up 2 real Route 53 health checks watching them. The full plan for automatically switching customer traffic to the backup region is written down, but not turned on — that needs a company's own website address, which this test account doesn't have.</p>
-        <p><strong class="lbl">Where to check:</strong> Console &rarr; Route 53 &rarr; Health checks; repo &mdash; <code>route53-failover-pattern.md</code> for the exact setup that would go live the moment a real domain is added.</p>
-        <p><strong class="lbl">Why:</strong> Covers what's actually possible to build without buying a domain name just for a test project. The health checks are real and ready to be used the moment that piece exists.</p>
+        <div class="concept">
+          <p><strong>In plain terms:</strong> Amazon Route 53 is AWS's system for directing web traffic to the right place, including automatically checking whether a server is still responding ("health checks") and rerouting customers to a backup if it isn't.</p>
+        </div>
+        <p><strong class="lbl">What was built:</strong> Added a simple "are you alive?" web address to both regions, then set up 2 real Route 53 health checks watching them continuously. The full plan for automatically switching customer traffic over to the backup region the moment the main one fails is written down in detail, but not actually turned on — turning it on for real needs a registered website address (a domain name) belonging to the company, which this test account doesn't have.</p>
+        <p><strong class="lbl">Where to check:</strong> Console &rarr; Route 53 &rarr; Health checks; repo &mdash; <code>route53-failover-pattern.md</code> for the exact setup that would go live the moment a real domain name is added.</p>
+        <p><strong class="lbl">Why it matters:</strong> Covers what's actually possible to build without buying a domain name just for a test project. The health checks themselves are real and fully working, and are exactly what the automatic switch-over would plug into the moment that one missing piece — an actual domain — exists.</p>
       </div>
       <div class="mini-bug">
         <p class="mb-head">Error 4 &middot; New web address took a minute to go live</p>
-        <p><strong>What happened:</strong> Both new health-check web addresses returned an error right after being created, even though everything looked correctly set up.</p>
-        <p><strong>Fix:</strong> waited about 30&ndash;60 seconds and it started working on its own. New AWS resources sometimes take a short moment to become fully live.</p>
+        <p><strong>What happened:</strong> Both newly created health-check web addresses returned an error right after being set up, even though everything looked correctly configured on paper.</p>
+        <p><strong>Fix:</strong> waited about 30&ndash;60 seconds and it started working on its own, with no changes needed. New AWS resources sometimes take a short moment to fully come online, even after the console shows them as created.</p>
       </div>
     </div>
 
     <div class="phase-divider" id="phase-4">
       <span class="pd-num">Phase 4</span>
-      <div class="pd-text"><h3>Custom Training</h3><p>Training data, a real training job, and where this task stopped</p></div>
+      <div class="pd-text"><h3>Custom Training</h3><p>Teach a model the bank's own style of question, and be honest about exactly where this project chose to stop.</p></div>
       <span class="pd-line"></span>
     </div>
 
@@ -470,9 +503,12 @@
       <div class="step-head"><span class="step-num">12</span><h4>Write training examples</h4></div>
       <p class="step-res">adi-1-2-finetuning-data (S3) &middot; 35 examples</p>
       <div class="step-body">
-        <p><strong class="lbl">What:</strong> Wrote 35 example question-and-answer pairs about banking topics not already covered in Step 2's test questions (wire transfers, disputes, credit scores, and more), each written in the same tone the assistant should always use.</p>
+        <div class="concept">
+          <p><strong>In plain terms:</strong> "Fine-tuning" means taking a general AI model and giving it extra training on examples from one specific topic, so it gets noticeably better and more consistent at that one topic — without having to build a brand-new AI model from scratch.</p>
+        </div>
+        <p><strong class="lbl">What was built:</strong> Wrote 35 example question-and-answer pairs about banking topics not already covered in Step 2's test questions — things like wire transfers, disputing a charge, and credit scores — each one written in the same consistent tone the assistant should always use, and saved them to S3 (the same storage service explained in Task 1.1's Step 2).</p>
         <p><strong class="lbl">Where to check:</strong> S3 &rarr; adi-1-2-finetuning-data.</p>
-        <p><strong class="lbl">Why:</strong> Fine-tuning means teaching the model a consistent style by example, so that style becomes automatic — instead of having to explain it in every single question.</p>
+        <p><strong class="lbl">Why it matters:</strong> Fine-tuning teaches a model a consistent style by example, so that style becomes automatic in every answer — instead of having to explain the same tone and formatting rules in every single question sent to the model.</p>
       </div>
     </div>
 
@@ -480,18 +516,21 @@
       <div class="step-head"><span class="step-num">13</span><h4>Train a custom model &mdash; switched tools partway through</h4></div>
       <p class="step-res">amazon.nova-micro-v1:0:128k &rarr; adi-1-2-nova-micro-financial-qa</p>
       <div class="step-body">
-        <p><strong class="lbl">What:</strong> Started with Amazon SageMaker, the tool the assignment specifically asked for, and had everything ready to go. Hit a wall (below) and switched to Bedrock's own built-in training tool instead, training a special version of Nova Micro &mdash; the same model already picked as the winner in Phase 1.</p>
+        <div class="concept">
+          <p><strong>In plain terms:</strong> Amazon SageMaker is AWS's dedicated machine-learning platform — more flexible and more hands-on than Bedrock, but also more work to set up, since you're managing your own training computer. Bedrock also has its own simpler, built-in fine-tuning feature for certain models, which manages all of that for you.</p>
+        </div>
+        <p><strong class="lbl">What was built:</strong> Started with Amazon SageMaker, the tool the assignment specifically asked for, and had everything fully ready to go — the training script, the permissions, all of it. Hit a wall (explained below) and switched to Bedrock's own built-in fine-tuning feature instead, training a specially-adapted version of Nova Micro — the same model already picked as the overall winner back in Phase 1.</p>
         <p><strong class="lbl">Where to check:</strong> Console &rarr; Amazon Bedrock &rarr; Custom models &rarr; Training jobs.</p>
-        <p><strong class="lbl">Why:</strong> Still delivers what the assignment asked for &mdash; a model trained specifically for this bank's questions &mdash; just through a different, and arguably simpler, AWS tool. The training finished successfully.</p>
+        <p><strong class="lbl">Why it matters:</strong> Still delivers exactly what the assignment asked for — a model trained specifically for this bank's own questions — just through a different, and arguably simpler, AWS tool. The training job ran and finished successfully.</p>
       </div>
       <div class="mini-bug">
         <p class="mb-head">Error 5 &middot; New accounts start with zero training capacity</p>
-        <p><strong>What happened:</strong> Trying to start the SageMaker training job failed right away: AWS said the allowed number of training computers for this account was zero &mdash; for every size of computer available, not just one.</p>
-        <p><strong>Fix:</strong> asked AWS to raise that limit. Both requests went into a manual review queue with no fixed wait time &mdash; possibly hours, possibly longer. Rather than wait on that, switched the whole step over to Bedrock's built-in training instead.</p>
+        <p><strong>What happened:</strong> Trying to start the SageMaker training job failed immediately. AWS said the allowed number of training computers for this account was zero — and checking further, that was true for every single size of training computer available, not just the one first tried.</p>
+        <p><strong>Fix:</strong> asked AWS to raise that limit. Both requests went into a manual review queue with no guaranteed timeline — possibly hours, possibly much longer. Rather than sit and wait on an unpredictable queue, the whole step was switched over to Bedrock's built-in fine-tuning tool instead, which didn't have this limit.</p>
       </div>
       <div class="mini-tip">
         <p class="mt-head">Good to know</p>
-        <p>A brand-new AWS account often starts with zero allowed usage for SageMaker training, no matter how small the request. This isn't a broken permission — it's a limit that has to be raised by asking AWS, and that request can take an unpredictable amount of time to get approved.</p>
+        <p>A brand-new AWS account often starts with a training-computer limit of zero for SageMaker, no matter how small the request is. This isn't a broken permission or a mistake in setup — it's a safety limit that has to be specifically raised by asking AWS, and that request can take an unpredictable amount of time to actually get approved.</p>
       </div>
     </div>
 
@@ -499,8 +538,11 @@
       <div class="step-head"><span class="step-num">14</span><h4>Turn the custom model on for real use</h4><span class="unbuilt-badge">Planned, not built</span></div>
       <p class="step-res">Would update: model_selection_strategy.json &middot; AppConfig</p>
       <div class="step-body">
-        <p><strong class="lbl">What this would have been:</strong> Switch on the newly trained model for live use, add it as an option in the settings file from Step 5 (no code changes needed, since the model-picker program already reads its choice from settings), re-run the Step 3 comparison to see if it's actually better, and if so, make it the new default &mdash; with the old settings still saved, so undoing it is instant.</p>
-        <p><strong class="lbl">Why it wasn't built:</strong> Turning on a custom-trained model for live use isn't pay-per-question like everything else in this project &mdash; it needs a dedicated, always-on slot that costs money every hour it's switched on, whether or not anyone's using it (roughly $4&ndash;50 an hour). That's a real ongoing cost, and the decision was made to stop here rather than spend on that for a test project.</p>
+        <div class="concept">
+          <p><strong>In plain terms:</strong> A "custom model" on Bedrock — one that's been fine-tuned like the one from Step 13 — can't be used the normal pay-as-you-go way. It needs something called Provisioned Throughput: a dedicated slot that's reserved and paid for by the hour, whether or not it's actually being used, similar to renting a parking space for a month instead of paying per visit.</p>
+        </div>
+        <p><strong class="lbl">What this would have involved:</strong> Turn on the newly trained model for live use, add it as an option in the Step 5 settings file (no code changes needed, since the model-picker program already reads its choice from settings), re-run the Step 3 comparison to check whether it's actually better than the general-purpose model, and if so, make it the new default — with the old settings still saved, so undoing the switch would be instant.</p>
+        <p><strong class="lbl">Why it wasn't built:</strong> Turning on a custom-trained model for live use costs money every hour it's switched on — roughly $4 to $50 an hour, whether or not anyone's actually using it — instead of the pay-per-question pricing used everywhere else in this project. That's a real ongoing cost, and the decision was made to stop here rather than spend on that just for a test project.</p>
       </div>
     </div>
 
@@ -508,8 +550,8 @@
       <div class="step-head"><span class="step-num">15</span><h4>Automatic testing before switching models</h4><span class="unbuilt-badge">Planned, not built</span></div>
       <p class="step-res">Would reuse: the same test-suite pattern from Task 1.1</p>
       <div class="step-body">
-        <p><strong class="lbl">What this would have been:</strong> An automatic test that runs the Step 3 comparison questions against both the old and new model, and only switches the settings file to the new one if it actually scores better on every measure &mdash; not just on average. Undoing a bad switch would just mean going back to the previous saved settings.</p>
-        <p><strong class="lbl">Why it wasn't built:</strong> This step only makes sense once Step 14's custom model is actually switched on for live use, which didn't happen for the cost reason above.</p>
+        <p><strong class="lbl">What this would have involved:</strong> An automatic test (using the same test-suite pattern built for Task 1.1's Step 13) that runs the Step 3 comparison questions against both the old model and the new custom-trained one, and only switches the live settings over to the new model if it actually scores better on every single measure — not just better on average. Undoing a bad switch would simply mean going back to the previously saved settings, the same instant-rollback idea as Step 14.</p>
+        <p><strong class="lbl">Why it wasn't built:</strong> This step only makes sense once Step 14's custom model is actually switched on for live use, which didn't happen for the cost reason explained above — there was nothing yet to test against.</p>
       </div>
     </div>
   </div>
