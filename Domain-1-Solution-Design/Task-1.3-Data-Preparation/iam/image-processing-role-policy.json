@@ -1,0 +1,35 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "S3ImagesRead",
+      "Effect": "Allow",
+      "Action": ["s3:GetObject"],
+      "Resource": "arn:aws:s3:::adi-1-3-customer-feedback-269737522732/raw-data/images/*"
+    },
+    {
+      "Sid": "S3ProcessedDataWrite",
+      "Effect": "Allow",
+      "Action": ["s3:PutObject"],
+      "Resource": "arn:aws:s3:::adi-1-3-customer-feedback-269737522732/processed-data/images/*"
+    },
+    {
+      "Sid": "TextractAnalysis",
+      "Effect": "Allow",
+      "Action": ["textract:DetectDocumentText"],
+      "Resource": "*"
+    },
+    {
+      "Sid": "RekognitionAnalysis",
+      "Effect": "Allow",
+      "Action": ["rekognition:DetectLabels", "rekognition:DetectText"],
+      "Resource": "*"
+    },
+    {
+      "Sid": "Logs",
+      "Effect": "Allow",
+      "Action": ["logs:CreateLogGroup", "logs:CreateLogStream", "logs:PutLogEvents"],
+      "Resource": "arn:aws:logs:us-east-1:269737522732:log-group:/aws/lambda/adi-1-3-image-processing:*"
+    }
+  ]
+}

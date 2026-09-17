@@ -1,0 +1,32 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "S3ReviewsReadWrite",
+      "Effect": "Allow",
+      "Action": ["s3:GetObject"],
+      "Resource": "arn:aws:s3:::adi-1-3-customer-feedback-269737522732/raw-data/reviews/*"
+    },
+    {
+      "Sid": "S3ValidationResultsWrite",
+      "Effect": "Allow",
+      "Action": ["s3:PutObject"],
+      "Resource": "arn:aws:s3:::adi-1-3-customer-feedback-269737522732/validation-results/reviews/*"
+    },
+    {
+      "Sid": "CloudWatchMetrics",
+      "Effect": "Allow",
+      "Action": ["cloudwatch:PutMetricData"],
+      "Resource": "*",
+      "Condition": {
+        "StringEquals": { "cloudwatch:namespace": "CustomerFeedback/TextQuality" }
+      }
+    },
+    {
+      "Sid": "Logs",
+      "Effect": "Allow",
+      "Action": ["logs:CreateLogGroup", "logs:CreateLogStream", "logs:PutLogEvents"],
+      "Resource": "arn:aws:logs:us-east-1:269737522732:log-group:/aws/lambda/adi-1-3-text-validation:*"
+    }
+  ]
+}

@@ -1,0 +1,29 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "TranscribeJob",
+      "Effect": "Allow",
+      "Action": ["transcribe:StartTranscriptionJob", "transcribe:GetTranscriptionJob"],
+      "Resource": "*"
+    },
+    {
+      "Sid": "S3AudioRead",
+      "Effect": "Allow",
+      "Action": ["s3:GetObject"],
+      "Resource": "arn:aws:s3:::adi-1-3-customer-feedback-269737522732/raw-data/audio/*"
+    },
+    {
+      "Sid": "S3TranscriptWrite",
+      "Effect": "Allow",
+      "Action": ["s3:PutObject"],
+      "Resource": "arn:aws:s3:::adi-1-3-customer-feedback-269737522732/transcriptions/*"
+    },
+    {
+      "Sid": "InvokeProcessingLambda",
+      "Effect": "Allow",
+      "Action": ["lambda:InvokeFunction"],
+      "Resource": "arn:aws:lambda:us-east-1:269737522732:function:adi-1-3-audio-processing"
+    }
+  ]
+}

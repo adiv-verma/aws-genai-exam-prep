@@ -1,0 +1,70 @@
+{
+  "Comment": "Task 1.3 Step 7 - start a Transcribe job and poll until done, then run Comprehend on the transcript. Avoids a single blocking Lambda (15-min timeout risk) for long calls.",
+  "StartAt": "StartTranscriptionJob",
+  "States": {
+    "StartTranscriptionJob": {
+      "Type": "Task",
+      "Resource": "arn:aws:states:::aws-sdk:transcribe:startTranscriptionJob",
+      "Parameters": {
+        "TranscriptionJobName.$": "$.job_name",
+        "Media": {
+          "MediaFileUri.$": "States.Format('s3://{}/{}', $.bucket, $.audio_key)"
+        },
+        "MediaFormat.$": "$.media_format",
+        "LanguageCode": "en-US",
+        "OutputBucketName.$": "$.bucket",
+        "OutputKey.$": "$.output_key",
+        "Settings": {
+          "ShowSpeakerLabels": true,
+          "MaxSpeakerLabels": 2
+        }
+      },
+      "ResultPath": null,
+      "Next": "WaitForTranscription"
+    },
+    "WaitForTranscription": {
+      "Type": "Wait",
+      "Seconds": 20,
+      "Next": "GetTranscriptionJob"
+    },
+    "GetTranscriptionJob": {
+      "Type": "Task",
+      "Resource": "arn:aws:states:::aws-sdk:transcribe:getTranscriptionJob",
+      "Parameters": {
+        "TranscriptionJobName.$": "$.job_name"
+      },
+      "ResultPath": "$.job_status",
+      "Next": "IsTranscriptionComplete"
+    },
+    "IsTranscriptionComplete": {
+      "Type": "Choice",
+      "Choices": [
+        {
+          "Variable": "$.job_status.TranscriptionJob.TranscriptionJobStatus",
+          "StringEquals": "COMPLETED",
+          "Next": "ProcessTranscript"
+        },
+        {
+          "Variable": "$.job_status.TranscriptionJob.TranscriptionJobStatus",
+          "StringEquals": "FAILED",
+          "Next": "TranscriptionFailed"
+        }
+      ],
+      "Default": "WaitForTranscription"
+    },
+    "TranscriptionFailed": {
+      "Type": "Fail",
+      "Error": "TranscriptionJobFailed"
+    },
+    "ProcessTranscript": {
+      "Type": "Task",
+      "Resource": "arn:aws:states:::lambda:invoke",
+      "Parameters": {
+        "FunctionName": "arn:aws:lambda:us-east-1:269737522732:function:adi-1-3-audio-processing",
+        "Payload.$": "$"
+      },
+      "ResultPath": "$.processing_result",
+      "End": true
+    }
+  }
+}

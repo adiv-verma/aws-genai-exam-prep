@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Task 1.3 Build Log | AIP-C01 Guide</title>
+<meta name="description" content="Domain 1, Task 1.3 bonus assignment, step by step: a pipeline that checks, cleans, and organizes messy customer feedback (reviews, photos, support calls, surveys) so an AI model can safely turn it into business insights. Written in plain English, with the AWS ideas explained as they come up.">
+<style>
+  :root{
+    --ink:#0b1524; --ink-soft:#3a4a5e; --paper:#f7f8fa; --card:#ffffff; --line:#e3e7ee;
+    --accent:#e8622c; --accent-dark:#c94f1f; --navy:#0f2540; --navy-2:#16345c;
+    --good:#1a7f5a; --good-bg:#e9f7f1; --good-line:#bfe6d6;
+    --bad:#b3271f; --bad-bg:#fdecea; --bad-line:#f3c6c2;
+    --unbuilt-bg:#f4f1fb; --unbuilt-line:#d8cdf0; --unbuilt:#5b3fa3;
+    --concept-bg:#eef6ff; --concept-line:#c9e0f7; --concept:#155a8a;
+    color-scheme: light;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{margin:0;background:var(--paper);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;line-height:1.6;}
+  a{color:var(--accent-dark);}
+  code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;background:#eef1f6;padding:1px 5px;border-radius:4px;font-size:.92em;}
+  .wrap{max-width:980px;margin:0 auto;padding:0 24px;}
+  .wrap-wide{max-width:1320px;margin:0 auto;padding:0 24px;}
+
+  .nav{position:sticky;top:0;z-index:50;background:rgba(15,37,64,.96);backdrop-filter:blur(6px);border-bottom:1px solid rgba(255,255,255,.08);}
+  .nav .wrap{display:flex;align-items:center;justify-content:space-between;height:56px;max-width:1080px;}
+  .nav-brand{color:#fff;font-weight:700;font-size:14px;letter-spacing:.02em;text-decoration:none;}
+  .nav-brand span{color:var(--accent);}
+  .nav-links{display:flex;gap:22px;list-style:none;margin:0;padding:0;}
+  .nav-links a{color:#cdd8e6;text-decoration:none;font-size:13.5px;font-weight:500;}
+  .nav-links a:hover{color:#fff;}
+  @media (max-width:720px){ .nav-links{display:none;} }
+
+  header.hero{background:radial-gradient(900px 420px at 85% -10%, rgba(232,98,44,.3), transparent 60%), linear-gradient(180deg,var(--navy) 0%, var(--navy-2) 100%);color:#fff;padding:48px 0 36px;}
+  .eyebrow{display:inline-block;font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#ffd8c4;background:rgba(232,98,44,.18);border:1px solid rgba(232,98,44,.4);padding:5px 10px;border-radius:999px;margin-bottom:16px;}
+  h1{font-size:clamp(24px,3.6vw,36px);line-height:1.18;margin:0 0 12px;font-weight:800;}
+  header.hero p.lead{font-size:16px;color:#c9d5e3;max-width:720px;margin:0 0 22px;}
+  .stat-row{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.12);border-radius:12px;overflow:hidden;}
+  .stat{background:rgba(255,255,255,.04);padding:14px 12px;text-align:center;}
+  .stat .n{font-size:19px;font-weight:800;color:#fff;}
+  .stat .l{font-size:11px;color:#a9b8cb;text-transform:uppercase;letter-spacing:.03em;margin-top:2px;}
+  @media (max-width:640px){.stat-row{grid-template-columns:repeat(2,1fr);}}
+
+  section{padding:40px 0;}
+  section.alt{background:#eef1f6;}
+  h2.h{font-size:24px;font-weight:800;letter-spacing:-.01em;margin:0 0 8px;color:var(--ink);}
+  .kicker{font-size:12.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--accent-dark);margin:0 0 8px;}
+  .section-lead{color:var(--ink-soft);max-width:740px;margin:0 0 24px;font-size:15px;}
+
+  .toc{display:flex;flex-wrap:wrap;gap:10px;margin:0 0 8px;}
+  .toc a{font-size:13px;font-weight:600;background:var(--card);border:1px solid var(--line);color:var(--ink-soft);padding:7px 13px;border-radius:999px;text-decoration:none;}
+  .toc a:hover{border-color:var(--accent);color:var(--accent-dark);}
+
+  /* PHASE DIVIDER */
+  .phase-divider{display:flex;align-items:flex-start;gap:14px;margin:36px 0 16px;}
+  .phase-divider:first-of-type{margin-top:4px;}
+  .phase-divider .pd-num{
+    background:var(--navy);color:#fff;font-weight:800;font-size:13px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;
+    padding:6px 12px;border-radius:8px;white-space:nowrap;margin-top:2px;
+  }
+  .phase-divider .pd-text h3{margin:0;font-size:18px;font-weight:800;color:var(--ink);}
+  .phase-divider .pd-text p{margin:4px 0 0;font-size:13.5px;color:var(--ink-soft);max-width:640px;}
+  .phase-divider .pd-line{flex:1;height:1px;background:var(--line);margin-top:14px;}
+
+  /* STEP CARD */
+  .step-card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:20px 24px;margin-bottom:14px;}
+  .step-head{display:flex;align-items:center;gap:12px;margin-bottom:12px;flex-wrap:wrap;}
+  .step-num{
+    background:var(--paper);border:1px solid var(--line);color:var(--navy-2);font-weight:800;font-size:12px;
+    font-family:ui-monospace,SFMono-Regular,Menlo,monospace;width:30px;height:30px;border-radius:8px;
+    display:flex;align-items:center;justify-content:center;flex-shrink:0;
+  }
+  .step-card h4{margin:0;font-size:15.5px;font-weight:700;}
+  .step-res{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px;color:var(--navy-2);background:#eef3fa;border:1px solid #d6e2f0;padding:2px 8px;border-radius:6px;margin:0 0 12px;display:inline-block;}
+  .step-body p{margin:0 0 8px;font-size:14px;color:var(--ink-soft);}
+  .step-body p strong.lbl{color:var(--ink);font-weight:700;}
+
+  .concept{background:var(--concept-bg);border:1px solid var(--concept-line);border-radius:8px;padding:12px 15px;margin:0 0 14px;}
+  .concept p{margin:0;font-size:13.5px;color:var(--ink);}
+  .concept p strong{color:var(--concept);}
+
+  .mini-bug{background:var(--bad-bg);border:1px solid var(--bad-line);border-radius:8px;padding:13px 16px;margin-top:10px;}
+  .mini-bug .mb-head{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.05em;color:var(--bad);margin:0 0 6px;}
+  .mini-bug p{margin:0 0 5px;font-size:13.5px;color:var(--ink-soft);}
+  .mini-bug p:last-child{margin-bottom:0;}
+  .mini-bug strong{color:var(--ink);}
+
+  .mini-tip{background:#fff7ed;border:1px solid #f6d9b8;border-radius:8px;padding:13px 16px;margin-top:10px;}
+  .mini-tip .mt-head{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.05em;color:var(--accent-dark);margin:0 0 4px;}
+  .mini-tip p{margin:0;font-size:13.5px;color:var(--ink);}
+
+  .step-card.unbuilt{background:var(--unbuilt-bg);border:1px dashed var(--unbuilt-line);}
+  .step-card.unbuilt .step-res{background:#ece6f8;border-color:var(--unbuilt-line);color:var(--unbuilt);}
+  .unbuilt-badge{font-size:10.5px;font-weight:800;text-transform:uppercase;letter-spacing:.05em;color:#fff;background:var(--unbuilt);padding:3px 9px;border-radius:999px;}
+
+  .diagram{margin:0;}
+  .diagram .svg-scroll{overflow-x:auto;}
+  .diagram svg{width:100%;min-width:900px;height:auto;display:block;color:var(--ink);}
+  .diagram figcaption{margin-top:14px;font-size:13px;color:var(--ink-soft);max-width:960px;}
+  .diagram figcaption code{font-size:.95em;}
+
+  table.verify{width:100%;border-collapse:collapse;font-size:13.5px;background:var(--card);border:1px solid var(--line);border-radius:10px;overflow:hidden;}
+  table.verify th{text-align:left;background:var(--navy);color:#fff;padding:10px 14px;font-size:12px;text-transform:uppercase;letter-spacing:.04em;}
+  table.verify td{padding:10px 14px;border-top:1px solid var(--line);color:var(--ink-soft);}
+  table.verify tr:nth-child(even) td{background:#fafbfc;}
+  .verify-wrap{overflow-x:auto;}
+
+  footer{padding:32px 0 48px;color:#8b96a5;font-size:12.5px;}
+  footer .wrap{border-top:1px solid var(--line);padding-top:22px;max-width:1080px;}
+  footer a{color:#6b7686;}
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="wrap">
+    <a class="nav-brand" href="../index.html">AIP-C01 <span>Guide</span></a>
+    <ul class="nav-links">
+      <li><a href="index.html">Build Log</a></li>
+      <li><a href="#architecture">How It Runs</a></li>
+      <li><a href="#log">Step-by-Step Log</a></li>
+      <li><a href="#resources">Resource Index</a></li>
+      <li><a href="../notes/task-1-3.html">Study Notes</a></li>
+    </ul>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="wrap">
+    <span class="eyebrow">Domain 1 &middot; Task 1.3 &middot; Bonus Assignment</span>
+    <h1>Turning Messy Customer Feedback<br>Into AI-Ready Data</h1>
+    <p class="lead">
+      The goal of this project: a made-up electronics company sells wireless earbuds, and customer
+      feedback about them shows up in four completely different shapes — written reviews, photos, support
+      call recordings, and survey forms. None of that is something an AI model can just read directly. This
+      page walks through building the pipeline that checks it, cleans it, understands each type using the
+      right AWS tool, packages it into the shape Claude actually expects, and — in the last step — lets
+      Claude's own judgment feed back into the quality checks at the start. Every AWS idea is explained in
+      plain terms the first time it comes up.
+    </p>
+    <div class="stat-row">
+      <div class="stat"><div class="n">13</div><div class="l">Steps built and tested</div></div>
+      <div class="stat"><div class="n">28</div><div class="l">Resources deployed</div></div>
+      <div class="stat"><div class="n">7</div><div class="l">Real bugs, fixed</div></div>
+      <div class="stat"><div class="n">4</div><div class="l">Kinds of feedback handled</div></div>
+    </div>
+  </div>
+</header>
+
+<section>
+  <div class="wrap">
+    <div class="toc">
+      <a href="#architecture">How it runs</a>
+      <a href="#phase-1">Phase 1: Checking the Data</a>
+      <a href="#phase-2">Phase 2: Understanding Each Type</a>
+      <a href="#phase-3">Phase 3: Getting It to Claude</a>
+      <a href="#phase-4">Phase 4: Closing the Loop</a>
+      <a href="#resources">Resource Index</a>
+    </div>
+  </div>
+</section>
+
+<section class="alt" id="architecture">
+  <div class="wrap-wide">
+    <p class="kicker">How It Runs</p>
+    <h2 class="h">Four different kinds of feedback, one pipeline, one AI at the end</h2>
+    <p class="section-lead">
+      A review, a photo, a phone call, and a survey form have almost nothing in common as raw files — so
+      each one needs its own AWS tool before they can all be brought back together for Claude to read as
+      one consistent picture. The dashed arrow at the bottom is the part that makes this a genuine loop, not
+      a one-way pipeline: Claude's own opinion of how solid a piece of feedback is flows back and can lower
+      that record's quality score. Resource names below leave off the shared <code>adi-1-3-</code> prefix
+      that every resource in this project starts with, just to save space.
+    </p>
+
+    <figure class="diagram">
+      <div class="svg-scroll">
+      <svg viewBox="0 0 1300 530" role="img" aria-label="Diagram: four kinds of raw customer feedback - text reviews, product photos, support call recordings, and survey forms - each get checked for quality, then each is processed by a different AWS AI service suited to that data type: Comprehend for text, Textract and Rekognition for photos, Transcribe (run through a Step Functions workflow) for audio, and a SageMaker processing job for surveys. All four results are then formatted into one consistent shape and sent to Claude on Amazon Bedrock, which produces a business insight. A dashed arrow loops back from Claude to the quality check step, showing that Claude's own confidence in a piece of feedback can lower that record's saved quality score.">
+        <defs>
+          <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+            <path d="M0,0 L10,5 L0,10 z" fill="var(--navy-2)"/>
+          </marker>
+          <marker id="arrowSoft" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+            <path d="M0,0 L10,5 L0,10 z" fill="var(--ink-soft)"/>
+          </marker>
+        </defs>
+
+        <g font-family="-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica,Arial,sans-serif">
+
+          <!-- Four raw sources -->
+          <rect x="40"  y="20" width="200" height="46" rx="10" fill="var(--card)" stroke="var(--line)" stroke-width="1.5"/>
+          <text x="140" y="48" text-anchor="middle" font-size="12" font-weight="700" fill="var(--ink)">Text reviews</text>
+
+          <rect x="260" y="20" width="200" height="46" rx="10" fill="var(--card)" stroke="var(--line)" stroke-width="1.5"/>
+          <text x="360" y="48" text-anchor="middle" font-size="12" font-weight="700" fill="var(--ink)">Product photos</text>
+
+          <rect x="480" y="20" width="220" height="46" rx="10" fill="var(--card)" stroke="var(--line)" stroke-width="1.5"/>
+          <text x="590" y="48" text-anchor="middle" font-size="12" font-weight="700" fill="var(--ink)">Support call recordings</text>
+
+          <rect x="720" y="20" width="200" height="46" rx="10" fill="var(--card)" stroke="var(--line)" stroke-width="1.5"/>
+          <text x="820" y="48" text-anchor="middle" font-size="12" font-weight="700" fill="var(--ink)">Survey forms</text>
+
+          <!-- down to quality check -->
+          <line x1="140" y1="66" x2="330" y2="115" stroke="var(--navy-2)" stroke-width="1.5" marker-end="url(#arrow)"/>
+          <line x1="360" y1="66" x2="400" y2="115" stroke="var(--navy-2)" stroke-width="1.5" marker-end="url(#arrow)"/>
+          <line x1="590" y1="66" x2="480" y2="115" stroke="var(--navy-2)" stroke-width="1.5" marker-end="url(#arrow)"/>
+          <line x1="820" y1="66" x2="560" y2="115" stroke="var(--navy-2)" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+          <!-- Quality check box -->
+          <rect x="280" y="117" width="340" height="60" rx="10" fill="var(--card)" stroke="var(--navy-2)" stroke-width="1.8"/>
+          <text x="450" y="141" text-anchor="middle" font-size="13" font-weight="700" fill="var(--ink)">Phase 1 &middot; Check it's trustworthy first</text>
+          <text x="450" y="160" text-anchor="middle" font-size="10" fill="var(--ink-soft)">Glue Data Quality (surveys) &middot; a Lambda check (reviews)</text>
+
+          <!-- down to 4 processing lanes -->
+          <line x1="330" y1="177" x2="140" y2="230" stroke="var(--navy-2)" stroke-width="1.5" marker-end="url(#arrow)"/>
+          <line x1="400" y1="177" x2="385" y2="230" stroke="var(--navy-2)" stroke-width="1.5" marker-end="url(#arrow)"/>
+          <line x1="500" y1="177" x2="630" y2="230" stroke="var(--navy-2)" stroke-width="1.5" marker-end="url(#arrow)"/>
+          <line x1="570" y1="177" x2="875" y2="230" stroke="var(--navy-2)" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+          <!-- 4 processing boxes -->
+          <rect x="40" y="232" width="200" height="66" rx="10" fill="var(--card)" stroke="var(--line)" stroke-width="1.5"/>
+          <text x="140" y="257" text-anchor="middle" font-size="12" font-weight="700" fill="var(--ink)">Amazon Comprehend</text>
+          <text x="140" y="273" text-anchor="middle" font-size="9.5" fill="var(--ink-soft)">sentiment, entities, key phrases</text>
+          <text x="140" y="288" text-anchor="middle" font-size="9.5" fill="var(--ink-soft)">(text cleaned up first)</text>
+
+          <rect x="285" y="232" width="200" height="66" rx="10" fill="var(--card)" stroke="var(--line)" stroke-width="1.5"/>
+          <text x="385" y="257" text-anchor="middle" font-size="12" font-weight="700" fill="var(--ink)">Textract + Rekognition</text>
+          <text x="385" y="273" text-anchor="middle" font-size="9.5" fill="var(--ink-soft)">text in the photo, and</text>
+          <text x="385" y="288" text-anchor="middle" font-size="9.5" fill="var(--ink-soft)">what the photo shows</text>
+
+          <rect x="530" y="232" width="200" height="66" rx="10" fill="var(--card)" stroke="var(--line)" stroke-width="1.5"/>
+          <text x="630" y="253" text-anchor="middle" font-size="12" font-weight="700" fill="var(--ink)">Transcribe</text>
+          <text x="630" y="269" text-anchor="middle" font-size="9.5" fill="var(--ink-soft)">run inside a Step Functions</text>
+          <text x="630" y="283" text-anchor="middle" font-size="9.5" fill="var(--ink-soft)">flowchart, not one long-running</text>
+          <text x="630" y="295" text-anchor="middle" font-size="9.5" fill="var(--ink-soft)">program (Step 7)</text>
+
+          <rect x="775" y="232" width="200" height="66" rx="10" fill="var(--card)" stroke="var(--line)" stroke-width="1.5"/>
+          <text x="875" y="257" text-anchor="middle" font-size="12" font-weight="700" fill="var(--ink)">SageMaker Processing</text>
+          <text x="875" y="273" text-anchor="middle" font-size="9.5" fill="var(--ink-soft)">turns survey rows into</text>
+          <text x="875" y="288" text-anchor="middle" font-size="9.5" fill="var(--ink-soft)">plain-English summaries</text>
+
+          <!-- converge to formatting box -->
+          <line x1="140" y1="298" x2="480" y2="345" stroke="var(--navy-2)" stroke-width="1.5" marker-end="url(#arrow)"/>
+          <line x1="385" y1="298" x2="520" y2="345" stroke="var(--navy-2)" stroke-width="1.5" marker-end="url(#arrow)"/>
+          <line x1="630" y1="298" x2="580" y2="345" stroke="var(--navy-2)" stroke-width="1.5" marker-end="url(#arrow)"/>
+          <line x1="875" y1="298" x2="620" y2="345" stroke="var(--navy-2)" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+          <!-- Formatting box -->
+          <rect x="400" y="347" width="300" height="58" rx="10" fill="var(--card)" stroke="var(--line)" stroke-width="1.5"/>
+          <text x="550" y="371" text-anchor="middle" font-size="12.5" font-weight="700" fill="var(--ink)">Phase 3 &middot; Package for Claude</text>
+          <text x="550" y="388" text-anchor="middle" font-size="9.5" fill="var(--ink-soft)">one consistent shape, photos included as real images</text>
+
+          <line x1="550" y1="405" x2="550" y2="443" stroke="var(--navy-2)" stroke-width="1.6" marker-end="url(#arrow)"/>
+
+          <!-- Claude box -->
+          <rect x="380" y="445" width="340" height="66" rx="10" fill="var(--card)" stroke="var(--line)" stroke-width="1.5"/>
+          <text x="550" y="470" text-anchor="middle" font-size="13" font-weight="700" fill="var(--ink)">Claude on Amazon Bedrock</text>
+          <text x="550" y="487" text-anchor="middle" font-size="9.5" fill="var(--ink-soft)">reads it and writes the core issue, whether</text>
+          <text x="550" y="500" text-anchor="middle" font-size="9.5" fill="var(--ink-soft)">it needs escalating, and what to do next</text>
+
+          <!-- Feedback loop dashed arrow back to quality check -->
+          <path d="M 400 460 C 150 460, 90 300, 90 177" fill="none" stroke="var(--ink-soft)" stroke-width="1.6" stroke-dasharray="6,4" marker-end="url(#arrowSoft)"/>
+          <rect x="40" y="330" width="220" height="58" rx="10" fill="#fff7ed" stroke="#f6d9b8" stroke-width="1.5"/>
+          <text x="150" y="352" text-anchor="middle" font-size="11" font-weight="700" fill="var(--accent-dark)">Phase 4 &middot; Feedback loop</text>
+          <text x="150" y="368" text-anchor="middle" font-size="9.5" fill="var(--ink-soft)">Claude's own confidence can lower</text>
+          <text x="150" y="381" text-anchor="middle" font-size="9.5" fill="var(--ink-soft)">the quality score saved back at Phase 1</text>
+
+        </g>
+      </svg>
+      </div>
+      <figcaption>
+        Solid arrows are the one-way trip from raw feedback to a finished insight. The dashed arrow is the
+        genuine loop built in Step 13: after Claude reads a formatted review, a second, small Bedrock call
+        asks Claude how confident it actually is that the feedback contained enough real detail to act on —
+        and if the answer is "not very," that review's saved quality score gets marked down for real, on the
+        same dashboard built in Phase 1. Not pictured: the plain-English text cleanup step (Step 12), which
+        runs quietly just before the Comprehend box above.
+      </figcaption>
+    </figure>
+  </div>
+</section>
+
+<section id="log">
+  <div class="wrap">
+    <p class="kicker">Step-by-Step Build Log</p>
+    <h2 class="h">Every step, in the order it happened</h2>
+    <p class="section-lead">
+      Each step below explains a new AWS idea in plain terms first (in the blue box, where it applies), then
+      says exactly what was built, where to see it in the AWS console, and why it mattered. Kept to one
+      product line on purpose — wireless earbuds, made up for this project — with sample data (reviews,
+      photos, call recordings, survey rows) written and generated specifically to test this pipeline, since
+      no ready-made sample data came with the assignment.
+    </p>
+
+    <div class="phase-divider" id="phase-1">
+      <span class="pd-num">Phase 1</span>
+      <div class="pd-text"><h3>Checking the Data First</h3><p>Before anything expensive happens to a piece of feedback, make sure it's actually trustworthy — and prove that bad data really does get caught, not just assumed to pass.</p></div>
+      <span class="pd-line"></span>
+    </div>
+
+    <div class="step-card">
+      <div class="step-head"><span class="step-num">1</span><h4>Set up storage and write test data</h4></div>
+      <p class="step-res">S3 bucket &middot; 12 reviews &middot; 4 photos &middot; 2 call recordings &middot; 12 survey rows</p>
+      <div class="step-body">
+        <p><strong class="lbl">What was built:</strong> A private, locked-down S3 storage bucket (the same idea explained in Task 1.1's Step 2) to hold everything. Since no sample data came with this assignment, realistic test data was written and generated by hand for all four types: written reviews (two of them deliberately broken — one far too short, one missing required fields — specifically to prove the quality check in Step 3 actually catches bad data), simple product-box photos with real text drawn onto them, and — the more interesting part — two real support-call recordings, created by having Amazon Polly (AWS's text-to-speech service) actually speak out two sample conversations, so the transcription step later on has genuine speech to work with instead of a silent file.</p>
+        <p><strong class="lbl">Where to check:</strong> S3 &rarr; adi-1-3-customer-feedback-269737522732 &rarr; raw-data.</p>
+        <p><strong class="lbl">Why it matters:</strong> A quality check that's never tested against genuinely bad data doesn't prove anything. Building two intentionally-broken sample reviews right from the start means Step 3 can be judged on whether it actually rejects bad input, not just on whether it runs without crashing.</p>
+      </div>
+    </div>
+
+    <div class="step-card">
+      <div class="step-head"><span class="step-num">2</span><h4>Check the survey numbers are sound</h4></div>
+      <p class="step-res">AWS Glue Data Quality &middot; score 1.0 out of 1.0</p>
+      <div class="step-body">
+        <div class="concept">
+          <p><strong>In plain terms:</strong> AWS Glue Data Quality lets you write plain rules for a table of data — "this column can never be empty," "this number has to be between 1 and 5" — and it automatically checks every row against those rules and gives back a pass/fail score. It's built for exactly this kind of structured, spreadsheet-shaped data, like the survey rows in this project.</p>
+        </div>
+        <p><strong class="lbl">What was built:</strong> A Glue Crawler scanned the survey file and figured out its structure automatically, then 8 quality rules were written against it — every required field filled in, every date in the right format, every rating actually between 1 and 5. Ran for real: all 8 rules passed, a perfect score.</p>
+        <p><strong class="lbl">Where to check:</strong> AWS Glue &rarr; Data Quality &rarr; adi-1-3-survey-quality-ruleset.</p>
+        <p><strong class="lbl">Why it matters:</strong> Structured data (rows and columns, like the survey) and unstructured data (free-form text, like a review) need different kinds of checking. This is the structured half — Step 3 covers the unstructured half.</p>
+      </div>
+      <div class="mini-bug">
+        <p class="mb-head">Error 1 &amp; 2 &middot; The checking program couldn't report its own results</p>
+        <p><strong>What happened:</strong> The quality check ran as its own separate mini-program behind the scenes, and that program needs permission to report its own status back — that's different from just having permission to read the data. It was missing that permission, twice in a row (two different report-back permissions were each missing in turn).</p>
+        <p><strong>Fix:</strong> added both missing permissions once the exact error named them. After that it ran clean.</p>
+      </div>
+      <div class="mini-bug">
+        <p class="mb-head">Error 3 &middot; A quality rule that looked fine actually never passed</p>
+        <p><strong>What happened:</strong> The very first real run scored only 50%, with two rule types failing on data that was actually correct — including the date-format rule failing on every single row. The cause: a typing mistake doubled up a special character in the rule, so it was quietly looking for something that could never appear in real dates.</p>
+        <p><strong>Fix:</strong> corrected the typo, and also switched the rating rule to a clearer, simpler style ("must be one of 1, 2, 3, 4, 5") instead of a "between" range, to remove any doubt about whether the endpoints count. Re-ran and got a perfect score.</p>
+      </div>
+      <div class="mini-tip">
+        <p class="mt-head">Good to know</p>
+        <p>If a data-quality rule fails on 100% of rows, or fails on exactly the edge values (like exactly 1 or exactly 5), that's almost always a mistake in how the rule itself was written — not real data suddenly all being wrong. Worth double-checking the rule's own spelling before assuming the data is bad.</p>
+      </div>
+    </div>
+
+    <div class="step-card">
+      <div class="step-head"><span class="step-num">3</span><h4>Check the written reviews are sound</h4></div>
+      <p class="step-res">adi-1-3-text-validation &middot; scores from 0.14 to 1.0</p>
+      <div class="step-body">
+        <p><strong class="lbl">What was built:</strong> A small program (a Lambda function) that runs automatically the instant a new review file is uploaded. It runs 7 checks — is it long enough, does it actually mention the product, does it sound like an opinion, are all the required fields filled in, is the star rating actually 1&ndash;5, is the date in the right format — and turns those into one score out of 1.0. Uploaded all 12 test reviews for real and let the real trigger fire, rather than just testing the code by itself.</p>
+        <p><strong class="lbl">Where to check:</strong> Lambda &rarr; adi-1-3-text-validation; S3 &rarr; validation-results/reviews.</p>
+        <p><strong class="lbl">Why it matters:</strong> This is the safety net that stops obviously broken data from ever reaching the more expensive AI steps later on. Proof it actually works: the good reviews scored close to 1.0, and the two deliberately-broken ones scored 0.43 and 0.14 — genuinely told apart, not rubber-stamped.</p>
+      </div>
+    </div>
+
+    <div class="step-card">
+      <div class="step-head"><span class="step-num">4</span><h4>A dashboard to watch data quality over time</h4></div>
+      <p class="step-res">adi-1-3-CustomerFeedbackQuality</p>
+      <div class="step-body">
+        <div class="concept">
+          <p><strong>In plain terms:</strong> Amazon CloudWatch is AWS's monitoring service — it can collect numbers your programs report (like a quality score) and turn them into a chart you can actually watch over time, instead of only finding out about a problem after it's already caused damage.</p>
+        </div>
+        <p><strong class="lbl">What was built:</strong> A dashboard showing the review quality scores from Step 3 over time, plus the Step 3 program's own health (how often it runs, whether it's erroring). On purpose, left out a chart for a number the original assignment example mentioned but never actually sets up anywhere — a dashboard pointed at a number nothing ever reports just shows an empty, misleading chart.</p>
+        <p><strong class="lbl">Where to check:</strong> CloudWatch &rarr; Dashboards &rarr; adi-1-3-CustomerFeedbackQuality.</p>
+        <p><strong class="lbl">Why it matters:</strong> Turns "did data quality get worse recently" from a question nobody's watching into something visible at a glance — and this same dashboard is exactly where Step 13's feedback loop shows up later, closing the circle.</p>
+      </div>
+    </div>
+
+    <div class="phase-divider" id="phase-2">
+      <span class="pd-num">Phase 2</span>
+      <div class="pd-text"><h3>Understanding Each Type</h3><p>A review, a photo, a phone call, and a spreadsheet row all need a different AWS tool built for that specific kind of data.</p></div>
+      <span class="pd-line"></span>
+    </div>
+
+    <div class="step-card">
+      <div class="step-head"><span class="step-num">5</span><h4>Read the reviews for meaning</h4></div>
+      <p class="step-res">adi-1-3-text-processing &middot; Amazon Comprehend</p>
+      <div class="step-body">
+        <div class="concept">
+          <p><strong>In plain terms:</strong> Amazon Comprehend is AWS's ready-made text-understanding service — no training needed, it just reads text and tells you the overall sentiment (positive, negative, mixed), the important phrases, and named things it recognizes.</p>
+        </div>
+        <p><strong class="lbl">What was built:</strong> A second small program that only picks up reviews that already passed Step 3's check, and runs them through Comprehend for sentiment, key phrases, and entities. Tested by uploading all 12 reviews for real and watching the two checks chain together automatically.</p>
+        <p><strong class="lbl">Where to check:</strong> Lambda &rarr; adi-1-3-text-processing; S3 &rarr; processed-data/reviews.</p>
+        <p><strong class="lbl">Why it matters:</strong> Exactly 10 of the 12 reviews got processed — the 2 deliberately-broken ones were correctly held back. That's the whole point of Step 3's check: bad data never even reaches this more expensive step. Spot-checked one review about a cracked case and missing earbud — Comprehend scored it 99.99% negative, matching a human reading it.</p>
+      </div>
+    </div>
+
+    <div class="step-card">
+      <div class="step-head"><span class="step-num">6</span><h4>Read the photos for text and content</h4></div>
+      <p class="step-res">adi-1-3-image-processing &middot; Textract + Rekognition</p>
+      <div class="step-body">
+        <div class="concept">
+          <p><strong>In plain terms:</strong> Amazon Textract reads printed or handwritten text out of an image or document. Amazon Rekognition is a separate service that looks at what's actually in a photo — objects, scenes, general labels — rather than reading text. Using both together on a product photo gets the full picture: what it says, and what it shows.</p>
+        </div>
+        <p><strong class="lbl">What was built:</strong> A program that runs both services on every uploaded product photo and saves the combined result.</p>
+        <p><strong class="lbl">Where to check:</strong> Lambda &rarr; adi-1-3-image-processing; S3 &rarr; processed-data/images.</p>
+        <p><strong class="lbl">Why it matters:</strong> On a test photo of a cracked earbud case with "CASE CRACKED ON ARRIVAL" drawn onto it, Textract correctly read that exact phrase back out, and Rekognition independently recognized real shapes in the image — proof both tools genuinely looked at the picture rather than just running without erroring.</p>
+      </div>
+      <div class="mini-bug">
+        <p class="mb-head">Looked broken, wasn't &middot; a mixed-up log made it look like the trigger never fired</p>
+        <p><strong>What happened:</strong> After uploading photos, nothing showed up in the results for several minutes, and checking the logs seemed to confirm the program had never even run once.</p>
+        <p><strong>Fix:</strong> a direct manual test proved the program itself worked fine. The real story: AWS had reused the same log window for two separate runs, and reading the full window (not just its name) showed the trigger genuinely had fired — one run succeeded, and a second one failed with a one-off, temporary error from the photo-reading service itself. Trying that exact same photo again seconds later worked with no changes, confirming it was just a brief hiccup, not a real bug.</p>
+      </div>
+    </div>
+
+    <div class="step-card">
+      <div class="step-head"><span class="step-num">7</span><h4>Transcribe the support calls, the safe way</h4></div>
+      <p class="step-res">adi-1-3-audio-transcription-sm &middot; Step Functions + Transcribe</p>
+      <div class="step-body">
+        <div class="concept">
+          <p><strong>In plain terms:</strong> Amazon Transcribe turns speech into text, but a transcription job takes time to finish — you start it, then have to check back later. A single small program (a Lambda) has a hard 15-minute time limit, so sitting there in a loop waiting for a long phone call to finish transcribing risks it simply timing out. AWS Step Functions (the flowchart tool from Task 1.1's Step 12) solves this by having the *waiting* live in the flowchart itself, which has no such time limit, while the small program only does the two real jobs: kick the transcription off, and handle the finished result.</p>
+        </div>
+        <p><strong class="lbl">What was built:</strong> A flowchart: start the transcription &rarr; wait 20 seconds &rarr; check if it's done yet &rarr; if not, wait again &rarr; once done, read the transcript and analyze it with Comprehend for sentiment and key phrases.</p>
+        <p><strong class="lbl">Where to check:</strong> Step Functions &rarr; adi-1-3-audio-transcription-sm &rarr; Executions.</p>
+        <p><strong class="lbl">Why it matters:</strong> Both real test calls transcribed with genuinely high accuracy — the AI-spoken audio from Step 1 came back as an almost word-for-word transcript, correctly picked up the specific complaint in each call, and correctly scored the sentiment of each. This is exactly the exam's "why Step Functions over a single Lambda" scenario, built and proven for real rather than just described.</p>
+      </div>
+      <div class="mini-tip">
+        <p class="mt-head">Good to know</p>
+        <p>The two test recordings each used one AI voice reading both sides of the conversation, so the "who's speaking" feature correctly reported just one speaker for the whole call — not a bug, just an honest limit of the practice audio, not the pipeline.</p>
+      </div>
+    </div>
+
+    <div class="step-card">
+      <div class="step-head"><span class="step-num">8</span><h4>Turn survey rows into readable summaries</h4></div>
+      <p class="step-res">adi-1-3-survey-processing &middot; Amazon SageMaker Processing</p>
+      <div class="step-body">
+        <div class="concept">
+          <p><strong>In plain terms:</strong> A SageMaker Processing job is a temporary computer that AWS spins up just to run one script, and automatically shuts down and stops charging the moment the script finishes — different from a SageMaker endpoint (used in Task 1.2), which stays on and keeps charging by the hour until someone turns it off.</p>
+        </div>
+        <p><strong class="lbl">What was built:</strong> A script that cleans up the survey rows and writes a short plain-English summary for each customer (like "Customer X was dissatisfied overall, rated the product 2 out of 5, and suggested improving battery life"), plus overall statistics across all responses.</p>
+        <p><strong class="lbl">Where to check:</strong> SageMaker &rarr; Processing &rarr; adi-1-3-survey-processing; S3 &rarr; processed-data/surveys.</p>
+        <p><strong class="lbl">Why it matters:</strong> Confirmed ahead of time (back before Phase 1 even started) that this specific kind of SageMaker job wasn't blocked by the same brand-new-account limit that stopped a different part of Task 1.2 — and running it for real confirmed that: the whole job, computer and all, finished in under 2 minutes and cost a fraction of a cent.</p>
+      </div>
+      <div class="mini-bug">
+        <p class="mb-head">Caught before it cost anything &middot; a spreadsheet tool silently corrupted a field</p>
+        <p><strong>What happened:</strong> Running the script on a laptop first, before ever paying for the real cloud job, showed that rows meant to say "no improvement area suggested" were coming out blank instead. The spreadsheet-reading tool treats the literal word "None" as a special "this cell is empty" marker by default, and was quietly throwing that value away.</p>
+        <p><strong>Fix:</strong> told the tool to treat every cell as literal text, re-tested on the laptop, confirmed it was fixed, and only then ran the real paid job — avoiding paying to generate summaries with a hidden data bug already baked in.</p>
+      </div>
+      <div class="mini-tip">
+        <p class="mt-head">Good to know</p>
+        <p>Testing a script on a laptop with a small sample of real data, before ever running it as a paid cloud job, is a cheap way to catch exactly this kind of silent, no-error data bug — the script never crashed, it just quietly produced wrong output.</p>
+      </div>
+    </div>
+
+    <div class="phase-divider" id="phase-3">
+      <span class="pd-num">Phase 3</span>
+      <div class="pd-text"><h3>Getting It Ready for Claude</h3><p>Four very differently-shaped results have to become one consistent shape before an AI model can make sense of any of them.</p></div>
+      <span class="pd-line"></span>
+    </div>
+
+    <div class="step-card">
+      <div class="step-head"><span class="step-num">9</span><h4>Package everything the same way</h4></div>
+      <p class="step-res">adi-1-3-bedrock-formatting &middot; 28 formatted records</p>
+      <div class="step-body">
+        <div class="concept">
+          <p><strong>In plain terms:</strong> Claude (like most AI models on Bedrock) expects every request in one specific shape: a short "system" instruction saying what job it's doing, then a "message" containing the actual content — and for a photo specifically, that message can include the real image itself, not just a text description of it, so Claude can genuinely look at the picture.</p>
+        </div>
+        <p><strong class="lbl">What was built:</strong> One program that reads whichever of the four processed results just showed up, and builds it into that exact request shape — a shared instruction ("you're a customer-insights analyst, tell me the issue, whether to escalate it, and what to do next") plus the specific content for that record. For a photo, it genuinely attaches the real image bytes alongside the Textract/Rekognition summary.</p>
+        <p><strong class="lbl">Where to check:</strong> Lambda &rarr; adi-1-3-bedrock-formatting; S3 &rarr; formatted-data.</p>
+        <p><strong class="lbl">Why it matters:</strong> All 28 records across all four types (10 reviews, 4 photos, 2 calls, 12 surveys) came out correctly packaged and ready to send to Claude exactly as-is — proven in Step 10 by actually sending them.</p>
+      </div>
+      <div class="mini-bug">
+        <p class="mb-head">Caught before deploying &middot; raw image data can't go straight into a saved file</p>
+        <p><strong>What happened:</strong> A photo's actual pixel data is raw binary bytes, which can't be written directly into a plain text/JSON file — every single photo record would have crashed the moment it tried to save.</p>
+        <p><strong>Fix:</strong> converted the image into a safe text format (base64) before saving it, with a clear note that it needs converting back to real bytes right before actually sending it to Claude. Caught by reading through the code carefully before ever running it for real.</p>
+      </div>
+      <div class="mini-bug">
+        <p class="mb-head">A different kind of "looked broken, wasn't" &middot; a copy trick that silently failed</p>
+        <p><strong>What happened:</strong> The usual trick used earlier in this project to re-trigger a step on already-existing files (copy a file onto itself to force a fresh "new file" event) silently failed 16 times in a row here — AWS actually refuses to copy a file onto its own exact same name unless something about it is genuinely changing, and the error had been accidentally hidden.</p>
+        <p><strong>Fix:</strong> stopped relying on that trick altogether — instead, re-uploaded the four original raw-data files again, which naturally cascades through every earlier step and proves the whole chain end-to-end, not just this one piece.</p>
+      </div>
+    </div>
+
+    <div class="step-card">
+      <div class="step-head"><span class="step-num">10</span><h4>Actually send it to Claude and check the answers make sense</h4></div>
+      <p class="step-res">Claude Haiku 4.5 &middot; 4/4 test calls</p>
+      <div class="step-body">
+        <p><strong class="lbl">What was built:</strong> A quick test script that picks one formatted record of each type and sends it for real to Claude Haiku 4.5 (the same model confirmed working back in Task 1.2), then reads the actual answer.</p>
+        <p><strong class="lbl">Where to check:</strong> re-run <code>scripts/test_bedrock_invoke.py</code> locally &mdash; this step doesn't save anything new, it's a check that Step 9's packaging actually works.</p>
+        <p><strong class="lbl">Why it matters:</strong> All four came back with sensible, correctly-flagged answers — including the cracked-case photo, where Claude's answer specifically referenced the crack, proving it genuinely looked at the actual image and not just the text summary next to it.</p>
+      </div>
+    </div>
+
+    <div class="phase-divider" id="phase-4">
+      <span class="pd-num">Phase 4</span>
+      <div class="pd-text"><h3>Closing the Loop</h3><p>Spot the big-picture trends, clean up messy text before anything reads it, and let the AI's own judgment feed back into quality checks.</p></div>
+      <span class="pd-line"></span>
+    </div>
+
+    <div class="step-card">
+      <div class="step-head"><span class="step-num">11</span><h4>Spot the recurring themes across all reviews</h4></div>
+      <p class="step-res">adi-1-3-theme-aggregation &middot; insights/reviews_theme_summary.json</p>
+      <div class="step-body">
+        <p><strong class="lbl">What was built:</strong> A program that reads every processed review at once and rolls them up into one report: overall sentiment split, sentiment split by product model, and the most commonly repeated phrases and named things across all of them.</p>
+        <p><strong class="lbl">Where to check:</strong> S3 &rarr; insights/reviews_theme_summary.json.</p>
+        <p><strong class="lbl">Why it matters:</strong> A single review is a data point; a hundred reviews rolled up together is a business trend. This is a batch report run on demand (like the benchmark script in Task 1.2), not something that runs per-file — it's meant to be checked periodically, not on every single new review.</p>
+      </div>
+      <div class="mini-bug">
+        <p class="mb-head">Error &middot; a permission "condition" that quietly never matched</p>
+        <p><strong>What happened:</strong> The program was denied access to read files it clearly should have had permission for. The cause: two different permissions (listing files, and reading a file) were combined into one rule with one extra condition attached — but that condition only actually makes sense for the "listing files" half, so for the "reading a file" half, the condition simply never matched anything and silently blocked it.</p>
+        <p><strong>Fix:</strong> split it into two separate, simpler rules — one for listing, one for reading, each written plainly with no shared condition to get confused about.</p>
+      </div>
+    </div>
+
+    <div class="step-card">
+      <div class="step-head"><span class="step-num">12</span><h4>Clean up messy text before anything reads it</h4></div>
+      <p class="step-res">Updated adi-1-3-text-processing &middot; normalized_text field</p>
+      <div class="step-body">
+        <p><strong class="lbl">What was built:</strong> Updated Step 5's program to clean review text up before Comprehend ever sees it — stripping out stray HTML tags, unscrambling HTML symbols, expanding shorthand ("w/" &rarr; "with", "BT" &rarr; "Bluetooth", "mins" &rarr; "minutes"), and squashing extra spaces. Both the original and the cleaned-up version get saved, so nothing's silently thrown away. Two new test reviews, written specifically with this kind of noise in them, were used to actually prove it works.</p>
+        <p><strong class="lbl">Where to check:</strong> S3 &rarr; processed-data/reviews &mdash; look for the <code>normalized_text</code> field next to <code>original_text</code>.</p>
+        <p><strong class="lbl">Why it matters:</strong> On the real test review, Comprehend correctly picked out "20 minutes" and "no Bluetooth dropouts" as key phrases — phrases that only exist in the cleaned-up version, proving Comprehend genuinely analyzed the clean text, not the noisy original.</p>
+      </div>
+      <div class="mini-bug">
+        <p class="mb-head">Error &middot; a shorthand fix that silently never fired</p>
+        <p><strong>What happened:</strong> Tested locally first (same habit as Step 8) and found "w/" was never actually being replaced with "with," even though the rule looked correct at a glance.</p>
+        <p><strong>Fix:</strong> the rule required a clean word-boundary on both sides of the match, but a slash followed by a space doesn't count as one on the right-hand side — so it could never match there. Rewrote it to specifically look for a space (or the end of the text) right after the slash instead, tested locally again, confirmed it worked, then updated the real program.</p>
+      </div>
+    </div>
+
+    <div class="step-card">
+      <div class="step-head"><span class="step-num">13</span><h4>Let Claude's own confidence adjust the quality score</h4></div>
+      <p class="step-res">adi-1-3-feedback-loop &middot; the actual feedback loop</p>
+      <div class="step-body">
+        <div class="concept">
+          <p><strong>In plain terms:</strong> Just because a review is well-formed — right length, has an opinion, correct fields — doesn't mean it's actually useful for a business decision. "It's fine I guess" passes every formatting check but tells a product team nothing. This step asks Claude directly: does this feedback actually contain enough real detail to act on? And if Claude says no, that review's saved quality score genuinely gets lowered — not just noted somewhere and ignored.</p>
+        </div>
+        <p><strong class="lbl">What was built:</strong> A program that sends each formatted review to Claude with a second, focused question — is this specific enough to act on, and how confident are you? If Claude says no, or isn't confident, the original quality score from Step 3 gets multiplied down and re-saved, and a new metric appears on the very same dashboard built in Step 4.</p>
+        <p><strong class="lbl">Where to check:</strong> Lambda &rarr; adi-1-3-feedback-loop; S3 &rarr; validation-results/reviews (look for the updated score) and quality-feedback/reviews (the full reasoning).</p>
+        <p><strong class="lbl">Why it matters:</strong> Tested on 4 real reviews, both directions: a genuinely vague one got marked down hard (score dropped from 0.86 to 0.13); a genuinely specific complaint about a cracked case kept its full score unchanged. A real surprise along the way — even a clearly positive review ("I love these earbuds, battery lasts all day") got marked down too, because it has no actual specifics for a product team to act on. That's not a bug, it's the whole point: "sounds fine" and "is actually useful" turned out to be two different things, and only a step like this one catches the difference. A final test review — about an earbud catching fire while charging — ran through the entire 13-step pipeline completely on its own, with zero manual steps, end to end.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="alt" id="resources">
+  <div class="wrap">
+    <p class="kicker">Full Resource Index</p>
+    <h2 class="h">All 28 resources, for quick reference</h2>
+    <p class="section-lead">Account <code>269737522732</code>, region <code>us-east-1</code>, named starting with <code>adi-1-3-</code>. See the step log above for what each one does and why.</p>
+    <div class="verify-wrap">
+      <table class="verify">
+        <tr><th>#</th><th>Type</th><th>Name</th><th>What it's for</th></tr>
+        <tr><td>1</td><td>S3 Bucket</td><td>adi-1-3-customer-feedback-269737522732</td><td>Holds every stage of data — raw, checked, processed, formatted, and the final insights.</td></tr>
+        <tr><td>2</td><td>IAM Role</td><td>adi-1-3-glue-role</td><td>Lets the survey-checking crawler and quality rules read the data and report their own results.</td></tr>
+        <tr><td>3</td><td>Glue Database</td><td>adi_1_3_customer_feedback_db</td><td>Where the survey table's structure gets cataloged.</td></tr>
+        <tr><td>4</td><td>Glue Crawler</td><td>adi-1-3-survey-crawler</td><td>Figures out the survey file's column structure automatically.</td></tr>
+        <tr><td>5</td><td>Glue Table</td><td>surveys</td><td>The cataloged structure the quality rules run against.</td></tr>
+        <tr><td>6</td><td>Glue Data Quality Ruleset</td><td>adi-1-3-survey-quality-ruleset</td><td>The 8 rules checking the survey data is sound. Scored 1.0.</td></tr>
+        <tr><td>7</td><td>IAM Role</td><td>adi-1-3-text-validation-role</td><td>Narrow permissions for the review-checking program.</td></tr>
+        <tr><td>8</td><td>Lambda Function</td><td>adi-1-3-text-validation</td><td>Scores every uploaded review 0&ndash;1 on 7 quality checks.</td></tr>
+        <tr><td>9</td><td>S3 Event Trigger</td><td>adi-1-3-text-validation-trigger</td><td>Runs the check the instant a new review file lands.</td></tr>
+        <tr><td>10</td><td>IAM Role</td><td>adi-1-3-text-processing-role</td><td>Narrow permissions for the Comprehend text-analysis program.</td></tr>
+        <tr><td>11</td><td>Lambda Function</td><td>adi-1-3-text-processing</td><td>Cleans up text (Step 12) then runs Comprehend on reviews that passed the check.</td></tr>
+        <tr><td>12</td><td>IAM Role</td><td>adi-1-3-image-processing-role</td><td>Narrow permissions for the photo-analysis program.</td></tr>
+        <tr><td>13</td><td>Lambda Function</td><td>adi-1-3-image-processing</td><td>Runs Textract and Rekognition on every uploaded product photo.</td></tr>
+        <tr><td>14</td><td>IAM Role</td><td>adi-1-3-audio-processing-role</td><td>Lets the finished-transcript program read the transcript and analyze it.</td></tr>
+        <tr><td>15</td><td>IAM Role</td><td>adi-1-3-audio-trigger-role</td><td>Lets the small starter program kick off the transcription flowchart.</td></tr>
+        <tr><td>16</td><td>IAM Role</td><td>adi-1-3-stepfunctions-audio-role</td><td>Lets the flowchart itself call Transcribe and the two Lambda programs.</td></tr>
+        <tr><td>17</td><td>Lambda Function</td><td>adi-1-3-audio-processing</td><td>Reads the finished transcript, runs Comprehend on it, saves the result.</td></tr>
+        <tr><td>18</td><td>Lambda Function</td><td>adi-1-3-audio-trigger</td><td>Kicks off the transcription flowchart the instant a call recording is uploaded.</td></tr>
+        <tr><td>19</td><td>Step Functions State Machine</td><td>adi-1-3-audio-transcription-sm</td><td>Start transcription &rarr; wait &rarr; check &rarr; process the finished result.</td></tr>
+        <tr><td>20</td><td>IAM Role</td><td>adi-1-3-sagemaker-execution-role</td><td>Narrow permissions for the survey-summarizing job.</td></tr>
+        <tr><td>21</td><td>SageMaker Processing Job</td><td>adi-1-3-survey-processing</td><td>Turns survey rows into plain-English summaries. Finished in under 2 minutes.</td></tr>
+        <tr><td>22</td><td>IAM Role</td><td>adi-1-3-bedrock-formatting-role</td><td>Narrow permissions for the request-packaging program.</td></tr>
+        <tr><td>23</td><td>Lambda Function</td><td>adi-1-3-bedrock-formatting</td><td>Packages all four data types into the shape Claude expects.</td></tr>
+        <tr><td>24</td><td>IAM Role</td><td>adi-1-3-theme-aggregation-role</td><td>Narrow permissions for the trend-spotting report.</td></tr>
+        <tr><td>25</td><td>Lambda Function</td><td>adi-1-3-theme-aggregation</td><td>Rolls up sentiment and recurring themes across every processed review.</td></tr>
+        <tr><td>26</td><td>IAM Role</td><td>adi-1-3-feedback-loop-role</td><td>Narrow permissions for the feedback-loop program — read/write quality scores, call Bedrock.</td></tr>
+        <tr><td>27</td><td>Lambda Function</td><td>adi-1-3-feedback-loop</td><td>Asks Claude how confident it is, and lowers the quality score if the answer is "not very."</td></tr>
+        <tr><td>28</td><td>S3 Event Trigger</td><td>adi-1-3-feedback-loop-trigger</td><td>Runs the feedback-loop program the instant a record is formatted for Claude.</td></tr>
+      </table>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <p>This is an independent, unofficial study resource and is not affiliated with, endorsed by, or sponsored by Amazon Web Services, Inc. AWS, Amazon Bedrock, and all related marks are trademarks of Amazon.com, Inc. or its affiliates.</p>
+    <p>Hosted on Amazon S3 + Amazon CloudFront. &middot; <a href="index.html">&larr; Back to Build Log</a></p>
+  </div>
+</footer>
+
+</body>
+</html>

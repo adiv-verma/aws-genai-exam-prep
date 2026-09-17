@@ -1,0 +1,46 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "S3ReadRawData",
+      "Effect": "Allow",
+      "Action": ["s3:GetObject", "s3:ListBucket"],
+      "Resource": [
+        "arn:aws:s3:::adi-1-3-customer-feedback-269737522732",
+        "arn:aws:s3:::adi-1-3-customer-feedback-269737522732/raw-data/*"
+      ]
+    },
+    {
+      "Sid": "GlueCatalogAccess",
+      "Effect": "Allow",
+      "Action": [
+        "glue:GetDatabase", "glue:CreateDatabase",
+        "glue:GetTable", "glue:GetTables", "glue:CreateTable", "glue:UpdateTable",
+        "glue:GetPartitions", "glue:BatchCreatePartition"
+      ],
+      "Resource": [
+        "arn:aws:glue:us-east-1:269737522732:catalog",
+        "arn:aws:glue:us-east-1:269737522732:database/adi_1_3_customer_feedback_db",
+        "arn:aws:glue:us-east-1:269737522732:table/adi_1_3_customer_feedback_db/*"
+      ]
+    },
+    {
+      "Sid": "GlueDataQuality",
+      "Effect": "Allow",
+      "Action": [
+        "glue:GetDataQualityRuleset",
+        "glue:GetDataQualityRulesetEvaluationRun",
+        "glue:GetDataQualityResult",
+        "glue:BatchGetDataQualityResult",
+        "glue:PublishDataQuality"
+      ],
+      "Resource": "*"
+    },
+    {
+      "Sid": "CloudWatchLogs",
+      "Effect": "Allow",
+      "Action": ["logs:CreateLogGroup", "logs:CreateLogStream", "logs:PutLogEvents"],
+      "Resource": "arn:aws:logs:us-east-1:269737522732:log-group:/aws-glue/*"
+    }
+  ]
+}

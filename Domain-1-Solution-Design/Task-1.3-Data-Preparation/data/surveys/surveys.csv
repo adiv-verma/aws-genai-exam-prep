@@ -1,0 +1,13 @@
+customer_id,survey_date,overall_satisfaction,product_rating,service_rating,improvement_area,comments
+cust-2001,2026-01-15,5,5,4,None,"Very happy with the earbuds, great value."
+cust-2002,2026-01-16,2,2,3,Battery life,Battery drains much faster than advertised.
+cust-2003,2026-01-17,4,4,4,Packaging,Product good but box was flimsy.
+cust-2004,2026-01-18,1,1,2,Build quality,Earbud stopped pairing after a week.
+cust-2005,2026-01-19,5,5,5,None,"Best earbuds I've owned, no complaints."
+cust-2006,2026-01-20,3,3,3,Fit and comfort,A bit uncomfortable after an hour of wear.
+cust-2007,2026-01-21,4,4,3,Customer support,"Product is fine, support response was slow."
+cust-2008,2026-01-22,2,2,2,Bluetooth connectivity,Frequent disconnects during calls.
+cust-2009,2026-01-23,5,5,4,None,Sound quality exceeded my expectations.
+cust-2010,2026-01-24,3,4,2,Customer support,Good product but return process was confusing.
+cust-2011,2026-01-25,4,4,4,Charging case size,"Solid earbuds, case is a little bulky."
+cust-2012,2026-01-26,1,1,1,Build quality,"Right earbud arrived defective, requesting refund."
