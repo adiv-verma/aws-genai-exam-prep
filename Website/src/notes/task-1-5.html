@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Task 1.5 Notes | AIP-C01 Guide</title>
+<meta name="description" content="Domain 1, Task 1.5 study notes.">
+<style>
+  :root{
+    --ink:#0b1524; --ink-soft:#3a4a5e; --paper:#f7f8fa; --card:#ffffff; --line:#e3e7ee;
+    --accent:#e8622c; --accent-dark:#c94f1f; --navy:#0f2540; --navy-2:#16345c;
+    --trap-bg:#fff7ed; --trap-line:#f6d9b8;
+    color-scheme: light;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{margin:0;background:var(--paper);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;line-height:1.6;}
+  a{color:var(--accent-dark);}
+  code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;background:#eef1f6;padding:1px 5px;border-radius:4px;font-size:.92em;}
+  img{max-width:100%;}
+  .wrap{max-width:1080px;margin:0 auto;padding:0 24px;}
+
+  .nav{position:sticky;top:0;z-index:50;background:rgba(15,37,64,.96);backdrop-filter:blur(6px);border-bottom:1px solid rgba(255,255,255,.08);}
+  .nav .wrap{display:flex;align-items:center;justify-content:space-between;height:56px;}
+  .nav-brand{color:#fff;font-weight:700;font-size:14px;letter-spacing:.02em;text-decoration:none;}
+  .nav-brand span{color:var(--accent);}
+  .nav-links{display:flex;gap:22px;list-style:none;margin:0;padding:0;}
+  .nav-links a{color:#cdd8e6;text-decoration:none;font-size:13.5px;font-weight:500;}
+  .nav-links a:hover{color:#fff;}
+  @media (max-width:720px){ .nav-links{display:none;} }
+
+  header.hero{background:linear-gradient(180deg,var(--navy) 0%, var(--navy-2) 100%);color:#fff;padding:36px 0 28px;}
+  .eyebrow{display:inline-block;font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#ffd8c4;background:rgba(232,98,44,.18);border:1px solid rgba(232,98,44,.4);padding:5px 10px;border-radius:999px;margin-bottom:14px;}
+  h1{font-size:clamp(22px,3.4vw,30px);line-height:1.15;margin:0;font-weight:800;}
+  header.hero p{font-size:14.5px;color:#c9d5e3;max-width:720px;margin:10px 0 0;}
+
+  section{padding:36px 0;}
+
+  figure.arch{margin:0 0 24px;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px;}
+  figure.arch img{display:block;border-radius:8px;width:100%;height:auto;}
+  figure.arch figcaption{margin-top:10px;font-size:12.5px;color:var(--ink-soft);text-align:center;}
+
+  .note-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;}
+  @media (max-width:760px){.note-grid{grid-template-columns:1fr;}}
+  .note-card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:18px 20px;}
+  .note-card.wide{grid-column:1 / -1;}
+  .note-card h4{margin:0 0 12px;font-size:13px;font-weight:800;color:var(--navy-2);}
+  .note-card dl{margin:0;}
+  .note-card dt{font-size:13.5px;font-weight:700;color:var(--ink);margin:0 0 3px;}
+  .note-card dt:not(:first-child){margin-top:12px;}
+  .note-card dd{margin:0;font-size:13px;color:var(--ink-soft);line-height:1.55;}
+  .note-card .lead{font-size:13.5px;font-weight:700;color:var(--ink);margin:0 0 8px;}
+  .note-card .lead:not(:first-child){margin-top:12px;}
+  .note-card .sub{font-size:13px;color:var(--ink-soft);line-height:1.55;margin:0 0 8px;}
+
+  .example{background:var(--paper);border:1px solid var(--line);border-radius:8px;padding:10px 12px;margin:8px 0;font-size:12.5px;}
+  .example p{margin:0 0 4px;color:var(--ink-soft);}
+  .example p:last-child{margin-bottom:0;}
+  .example pre{margin:0;white-space:pre-wrap;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px;color:var(--ink-soft);}
+
+  .trap{background:var(--trap-bg);border:1px solid var(--trap-line);border-radius:8px;padding:12px 14px;margin-top:14px;}
+  .trap p{margin:0;font-size:13px;color:var(--ink);}
+
+  footer{padding:32px 0 48px;color:#8b96a5;font-size:12.5px;}
+  footer .wrap{border-top:1px solid var(--line);padding-top:22px;}
+  footer a{color:#6b7686;}
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="wrap">
+    <a class="nav-brand" href="../index.html">AIP-C01 <span>Guide</span></a>
+    <ul class="nav-links">
+      <li><a href="index.html">All Study Notes</a></li>
+    </ul>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="wrap">
+    <span class="eyebrow">Domain 1 &middot; Task 1.5</span>
+    <h1>Design Retrieval Mechanisms for FM Augmentation</h1>
+    <p>Target Enterprise: A global law firm operating across 25 countries handling case law, legal opinions, contracts, and regulatory filings.</p>
+  </div>
+</header>
+
+<section>
+  <div class="wrap">
+
+    <figure class="arch">
+      <img src="../assets/task-1-5-architecture.jpg" alt="Task 1.5 retrieval design diagram for a global law firm document platform">
+      <figcaption>Reference architecture: retrieval pipeline covering chunking, embedding generation, vector search, hybrid/reranking, and query handling for a legal RAG system.</figcaption>
+    </figure>
+
+    <div class="note-grid">
+
+      <div class="note-card">
+        <h4>Scenario Overview</h4>
+        <dl>
+          <dt>Target Enterprise</dt>
+          <dd>A global law firm operating across 25 countries handling case law, legal opinions, contracts, and regulatory filings.</dd>
+          <dt>Core Requirements</dt>
+          <dd>Accurate context-aware answers, multi-jurisdictional research, strict client confidentiality, mandatory citations to source documents on every response, and sub-second response times.</dd>
+          <dt>Outcomes Achieved</dt>
+          <dd>Research time reduced by 70%, 42% more relevant precedents discovered, 92% retrieval recall, and 95% of attorneys reporting higher confidence in AI-assisted output.</dd>
+        </dl>
+      </div>
+
+      <div class="note-card">
+        <h4>Task 1.4 vs. Task 1.5 Focus Comparison</h4>
+        <dl>
+          <dt>Task 1.4 Focus</dt>
+          <dd>Infrastructure, storage tiering, sharding, caching, synchronization, and where the vector store lives and is maintained.</dd>
+          <dt>Task 1.5 Focus</dt>
+          <dd>Retrieval quality&mdash;document segmentation, embedding generation, query handling, and reranking to optimize recall and relevance.</dd>
+        </dl>
+      </div>
+
+      <div class="note-card wide">
+        <h4>1. Document Segmentation (Chunking)</h4>
+        <p class="sub">Legal chunking presents a unique engineering challenge. For example, consider the clause:</p>
+        <div class="example">
+          <p>&ldquo;The Party may terminate this Agreement, provided that Section 5.1 conditions are met.&rdquo;</p>
+        </div>
+        <p class="sub">If a naive chunking boundary splits this sentence right before the proviso, the chunk reads &ldquo;Party may terminate&rdquo;, while the critical conditions vanish, inverting the legal meaning. Poor chunking leads directly to flawed legal reasoning.</p>
+
+        <p class="lead">Four Core Chunking Strategies</p>
+        <dl>
+          <dt>Fixed-Size Chunking</dt>
+          <dd>Cuts text every N words. Simple and fast, but entirely blind to structural hierarchy (clauses break mid-sentence). Suitable only for plain narrative text.</dd>
+          <dt>Structure-Aware Chunking</dt>
+          <dd>Cuts on natural document boundaries like headings (&lt;h1&gt;, &lt;h2&gt;, &lt;p&gt;) and paragraph breaks rather than word counts. Unstructured text is first converted into a structured format (e.g., HTML/Markdown) to expose logical divisions, ensuring each chunk represents a complete logical unit.</dd>
+          <dt>Hierarchical (Parent-Child) Chunking</dt>
+          <dd>Leverages a two-tier architecture. The system searches small child chunks to achieve high retrieval precision, but passes the corresponding large parent chunk to the Foundation Model (FM) to preserve comprehensive surrounding context. This is natively supported within Bedrock Knowledge Bases.</dd>
+        </dl>
+        <div class="example">
+          <p>Example Structure:</p>
+          <pre>PARENT: Article 5 - Termination (2000 words)
+-- CHILD: 5.1 Conditions (300 words)
+-- CHILD: 5.2 Notice period (250 words)
+-- CHILD: 5.3 Effects (400 words)</pre>
+        </div>
+        <dl>
+          <dt>Semantic Chunking</dt>
+          <dd>Automatically detects topic shifts by calculating similarity scores between consecutive sentences. Computationally expensive during ingestion because embeddings must be calculated on-the-fly, but yields highly natural and logically bounded chunks.</dd>
+        </dl>
+
+        <p class="lead">Bedrock Knowledge Bases Chunking Options</p>
+        <dl>
+          <dt>Default / Fixed-Size</dt>
+          <dd>~300 tokens with configurable overlap.</dd>
+          <dt>Hierarchical</dt>
+          <dd>Parent-child configuration.</dd>
+          <dt>Semantic</dt>
+          <dd>Meaning-based boundary detection.</dd>
+          <dt>No Chunking</dt>
+          <dd>Treats one entire file as one chunk (ideal for small memos/documents).</dd>
+          <dt>Lambda Custom Chunking</dt>
+          <dd>Invokes a custom Lambda function when documents land in the S3 data source, executing specialized code for complex document types.</dd>
+        </dl>
+        <div class="trap">
+          <p>Exam-Relevant Rule: Chunking strategy must be selected per document type, not applied uniformly across an entire enterprise corpus. For instance, internal opinions might use structure-aware Lambda parsing, whereas case law leverages hierarchical parent-child structures.</p>
+        </div>
+
+        <p class="lead">Metadata Integration &amp; Boundary Overlap</p>
+        <dl>
+          <dt>Metadata Attachment</dt>
+          <dd>Metadata elements (such as jurisdiction, practice area, precedential value, and date) must be attached during the chunking phase. Attempting to add or modify metadata after vectors are stored requires a costly and slow full-corpus re-ingestion.</dd>
+          <dt>Boundary Overlap (~10%)</dt>
+          <dd>A small overlap between consecutive chunks ensures that statements spanning split boundaries are fully preserved in both chunks, protecting semantic meaning from being cut off.</dd>
+        </dl>
+      </div>
+
+      <div class="note-card wide">
+        <h4>2. Embedding Solutions</h4>
+        <p class="sub">Embeddings transform textual chunks into high-dimensional numerical representations (vectors) that capture semantic meaning.</p>
+
+        <p class="lead">Dimensionality</p>
+        <dl>
+          <dt>Amazon Titan Text Embeddings</dt>
+          <dd>Operates natively at 1,536 dimensions (a key value to memorize for the exam). Titan V2 also offers selectable options of 1024, 512, or 256 dimensions.</dd>
+        </dl>
+        <p class="lead">Trade-offs</p>
+        <dl>
+          <dt>High Dimensions (e.g., 1,536)</dt>
+          <dd>Captures finer nuances, deeper context, and higher similarity fidelity, but demands more storage, higher RAM, and slower search latency.</dd>
+          <dt>Low Dimensions (e.g., 256/512)</dt>
+          <dd>Faster and cheaper, but risks losing subtle legal distinctions.</dd>
+          <dt>Analogy (The &ldquo;Meters&rdquo; Concept)</dt>
+          <dd>Think of dimensionality as a panel of 1,536 independent analytical meters (scoring various legal topics, tones, and subject matters). A higher dimension count provides a higher-resolution profile of the text, while a lower dimension count compresses the profile into broad, generalized scores.</dd>
+        </dl>
+
+        <p class="lead">Dense vs. Sparse Embeddings</p>
+        <dl>
+          <dt>Dense Embeddings (Semantic)</dt>
+          <dd>Every dimension holds a floating-point value. They map the underlying semantic meaning and concept relationships (e.g., matching &ldquo;employee relocation&rdquo; with &ldquo;restrictive covenant&rdquo;).</dd>
+          <dt>Sparse Embeddings (Keyword)</dt>
+          <dd>Composed mostly of zero values with non-zero weights assigned to exact terms (mirroring traditional keyword systems like BM25). They excel at exact string matching, statute numbers, and proper nouns.</dd>
+          <dt>Hybrid Need</dt>
+          <dd>Legal workflows require both exact citations (Sparse) and conceptual reasoning (Dense), driving the need for Hybrid Search architectures.</dd>
+        </dl>
+
+        <p class="lead">Binary Embeddings &amp; Quantization (Cost Optimization)</p>
+        <div class="example">
+          <p>Standard float32 representations consume 4 bytes per dimension.</p>
+          <p>Binary Embeddings compress each dimension down to a single bit (0 or 1), yielding ~32x reduction in storage space.</p>
+          <p>Titan and OpenSearch Serverless support binary vectors and FP16 quantization to drastically cut infrastructure costs without significant drops in accuracy.</p>
+        </div>
+
+        <p class="lead">Domain Fit &amp; Model Consistency</p>
+        <dl>
+          <dt>General vs. Legal Vocabulary</dt>
+          <dd>General embedding models trained on web corpora misinterpret legal terminology (e.g., interpreting &ldquo;consideration&rdquo; as cognitive reflection rather than exchange of value, or &ldquo;party&rdquo; as a celebration rather than a legal entity). Specialized domains require fine-tuned or domain-adapted embedding models.</dd>
+        </dl>
+        <div class="trap">
+          <p>The Golden Rule of Consistency: The exact same embedding model must be used for both document ingestion and runtime query generation. Switching embedding models shifts the vector space entirely, breaking similarity matching and necessitating a complete corpus rebuild.</p>
+        </div>
+      </div>
+
+      <div class="note-card wide">
+        <h4>3. Vector Search Deployment</h4>
+        <p class="sub">Selecting the right storage backend and architecture governs scalability, cost, and multi-tenant isolation.</p>
+
+        <p class="lead">Vector Store Options</p>
+        <dl>
+          <dt>Bedrock Knowledge Bases (Fully Managed)</dt>
+          <dd>Manages end-to-end ingestion, chunking, embedding generation, and storage natively. Ideal for standard RAG setups requiring minimal custom overhead.</dd>
+          <dt>OpenSearch Serverless</dt>
+          <dd>High-performance vector engine supporting binary vectors, FP16 quantization, hybrid search, and fine-grained access control. Best for highly sensitive enterprise data.</dd>
+          <dt>Aurora PostgreSQL + pgvector</dt>
+          <dd>Combines relational data management with vector similarity search in a single query engine. Ideal when structured metadata filters and relationships carry equal weight to similarity scores.</dd>
+        </dl>
+        <div class="example">
+          <p>Example Single-Query Pattern:</p>
+          <pre>SELECT * FROM cases
+WHERE jurisdiction = '9th Circuit'
+  AND date &gt; '2020-01-01'
+ORDER BY embedding &lt;-&gt; query_embedding
+LIMIT 10;</pre>
+        </div>
+
+        <p class="lead">Multi-Tenant Architectures (SaaS Patterns)</p>
+        <dl>
+          <dt>Silo Model</dt>
+          <dd>Separate index or database per tenant. Maximum security and isolation, but highest cost.</dd>
+          <dt>Pool Model</dt>
+          <dd>Shared database/index store across tenants, filtered dynamically via a tenant_id parameter. Most cost-effective, but entirely dependent on correct application filtering; a single query bug risks catastrophic cross-tenant data leaks.</dd>
+          <dt>Bridge Model</dt>
+          <dd>Shared infrastructure with separate database schemas (middle ground).</dd>
+        </dl>
+        <div class="trap">
+          <p>Enterprise Practice: Law firms frequently mix patterns&mdash;deploying Silo models for high-stakes or enterprise clients, and Pool models for smaller matters. In pool architectures, tenant filters must be enforced strictly within the database query execution layer, never left solely to client application logic.</p>
+        </div>
+
+        <p class="lead">Security Controls &amp; PII Redaction</p>
+        <dl>
+          <dt>Encryption &amp; Access Control</dt>
+          <dd>Data encrypted at rest via KMS and in transit via TLS, paired with IAM roles and fine-grained document/field-level permissions in OpenSearch.</dd>
+          <dt>PII Redaction</dt>
+          <dd>Personal Identifiable Information must be scrubbed or masked prior to embedding generation. Once PII is embedded into vector coordinates, it becomes mathematically opaque and nearly impossible to cleanly delete or extract.</dd>
+        </dl>
+      </div>
+
+      <div class="note-card wide">
+        <h4>4. Advanced Search Architectures</h4>
+        <p class="sub">To bridge the gap between abstract conceptual queries and rigid legal requirements, advanced search pipelines combine multiple retrieval layers.</p>
+
+        <p class="lead">Hybrid Search (Vector + BM25)</p>
+        <div class="example">
+          <p>Combines Dense Vector Search (capturing broad conceptual intent) with Sparse BM25 Search (capturing exact citation strings, statute codes, and proper nouns).</p>
+          <p>Configured in Bedrock Knowledge Bases via OverrideSearchType = HYBRID.</p>
+        </div>
+        <dl>
+          <dt>Constraint</dt>
+          <dd>Requires underlying vector stores (such as OpenSearch Serverless with filterable text fields) that natively support hybrid scoring.</dd>
+        </dl>
+
+        <p class="lead">Two-Stage Retrieval with Rerankers</p>
+        <dl>
+          <dt>Stage 1 (Coarse &amp; Fast)</dt>
+          <dd>Hybrid search scans millions of chunks to retrieve the top 100 candidate documents.</dd>
+          <dt>Stage 2 (Precise &amp; Slow)</dt>
+          <dd>A specialized Reranker model (e.g., Cohere Rerank or Amazon Rerank) jointly analyzes the user query alongside each candidate chunk, applying deep contextual cross-attention scoring to re-order and distill the list down to the definitive top 10.</dd>
+        </dl>
+        <div class="example">
+          <p>Why two stages? Running deep cross-attention models across an entire corpus of 15 million documents is computationally prohibitive. Two-stage retrieval balances lightning speed with supreme accuracy.</p>
+        </div>
+
+        <p class="lead">Legal-Specific Relevance Boosts</p>
+        <dl>
+          <dt>Citation Network Analysis</dt>
+          <dd>Boosts document ranking based on graph-based authority (how frequently a precedent is cited by higher courts), independent of semantic similarity.</dd>
+          <dt>Jurisdiction-Aware Filtering</dt>
+          <dd>Applies context filters matching the attorney's practicing jurisdiction.</dd>
+          <dt>Precedential Value Boosts</dt>
+          <dd>Elevates landmark rulings over lower court decisions.</dd>
+        </dl>
+      </div>
+
+      <div class="note-card wide">
+        <h4>5. Query Handling Systems</h4>
+        <p class="sub">Attorneys rarely type queries in optimal formats for vector databases. Query handling systems preprocess and enrich user input before search execution.</p>
+        <dl>
+          <dt>Query Expansion (via Bedrock)</dt>
+          <dd>Automatically expands brief user queries (e.g., expanding &ldquo;non-compete enforceability&rdquo; to include restrictive covenants, employee mobility restrictions, trade secret protection) to capture alternative legal terminology used across different documents. Yields up to a 23% boost in recall.</dd>
+          <dt>Query Decomposition (via Lambda &amp; Step Functions)</dt>
+          <dd>Breaks complex multi-part questions (e.g., &ldquo;Can a non-compete be enforced in California if the employee relocated to Texas, and trade secrets are involved?&rdquo;) into independent sub-queries. Utilizes AWS Step Functions to execute parallel sub-query searches, merging results before passing them to the reranker, reducing overall response latency by up to 40%.</dd>
+        </dl>
+
+        <p class="lead">Graph-Enhanced Retrieval &amp; Event-Driven Indexing</p>
+        <dl>
+          <dt>Neptune Analytics</dt>
+          <dd>Combines graph traversals with vector search (.vectors.topKByEmbedding), enabling queries like &ldquo;find documents semantically similar to this case AND explicitly cited by the Supreme Court&rdquo;.</dd>
+          <dt>Event-Driven Indexing</dt>
+          <dd>S3 document uploads trigger EventBridge Pipes, feeding updates directly into embedding pipelines and vector stores without manual glue code.</dd>
+        </dl>
+      </div>
+
+      <div class="note-card wide">
+        <h4>6. Integration with Foundation Models</h4>
+        <p class="sub">The final retrieval output must be securely and auditably wired into the Foundation Model.</p>
+        <dl>
+          <dt>RAG with Mandatory Citations</dt>
+          <dd>Chunks are passed to the FM alongside rich metadata mapping [Chunk N -&gt; Source Citation]. The model embeds exact source citations in its output, allowing attorneys to verify every claim.</dd>
+          <dt>Function Calling &amp; Bedrock Agents</dt>
+          <dd>Shifts control to the model, allowing it to dynamically invoke specific retrieval or validation tools (e.g., search_cases() and check_overturned()) based on complex multi-step reasoning needs.</dd>
+          <dt>Model Context Protocol (MCP)</dt>
+          <dd>Acts as a standardized protocol (analogous to a USB cable) between AI models and diverse enterprise data sources, eliminating custom connector code for every tool integration.</dd>
+        </dl>
+        <div class="trap">
+          <p>Comprehensive Audit Logging: Non-negotiable in legal engineering. Every interaction&mdash;capturing incoming queries, retrieved source documents, assembled system prompts, and model responses&mdash;must be immutably logged to ensure verifiable audit trails months or years later.</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <p>This is an independent, unofficial study resource and is not affiliated with, endorsed by, or sponsored by Amazon Web Services, Inc. AWS, Amazon Bedrock, and all related marks are trademarks of Amazon.com, Inc. or its affiliates.</p>
+    <p>Hosted on Amazon S3 + Amazon CloudFront. &middot; <a href="index.html">&larr; Back to Study Notes</a></p>
+  </div>
+</footer>
+
+</body>
+</html>
