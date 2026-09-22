@@ -1,0 +1,74 @@
+[
+  {
+    "query_id": "q01",
+    "query_text": "How does S3 Intelligent-Tiering decide when to move objects to infrequent-access storage automatically?",
+    "doc_id": "s3-storage-classes",
+    "expected_section": "S3 Intelligent-Tiering"
+  },
+  {
+    "query_id": "q02",
+    "query_text": "What is the difference in durability and Availability Zone coverage between Standard-IA and One Zone-IA?",
+    "doc_id": "s3-storage-classes",
+    "expected_section": "S3 Standard-Infrequent Access and One Zone-IA"
+  },
+  {
+    "query_id": "q03",
+    "query_text": "How can I stop a Lambda function from overwhelming a downstream database with too many concurrent connections?",
+    "doc_id": "lambda-concurrency",
+    "expected_section": "Reserved concurrency"
+  },
+  {
+    "query_id": "q04",
+    "query_text": "Why would I pay extra to keep Lambda execution environments warm ahead of time?",
+    "doc_id": "lambda-concurrency",
+    "expected_section": "Provisioned concurrency"
+  },
+  {
+    "query_id": "q05",
+    "query_text": "Which DynamoDB capacity mode is best for a brand new application with unpredictable traffic?",
+    "doc_id": "dynamodb-capacity-modes",
+    "expected_section": "On-demand capacity mode"
+  },
+  {
+    "query_id": "q06",
+    "query_text": "How often can a DynamoDB table switch between on-demand and provisioned capacity mode?",
+    "doc_id": "dynamodb-capacity-modes",
+    "expected_section": "Switching between modes"
+  },
+  {
+    "query_id": "q07",
+    "query_text": "What vector stores can back an Amazon Bedrock Knowledge Base besides the default managed option?",
+    "doc_id": "bedrock-knowledge-bases",
+    "expected_section": "Backing vector stores"
+  },
+  {
+    "query_id": "q08",
+    "query_text": "What is the difference between the Retrieve API and RetrieveAndGenerate in Bedrock Knowledge Bases?",
+    "doc_id": "bedrock-knowledge-bases",
+    "expected_section": "Querying a knowledge base"
+  },
+  {
+    "query_id": "q09",
+    "query_text": "What algorithm does OpenSearch use by default for fast approximate nearest-neighbor vector search?",
+    "doc_id": "opensearch-vector-search",
+    "expected_section": "The k-NN plugin and vector fields"
+  },
+  {
+    "query_id": "q10",
+    "query_text": "Why would I combine keyword search with vector search instead of using vector search alone?",
+    "doc_id": "opensearch-vector-search",
+    "expected_section": "Hybrid search"
+  },
+  {
+    "query_id": "q11",
+    "query_text": "Which Step Functions workflow type is cheaper for high-volume, short-duration event processing?",
+    "doc_id": "step-functions-workflows",
+    "expected_section": "Standard versus Express workflows"
+  },
+  {
+    "query_id": "q12",
+    "query_text": "How does Step Functions handle a task that takes much longer than a single Lambda invocation, like a transcription job?",
+    "doc_id": "step-functions-workflows",
+    "expected_section": "Long-running and asynchronous integrations"
+  }
+]

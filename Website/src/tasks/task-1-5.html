@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Task 1.5 Build Log | AIP-C01 Guide</title>
+<meta name="description" content="Domain 1, Task 1.5: three chunking strategies and two embedding models, built and run for real over a synthetic AWS-documentation corpus, with retrieval quality proven by brute-force search instead of a provisioned vector database. Written in plain English — what was built, what the results actually showed, and what was deliberately left as a plan.">
+<style>
+  :root{
+    --ink:#0b1524; --ink-soft:#3a4a5e; --paper:#f7f8fa; --card:#ffffff; --line:#e3e7ee;
+    --accent:#e8622c; --accent-dark:#c94f1f; --navy:#0f2540; --navy-2:#16345c;
+    --good:#1a7f5a; --good-bg:#e9f7f1; --good-line:#bfe6d6;
+    --bad:#b3271f; --bad-bg:#fdecea; --bad-line:#f3c6c2;
+    --unbuilt-bg:#f4f1fb; --unbuilt-line:#d8cdf0; --unbuilt:#5b3fa3;
+    --concept-bg:#eef6ff; --concept-line:#c9e0f7; --concept:#155a8a;
+    color-scheme: light;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{margin:0;background:var(--paper);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;line-height:1.6;}
+  a{color:var(--accent-dark);}
+  code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;background:#eef1f6;padding:1px 5px;border-radius:4px;font-size:.92em;}
+  img{max-width:100%;}
+  .wrap{max-width:980px;margin:0 auto;padding:0 24px;}
+  .wrap-wide{max-width:1320px;margin:0 auto;padding:0 24px;}
+
+  .nav{position:sticky;top:0;z-index:50;background:rgba(15,37,64,.96);backdrop-filter:blur(6px);border-bottom:1px solid rgba(255,255,255,.08);}
+  .nav .wrap{display:flex;align-items:center;justify-content:space-between;height:56px;max-width:1080px;}
+  .nav-brand{color:#fff;font-weight:700;font-size:14px;letter-spacing:.02em;text-decoration:none;}
+  .nav-brand span{color:var(--accent);}
+  .nav-links{display:flex;gap:22px;list-style:none;margin:0;padding:0;}
+  .nav-links a{color:#cdd8e6;text-decoration:none;font-size:13.5px;font-weight:500;}
+  .nav-links a:hover{color:#fff;}
+  @media (max-width:720px){ .nav-links{display:none;} }
+
+  header.hero{background:radial-gradient(900px 420px at 85% -10%, rgba(232,98,44,.3), transparent 60%), linear-gradient(180deg,var(--navy) 0%, var(--navy-2) 100%);color:#fff;padding:48px 0 36px;}
+  .eyebrow{display:inline-block;font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#ffd8c4;background:rgba(232,98,44,.18);border:1px solid rgba(232,98,44,.4);padding:5px 10px;border-radius:999px;margin-bottom:16px;}
+  h1{font-size:clamp(24px,3.6vw,36px);line-height:1.18;margin:0 0 12px;font-weight:800;}
+  header.hero p.lead{font-size:16px;color:#c9d5e3;max-width:720px;margin:0 0 22px;}
+  .stat-row{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.12);border-radius:12px;overflow:hidden;}
+  .stat{background:rgba(255,255,255,.04);padding:14px 12px;text-align:center;}
+  .stat .n{font-size:19px;font-weight:800;color:#fff;}
+  .stat .l{font-size:11px;color:#a9b8cb;text-transform:uppercase;letter-spacing:.03em;margin-top:2px;}
+  @media (max-width:640px){.stat-row{grid-template-columns:repeat(2,1fr);}}
+
+  section{padding:40px 0;}
+  section.alt{background:#eef1f6;}
+  h2.h{font-size:24px;font-weight:800;letter-spacing:-.01em;margin:0 0 8px;color:var(--ink);}
+  .kicker{font-size:12.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--accent-dark);margin:0 0 8px;}
+  .section-lead{color:var(--ink-soft);max-width:740px;margin:0 0 24px;font-size:15px;}
+
+  .toc{display:flex;flex-wrap:wrap;gap:10px;margin:0 0 8px;}
+  .toc a{font-size:13px;font-weight:600;background:var(--card);border:1px solid var(--line);color:var(--ink-soft);padding:7px 13px;border-radius:999px;text-decoration:none;}
+  .toc a:hover{border-color:var(--accent);color:var(--accent-dark);}
+
+  .hold-banner{background:var(--unbuilt-bg);border:1px solid var(--unbuilt-line);border-radius:14px;padding:22px 24px;margin-bottom:8px;}
+  .hold-banner h3{margin:0 0 8px;font-size:15px;font-weight:800;color:var(--unbuilt);}
+  .hold-banner p{margin:0 0 10px;font-size:14px;color:var(--ink-soft);line-height:1.6;}
+  .hold-banner p:last-child{margin-bottom:0;}
+  .hold-banner code{background:#ece6f8;}
+  .cost-table{width:100%;border-collapse:collapse;font-size:13px;margin:12px 0;}
+  .cost-table th{text-align:left;padding:6px 10px;color:var(--unbuilt);font-size:11px;text-transform:uppercase;letter-spacing:.03em;border-bottom:1px solid var(--unbuilt-line);}
+  .cost-table td{padding:6px 10px;border-bottom:1px solid var(--unbuilt-line);color:var(--ink);}
+
+  /* PHASE DIVIDER */
+  .phase-divider{display:flex;align-items:flex-start;gap:14px;margin:36px 0 16px;}
+  .phase-divider:first-of-type{margin-top:4px;}
+  .phase-divider .pd-num{
+    background:var(--navy);color:#fff;font-weight:800;font-size:13px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;
+    padding:6px 12px;border-radius:8px;white-space:nowrap;margin-top:2px;
+  }
+  .phase-divider .pd-text h3{margin:0;font-size:18px;font-weight:800;color:var(--ink);}
+  .phase-divider .pd-text p{margin:4px 0 0;font-size:13.5px;color:var(--ink-soft);max-width:640px;}
+  .phase-divider .pd-line{flex:1;height:1px;background:var(--line);margin-top:14px;}
+
+  /* STEP CARD */
+  .step-card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:20px 24px;margin-bottom:14px;}
+  .step-head{display:flex;align-items:center;gap:12px;margin-bottom:12px;flex-wrap:wrap;}
+  .step-num{
+    background:var(--paper);border:1px solid var(--line);color:var(--navy-2);font-weight:800;font-size:12px;
+    font-family:ui-monospace,SFMono-Regular,Menlo,monospace;width:30px;height:30px;border-radius:8px;
+    display:flex;align-items:center;justify-content:center;flex-shrink:0;
+  }
+  .step-card h4{margin:0;font-size:15.5px;font-weight:700;}
+  .step-res{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px;color:var(--navy-2);background:#eef3fa;border:1px solid #d6e2f0;padding:2px 8px;border-radius:6px;margin:0 0 12px;display:inline-block;}
+  .step-body p{margin:0 0 8px;font-size:14px;color:var(--ink-soft);}
+  .step-body p strong.lbl{color:var(--ink);font-weight:700;}
+  .step-body ul{margin:0 0 10px;padding-left:20px;}
+  .step-body li{font-size:14px;color:var(--ink-soft);margin-bottom:6px;}
+  .step-body li strong{color:var(--ink);}
+
+  .concept{background:var(--concept-bg);border:1px solid var(--concept-line);border-radius:8px;padding:12px 15px;margin:0 0 14px;}
+  .concept p{margin:0;font-size:13.5px;color:var(--ink);}
+  .concept p strong{color:var(--concept);}
+
+  .mini-tip{background:#fff7ed;border:1px solid #f6d9b8;border-radius:8px;padding:13px 16px;margin-top:10px;}
+  .mini-tip .mt-head{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.05em;color:var(--accent-dark);margin:0 0 4px;}
+  .mini-tip p{margin:0;font-size:13.5px;color:var(--ink);}
+
+  .mini-find{background:var(--good-bg);border:1px solid var(--good-line);border-radius:8px;padding:13px 16px;margin-top:10px;}
+  .mini-find .mf-head{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.05em;color:var(--good);margin:0 0 4px;}
+  .mini-find p{margin:0;font-size:13.5px;color:var(--ink);}
+
+  .step-card.unbuilt{background:var(--unbuilt-bg);border:1px dashed var(--unbuilt-line);}
+  .step-card.unbuilt .step-res{background:#ece6f8;border-color:var(--unbuilt-line);color:var(--unbuilt);}
+  .unbuilt-badge{font-size:10.5px;font-weight:800;text-transform:uppercase;letter-spacing:.05em;color:#fff;background:var(--unbuilt);padding:3px 9px;border-radius:999px;}
+
+  .diagram{margin:0;}
+  .diagram .svg-scroll{overflow-x:auto;}
+  .diagram svg{width:100%;min-width:900px;height:auto;display:block;color:var(--ink);}
+  .diagram figcaption{margin-top:14px;font-size:13px;color:var(--ink-soft);max-width:960px;}
+  .diagram figcaption code{font-size:.95em;}
+
+  table.verify{width:100%;border-collapse:collapse;font-size:13.5px;background:var(--card);border:1px solid var(--line);border-radius:10px;overflow:hidden;}
+  table.verify th{text-align:left;background:var(--navy);color:#fff;padding:10px 14px;font-size:12px;text-transform:uppercase;letter-spacing:.04em;}
+  table.verify td{padding:10px 14px;border-top:1px solid var(--line);color:var(--ink-soft);}
+  table.verify tr:nth-child(even) td{background:#fafbfc;}
+  .verify-wrap{overflow-x:auto;}
+
+  footer{padding:32px 0 48px;color:#8b96a5;font-size:12.5px;}
+  footer .wrap{border-top:1px solid var(--line);padding-top:22px;max-width:1080px;}
+  footer a{color:#6b7686;}
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="wrap">
+    <a class="nav-brand" href="../index.html">AIP-C01 <span>Guide</span></a>
+    <ul class="nav-links">
+      <li><a href="index.html">Build Log</a></li>
+      <li><a href="#architecture">How It Runs</a></li>
+      <li><a href="#log">Step-by-Step Log</a></li>
+      <li><a href="#resources">Resource Index</a></li>
+      <li><a href="../notes/task-1-5.html">Study Notes</a></li>
+    </ul>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="wrap">
+    <span class="eyebrow">Domain 1 &middot; Task 1.5</span>
+    <h1>Three Chunking Strategies,<br>Two Embedding Models, No Vector Database</h1>
+    <p class="lead">
+      The brief's full 6-phase build calls for chunking, embedding, <em>three parallel provisioned vector
+      stores</em> to benchmark against each other, hybrid/rerank search on top of that, query decomposition,
+      and an API layer. This build takes the first two phases all the way to real, verified results — a
+      Lambda that chunks the same source documents three different ways, and a Lambda that embeds every
+      chunk with two different models — while deliberately leaving the vector-store shootout and everything
+      built on top of it as a documented plan, not a deployment. See the note further down this page for
+      exactly why, with real numbers.
+    </p>
+    <div class="stat-row">
+      <div class="stat"><div class="n">3</div><div class="l">Steps deployed</div></div>
+      <div class="stat"><div class="n">4</div><div class="l">Resources deployed</div></div>
+      <div class="stat"><div class="n">99</div><div class="l">Chunks produced, 3 strategies &times; 6 docs</div></div>
+      <div class="stat"><div class="n">$0</div><div class="l">Standing infrastructure cost</div></div>
+    </div>
+  </div>
+</header>
+
+<section>
+  <div class="wrap">
+    <div class="toc">
+      <a href="#architecture">How it runs</a>
+      <a href="#phase-1">Phase 1: Chunking</a>
+      <a href="#phase-2">Phase 2: Embeddings</a>
+      <a href="#phase-later">Evaluation &amp; Phases 3&ndash;6: Scoped Out</a>
+      <a href="#resources">Resource Index</a>
+    </div>
+  </div>
+</section>
+
+<section class="alt" id="architecture">
+  <div class="wrap-wide">
+    <p class="kicker">How It Runs</p>
+    <h2 class="h">One document set, chunked three ways, embedded two ways</h2>
+    <p class="section-lead">
+      Everything solid below is live and was actually run against real data. The dashed box is the one piece
+      that was designed but not deployed — see the note in the Evaluation section for why. This is this
+      task's own scaled-down pipeline; a broader reference architecture (a global law firm's retrieval
+      pipeline) is covered separately on the <a href="../notes/task-1-5.html">Study Notes page</a>, the same
+      way Task 1.4's notes page uses its own bigger example.
+    </p>
+
+    <figure class="diagram">
+      <div class="svg-scroll">
+      <svg viewBox="0 0 1300 560" role="img" aria-label="Diagram: six synthetic AWS documentation files are uploaded to an S3 bucket, which triggers a chunking-engine Lambda that produces fixed-size, hierarchical, and semantic chunks into three S3 prefixes. A manually-invoked embedding-generator Lambda reads all chunks and writes Titan and Cohere embeddings into two more S3 prefixes. A planned but not-yet-built retrieval-evaluator Lambda would read those embeddings plus a test-queries file and score retrieval quality, shown as a dashed box.">
+        <defs>
+          <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+            <path d="M0,0 L10,5 L0,10 z" fill="var(--navy-2)"/>
+          </marker>
+          <marker id="arrowSoft" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+            <path d="M0,0 L10,5 L0,10 z" fill="var(--ink-soft)"/>
+          </marker>
+        </defs>
+
+        <g font-family="-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica,Arial,sans-serif">
+
+          <!-- Source docs -->
+          <rect x="470" y="16" width="320" height="50" rx="10" fill="var(--card)" stroke="var(--line)" stroke-width="1.5"/>
+          <text x="630" y="38" text-anchor="middle" font-size="12.5" font-weight="700" fill="var(--ink)">6 synthetic AWS docs</text>
+          <text x="630" y="55" text-anchor="middle" font-size="10" fill="var(--ink-soft)">raw-docs/*.md</text>
+
+          <line x1="630" y1="66" x2="630" y2="104" stroke="var(--navy-2)" stroke-width="1.6" marker-end="url(#arrow)"/>
+          <text x="645" y="90" font-size="10.5" fill="var(--ink-soft)">1 &#183; upload fires S3 trigger</text>
+
+          <!-- Chunking engine -->
+          <rect x="440" y="106" width="380" height="58" rx="10" fill="var(--card)" stroke="var(--navy-2)" stroke-width="1.8"/>
+          <text x="630" y="130" text-anchor="middle" font-size="13" font-weight="700" fill="var(--ink)">adi-1-5-chunking-engine</text>
+          <text x="630" y="148" text-anchor="middle" font-size="10" fill="var(--ink-soft)">Lambda, S3-triggered &middot; fixed / hierarchical / semantic</text>
+
+          <!-- 3 outputs -->
+          <line x1="530" y1="164" x2="280" y2="220" stroke="var(--navy-2)" stroke-width="1.5" marker-end="url(#arrow)"/>
+          <line x1="630" y1="164" x2="630" y2="220" stroke="var(--navy-2)" stroke-width="1.5" marker-end="url(#arrow)"/>
+          <line x1="730" y1="164" x2="980" y2="220" stroke="var(--navy-2)" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+          <rect x="130" y="222" width="300" height="50" rx="10" fill="var(--card)" stroke="var(--line)" stroke-width="1.5"/>
+          <text x="280" y="242" text-anchor="middle" font-size="11.5" font-weight="700" fill="var(--ink)">chunks/fixed/</text>
+          <text x="280" y="258" text-anchor="middle" font-size="9.5" fill="var(--ink-soft)">33 chunks &middot; 800 chars, 100 overlap</text>
+
+          <rect x="480" y="222" width="300" height="50" rx="10" fill="var(--card)" stroke="var(--line)" stroke-width="1.5"/>
+          <text x="630" y="242" text-anchor="middle" font-size="11.5" font-weight="700" fill="var(--ink)">chunks/hierarchical/</text>
+          <text x="630" y="258" text-anchor="middle" font-size="9.5" fill="var(--ink-soft)">36 chunks &middot; one per ## section</text>
+
+          <rect x="830" y="222" width="300" height="50" rx="10" fill="var(--card)" stroke="var(--line)" stroke-width="1.5"/>
+          <text x="980" y="242" text-anchor="middle" font-size="11.5" font-weight="700" fill="var(--ink)">chunks/semantic/</text>
+          <text x="980" y="258" text-anchor="middle" font-size="9.5" fill="var(--ink-soft)">30 chunks &middot; similarity-drop boundaries</text>
+
+          <!-- converge to embedding generator -->
+          <line x1="280" y1="272" x2="560" y2="330" stroke="var(--navy-2)" stroke-width="1.5" marker-end="url(#arrow)"/>
+          <line x1="630" y1="272" x2="630" y2="330" stroke="var(--navy-2)" stroke-width="1.5" marker-end="url(#arrow)"/>
+          <line x1="980" y1="272" x2="700" y2="330" stroke="var(--navy-2)" stroke-width="1.5" marker-end="url(#arrow)"/>
+          <text x="700" y="300" font-size="10.5" fill="var(--ink-soft)">2 &#183; manual invoke, reads all 99 chunks</text>
+
+          <!-- Embedding generator -->
+          <rect x="440" y="332" width="380" height="58" rx="10" fill="var(--card)" stroke="var(--navy-2)" stroke-width="1.8"/>
+          <text x="630" y="356" text-anchor="middle" font-size="13" font-weight="700" fill="var(--ink)">adi-1-5-embedding-generator</text>
+          <text x="630" y="374" text-anchor="middle" font-size="10" fill="var(--ink-soft)">Lambda, manual invoke &middot; Titan (1-by-1) + Cohere (batched)</text>
+
+          <!-- 2 outputs -->
+          <line x1="560" y1="390" x2="390" y2="440" stroke="var(--navy-2)" stroke-width="1.5" marker-end="url(#arrow)"/>
+          <line x1="700" y1="390" x2="870" y2="440" stroke="var(--navy-2)" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+          <rect x="220" y="442" width="340" height="50" rx="10" fill="var(--card)" stroke="var(--line)" stroke-width="1.5"/>
+          <text x="390" y="462" text-anchor="middle" font-size="11.5" font-weight="700" fill="var(--ink)">embeddings/titan/</text>
+          <text x="390" y="478" text-anchor="middle" font-size="9.5" fill="var(--ink-soft)">99 vectors &middot; 1536-dim</text>
+
+          <rect x="700" y="442" width="340" height="50" rx="10" fill="var(--card)" stroke="var(--line)" stroke-width="1.5"/>
+          <text x="870" y="462" text-anchor="middle" font-size="11.5" font-weight="700" fill="var(--ink)">embeddings/cohere/</text>
+          <text x="870" y="478" text-anchor="middle" font-size="9.5" fill="var(--ink-soft)">99 vectors &middot; 1024-dim</text>
+
+          <!-- dashed to planned evaluator -->
+          <path d="M 390 492 L 200 530" fill="none" stroke="var(--ink-soft)" stroke-width="1.4" stroke-dasharray="5,4" marker-end="url(#arrowSoft)"/>
+          <path d="M 870 492 L 1060 530" fill="none" stroke="var(--ink-soft)" stroke-width="1.4" stroke-dasharray="5,4" marker-end="url(#arrowSoft)"/>
+          <rect x="60" y="500" width="1180" height="50" rx="10" fill="var(--unbuilt-bg)" stroke="var(--unbuilt-line)" stroke-width="1.5" stroke-dasharray="4,3"/>
+          <text x="630" y="522" text-anchor="middle" font-size="11.5" font-weight="700" fill="var(--unbuilt)">adi-1-5-retrieval-evaluator &mdash; planned, not built</text>
+          <text x="630" y="538" text-anchor="middle" font-size="9.5" fill="var(--ink-soft)">would score all 6 (strategy &times; model) combos against test_queries.json</text>
+
+        </g>
+      </svg>
+      </div>
+      <figcaption>
+        Solid boxes and arrows (top to bottom) are live and were actually run: an upload to
+        <code>raw-docs/</code> fires the chunking Lambda automatically, producing three differently-shaped
+        chunk sets from identical source text; a manual invoke of the embedding Lambda then reads all 99
+        chunks and embeds each one with both Titan and Cohere. The dashed box at the bottom is the one piece
+        designed but not deployed &mdash; explained in the Evaluation section below, with the reasoning for
+        stopping there.
+      </figcaption>
+    </figure>
+  </div>
+</section>
+
+<section id="log">
+  <div class="wrap">
+    <p class="kicker">Step-by-Step Build Log</p>
+    <h2 class="h">Every step, in the order it happened</h2>
+    <p class="section-lead">
+      Scope for this task: `project.md`'s brief has 6 phases. Phases 1&ndash;2 (chunking + embeddings) are
+      built for real below, over a synthetic AWS-documentation corpus written specifically so the three
+      chunking strategies would actually diverge, not just look different on paper. The retrieval-evaluation
+      step and Phases 3&ndash;6 are covered as a documented plan further down this page &mdash; see why in that
+      section.
+    </p>
+
+    <div class="phase-divider" id="phase-1">
+      <span class="pd-num">Phase 1</span>
+      <div class="pd-text"><h3>Document Processing &amp; Segmentation</h3><p>Sample data, storage, permissions, and a Lambda that chunks the same documents three different ways.</p></div>
+      <span class="pd-line"></span>
+    </div>
+
+    <div class="step-card">
+      <div class="step-head"><span class="step-num">1</span><h4>Storage, sample documents, and permissions</h4></div>
+      <p class="step-res">adi-1-5-documents-269737522732 &middot; adi-1-5-lambda-role</p>
+      <div class="step-body">
+        <div class="concept">
+          <p><strong>In plain terms:</strong> Before any chunking or embedding logic can be tested, it needs real text to run against. The brief's own example is AWS technical documentation, not the law-firm scenario used on this task's Study Notes page &mdash; those are two intentionally separate things, the same split Task 1.4 makes between its own build and its notes page.</p>
+        </div>
+        <p><strong class="lbl">What was built:</strong> An S3 bucket (versioned, all public access blocked), 6 hand-authored synthetic technical articles covering S3 storage classes, Lambda concurrency, DynamoDB capacity modes, Bedrock Knowledge Bases, OpenSearch vector search, and Step Functions &mdash; each with 4&ndash;5 distinct <code>##</code> sections, written specifically so fixed-size chunking would sometimes cut mid-section while the other two strategies could recover section boundaries cleanly. Also hand-authored a 12-query test set, each query mapped to exactly which document and section should answer it (ground truth for a future evaluation step). An IAM role was created scoped to only S3 read/write on this one bucket and <code>bedrock:InvokeModel</code> on just the two embedding models used later &mdash; nothing broader.</p>
+        <p><strong class="lbl">Where to check:</strong> S3 &rarr; adi-1-5-documents-269737522732 &rarr; raw-docs/ (6 objects) and test-queries/ (1 object). IAM &rarr; Roles &rarr; adi-1-5-lambda-role.</p>
+        <p><strong class="lbl">Why it matters:</strong> Confirmed Bedrock embedding access already worked (both Titan and Cohere returned real vectors on a test call) before building anything else &mdash; unlike Task 1.4, which assumed model access might need requesting, this task verified it up front instead of guessing.</p>
+      </div>
+      <div class="mini-tip">
+        <p class="mt-head">Good to know</p>
+        <p>The sample documents were deliberately written to make the three chunking strategies actually disagree with each other &mdash; multiple substantial sections per document, not one short paragraph. A trivially short test document would make every chunking strategy produce nearly identical output, which proves nothing about which strategy is actually better.</p>
+      </div>
+    </div>
+
+    <div class="step-card">
+      <div class="step-head"><span class="step-num">2</span><h4>The chunking engine &mdash; three strategies, one Lambda</h4></div>
+      <p class="step-res">adi-1-5-chunking-engine</p>
+      <div class="step-body">
+        <div class="concept">
+          <p><strong>In plain terms:</strong> "Chunking" means splitting a document into smaller pieces before it can be searched or embedded &mdash; a whole document is usually too big and too unfocused to compare against a short question. How you draw those cut lines changes what actually gets retrieved later.</p>
+        </div>
+        <p><strong class="lbl">What was built:</strong> A Lambda, triggered automatically the moment a file lands in <code>raw-docs/</code>, that runs the same source document through three different chunking methods:</p>
+        <ul>
+          <li><strong>Fixed-size</strong> &mdash; cuts every 800 characters with 100 characters of overlap, nudged to the nearest sentence ending nearby. Simple, but blind to the document's actual structure.</li>
+          <li><strong>Hierarchical</strong> &mdash; splits on the document's own <code>##</code> headings, so each section becomes exactly one chunk. Structure-aware by construction.</li>
+          <li><strong>Semantic</strong> &mdash; embeds every individual sentence with Titan, measures how similar each sentence is to the one right before it, and cuts wherever that similarity drops meaningfully below <em>that specific document's own</em> average (not one fixed number reused across every document, since raw similarity scores aren't comparable across different content).</li>
+        </ul>
+        <p><strong class="lbl">Where to check:</strong> Lambda &rarr; adi-1-5-chunking-engine &rarr; Configuration &rarr; Triggers (shows the S3 event source); Monitor &rarr; Logs (6 invocations, zero errors). S3 &rarr; chunks/fixed/, chunks/hierarchical/, chunks/semantic/ &mdash; 33 + 36 + 30 chunks.</p>
+        <p><strong class="lbl">Why it matters:</strong> This is the actual exam-tested content of Phase 1 &mdash; not reading about the three strategies, but running identical source text through all three and seeing exactly where they agree and disagree.</p>
+      </div>
+      <div class="mini-find">
+        <p class="mf-head">What the results actually showed</p>
+        <p>On the S3 storage-classes document, fixed-size chunking visibly cut mid-sentence (one chunk literally starts mid-word, "ency and high throughput&hellip;"). Hierarchical recovered all 6 sections cleanly, one chunk per heading. Semantic chunking produced 5 chunks that mostly tracked section boundaries too &mdash; but it <strong>merged</strong> the "Standard-IA / One Zone-IA" section with the following "Glacier storage classes" section into a single chunk, because their content was similar enough in meaning (both are about lower-cost, infrequent-access storage tiers) that the similarity score never dropped enough to justify a split. A purely structural strategy would never make that call &mdash; that's a real, observed difference between "structure-aware" and "meaning-aware" chunking, not just a definition.</p>
+      </div>
+      <div class="mini-tip">
+        <p class="mt-head">Good to know</p>
+        <p>"Semantic chunking" in the actual exam-tested sense means detecting topic shifts by comparing embedding similarity between consecutive sentences &mdash; it is not asking an LLM to creatively decide where to split text (which is one way it's sometimes implemented, but not the technique being tested here). Building the embedding-similarity version directly is what surfaced the section-merging behavior above; a prompt-based LLM splitter would likely have just followed the headings and never shown that trade-off at all.</p>
+      </div>
+    </div>
+
+    <div class="phase-divider" id="phase-2">
+      <span class="pd-num">Phase 2</span>
+      <div class="pd-text"><h3>Embedding Generation &amp; Optimization</h3><p>Turn every chunk from Phase 1 into vectors with two different embedding models, side by side.</p></div>
+      <span class="pd-line"></span>
+    </div>
+
+    <div class="step-card">
+      <div class="step-head"><span class="step-num">3</span><h4>The embedding generator &mdash; Titan and Cohere, side by side</h4></div>
+      <p class="step-res">adi-1-5-embedding-generator</p>
+      <div class="step-body">
+        <div class="concept">
+          <p><strong>In plain terms:</strong> An embedding is a list of numbers that represents what a piece of text means, generated by a model trained for exactly that purpose. Two different embedding models will produce different numbers for the same text, and won't necessarily agree on which two chunks are "similar" &mdash; that's why comparing them matters, not just picking one by reputation.</p>
+        </div>
+        <p><strong class="lbl">What was built:</strong> A Lambda, invoked manually rather than sitting behind any public endpoint (same "no idle cost" choice Task 1.4 planned for its own search-coordinator), that lists every chunk from all 3 strategies and embeds each one with <strong>both</strong> <code>amazon.titan-embed-text-v1</code> (1,536 dimensions) and <code>cohere.embed-english-v3</code> (1,024 dimensions). Titan only accepts one input per call, so it's looped one chunk at a time; Cohere natively accepts a batch, so those calls are grouped 20 texts at a time &mdash; a real, observable difference between the two APIs, not just a line in a comparison table.</p>
+        <p><strong class="lbl">Where to check:</strong> Lambda &rarr; adi-1-5-embedding-generator &rarr; Monitor &rarr; Logs (single invocation, <code>{"titan": 99, "cohere": 99, "total_chunks": 99}</code>). S3 &rarr; embeddings/titan/ and embeddings/cohere/ &mdash; 99 objects each, 198 total.</p>
+        <p><strong class="lbl">Why it matters:</strong> Produces the two embedding sets a future evaluation step would need to score Titan vs. Cohere head-to-head on identical chunk sets &mdash; and confirms both models actually work end-to-end against this project's own data, not just in an isolated test call.</p>
+      </div>
+      <div class="mini-find">
+        <p class="mf-head">What the results actually showed</p>
+        <p>All 198 embeddings (99 chunks &times; 2 models) generated successfully in about 27 seconds, with zero errors. The batch-vs-single-call difference showed up directly in the code, not just in documentation: Titan's API rejects more than one input text per call, while Cohere's <code>texts</code> parameter accepts a list &mdash; confirmed by building both paths against the real Bedrock endpoints, matching exactly what <code>project.md</code>'s own sample code assumes.</p>
+      </div>
+      <div class="mini-tip">
+        <p class="mt-head">Good to know</p>
+        <p>Batching isn't just a performance optimization here &mdash; it changes how many billed API calls happen. 99 chunks through Titan is 99 separate <code>invoke_model</code> calls; the same 99 chunks through Cohere is 5 calls (99 &divide; 20, rounded up). At this project's tiny scale the cost difference is pennies either way, but the same ratio at real production volume (millions of chunks) is the difference between millions of calls and tens of thousands.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="alt" id="phase-later">
+  <div class="wrap">
+    <p class="kicker">Evaluation &amp; Phases 3&ndash;6</p>
+    <h2 class="h">Scored on purpose, then deliberately left as a plan</h2>
+    <p class="section-lead">
+      Phases 1&ndash;2 above already produced the useful part of this task for free &mdash; real chunking
+      divergence and real embeddings from two models, with zero provisioned infrastructure. What follows is
+      what would come next, and exactly why it's documented rather than deployed.
+    </p>
+
+    <div class="hold-banner">
+      <h3>Why the vector-store comparison (Phase 3) stays a plan, not a deployment</h3>
+      <p>
+        <code>project.md</code>'s Phase 3 asks for <strong>three parallel provisioned or managed vector stores
+        at once</strong>, purely to benchmark them against each other: an OpenSearch Service domain (the
+        brief's own config is 2 data nodes plus 3 dedicated master nodes &mdash; 5 nodes total), Aurora
+        PostgreSQL with the pgvector extension, and a Bedrock Knowledge Base backed by OpenSearch Serverless.
+        This is the same cost profile that kept <a href="task-1-4.html">Task 1.4</a> at plan-only &mdash; just
+        with a third always-billing service added on top.
+      </p>
+      <table class="cost-table">
+        <tr><th>Service</th><th>Bills even when idle</th><th>If left running a month</th></tr>
+        <tr><td>Bedrock Knowledge Base (min. OCU floor)</td><td>~$1/hr</td><td>~$700</td></tr>
+        <tr><td>OpenSearch domain (brief's own 5-node config)</td><td>~$0.84/hr</td><td>~$600</td></tr>
+        <tr><td>Aurora PostgreSQL + pgvector (provisioned instance)</td><td>~$0.08&ndash;0.29/hr</td><td>~$60&ndash;210</td></tr>
+      </table>
+      <p>
+        Phases 4&ndash;6 (hybrid search tuning, query decomposition via Step Functions, an API integration
+        layer) all sit on top of whichever store Phase 3 stands up, so they inherit the same call. All of it
+        is covered conceptually on the <a href="../notes/task-1-5.html">Study Notes page</a> already.
+      </p>
+    </div>
+
+    <div class="step-card unbuilt">
+      <div class="step-head"><h4>Retrieval evaluator &mdash; brute-force search, no vector database</h4><span class="unbuilt-badge">Planned, not built</span></div>
+      <p class="step-res">Would create: adi-1-5-retrieval-evaluator</p>
+      <div class="step-body">
+        <div class="concept">
+          <p><strong>In plain terms:</strong> A vector store is really just an index over embeddings that makes similarity search fast at scale. For a corpus this small (99 chunks), comparing a query's embedding against every stored chunk embedding directly &mdash; a brute-force linear scan &mdash; finds the exact same "most similar" result a managed vector database would, just without needing one deployed. Managed indexes (OpenSearch's HNSW, for example) only start to matter once brute-force search would take too long, which is a scale problem, not an accuracy problem.</p>
+        </div>
+        <p><strong class="lbl">What this would involve:</strong> A Lambda, manually invoked, that for each of the 6 (strategy &times; embedding model) combinations from Phases 1&ndash;2: embeds each of the 12 test queries, runs cosine-similarity search across that combination's 99 stored chunk embeddings in S3, checks whether the correct section (from the Step 1 ground-truth file) came back in the top results, and computes Hit-Rate@3 and Mean Reciprocal Rank per combination &mdash; plus a pure embedding-quality check comparing Titan vs. Cohere on known-similar and known-dissimilar chunk pairs.</p>
+        <p><strong class="lbl">Why it wasn't built:</strong> Not a cost concern this time &mdash; brute-force search over 99 embeddings costs nothing to run. Left as a documented next step because Phases 1&ndash;2 already delivered concrete, verifiable results (the chunking divergence and the batch-vs-single-call embedding difference above) without it; scoring which of the 6 combinations retrieves best is the natural next session's work if this task gets picked back up.</p>
+      </div>
+    </div>
+
+    <div class="step-card unbuilt">
+      <div class="step-head"><h4>Three-way vector store deployment, hybrid search, query decomposition, API layer</h4><span class="unbuilt-badge">Architecture only</span></div>
+      <div class="step-body">
+        <p><strong class="lbl">What this would have involved:</strong> Standing up OpenSearch Service, Aurora + pgvector, and a Bedrock Knowledge Base against the same document set, benchmarking query latency/recall across all three; layering hybrid (vector + BM25) search and a reranker on top of whichever store won; a Lambda/Step Functions pipeline for expanding and decomposing complex multi-part queries; and a standardized API layer with function-calling support for foundation-model integration.</p>
+        <p><strong class="lbl">Why it wasn't scoped for a live build:</strong> Three concurrent pay-by-the-hour services purely to compare them is the exact pattern this project has consistently avoided (see Task 1.4). All of it &mdash; store trade-offs, hybrid search, query decomposition, MCP/function-calling integration &mdash; is already covered conceptually on this task's <a href="../notes/task-1-5.html">Study Notes page</a>.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="resources">
+  <div class="wrap">
+    <p class="kicker">Full Resource Index</p>
+    <h2 class="h">All 4 deployed resources, for quick reference</h2>
+    <p class="section-lead">Account <code>269737522732</code>, region <code>us-east-1</code>, named starting with <code>adi-1-5-</code>. See the step log above for what each one does and why.</p>
+    <div class="verify-wrap">
+      <table class="verify">
+        <tr><th>#</th><th>Type</th><th>Name</th><th>What it's for</th></tr>
+        <tr><td>1</td><td>S3 Bucket</td><td>adi-1-5-documents-269737522732</td><td>Source docs, chunks, and embeddings across raw-docs/, chunks/, embeddings/, and test-queries/ prefixes.</td></tr>
+        <tr><td>2</td><td>IAM Role</td><td>adi-1-5-lambda-role</td><td>Scoped to S3 read/write on this bucket and Bedrock InvokeModel on just Titan Embed + Cohere Embed.</td></tr>
+        <tr><td>3</td><td>Lambda Function</td><td>adi-1-5-chunking-engine</td><td>S3-triggered on raw-docs/ uploads; produces fixed-size, hierarchical, and semantic chunks per document.</td></tr>
+        <tr><td>4</td><td>Lambda Function</td><td>adi-1-5-embedding-generator</td><td>Manually invoked; embeds every chunk with both Titan (1-by-1) and Cohere (batched 20 at a time).</td></tr>
+      </table>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <p>This is an independent, unofficial study resource and is not affiliated with, endorsed by, or sponsored by Amazon Web Services, Inc. AWS, Amazon Bedrock, and all related marks are trademarks of Amazon.com, Inc. or its affiliates.</p>
+    <p>Hosted on Amazon S3 + Amazon CloudFront. &middot; <a href="index.html">&larr; Back to Build Log</a></p>
+  </div>
+</footer>
+
+</body>
+</html>
