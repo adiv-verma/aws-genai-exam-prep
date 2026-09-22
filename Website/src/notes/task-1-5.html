@@ -44,7 +44,7 @@
   @media (max-width:760px){.note-grid{grid-template-columns:1fr;}}
   .note-card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:18px 20px;}
   .note-card.wide{grid-column:1 / -1;}
-  .note-card h4{margin:0 0 12px;font-size:13px;font-weight:800;color:var(--navy-2);}
+  .note-card h4{scroll-margin-top:78px;margin:0 0 12px;font-size:13px;font-weight:800;color:var(--navy-2);}
   .note-card dl{margin:0;}
   .note-card dt{font-size:13.5px;font-weight:700;color:var(--ink);margin:0 0 3px;}
   .note-card dt:not(:first-child){margin-top:12px;}
@@ -64,6 +64,8 @@
   footer{padding:32px 0 48px;color:#8b96a5;font-size:12.5px;}
   footer .wrap{border-top:1px solid var(--line);padding-top:22px;}
   footer a{color:#6b7686;}
+  .note-card h4:target{color:var(--accent-dark);}
+  .note-card h4:target::after{content:" \2190";color:var(--accent);}
 </style>
 </head>
 <body>
@@ -73,6 +75,7 @@
     <a class="nav-brand" href="../index.html">AIP-C01 <span>Guide</span></a>
     <ul class="nav-links">
       <li><a href="index.html">All Study Notes</a></li>
+      <li><a href="domain-1.html">Domain 1 Map</a></li>
       <li><a href="../tasks/task-1-5.html">Task 1.5 Build Log</a></li>
     </ul>
   </div>
@@ -97,7 +100,7 @@
     <div class="note-grid">
 
       <div class="note-card">
-        <h4>Scenario Overview</h4>
+        <h4 id="s1">Scenario Overview</h4>
         <dl>
           <dt>Target Enterprise</dt>
           <dd>A global law firm operating across 25 countries handling case law, legal opinions, contracts, and regulatory filings.</dd>
@@ -109,7 +112,7 @@
       </div>
 
       <div class="note-card">
-        <h4>Task 1.4 vs. Task 1.5 Focus Comparison</h4>
+        <h4 id="s2">Task 1.4 vs. Task 1.5 Focus Comparison</h4>
         <dl>
           <dt>Task 1.4 Focus</dt>
           <dd>Infrastructure, storage tiering, sharding, caching, synchronization, and where the vector store lives and is maintained.</dd>
@@ -119,7 +122,7 @@
       </div>
 
       <div class="note-card wide">
-        <h4>1. Document Segmentation (Chunking)</h4>
+        <h4 id="s3">1. Document Segmentation (Chunking)</h4>
         <p class="sub">Legal chunking presents a unique engineering challenge. For example, consider the clause:</p>
         <div class="example">
           <p>&ldquo;The Party may terminate this Agreement, provided that Section 5.1 conditions are met.&rdquo;</p>
@@ -174,7 +177,7 @@
       </div>
 
       <div class="note-card wide">
-        <h4>2. Embedding Solutions</h4>
+        <h4 id="s4">2. Embedding Solutions</h4>
         <p class="sub">Embeddings transform textual chunks into high-dimensional numerical representations (vectors) that capture semantic meaning.</p>
 
         <p class="lead">Dimensionality</p>
@@ -220,7 +223,7 @@
       </div>
 
       <div class="note-card wide">
-        <h4>3. Vector Search Deployment</h4>
+        <h4 id="s5">3. Vector Search Deployment</h4>
         <p class="sub">Selecting the right storage backend and architecture governs scalability, cost, and multi-tenant isolation.</p>
 
         <p class="lead">Vector Store Options</p>
@@ -264,7 +267,7 @@ LIMIT 10;</pre>
       </div>
 
       <div class="note-card wide">
-        <h4>4. Advanced Search Architectures</h4>
+        <h4 id="s6">4. Advanced Search Architectures</h4>
         <p class="sub">To bridge the gap between abstract conceptual queries and rigid legal requirements, advanced search pipelines combine multiple retrieval layers.</p>
 
         <p class="lead">Hybrid Search (Vector + BM25)</p>
@@ -300,7 +303,7 @@ LIMIT 10;</pre>
       </div>
 
       <div class="note-card wide">
-        <h4>5. Query Handling Systems</h4>
+        <h4 id="s7">5. Query Handling Systems</h4>
         <p class="sub">Attorneys rarely type queries in optimal formats for vector databases. Query handling systems preprocess and enrich user input before search execution.</p>
         <dl>
           <dt>Query Expansion (via Bedrock)</dt>
@@ -319,7 +322,7 @@ LIMIT 10;</pre>
       </div>
 
       <div class="note-card wide">
-        <h4>6. Integration with Foundation Models</h4>
+        <h4 id="s8">6. Integration with Foundation Models</h4>
         <p class="sub">The final retrieval output must be securely and auditably wired into the Foundation Model.</p>
         <dl>
           <dt>RAG with Mandatory Citations</dt>

@@ -1,169 +1,189 @@
-Bonus Assignment
-
-Now, you will have an opportunity to build a customer support AI assistant that helps users troubleshoot AWS service issues, implementing proper prompt engineering strategies and governance controls.
+Now, you will have an opportunity to build a proof-of-concept document processing solution that extracts information from insurance claim documents and generates summaries using Amazon Bedrock.
 
 Bonus assignments are an open-ended way for you to assess your overall knowledge of this task. You can share your answers on social media and tag #awsexamprep for us to review.
 Bonus assignment
-Project components
+Scenario
+An insurance company wants to automate processing of claim documents to reduce manual effort and improve consistency.
+Step 1. Design the architecture (Skill 1.1.1)
+Create a simple architecture diagram showing the following:
+Document storage (Amazon S3)
+Processing workflow
+Foundation model integration
+Response generation
+Select appropriate Amazon Bedrock models for the following:
+Document understanding
+Information extraction
+Summary generation
+Step 2. Implement proof-of-Concept (Skill 1.1.2)
+Set up AWS environment:
+aws s3 mb s3://claim-documents-poc-<your-initials>
+Create a Python application with the following:
+Document upload functionality
+Amazon Bedrock integration
+Simple RAG component using policy information
+Claim summary generation
+Step 3. Create reusable components (Skill 1.1.3)
+Develop standardized for the following:
 
-Model instruction framework
+Prompt template manager
+Model invoker
+Basic content validator
+Step 4. Test and evaluate
+Test with 2-3 sample documents
+Compare performance of different models
+Document findings and recommendations
 
-Create a base persona for your customer support assistant using Amazon Bedrock Prompt Management
-Define clear role boundaries, tone, and response formats
-Implement Amazon Bedrock Guardrails to prevent the assistant from:
-Providing security credentials
-Making commitments about future AWS features
-Discussing competitors inappropriately
-For the guardrails implementation:
-Consider using content filtering for preventing security credential sharing
-Implement topic detection to identify and block discussions about future AWS features
-Use semantic boundaries for competitor discussions
+TESTING
 
-Prompt management and governance
-
-Set up Amazon Bedrock Prompt Management with:
-Parameterized templates for different support scenarios
-Approval workflows for new prompt templates
-Version control for prompts stored in Amazon S3
-CloudTrail tracking for prompt usage
-CloudWatch Logs for access monitoring
-Some additional considerations:
-Implement role-based access control for prompt template modifications
-Create an audit log dashboard for prompt usage patterns
-Consider A/B testing capabilities within your prompt management system
-
-Quality assurance system
-
-Develop Lambda functions to verify expected outputs against predefined criteria
-Create Step Functions workflows to test edge cases (angry customers, vague requests)
-Implement CloudWatch monitoring to detect prompt regression
-Set up automated testing for different prompt versions
-To enhance your Step Functions approach:
-Consider implementing a session management system with TTL in DynamoDB
-Add sentiment analysis alongside intent detection
-Include a confidence score threshold for when to trigger clarification workflows
-For your feedback loop:
-Add response latency tracking to optimize prompt efficiency
-Implement semantic clustering of user queries to identify common patterns
-Consider prompt distillation techniques to simplify complex prompts over time
-
-Iterative prompt enhancement
-
-Design a feedback collection mechanism
-Implement structured input components for different support scenarios
-Create output format specifications for consistent responses
-Develop chain-of-thought instruction patterns for complex troubleshooting
-Build a feedback loop system to improve prompts based on user interactions
-
-Complex prompt system design
-
-Implement Amazon Bedrock Prompt Flows to create:
-Sequential prompt chains for multi-step troubleshooting
-Conditional branching based on detected issue complexity
-Reusable prompt components for common support scenarios
-Pre-processing to format user inputs
-Post-processing to ensure response quality and consistency
-Consider adding:
-Fallback mechanisms when confidence scores are low
-Handoff protocols to human agents for complex scenarios
-Progressive disclosure techniques for complex troubleshooting steps
-Implementation steps
-
-Architecture design and implementation
-
-Create an Amazon Bedrock environment with access to appropriate foundation models
-Set up DynamoDB tables for conversation history
-Configure S3 buckets for prompt template storage
-Enable CloudTrail and CloudWatch for monitoring
-Use Amazon EventBridge to create event-driven workflows between components
-Consider Amazon Kendra for knowledge retrieval alongside your prompt system
-Implement AWS X-Ray for tracing requests through your system components
-
-Development
-
-Create base prompt templates in Amazon Bedrock Prompt Management
-Implement guardrails for responsible AI usage
-Develop Step Functions for conversation flow
-Build Lambda functions for pre/post-processing
-Configure Comprehend for intent recognition
-Best practices:
-Start with a limited domain scope and expand gradually
-Implement blue/green deployment for prompt template updates
-Create a prompt template library organized by support categories
-
-Testing
-
-Develop a comprehensive test suite with both synthetic and real-world examples
-Implement chaos engineering to test system resilience
-Create regression tests that run automatically when prompt templates change
-Create test cases for common support scenarios
-Implement automated testing with Lambda
-Set up monitoring for prompt effectiveness
-Test edge cases and failure modes
-
-Refinement
-
-Analyze performance metrics
-Refine prompts based on test results
-Implement feedback loops
-Optimize conversation flows
-Implementation examples
-For your Step Functions workflow, consider this high-level structure:
+EVALUATION
+Create sample claim documents (or use public datasets)
+Upload to your S3 bucket
+Run the processor on different document types
+Compare results from different models
+Document your findings
+Core implementation examples
+Basic document processor
 
 
-{
-  "Comment": "Customer Support AI Assistant Workflow",
-  "StartAt": "CaptureUserQuery",
-  "States": {
-    "CaptureUserQuery": {
-      "Type": "Task",
-      "Resource": "arn:aws:states:::lambda:invoke",
-      "Parameters": {
-        "FunctionName": "captureQueryFunction",
-        "Payload": {
-          "query.$": "$.query"
-        }
-      },
-      "Next": "DetectIntent"
-    },
-    "DetectIntent": {
-      "Type": "Task",
-      "Resource": "arn:aws:states:::lambda:invoke",
-      "Parameters": {
-        "FunctionName": "comprehendIntentFunction",
-        "Payload": {
-          "query.$": "$.query"
-        }
-      },
-      "Next": "CheckIntentClarity"
-    },
-    "CheckIntentClarity": {
-      "Type": "Choice",
-      "Choices": [
-        {
-          "Variable": "$.intentConfidence",
-          "NumericLessThan": 0.7,
-          "Next": "ClarifyIntent"
-        }
-      ],
-      "Default": "RetrieveContext"
+import boto3
+import json
+
+# Initialize clients
+s3 = boto3.client('s3')
+bedrock_runtime = boto3.client('bedrock-runtime')
+
+def process_document(bucket, key, model_id='anthropic.claude-v2'):
+    # Get document from S3
+    response = s3.get_object(Bucket=bucket, Key=key)
+    document_text = response['Body'].read().decode('utf-8')
+    
+    # Create prompt for information extraction
+    prompt = f"""
+    Extract the following information from this insurance claim document:
+    - Claimant Name
+    - Policy Number
+    - Incident Date
+    - Claim Amount
+    - Incident Description
+    
+    Document:
+    {document_text}
+    
+    Return the information in JSON format.
+    """
+    
+    # Invoke Bedrock model
+    response = bedrock_runtime.invoke_model(
+        modelId=model_id,
+        body=json.dumps({
+            "prompt": prompt,
+            "temperature": 0.0,
+            "max_tokens_to_sample": 1000
+        })
+    )
+    
+    # Parse response
+    response_body = json.loads(response['body'].read())
+    extracted_info = response_body['completion']
+    
+    # Generate summary
+    summary_prompt = f"""
+    Based on this extracted information:
+    {extracted_info}
+    
+    Generate a concise summary of the claim.
+    """
+    
+    summary_response = bedrock_runtime.invoke_model(
+        modelId=model_id,
+        body=json.dumps({
+            "prompt": summary_prompt,
+            "temperature": 0.7,
+            "max_tokens_to_sample": 500
+        })
+    )
+    
+    summary_body = json.loads(summary_response['body'].read())
+    summary = summary_body['completion']
+    
+    return {
+        "extracted_info": extracted_info,
+        "summary": summary
     }
-    // Additional states would continue here
-  }
-}
-Deliverables
-Working customer support AI assistant with governance controls
-Documentation of prompt templates and governance mechanisms
-Test results showing prompt effectiveness
-Analysis of iterative improvements made during development
-Advanced challenge
-1
-Start with a prototype focusing on a single support scenario.
-2
-Build your prompt library with templates for common issues.
-3
-Implement basic guardrails before expanding functionality.
-4
-Create your testing framework early in development.
-5
-Establish metrics to measure assistant effectiveness.
+
+# Example usage
+if __name__ == "__main__":
+    result = process_document('claim-documents-poc-xyz', 'claims/claim1.txt')
+    print(json.dumps(result, indent=2))
+Simple prompt template manager
+
+
+class PromptTemplateManager:
+    def __init__(self):
+        self.templates = {
+            "extract_info": """
+            Extract the following information from this insurance claim document:
+            - Claimant Name
+            - Policy Number
+            - Incident Date
+            - Claim Amount
+            - Incident Description
+            
+            Document:
+            {document_text}
+            
+            Return the information in JSON format.
+            """,
+            
+            "generate_summary": """
+            Based on this extracted information:
+            {extracted_info}
+            
+            Generate a concise summary of the claim.
+            """
+        }
+    
+    def get_prompt(self, template_name, **kwargs):
+        template = self.templates.get(template_name)
+        if not template:
+            raise ValueError(f"Template {template_name} not found")
+        
+        return template.format(**kwargs)
+Basic model comparison
+
+
+def compare_models(document_text, models=['anthropic.claude-v2', 'anthropic.claude-instant-v1']):
+    results = {}
+    
+    for model in models:
+        start_time = time.time()
+        
+        # Process with current model
+        response = bedrock_runtime.invoke_model(
+            modelId=model,
+            body=json.dumps({
+                "prompt": "Extract key information from this document: " + document_text,
+                "temperature": 0.0,
+                "max_tokens_to_sample": 1000
+            })
+        )
+        
+        # Calculate metrics
+        elapsed_time = time.time() - start_time
+        response_body = json.loads(response['body'].read())
+        output = response_body['completion']
+        
+        results[model] = {
+            "time_seconds": elapsed_time,
+            "output_length": len(output),
+            "output_sample": output[:100] + "..."
+        }
+    
+    return results
+Extra challenging steps
+To #neverstoplearning and once you've completed this bonus assignment, consider these extensions to further enhance your skills.
+
+Add a simple web interface using Flask
+Implement a knowledge base with policy information
+Add content filtering for sensitive information
+Create a simple feedback mechanism

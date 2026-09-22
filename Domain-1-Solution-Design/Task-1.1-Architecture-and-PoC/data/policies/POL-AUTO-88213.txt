@@ -1,0 +1,21 @@
+POLICY DOCUMENT
+Policy Number: POL-AUTO-88213
+Policy Type: Personal Auto Insurance
+Policyholder: Marcus Reyes
+Coverage Period: 2025-01-01 to 2025-12-31
+
+COVERAGE SUMMARY
+- Collision Coverage: Up to $50,000 per incident, $500 deductible
+- Comprehensive Coverage: Up to $50,000 per incident, $250 deductible
+- Liability (Bodily Injury): $100,000 per person / $300,000 per accident
+- Liability (Property Damage): $50,000 per accident
+- Rental Reimbursement: $30/day, 15-day maximum
+
+EXCLUSIONS
+- Damage occurring while the vehicle is used for commercial ride-sharing purposes
+- Damage resulting from racing or speed contests
+- Wear and tear, mechanical breakdown, or road debris damage not caused by a collision
+
+CLAIMS NOTES
+Claims must be reported within 30 days of the incident. A police report is required for
+any claim exceeding $2,000 in estimated damage.

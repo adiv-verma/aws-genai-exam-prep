@@ -42,7 +42,7 @@
   @media (max-width:760px){.note-grid{grid-template-columns:1fr;}}
   .note-card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:18px 20px;}
   .note-card.wide{grid-column:1 / -1;}
-  .note-card h4{margin:0 0 12px;font-size:13px;font-weight:800;color:var(--navy-2);}
+  .note-card h4{scroll-margin-top:78px;margin:0 0 12px;font-size:13px;font-weight:800;color:var(--navy-2);}
   .note-card dl{margin:0;}
   .note-card dt{font-size:13.5px;font-weight:700;color:var(--ink);margin:0 0 3px;}
   .note-card dt:not(:first-child){margin-top:12px;}
@@ -61,6 +61,8 @@
   footer{padding:32px 0 48px;color:#8b96a5;font-size:12.5px;}
   footer .wrap{border-top:1px solid var(--line);padding-top:22px;}
   footer a{color:#6b7686;}
+  .note-card h4:target{color:var(--accent-dark);}
+  .note-card h4:target::after{content:" \2190";color:var(--accent);}
 </style>
 </head>
 <body>
@@ -70,6 +72,7 @@
     <a class="nav-brand" href="../index.html">AIP-C01 <span>Guide</span></a>
     <ul class="nav-links">
       <li><a href="index.html">All Study Notes</a></li>
+      <li><a href="domain-1.html">Domain 1 Map</a></li>
     </ul>
   </div>
 </nav>
@@ -91,7 +94,7 @@
     <div class="note-grid">
 
       <div class="note-card">
-        <h4>Step 1: Model Selection, Criteria Definition &amp; Capabilities</h4>
+        <h4 id="s1">Step 1: Model Selection, Criteria Definition &amp; Capabilities</h4>
         <dl>
           <dt>Defining Metrics First</dt>
           <dd>Before testing any models, establish strict business, clinical, and compliance thresholds to prevent post-hoc bias.</dd>
@@ -108,7 +111,7 @@
       </div>
 
       <div class="note-card">
-        <h4>Step 2: Dataset Preparation &amp; HIPAA Security</h4>
+        <h4 id="s2">Step 2: Dataset Preparation &amp; HIPAA Security</h4>
         <dl>
           <dt>Human-in-the-Loop &amp; JSONL Format</dt>
           <dd>Domain experts (clinicians/doctors) and data engineers curate 100&ndash;300 high-quality training pairs saved in JSONL (JSON Lines) format on Amazon S3, pairing de-identified prompts with ideal referenceResponses.</dd>
@@ -125,7 +128,7 @@
       </div>
 
       <div class="note-card">
-        <h4>Step 3: LoRA (Low-Rank Adaptation) Mechanics</h4>
+        <h4 id="s3">Step 3: LoRA (Low-Rank Adaptation) Mechanics</h4>
         <dl>
           <dt>LoRA Architecture</dt>
           <dd>Full fine-tuning alters billions of parameters in a base model, making it heavy, slow, and expensive.</dd>
@@ -142,7 +145,7 @@
       </div>
 
       <div class="note-card">
-        <h4>Step 4: Comprehensive Model Evaluation (The Three-Tier Gate)</h4>
+        <h4 id="s4">Step 4: Comprehensive Model Evaluation (The Three-Tier Gate)</h4>
         <p class="sub">Once trained, the model passes through a multi-tier evaluation pipeline:</p>
         <dl>
           <dt>1. Tier 1: Automatic Evaluation (Fast &amp; Cheap)</dt>
@@ -160,7 +163,7 @@
       </div>
 
       <div class="note-card wide">
-        <h4>Step 5: Limitation Analysis, Adversarial Testing, Failure Modes, Data Drift &amp; Operational Tooling</h4>
+        <h4 id="s5">Step 5: Limitation Analysis, Adversarial Testing, Failure Modes, Data Drift &amp; Operational Tooling</h4>
         <p class="sub">Even after passing rigorous automatic evaluations, LLM-as-a-Judge gates, and clinical sign-offs, a production-grade healthcare architecture must account for real-world edge cases, runtime failures, and long-term system degradation.</p>
 
         <dl>
@@ -200,7 +203,7 @@
       </div>
 
       <div class="note-card wide">
-        <h4>Detailed Deep-Dive: Automatic Evaluation Metrics (BLEU &amp; ROUGE)</h4>
+        <h4 id="s6">Detailed Deep-Dive: Automatic Evaluation Metrics (BLEU &amp; ROUGE)</h4>
         <p class="sub">During automatic testing (Tier 1), model outputs are compared against expert-curated reference answers using two core metrics:</p>
 
         <dl>

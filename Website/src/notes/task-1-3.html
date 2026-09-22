@@ -49,7 +49,7 @@
   @media (max-width:760px){.note-grid{grid-template-columns:1fr;}}
   .note-card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:18px 20px;}
   .note-card.wide{grid-column:1 / -1;}
-  .note-card h4{margin:0 0 12px;font-size:13px;font-weight:800;color:var(--navy-2);}
+  .note-card h4{scroll-margin-top:78px;margin:0 0 12px;font-size:13px;font-weight:800;color:var(--navy-2);}
   .note-card p{margin:0 0 10px;font-size:13px;color:var(--ink-soft);line-height:1.6;}
   .note-card > p:last-child{margin-bottom:0;}
   .note-card dl{margin:0;}
@@ -77,6 +77,8 @@
   footer{padding:32px 0 48px;color:#8b96a5;font-size:12.5px;}
   footer .wrap{border-top:1px solid var(--line);padding-top:22px;}
   footer a{color:#6b7686;}
+  .note-card h4:target{color:var(--accent-dark);}
+  .note-card h4:target::after{content:" \2190";color:var(--accent);}
 </style>
 </head>
 <body>
@@ -86,6 +88,7 @@
     <a class="nav-brand" href="../index.html">AIP-C01 <span>Guide</span></a>
     <ul class="nav-links">
       <li><a href="index.html">All Study Notes</a></li>
+      <li><a href="domain-1.html">Domain 1 Map</a></li>
     </ul>
   </div>
 </nav>
@@ -318,14 +321,14 @@
     <div class="note-grid">
 
       <div class="note-card wide">
-        <h4>1. Context and High-Level Architecture Overview</h4>
+        <h4 id="s1">1. Context and High-Level Architecture Overview</h4>
         <p>In an enterprise insurance modernization project processing over 5,000+ complex claims daily, the architecture deals with multimodal data (Tabular forms, Images, Audio, and Historical records).</p>
         <p>The primary architectural challenge is that Foundation Models (FMs) cannot process raw, unvalidated, or unstructured data directly. Doing so would lead to severe data hallucinations, token wastage, security vulnerabilities (such as unmasked PII), and massive latency issues. Therefore, an end-to-end pipeline consisting of five distinct sequential stages must be established before any data reaches Amazon Bedrock.</p>
         <p class="flow-line">Raw Data Sources -&gt; 1. Validation -&gt; 2. Processing &amp; Fusion -&gt; 3. Formatting -&gt; 4. Enhancement &amp; Enrichment -&gt; 5. Bedrock Inference</p>
       </div>
 
       <div class="note-card wide">
-        <h4>Stage 1: Data Validation (The First Line of Defense)</h4>
+        <h4 id="s2">Stage 1: Data Validation (The First Line of Defense)</h4>
         <p>In Generative AI, the golden rule is "Garbage in, garbage out." However, the danger with LLMs is far worse than traditional software: an LLM will take flawed, corrupted, or incorrect input and generate a completely false answer with absolute confidence and a smooth, convincing tone. If a bad policy number or inflated claim amount slips through, it results in erroneous financial payouts.</p>
         <p>To prevent this, four distinct validation tools are deployed. They do not compete; instead, each catches what the others miss:</p>
         <dl>
@@ -351,7 +354,7 @@
       </div>
 
       <div class="note-card wide">
-        <h4>Stage 2: Data Processing &amp; Fusion (Parallel Handling &amp; Contradiction Detection)</h4>
+        <h4 id="s3">Stage 2: Data Processing &amp; Fusion (Parallel Handling &amp; Contradiction Detection)</h4>
         <p>Because claims arrive simultaneously across four disparate modalities, running them sequentially through a single thread would bottleneck the system and cause severe latency. Parallel processing via an enterprise orchestrator is mandatory.</p>
         <dl>
           <dt>AWS Step Functions (The Resilient Orchestrator):</dt>
@@ -376,7 +379,7 @@
       </div>
 
       <div class="note-card">
-        <h4>Stage 3: Formatting Input Data for FM Inference</h4>
+        <h4 id="s4">Stage 3: Formatting Input Data for FM Inference</h4>
         <p>Once data is clean and fused into a structured JSON payload, it must be formatted for the Foundation Model hosted on Amazon Bedrock.</p>
         <p class="lead">The Three Inference Parameters Explained:</p>
         <dl>
@@ -398,7 +401,7 @@
       </div>
 
       <div class="note-card">
-        <h4>Stage 4 &amp; 5: Enhancement, Enrichment &amp; Final Inference</h4>
+        <h4 id="s5">Stage 4 &amp; 5: Enhancement, Enrichment &amp; Final Inference</h4>
         <p>Data that passes validation is not just formatted; it is actively optimized and enriched to maximize model performance and cost efficiency.</p>
         <dl>
           <dt>Text Reformatting &amp; Noise Removal:</dt>

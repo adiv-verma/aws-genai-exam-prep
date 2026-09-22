@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Task 1.4 Notes | AIP-C01 Guide</title>
+<meta name="description" content="Domain 1, Task 1.4 study notes.">
+<style>
+  :root{
+    --ink:#0b1524; --ink-soft:#3a4a5e; --paper:#f7f8fa; --card:#ffffff; --line:#e3e7ee;
+    --accent:#e8622c; --accent-dark:#c94f1f; --navy:#0f2540; --navy-2:#16345c;
+    --trap-bg:#fff7ed; --trap-line:#f6d9b8;
+    color-scheme: light;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{margin:0;background:var(--paper);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;line-height:1.6;}
+  a{color:var(--accent-dark);}
+  code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;background:#eef1f6;padding:1px 5px;border-radius:4px;font-size:.92em;}
+  img{max-width:100%;}
+  .wrap{max-width:1080px;margin:0 auto;padding:0 24px;}
+
+  .nav{position:sticky;top:0;z-index:50;background:rgba(15,37,64,.96);backdrop-filter:blur(6px);border-bottom:1px solid rgba(255,255,255,.08);}
+  .nav .wrap{display:flex;align-items:center;justify-content:space-between;height:56px;}
+  .nav-brand{color:#fff;font-weight:700;font-size:14px;letter-spacing:.02em;text-decoration:none;}
+  .nav-brand span{color:var(--accent);}
+  .nav-links{display:flex;gap:22px;list-style:none;margin:0;padding:0;}
+  .nav-links a{color:#cdd8e6;text-decoration:none;font-size:13.5px;font-weight:500;}
+  .nav-links a:hover{color:#fff;}
+  @media (max-width:720px){ .nav-links{display:none;} }
+
+  header.hero{background:linear-gradient(180deg,var(--navy) 0%, var(--navy-2) 100%);color:#fff;padding:36px 0 28px;}
+  .eyebrow{display:inline-block;font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#ffd8c4;background:rgba(232,98,44,.18);border:1px solid rgba(232,98,44,.4);padding:5px 10px;border-radius:999px;margin-bottom:14px;}
+  h1{font-size:clamp(22px,3.4vw,30px);line-height:1.15;margin:0;font-weight:800;}
+  header.hero p{font-size:14.5px;color:#c9d5e3;max-width:720px;margin:10px 0 0;}
+
+  section{padding:36px 0;}
+
+  figure.arch{margin:0 0 24px;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px;}
+  figure.arch img{display:block;border-radius:8px;width:100%;height:auto;}
+  figure.arch figcaption{margin-top:10px;font-size:12.5px;color:var(--ink-soft);text-align:center;}
+
+  .note-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;}
+  @media (max-width:760px){.note-grid{grid-template-columns:1fr;}}
+  .note-card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:18px 20px;}
+  .note-card.wide{grid-column:1 / -1;}
+  .note-card h4{scroll-margin-top:78px;margin:0 0 12px;font-size:13px;font-weight:800;color:var(--navy-2);}
+  .note-card dl{margin:0;}
+  .note-card dt{font-size:13.5px;font-weight:700;color:var(--ink);margin:0 0 3px;}
+  .note-card dt:not(:first-child){margin-top:12px;}
+  .note-card dd{margin:0;font-size:13px;color:var(--ink-soft);line-height:1.55;}
+  .note-card .lead{font-size:13.5px;font-weight:700;color:var(--ink);margin:0 0 8px;}
+  .note-card .lead:not(:first-child){margin-top:12px;}
+  .note-card .sub{font-size:13px;color:var(--ink-soft);line-height:1.55;margin:0 0 8px;}
+
+  .example{background:var(--paper);border:1px solid var(--line);border-radius:8px;padding:10px 12px;margin:8px 0;font-size:12.5px;}
+  .example p{margin:0 0 4px;color:var(--ink-soft);}
+  .example p:last-child{margin-bottom:0;}
+
+  .trap{background:var(--trap-bg);border:1px solid var(--trap-line);border-radius:8px;padding:12px 14px;margin-top:14px;}
+  .trap p{margin:0;font-size:13px;color:var(--ink);}
+
+  footer{padding:32px 0 48px;color:#8b96a5;font-size:12.5px;}
+  footer .wrap{border-top:1px solid var(--line);padding-top:22px;}
+  footer a{color:#6b7686;}
+  .note-card h4:target{color:var(--accent-dark);}
+  .note-card h4:target::after{content:" \2190";color:var(--accent);}
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="wrap">
+    <a class="nav-brand" href="../index.html">AIP-C01 <span>Guide</span></a>
+    <ul class="nav-links">
+      <li><a href="index.html">All Study Notes</a></li>
+      <li><a href="domain-1.html">Domain 1 Map</a></li>
+    </ul>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="wrap">
+    <span class="eyebrow">Domain 1 &middot; Task 1.4</span>
+    <h1>Design and Implement Vector Store Solutions</h1>
+    <p>Real-World Scenario: A Global Law Firm handling 15 million documents across 30 countries, requiring sub-second queries and strict client-matter security.</p>
+  </div>
+</header>
+
+<section>
+  <div class="wrap">
+
+    <figure class="arch">
+      <img src="../assets/task-1-4-architecture.jpg" alt="Task 1.4 vector store architecture diagram for a global law firm document platform">
+      <figcaption>Reference architecture: multi-tiered vector store pipeline routing attorney queries across Bedrock KB, OpenSearch, RDS/S3/custom stores, and DynamoDB.</figcaption>
+    </figure>
+
+    <div class="note-grid">
+
+      <div class="note-card wide">
+        <h4 id="s1">Step 1: Core Vector Store Architecture &amp; Component Breakdown</h4>
+        <p class="sub">To handle a massive enterprise legal environment, a single vector database isn't enough. We use a multi-tiered pipeline combining managed services and custom stores.</p>
+
+        <p class="lead">1. Bedrock Knowledge Bases (Managed Public Store)</p>
+        <dl>
+          <dt>What it is</dt>
+          <dd>A fully managed AWS service for managing public data.</dd>
+        </dl>
+        <div class="example">
+          <p>Real-World Example: Public court rulings of the US Supreme Court or standard federal tax codes.</p>
+        </div>
+        <dl>
+          <dt>How it works</dt>
+          <dd>You upload raw PDFs to S3, and Bedrock automatically handles chunking, embedding generation, and backend storage (using OpenSearch Serverless).</dd>
+          <dt>Trade-off</dt>
+          <dd>Incredibly easy to set up, but offers limited deep control over database internals and custom security filters.</dd>
+        </dl>
+
+        <p class="lead">2. Amazon OpenSearch Service + Neural Plugin (Confidential &amp; Hybrid Search)</p>
+        <dl>
+          <dt>What it is</dt>
+          <dd>A custom-managed vector store for confidential internal case files.</dd>
+          <dt>The Neural Plugin Advantage (No Pre-Embedding Needed)</dt>
+          <dd>Ingestion Time: Documents are chunked and their vector embeddings are pre-computed and stored in the index. Query Time: When an attorney types "dispute over intellectual property" in plain text, OpenSearch's internal neural plugin converts the query text into a vector on-the-fly and runs the k-NN (K-Nearest Neighbors) search internally.</dd>
+        </dl>
+        <div class="example">
+          <p>Hybrid Search Example: Combining semantic vector search with exact keyword matching (BM25). If a lawyer searches for exact statute code "Section 10b-5", keyword search ensures the exact code match is caught, while semantic search catches related phrasing like "fraudulent stock market practices".</p>
+        </div>
+
+        <p class="lead">3. RDS + S3 + Custom Vector Store (Relational &amp; Raw File Pipeline)</p>
+        <div class="example">
+          <p>Real-World Example (M&amp;A Contract Lookup): When an attorney queries, "Find 2024 contracts from the Delaware Court of Chancery concerning an indemnification cap dispute," this custom pipeline operates through three synchronized stages:</p>
+          <p>RDS Pre-Filtering: The system queries RDS first, using structured metadata (Court = Delaware Court of Chancery, Year = 2024) to instantly narrow down 15 million documents to just 5 matching Document IDs.</p>
+          <p>Custom Vector Store Search: Pinecone or Faiss performs high-speed vector math only on those 5 shortlisted IDs to pinpoint the exact paragraph or chunk where the semantic concept of an "indemnification cap dispute" occurs (DOC-105, chunk #12).</p>
+          <p>S3 File Retrieval: Once the exact location is identified, S3 fetches the original, immutable PDF file (DOC-105.pdf) and serves it to the attorney for review.</p>
+        </div>
+        <p class="lead">Component Breakdown:</p>
+        <dl>
+          <dt>S3 (Raw Storage)</dt>
+          <dd>Stores the immutable raw PDF files of legal briefs linked by a unique ID (DOC-999). It acts as the ultimate source of truth for the original binary documents.</dd>
+          <dt>RDS (Relational Metadata)</dt>
+          <dd>Stores structured filters like case numbers, judge names, court levels, and dates. It enables lightning-fast SQL pre-filtering to eliminate irrelevant documents before vector calculations begin.</dd>
+          <dt>Custom Vector Store (Pinecone/Faiss)</dt>
+          <dd>Powers high-speed vector distance math and semantic similarity searches when custom infrastructure, fine-tuned indexing, or specialized control is preferred over managed services.</dd>
+        </dl>
+
+        <p class="lead">4. Amazon DynamoDB (Real-Time Regulatory Updates)</p>
+        <dl>
+          <dt>What it is</dt>
+          <dd>A sub-millisecond NoSQL key-value store.</dd>
+        </dl>
+        <div class="example">
+          <p>Real-World Example: Tracking whether compliance regulation Rule 10b-5 was amended or updated this morning. DynamoDB doesn't store 15 million documents; it only stores lightweight active status keys and quick configuration flags for instant lookups.</p>
+        </div>
+      </div>
+
+      <div class="note-card">
+        <h4 id="s2">Step 2: Metadata Frameworks &amp; Precedent Validation</h4>
+        <p class="sub">Vector search alone can return semantically similar results that are legally dead or jurisdictionally irrelevant.</p>
+        <dl>
+          <dt>Taxonomies &amp; Structured Attributes</dt>
+          <dd>Tagging documents with strict attributes like Jurisdiction (e.g., 9th Circuit) and Court Level.</dd>
+          <dt>AI-Powered Metadata Tagging</dt>
+          <dd>During ingestion, AI tools (like Amazon Comprehend or custom LLMs) parse raw PDFs to extract judges, dates, and citations, saving them directly into RDS.</dd>
+        </dl>
+        <div class="trap">
+          <p>The "Overturned Case" Real-World Example (Cross-Reference Graphs): Suppose semantic search finds a case that matches 100% with a breach-of-contract query. However, the RDS relationship graph indicates: "This case was overturned by the Supreme Court last year." The metadata framework instantly blocks this result, preventing legal malpractice.</p>
+        </div>
+      </div>
+
+      <div class="note-card">
+        <h4 id="s3">Step 3: High-Performance Architecture &amp; Sharding (The Grocery Store Analogy)</h4>
+        <p class="sub">To achieve sub-second queries across 15 million documents and 30 countries:</p>
+        <dl>
+          <dt>Index Sharding &amp; Partitioning (Grocery Store Sections)</dt>
+          <dd>Splitting a massive vector index into distinct shards based on practice areas or jurisdictions (analogous to splitting a huge supermarket into Dairy, Meat, and Sports sections). A query for tax law only searches the Tax shard, not all 15 million rows.</dd>
+          <dt>Parallel Fan-out Queries (Deploying Multiple Runners)</dt>
+          <dd>When a multi-part query is executed, the orchestrator dispatches concurrent requests across separate shards and storage engines simultaneously, bringing back results in milliseconds (analogous to sending 4 assistants to 4 different store aisles at the same time).</dd>
+          <dt>Caching (Front-Counter Popular Items)</dt>
+          <dd>Frequently requested legal statutes or standard boilerplate clauses (like standard NDA templates) are saved in a Redis / OpenSearch Query Cache. When someone asks for it again, the system skips compute entirely and serves it instantly from the cache counter.</dd>
+        </dl>
+      </div>
+
+      <div class="note-card wide">
+        <h4 id="s4">Step 4: Unified Router &amp; Security Boundaries</h4>
+        <p class="sub">In an enterprise law firm, client confidentiality is absolute.</p>
+        <dl>
+          <dt>Unified Router (The Traffic Cop)</dt>
+          <dd>An API Gateway / Lambda function intercepts attorney queries and directs them to the right place: Public precedents &rarr; Bedrock KB. Confidential internal opinions &rarr; OpenSearch. Live regulatory checks &rarr; DynamoDB.</dd>
+          <dt>Fine-Grained Access Control (FGAC) / Client-Matter Ethics</dt>
+          <dd>OpenSearch evaluates document-level and field-level security using the user's IAM role/JWT token before executing vector math, instantly dropping unauthorized matches.</dd>
+        </dl>
+        <div class="example">
+          <p>Real-World Example: A lawyer in the London office working on Client X must never see secret documents belonging to Client Y in New York, even if they sit in the same OpenSearch cluster.</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <p>This is an independent, unofficial study resource and is not affiliated with, endorsed by, or sponsored by Amazon Web Services, Inc. AWS, Amazon Bedrock, and all related marks are trademarks of Amazon.com, Inc. or its affiliates.</p>
+    <p>Hosted on Amazon S3 + Amazon CloudFront. &middot; <a href="index.html">&larr; Back to Study Notes</a></p>
+  </div>
+</footer>
+
+</body>
+</html>

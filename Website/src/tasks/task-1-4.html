@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Task 1.4 Build Log | AIP-C01 Guide</title>
+<meta name="description" content="Domain 1, Task 1.4 bonus assignment: a planned RAG knowledge-assistant build over technical docs, research papers, and company policies — a managed vector store and a custom one, side by side — and why the build is being held before deploying anything. Written in plain English.">
+<style>
+  :root{
+    --ink:#0b1524; --ink-soft:#3a4a5e; --paper:#f7f8fa; --card:#ffffff; --line:#e3e7ee;
+    --accent:#e8622c; --accent-dark:#c94f1f; --navy:#0f2540; --navy-2:#16345c;
+    --good:#1a7f5a; --good-bg:#e9f7f1; --good-line:#bfe6d6;
+    --bad:#b3271f; --bad-bg:#fdecea; --bad-line:#f3c6c2;
+    --unbuilt-bg:#f4f1fb; --unbuilt-line:#d8cdf0; --unbuilt:#5b3fa3;
+    --concept-bg:#eef6ff; --concept-line:#c9e0f7; --concept:#155a8a;
+    color-scheme: light;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{margin:0;background:var(--paper);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;line-height:1.6;}
+  a{color:var(--accent-dark);}
+  code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;background:#eef1f6;padding:1px 5px;border-radius:4px;font-size:.92em;}
+  img{max-width:100%;}
+  .wrap{max-width:980px;margin:0 auto;padding:0 24px;}
+  .wrap-wide{max-width:1320px;margin:0 auto;padding:0 24px;}
+
+  .nav{position:sticky;top:0;z-index:50;background:rgba(15,37,64,.96);backdrop-filter:blur(6px);border-bottom:1px solid rgba(255,255,255,.08);}
+  .nav .wrap{display:flex;align-items:center;justify-content:space-between;height:56px;max-width:1080px;}
+  .nav-brand{color:#fff;font-weight:700;font-size:14px;letter-spacing:.02em;text-decoration:none;}
+  .nav-brand span{color:var(--accent);}
+  .nav-links{display:flex;gap:22px;list-style:none;margin:0;padding:0;}
+  .nav-links a{color:#cdd8e6;text-decoration:none;font-size:13.5px;font-weight:500;}
+  .nav-links a:hover{color:#fff;}
+  @media (max-width:720px){ .nav-links{display:none;} }
+
+  header.hero{background:radial-gradient(900px 420px at 85% -10%, rgba(232,98,44,.3), transparent 60%), linear-gradient(180deg,var(--navy) 0%, var(--navy-2) 100%);color:#fff;padding:48px 0 36px;}
+  .eyebrow{display:inline-block;font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#ffd8c4;background:rgba(232,98,44,.18);border:1px solid rgba(232,98,44,.4);padding:5px 10px;border-radius:999px;margin-bottom:16px;}
+  h1{font-size:clamp(24px,3.6vw,36px);line-height:1.18;margin:0 0 12px;font-weight:800;}
+  header.hero p.lead{font-size:16px;color:#c9d5e3;max-width:720px;margin:0 0 22px;}
+  .stat-row{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.12);border-radius:12px;overflow:hidden;}
+  .stat{background:rgba(255,255,255,.04);padding:14px 12px;text-align:center;}
+  .stat .n{font-size:19px;font-weight:800;color:#fff;}
+  .stat .l{font-size:11px;color:#a9b8cb;text-transform:uppercase;letter-spacing:.03em;margin-top:2px;}
+  @media (max-width:640px){.stat-row{grid-template-columns:repeat(2,1fr);}}
+
+  section{padding:40px 0;}
+  section.alt{background:#eef1f6;}
+  h2.h{font-size:24px;font-weight:800;letter-spacing:-.01em;margin:0 0 8px;color:var(--ink);}
+  .kicker{font-size:12.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--accent-dark);margin:0 0 8px;}
+  .section-lead{color:var(--ink-soft);max-width:740px;margin:0 0 24px;font-size:15px;}
+
+  .toc{display:flex;flex-wrap:wrap;gap:10px;margin:0 0 8px;}
+  .toc a{font-size:13px;font-weight:600;background:var(--card);border:1px solid var(--line);color:var(--ink-soft);padding:7px 13px;border-radius:999px;text-decoration:none;}
+  .toc a:hover{border-color:var(--accent);color:var(--accent-dark);}
+
+  .hold-banner{background:var(--unbuilt-bg);border:1px solid var(--unbuilt-line);border-radius:14px;padding:22px 24px;margin-bottom:8px;}
+  .hold-banner h3{margin:0 0 8px;font-size:15px;font-weight:800;color:var(--unbuilt);}
+  .hold-banner p{margin:0 0 10px;font-size:14px;color:var(--ink-soft);line-height:1.6;}
+  .hold-banner p:last-child{margin-bottom:0;}
+  .hold-banner code{background:#ece6f8;}
+  .cost-table{width:100%;border-collapse:collapse;font-size:13px;margin:12px 0;}
+  .cost-table th{text-align:left;padding:6px 10px;color:var(--unbuilt);font-size:11px;text-transform:uppercase;letter-spacing:.03em;border-bottom:1px solid var(--unbuilt-line);}
+  .cost-table td{padding:6px 10px;border-bottom:1px solid var(--unbuilt-line);color:var(--ink);}
+
+  /* PHASE DIVIDER */
+  .phase-divider{display:flex;align-items:flex-start;gap:14px;margin:36px 0 16px;}
+  .phase-divider:first-of-type{margin-top:4px;}
+  .phase-divider .pd-num{
+    background:var(--navy);color:#fff;font-weight:800;font-size:13px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;
+    padding:6px 12px;border-radius:8px;white-space:nowrap;margin-top:2px;
+  }
+  .phase-divider .pd-text h3{margin:0;font-size:18px;font-weight:800;color:var(--ink);}
+  .phase-divider .pd-text p{margin:4px 0 0;font-size:13.5px;color:var(--ink-soft);max-width:640px;}
+  .phase-divider .pd-line{flex:1;height:1px;background:var(--line);margin-top:14px;}
+
+  /* STEP CARD */
+  .step-card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:20px 24px;margin-bottom:14px;}
+  .step-head{display:flex;align-items:center;gap:12px;margin-bottom:12px;flex-wrap:wrap;}
+  .step-num{
+    background:var(--paper);border:1px solid var(--line);color:var(--navy-2);font-weight:800;font-size:12px;
+    font-family:ui-monospace,SFMono-Regular,Menlo,monospace;width:30px;height:30px;border-radius:8px;
+    display:flex;align-items:center;justify-content:center;flex-shrink:0;
+  }
+  .step-card h4{margin:0;font-size:15.5px;font-weight:700;}
+  .step-res{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px;color:var(--navy-2);background:#eef3fa;border:1px solid #d6e2f0;padding:2px 8px;border-radius:6px;margin:0 0 12px;display:inline-block;}
+  .step-body p{margin:0 0 8px;font-size:14px;color:var(--ink-soft);}
+  .step-body p strong.lbl{color:var(--ink);font-weight:700;}
+
+  .concept{background:var(--concept-bg);border:1px solid var(--concept-line);border-radius:8px;padding:12px 15px;margin:0 0 14px;}
+  .concept p{margin:0;font-size:13.5px;color:var(--ink);}
+  .concept p strong{color:var(--concept);}
+
+  .mini-tip{background:#fff7ed;border:1px solid #f6d9b8;border-radius:8px;padding:13px 16px;margin-top:10px;}
+  .mini-tip .mt-head{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.05em;color:var(--accent-dark);margin:0 0 4px;}
+  .mini-tip p{margin:0;font-size:13.5px;color:var(--ink);}
+
+  .step-card.unbuilt{background:var(--unbuilt-bg);border:1px dashed var(--unbuilt-line);}
+  .step-card.unbuilt .step-res{background:#ece6f8;border-color:var(--unbuilt-line);color:var(--unbuilt);}
+  .unbuilt-badge{font-size:10.5px;font-weight:800;text-transform:uppercase;letter-spacing:.05em;color:#fff;background:var(--unbuilt);padding:3px 9px;border-radius:999px;}
+
+  .diagram{margin:0;}
+  .diagram .svg-scroll{overflow-x:auto;}
+  .diagram svg{width:100%;min-width:900px;height:auto;display:block;color:var(--ink);}
+  .diagram figcaption{margin-top:14px;font-size:13px;color:var(--ink-soft);max-width:960px;}
+  .diagram figcaption code{font-size:.95em;}
+
+  table.verify{width:100%;border-collapse:collapse;font-size:13.5px;background:var(--card);border:1px solid var(--line);border-radius:10px;overflow:hidden;}
+  table.verify th{text-align:left;background:var(--navy);color:#fff;padding:10px 14px;font-size:12px;text-transform:uppercase;letter-spacing:.04em;}
+  table.verify td{padding:10px 14px;border-top:1px solid var(--line);color:var(--ink-soft);}
+  table.verify tr:nth-child(even) td{background:#fafbfc;}
+  .verify-wrap{overflow-x:auto;}
+
+  footer{padding:32px 0 48px;color:#8b96a5;font-size:12.5px;}
+  footer .wrap{border-top:1px solid var(--line);padding-top:22px;max-width:1080px;}
+  footer a{color:#6b7686;}
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="wrap">
+    <a class="nav-brand" href="../index.html">AIP-C01 <span>Guide</span></a>
+    <ul class="nav-links">
+      <li><a href="index.html">Build Log</a></li>
+      <li><a href="#architecture">How It Would Run</a></li>
+      <li><a href="#log">Build Plan</a></li>
+      <li><a href="#resources">Resource Index</a></li>
+      <li><a href="../notes/task-1-4.html">Study Notes</a></li>
+    </ul>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="wrap">
+    <span class="eyebrow">Domain 1 &middot; Task 1.4 &middot; Bonus Assignment</span>
+    <h1>Two Vector Stores,<br>One Knowledge Assistant</h1>
+    <p class="lead">
+      The assignment: build a knowledge assistant that can answer questions about technical documentation,
+      research papers, and company policies. The brief specifically calls for standing up <em>two</em> different
+      kinds of vector store over that same document set — a fully managed one (Bedrock Knowledge Bases) and a
+      custom one with full control over indexing and search (OpenSearch) — so this build is designed as a
+      side-by-side comparison of both approaches, not just one. This page lays out exactly how that would be
+      built — which AWS services, in what order, and why each one earns its place — but <strong>nothing on this
+      page has been deployed yet.</strong> Two of the pieces this design calls for (a provisioned OpenSearch
+      domain and a Bedrock Knowledge Base) bill by the hour whether they're being used or not, so the build is
+      being held until there's a deliberate, single build-test-and-tear-down session, instead of risking
+      something expensive running unattended by mistake.
+    </p>
+    <div class="stat-row">
+      <div class="stat"><div class="n">0</div><div class="l">Steps deployed so far</div></div>
+      <div class="stat"><div class="n">10</div><div class="l">Resources planned</div></div>
+      <div class="stat"><div class="n">3 of 6</div><div class="l">Brief phases scoped for a live build</div></div>
+      <div class="stat"><div class="n">2</div><div class="l">Pay-by-the-hour services flagged first</div></div>
+    </div>
+  </div>
+</header>
+
+<section>
+  <div class="wrap">
+    <div class="toc">
+      <a href="#architecture">How it would run</a>
+      <a href="#phase-1">Phase 1: Foundation Infra</a>
+      <a href="#phase-2">Phase 2: Processing Pipeline</a>
+      <a href="#phase-3">Phase 3: Advanced Search</a>
+      <a href="#phase-later">Phases 4&ndash;6: Scoped Out</a>
+      <a href="#resources">Resource Index</a>
+    </div>
+  </div>
+</section>
+
+<section class="alt" id="architecture">
+  <div class="wrap-wide">
+    <p class="kicker">How It Would Run</p>
+    <h2 class="h">Same documents, two different vector stores, built and tested side by side</h2>
+    <p class="section-lead">
+      This diagram is specific to what's actually planned in the build below — a broader, higher-level
+      reference architecture (a law firm handling client-matter security across 30 countries) is covered
+      separately on the <a href="../notes/task-1-4.html">Study Notes page</a>, which intentionally uses its own
+      bigger example the same way Task 1.3's notes page does. What follows is just this task's own plan: one
+      document set, ingested two ways.
+    </p>
+
+    <figure class="diagram">
+      <div class="svg-scroll">
+      <svg viewBox="0 0 1300 610" role="img" aria-label="Diagram: technical docs, research papers, and policy documents are uploaded to one S3 bucket. From there, two parallel paths process the same documents - a managed path where Bedrock Knowledge Bases automatically chunks and embeds the documents and is queried through its own built-in Retrieve API, and a custom path where a document-processor Lambda chunks the documents, generates embeddings with Titan, and writes vectors into an OpenSearch domain with three hierarchical indices plus chunk metadata into a DynamoDB table. A search-coordinator Lambda then fans out across the OpenSearch indices, applies metadata filters from DynamoDB, combines keyword and semantic hybrid search, and re-ranks the merged results.">
+        <defs>
+          <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+            <path d="M0,0 L10,5 L0,10 z" fill="var(--navy-2)"/>
+          </marker>
+          <marker id="arrowSoft" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+            <path d="M0,0 L10,5 L0,10 z" fill="var(--ink-soft)"/>
+          </marker>
+        </defs>
+
+        <g font-family="-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica,Arial,sans-serif">
+
+          <!-- Three source folders -->
+          <rect x="70"  y="20" width="230" height="46" rx="10" fill="var(--card)" stroke="var(--line)" stroke-width="1.5"/>
+          <text x="185" y="48" text-anchor="middle" font-size="12" font-weight="700" fill="var(--ink)">technical-docs/</text>
+
+          <rect x="340" y="20" width="230" height="46" rx="10" fill="var(--card)" stroke="var(--line)" stroke-width="1.5"/>
+          <text x="455" y="48" text-anchor="middle" font-size="12" font-weight="700" fill="var(--ink)">research-papers/</text>
+
+          <rect x="610" y="20" width="230" height="46" rx="10" fill="var(--card)" stroke="var(--line)" stroke-width="1.5"/>
+          <text x="725" y="48" text-anchor="middle" font-size="12" font-weight="700" fill="var(--ink)">policies/</text>
+
+          <line x1="185" y1="66" x2="380" y2="110" stroke="var(--navy-2)" stroke-width="1.5" marker-end="url(#arrow)"/>
+          <line x1="455" y1="66" x2="455" y2="110" stroke="var(--navy-2)" stroke-width="1.5" marker-end="url(#arrow)"/>
+          <line x1="725" y1="66" x2="530" y2="110" stroke="var(--navy-2)" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+          <!-- S3 bucket -->
+          <rect x="290" y="110" width="330" height="56" rx="10" fill="var(--card)" stroke="var(--navy-2)" stroke-width="1.8"/>
+          <text x="455" y="134" text-anchor="middle" font-size="13" font-weight="700" fill="var(--ink)">Phase 1 &middot; S3 &middot; adi-1-4-documents</text>
+          <text x="455" y="151" text-anchor="middle" font-size="10" fill="var(--ink-soft)">one bucket, three prefixes, same document set</text>
+
+          <!-- split into managed vs custom path -->
+          <line x1="380" y1="166" x2="240" y2="220" stroke="var(--navy-2)" stroke-width="1.5" marker-end="url(#arrow)"/>
+          <line x1="530" y1="166" x2="720" y2="220" stroke="var(--navy-2)" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+          <!-- Bedrock KB (managed path) -->
+          <rect x="90" y="220" width="300" height="74" rx="10" fill="var(--card)" stroke="var(--line)" stroke-width="1.5"/>
+          <text x="240" y="245" text-anchor="middle" font-size="12.5" font-weight="700" fill="var(--ink)">Bedrock Knowledge Base</text>
+          <text x="240" y="261" text-anchor="middle" font-size="9.5" fill="var(--ink-soft)">managed path &mdash; auto chunk + embed</text>
+          <text x="240" y="275" text-anchor="middle" font-size="9.5" fill="var(--ink-soft)">Phase 1 &middot; adi-1-4-knowledge-base</text>
+
+          <!-- document processor (custom path) -->
+          <rect x="560" y="220" width="320" height="74" rx="10" fill="var(--card)" stroke="var(--line)" stroke-width="1.5"/>
+          <text x="720" y="245" text-anchor="middle" font-size="12.5" font-weight="700" fill="var(--ink)">adi-1-4-document-processor</text>
+          <text x="720" y="261" text-anchor="middle" font-size="9.5" fill="var(--ink-soft)">custom path &mdash; chunk + embed via Titan</text>
+          <text x="720" y="275" text-anchor="middle" font-size="9.5" fill="var(--ink-soft)">Phase 2 &middot; writes vectors + metadata</text>
+
+          <!-- Bedrock KB terminal (dashed, its own query path) -->
+          <path d="M 240 294 L 240 380" fill="none" stroke="var(--ink-soft)" stroke-width="1.5" stroke-dasharray="6,4" marker-end="url(#arrowSoft)"/>
+          <rect x="90" y="380" width="300" height="58" rx="10" fill="var(--unbuilt-bg)" stroke="var(--unbuilt-line)" stroke-width="1.5" stroke-dasharray="4,3"/>
+          <text x="240" y="404" text-anchor="middle" font-size="11.5" font-weight="700" fill="var(--unbuilt)">Bedrock Retrieve API</text>
+          <text x="240" y="420" text-anchor="middle" font-size="9.5" fill="var(--ink-soft)">its own separate query path &mdash; not part of</text>
+          <text x="240" y="431" text-anchor="middle" font-size="9.5" fill="var(--ink-soft)">the custom search coordinator below</text>
+
+          <!-- processor splits to OpenSearch + DynamoDB -->
+          <line x1="650" y1="294" x2="605" y2="380" stroke="var(--navy-2)" stroke-width="1.5" marker-end="url(#arrow)"/>
+          <line x1="790" y1="294" x2="915" y2="380" stroke="var(--navy-2)" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+          <!-- OpenSearch -->
+          <rect x="470" y="380" width="270" height="74" rx="10" fill="var(--card)" stroke="var(--line)" stroke-width="1.5"/>
+          <text x="605" y="405" text-anchor="middle" font-size="12.5" font-weight="700" fill="var(--ink)">OpenSearch &middot; 3 indices</text>
+          <text x="605" y="421" text-anchor="middle" font-size="9.5" fill="var(--ink-soft)">hierarchical + knn_vector</text>
+          <text x="605" y="435" text-anchor="middle" font-size="9.5" fill="var(--ink-soft)">Phase 3 &middot; adi-1-4-vector-search</text>
+
+          <!-- DynamoDB -->
+          <rect x="800" y="380" width="230" height="74" rx="10" fill="var(--card)" stroke="var(--line)" stroke-width="1.5"/>
+          <text x="915" y="410" text-anchor="middle" font-size="12.5" font-weight="700" fill="var(--ink)">DynamoDB metadata</text>
+          <text x="915" y="426" text-anchor="middle" font-size="9.5" fill="var(--ink-soft)">Phase 1 &middot; chunk status + filters</text>
+
+          <!-- converge into search coordinator -->
+          <line x1="605" y1="454" x2="650" y2="520" stroke="var(--navy-2)" stroke-width="1.5" marker-end="url(#arrow)"/>
+          <line x1="915" y1="454" x2="760" y2="520" stroke="var(--navy-2)" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+          <!-- search coordinator -->
+          <rect x="520" y="520" width="340" height="70" rx="10" fill="var(--card)" stroke="var(--navy-2)" stroke-width="1.8"/>
+          <text x="690" y="548" text-anchor="middle" font-size="13" font-weight="700" fill="var(--ink)">adi-1-4-search-coordinator</text>
+          <text x="690" y="565" text-anchor="middle" font-size="9.5" fill="var(--ink-soft)">Phase 3 &middot; multi-index fan-out, hybrid search, re-rank</text>
+
+        </g>
+      </svg>
+      </div>
+      <figcaption>
+        Solid arrows are the two ingestion paths for the same three document folders &mdash; a fully managed
+        one through Bedrock Knowledge Bases (left) and a custom one through a Lambda pipeline into OpenSearch
+        (right), matching the brief's own instruction to build both. The dashed box is deliberately a dead end:
+        Bedrock's Retrieve API is its own separate, simpler query path, never merged into the custom search
+        coordinator. Not pictured: Phase 6's RAG answer generation (Claude reading the retrieved chunks and
+        writing a final answer) &mdash; out of scope for this build, see the note further down this page.
+      </figcaption>
+    </figure>
+  </div>
+</section>
+
+<section id="log">
+  <div class="wrap">
+    <p class="kicker">Build Plan</p>
+    <h2 class="h">The order it would get built in, and what each step proves</h2>
+    <p class="section-lead">
+      Every step below is written the same way the other tasks' completed steps are &mdash; what would get
+      built, where to check it, why it matters &mdash; except nothing here has actually run yet. Scope follows
+      the same pattern as Tasks 1.1&ndash;1.3: a real, live, scaled-down PoC of the parts that actually teach
+      vector-store concepts (Phases 1&ndash;3 of the brief), not the full enterprise brief. See the note at the
+      bottom of this section for why Phases 4&ndash;6 (external connectors, sync automation, a full web app) are
+      being left as design-only.
+    </p>
+
+    <div class="hold-banner">
+      <h3>Why this whole task is on hold before deploying</h3>
+      <p>
+        Every task before this one (1.1&ndash;1.3) only used pay-per-request services &mdash; Lambda, S3,
+        DynamoDB on-demand, Bedrock's pay-as-you-go model calls &mdash; so leaving something running by accident
+        overnight cost, at most, a few cents. This task is different: it calls for a <strong>provisioned
+        OpenSearch domain</strong> and a <strong>Bedrock Knowledge Base</strong>, and both of those bill by the
+        hour the moment they exist, whether or not a single query ever hits them.
+      </p>
+      <table class="cost-table">
+        <tr><th>Service</th><th>Bills even when idle</th><th>If left running a month</th></tr>
+        <tr><td>OpenSearch domain (scaled to 1 small node for this PoC)</td><td>~$0.036/hr</td><td>~$26</td></tr>
+        <tr><td>Bedrock Knowledge Base (min. OCU floor)</td><td>~$1/hr</td><td>~$700</td></tr>
+      </table>
+      <p>
+        The plan: deploy Steps 1&ndash;10 in one focused session, verify each one against real test documents
+        and real queries (the same "prove it with a live test, not just a successful deploy" standard every
+        other task on this site follows), then delete the OpenSearch domain and the Knowledge Base
+        <em>before that session ends</em> &mdash; not "later." The full teardown commands are kept ready in
+        this task's <code>progress.md</code> so there's no delay between finishing a test and shutting the
+        billing off.
+      </p>
+    </div>
+
+    <div class="phase-divider" id="phase-1">
+      <span class="pd-num">Phase 1</span>
+      <div class="pd-text"><h3>Foundation Infra</h3><p>The three stores this design depends on, plus the storage and access role that feed them.</p></div>
+      <span class="pd-line"></span>
+    </div>
+
+    <div class="step-card unbuilt">
+      <div class="step-head"><span class="step-num">1</span><h4>Turn on Bedrock model access</h4><span class="unbuilt-badge">Planned, not built</span></div>
+      <p class="step-res">Would enable: Claude &middot; Titan Embeddings</p>
+      <div class="step-body">
+        <p><strong class="lbl">What this would involve:</strong> Confirming model access is already granted from earlier tasks (Claude was used in 1.1&ndash;1.3), and specifically requesting access to a Titan embeddings model, which none of the earlier tasks needed &mdash; embeddings are the numeric fingerprint of a piece of text that vector search actually compares.</p>
+        <p><strong class="lbl">Why it wasn't built yet:</strong> Free to enable, but there's nothing to test it against until the S3 bucket and document set in Step 2 exist.</p>
+      </div>
+    </div>
+
+    <div class="step-card unbuilt">
+      <div class="step-head"><span class="step-num">2</span><h4>Create storage and a small set of test documents</h4><span class="unbuilt-badge">Planned, not built</span></div>
+      <p class="step-res">Would create: adi-1-4-documents-269737522732 &middot; sample docs across 3 folders</p>
+      <div class="step-body">
+        <p><strong class="lbl">What this would involve:</strong> An S3 bucket with three prefixes &mdash; <code>technical-docs/</code>, <code>research-papers/</code>, <code>policies/</code> &mdash; matching the brief's three document categories, plus a handful of realistic synthetic sample files written for this project (same approach as Task 1.3's synthetic reviews/photos/calls, since no ready-made sample data ships with the assignment).</p>
+        <p><strong class="lbl">Why it wasn't built yet:</strong> This step alone is essentially free (S3 storage for a handful of small files), but it only exists to feed Steps 3&ndash;6, so it's sequenced with them rather than built in isolation.</p>
+      </div>
+    </div>
+
+    <div class="step-card unbuilt">
+      <div class="step-head"><span class="step-num">3</span><h4>Stand up the managed vector store</h4><span class="unbuilt-badge">Planned, not built</span></div>
+      <p class="step-res">Would create: adi-1-4-bedrock-kb-role &middot; adi-1-4-knowledge-base</p>
+      <div class="step-body">
+        <div class="concept">
+          <p><strong>In plain terms:</strong> A Bedrock Knowledge Base is the "easy mode" vector store &mdash; point it at an S3 bucket, and AWS handles chunking the documents, turning each chunk into an embedding, and storing those embeddings, with no database to manage directly. The trade-off is less control over exactly how that storage works under the hood.</p>
+        </div>
+        <p><strong class="lbl">What this would involve:</strong> An IAM role letting Bedrock read from the S3 bucket, then a Knowledge Base configured with semantic chunking and the Titan embedding model, pointed at all three prefixes from Step 2. This is the <em>managed</em> implementation of this task's vector store &mdash; the same documents get a second, <em>custom</em> implementation through OpenSearch in Step 4, so both approaches can be compared side by side, which is what the brief itself asks for.</p>
+        <p><strong class="lbl">Why it wasn't built yet:</strong> This is one of the two pay-by-the-hour resources flagged in the cost note above &mdash; a Knowledge Base's backing storage has a minimum billable floor around $1/hr even completely idle, so it's held until it can be tested and torn down in the same sitting.</p>
+      </div>
+      <div class="mini-tip">
+        <p class="mt-head">Cost to know</p>
+        <p>A Knowledge Base doesn't let you point it at zero infrastructure &mdash; by default it provisions an OpenSearch Serverless collection behind the scenes with its own minimum OCU (compute unit) floor, and that minimum is billed even at zero queries. That's a different bill from the OpenSearch <em>domain</em> in Step 4, which is a separate, manually-run cluster for the custom implementation.</p>
+      </div>
+    </div>
+
+    <div class="step-card unbuilt">
+      <div class="step-head"><span class="step-num">4</span><h4>Stand up the custom vector store</h4><span class="unbuilt-badge">Planned, not built</span></div>
+      <p class="step-res">Would create: adi-1-4-vector-search (OpenSearch domain, 1 node)</p>
+      <div class="step-body">
+        <div class="concept">
+          <p><strong>In plain terms:</strong> Amazon OpenSearch Service with the Neural Search plugin turned on works differently from a Knowledge Base: documents get embedded and indexed ahead of time, but at query time someone can type a plain-English question and OpenSearch converts it to a vector and runs the similarity search internally &mdash; no separate embedding step needed at search time. It can also combine that semantic search with exact keyword matching (an exact error code or API name has to match precisely; a rephrased troubleshooting question has to match by meaning) &mdash; that combination is called hybrid search, and it's something a Knowledge Base can't do out of the box.</p>
+        </div>
+        <p><strong class="lbl">What this would involve:</strong> A domain sized to <code>t3.small.search</code>, single node, single AZ &mdash; deliberately scaled down from the brief's own example (<code>r6g.large.search</code> &times; 3 nodes across 3 AZs, meant for production traffic at real scale, not a PoC), with the Neural Search plugin turned on. This is the <em>custom</em> implementation of the same document set from Step 2 &mdash; the one with real control over indexing (Step 8) and search behavior (Step 9), which a Knowledge Base doesn't expose.</p>
+        <p><strong class="lbl">Why it wasn't built yet:</strong> The other pay-by-the-hour item flagged above. Scaled down from ~$360/month (the brief's literal 3-node config) to ~$26/month for a single small node &mdash; still real money if forgotten, which is exactly the scenario this hold is meant to prevent.</p>
+      </div>
+    </div>
+
+    <div class="step-card unbuilt">
+      <div class="step-head"><span class="step-num">5</span><h4>Create the fast-lookup metadata store</h4><span class="unbuilt-badge">Planned, not built</span></div>
+      <p class="step-res">Would create: adi-1-4-document-metadata (DynamoDB, on-demand)</p>
+      <div class="step-body">
+        <div class="concept">
+          <p><strong>In plain terms:</strong> DynamoDB here isn't storing the 15 million documents themselves &mdash; it's a sub-millisecond key-value lookup for lightweight, fast-changing facts, like "was compliance rule 10b-5 updated this morning." Vector search is the wrong tool for that question; it's not a similarity search, it's a single exact lookup that needs to be instant.</p>
+        </div>
+        <p><strong class="lbl">What this would involve:</strong> A table keyed on <code>document_id</code> (partition key) and <code>chunk_id</code> (sort key), on-demand billing mode (no capacity to plan for at PoC scale), with a secondary index on <code>document_type</code> for filtering.</p>
+        <p><strong class="lbl">Why it wasn't built yet:</strong> Essentially free at this scale (DynamoDB on-demand bills per request, not per hour), but it's the last piece of Phase 1's infrastructure and gets deployed alongside the rest in the same session.</p>
+      </div>
+    </div>
+
+    <div class="phase-divider" id="phase-2">
+      <span class="pd-num">Phase 2</span>
+      <div class="pd-text"><h3>Document Processing Pipeline</h3><p>Turning raw uploaded files into chunked, embedded, searchable records automatically.</p></div>
+      <span class="pd-line"></span>
+    </div>
+
+    <div class="step-card unbuilt">
+      <div class="step-head"><span class="step-num">6</span><h4>Build the ingestion pipeline</h4><span class="unbuilt-badge">Planned, not built</span></div>
+      <p class="step-res">Would create: adi-1-4-document-processor-role &middot; adi-1-4-document-processor</p>
+      <div class="step-body">
+        <p><strong class="lbl">What this would involve:</strong> A Lambda triggered the instant a new file lands in S3 &mdash; extracts text (PDF/DOCX/HTML), splits it into overlapping chunks, calls Titan to embed each chunk, writes the vector into OpenSearch, and writes the chunk's metadata (title, source, chunk index) into the Step 5 DynamoDB table.</p>
+        <p><strong class="lbl">Why it wasn't built yet:</strong> Depends on Steps 3&ndash;5 already being live to write into, so it's sequenced right after them rather than deployed standalone.</p>
+      </div>
+    </div>
+
+    <div class="step-card unbuilt">
+      <div class="step-head"><span class="step-num">7</span><h4>Prove the pipeline end-to-end with real documents</h4><span class="unbuilt-badge">Planned, not built</span></div>
+      <p class="step-res">Would test: one upload per document type</p>
+      <div class="step-body">
+        <p><strong class="lbl">What this would involve:</strong> Upload one technical doc, one research-paper excerpt, and one policy doc for real, and confirm chunks actually land in DynamoDB and vectors actually land in the OpenSearch index &mdash; the same "test with a real event, don't just trust the code compiles" standard every other task on this site holds to.</p>
+        <p><strong class="lbl">Why it wasn't built yet:</strong> Can't be tested before Step 6 exists to trigger.</p>
+      </div>
+    </div>
+
+    <div class="phase-divider" id="phase-3">
+      <span class="pd-num">Phase 3</span>
+      <div class="pd-text"><h3>Advanced Search</h3><p>Making search fast and precise at scale &mdash; sharding, hierarchy, and combining keyword with meaning.</p></div>
+      <span class="pd-line"></span>
+    </div>
+
+    <div class="step-card unbuilt">
+      <div class="step-head"><span class="step-num">8</span><h4>Set up hierarchical, multi-index search</h4><span class="unbuilt-badge">Planned, not built</span></div>
+      <p class="step-res">Would create: 3 OpenSearch indices with nested + knn_vector mappings</p>
+      <div class="step-body">
+        <div class="concept">
+          <p><strong>In plain terms:</strong> Splitting one giant index into several smaller ones by document type (technical docs, research papers, policies) is the same idea as splitting a huge supermarket into Dairy, Meat, and Sports sections &mdash; a query about a policy only has to search the policy shelf, not all 15 million rows. A "nested" field additionally lets one document keep parent-child structure (a case and its individual sections) inside a single index.</p>
+        </div>
+        <p><strong class="lbl">What this would involve:</strong> Three separate indices (<code>technical_documentation</code>, <code>research_papers</code>, <code>company_policies</code>) inside the Step 4 domain, each with a <code>knn_vector</code> field (dimension 1536, hnsw/cosine similarity) and a nested <code>hierarchy</code> field for parent-child document sections.</p>
+        <p><strong class="lbl">Why it wasn't built yet:</strong> Configuration inside the Step 4 domain &mdash; can't exist before that domain does.</p>
+      </div>
+    </div>
+
+    <div class="step-card unbuilt">
+      <div class="step-head"><span class="step-num">9</span><h4>Build the search coordinator</h4><span class="unbuilt-badge">Planned, not built</span></div>
+      <p class="step-res">Would create: adi-1-4-search-coordinator-role &middot; adi-1-4-search-coordinator</p>
+      <div class="step-body">
+        <div class="concept">
+          <p><strong>In plain terms:</strong> A single query might need to check more than one shard/index at once (a "parallel fan-out" &mdash; like sending several assistants down different aisles at the same time instead of one person walking the whole store), then merge and re-rank the combined results before anything is returned.</p>
+        </div>
+        <p><strong class="lbl">What this would involve:</strong> A Lambda, invoked manually for this PoC rather than sitting behind a public API Gateway endpoint (same choice Task 1.3 made for its batch/report-style Lambdas &mdash; no public endpoint means no idle cost) &mdash; generates a query embedding, fans out across the three Step 8 indices with metadata filters applied, combines keyword (BM25) and semantic (kNN) scoring for hybrid search, and re-ranks the merged result set.</p>
+        <p><strong class="lbl">Why it wasn't built yet:</strong> Needs Step 8's indices populated with real embedded chunks (from Steps 6&ndash;7) before there's anything real to search.</p>
+      </div>
+    </div>
+
+    <div class="step-card unbuilt">
+      <div class="step-head"><span class="step-num">10</span><h4>Run real test queries and check the results make sense</h4><span class="unbuilt-badge">Planned, not built</span></div>
+      <p class="step-res">Would test: 3 representative queries</p>
+      <div class="step-body">
+        <p><strong class="lbl">What this would involve:</strong> One query that needs metadata filtering (e.g. "policies only"), one that needs exact keyword precision (an exact error code or API name), and one that's purely semantic (a rephrased troubleshooting question with no exact keyword match) &mdash; checking the coordinator actually returns the right documents for each kind of question, not just that it runs without erroring.</p>
+        <p><strong class="lbl">Why it wasn't built yet:</strong> The final verification step &mdash; runs last, then the whole domain and Knowledge Base get torn down per the cost note above.</p>
+      </div>
+    </div>
+
+    <div class="phase-divider" id="phase-later">
+      <span class="pd-num">Phases 4&ndash;6</span>
+      <div class="pd-text"><h3>Scoped Out of This Build</h3><p>External connectors, sync automation, and a full RAG web app &mdash; designed, not deployed.</p></div>
+      <span class="pd-line"></span>
+    </div>
+
+    <div class="step-card unbuilt">
+      <div class="step-head"><h4>Web crawler, wiki connector, DMS connector, data catalog, change detection, Step Functions sync, and an Amplify RAG app</h4><span class="unbuilt-badge">Architecture only</span></div>
+      <div class="step-body">
+        <p><strong class="lbl">What this would have involved:</strong> The brief's remaining three phases &mdash; connectors to crawl public sites and pull from Confluence/SharePoint-style systems, a unified data catalog, automated change-detection and incremental refresh via Step Functions and EventBridge, and finally a full RAG application with an Amplify-hosted web UI, conversation history, and A/B testing.</p>
+        <p><strong class="lbl">Why it wasn't scoped for a live build:</strong> None of it teaches vector-store selection or retrieval concepts &mdash; the actual AIP-C01 subject matter for this task. It's integration and frontend work (OAuth against third-party systems, webhook listeners, a deployed web app) that would multiply both cost and build time with no additional exam-relevant content. Already captured at the design level in this task's <a href="../notes/task-1-4.html">Study Notes page</a> and its architecture diagram.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="alt" id="resources">
+  <div class="wrap">
+    <p class="kicker">Full Resource Index</p>
+    <h2 class="h">All 10 planned resources, for quick reference</h2>
+    <p class="section-lead">Account <code>269737522732</code>, region <code>us-east-1</code>, named starting with <code>adi-1-4-</code>. None of these exist yet &mdash; see the build plan above and <code>progress.md</code> in this task's folder for the deploy/teardown sequence.</p>
+    <div class="verify-wrap">
+      <table class="verify">
+        <tr><th>#</th><th>Type</th><th>Name</th><th>What it would be for</th></tr>
+        <tr><td>1</td><td>S3 Bucket</td><td>adi-1-4-documents-269737522732</td><td>Raw source documents across 3 category prefixes.</td></tr>
+        <tr><td>2</td><td>IAM Role</td><td>adi-1-4-bedrock-kb-role</td><td>Lets the Knowledge Base read the S3 bucket.</td></tr>
+        <tr><td>3</td><td>Bedrock Knowledge Base</td><td>adi-1-4-knowledge-base</td><td>Managed vector store implementation of the same document set. Pay-by-the-hour.</td></tr>
+        <tr><td>4</td><td>OpenSearch Domain</td><td>adi-1-4-vector-search</td><td>Custom vector store implementation of the same document set, scaled to 1 small node. Pay-by-the-hour.</td></tr>
+        <tr><td>5</td><td>OpenSearch Indices</td><td>technical_documentation, research_papers, company_policies</td><td>Hierarchical, knn_vector-mapped indices inside the domain above.</td></tr>
+        <tr><td>6</td><td>DynamoDB Table</td><td>adi-1-4-document-metadata</td><td>Fast lookup of document/chunk metadata and status.</td></tr>
+        <tr><td>7</td><td>IAM Role</td><td>adi-1-4-document-processor-role</td><td>Narrow permissions for the ingestion Lambda.</td></tr>
+        <tr><td>8</td><td>Lambda Function</td><td>adi-1-4-document-processor</td><td>Extracts, chunks, embeds, and indexes each uploaded document.</td></tr>
+        <tr><td>9</td><td>IAM Role</td><td>adi-1-4-search-coordinator-role</td><td>Narrow permissions for the search Lambda.</td></tr>
+        <tr><td>10</td><td>Lambda Function</td><td>adi-1-4-search-coordinator</td><td>Multi-index fan-out, metadata filtering, hybrid search, re-ranking.</td></tr>
+      </table>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <p>This is an independent, unofficial study resource and is not affiliated with, endorsed by, or sponsored by Amazon Web Services, Inc. AWS, Amazon Bedrock, and all related marks are trademarks of Amazon.com, Inc. or its affiliates.</p>
+    <p>Hosted on Amazon S3 + Amazon CloudFront. &middot; <a href="index.html">&larr; Back to Build Log</a></p>
+  </div>
+</footer>
+
+</body>
+</html>

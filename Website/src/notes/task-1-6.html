@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Task 1.6 Notes | AIP-C01 Guide</title>
+<meta name="description" content="Domain 1, Task 1.6 study notes.">
+<style>
+  :root{
+    --ink:#0b1524; --ink-soft:#3a4a5e; --paper:#f7f8fa; --card:#ffffff; --line:#e3e7ee;
+    --accent:#e8622c; --accent-dark:#c94f1f; --navy:#0f2540; --navy-2:#16345c;
+    --trap-bg:#fff7ed; --trap-line:#f6d9b8;
+    color-scheme: light;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{margin:0;background:var(--paper);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;line-height:1.6;}
+  a{color:var(--accent-dark);}
+  code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;background:#eef1f6;padding:1px 5px;border-radius:4px;font-size:.92em;}
+  img{max-width:100%;}
+  .wrap{max-width:1080px;margin:0 auto;padding:0 24px;}
+
+  .nav{position:sticky;top:0;z-index:50;background:rgba(15,37,64,.96);backdrop-filter:blur(6px);border-bottom:1px solid rgba(255,255,255,.08);}
+  .nav .wrap{display:flex;align-items:center;justify-content:space-between;height:56px;}
+  .nav-brand{color:#fff;font-weight:700;font-size:14px;letter-spacing:.02em;text-decoration:none;}
+  .nav-brand span{color:var(--accent);}
+  .nav-links{display:flex;gap:22px;list-style:none;margin:0;padding:0;}
+  .nav-links a{color:#cdd8e6;text-decoration:none;font-size:13.5px;font-weight:500;}
+  .nav-links a:hover{color:#fff;}
+  @media (max-width:720px){ .nav-links{display:none;} }
+
+  header.hero{background:linear-gradient(180deg,var(--navy) 0%, var(--navy-2) 100%);color:#fff;padding:36px 0 28px;}
+  .eyebrow{display:inline-block;font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#ffd8c4;background:rgba(232,98,44,.18);border:1px solid rgba(232,98,44,.4);padding:5px 10px;border-radius:999px;margin-bottom:14px;}
+  h1{font-size:clamp(22px,3.4vw,30px);line-height:1.15;margin:0;font-weight:800;}
+  header.hero p{font-size:14.5px;color:#c9d5e3;max-width:760px;margin:10px 0 0;}
+
+  section{padding:36px 0;}
+
+  figure.arch{margin:0 0 24px;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px;}
+  figure.arch img{display:block;border-radius:8px;width:100%;height:auto;background:#0f2540;}
+  figure.arch figcaption{margin-top:10px;font-size:12.5px;color:var(--ink-soft);text-align:center;}
+
+  .note-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;}
+  @media (max-width:760px){.note-grid{grid-template-columns:1fr;}}
+  .note-card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:18px 20px;}
+  .note-card.wide{grid-column:1 / -1;}
+  .note-card h4{scroll-margin-top:78px;margin:0 0 12px;font-size:13px;font-weight:800;color:var(--navy-2);}
+  .note-card dl{margin:0;}
+  .note-card dt{font-size:13.5px;font-weight:700;color:var(--ink);margin:0 0 3px;}
+  .note-card dt:not(:first-child){margin-top:12px;}
+  .note-card dd{margin:0;font-size:13px;color:var(--ink-soft);line-height:1.55;}
+  .note-card .lead{font-size:13.5px;font-weight:700;color:var(--ink);margin:0 0 8px;}
+  .note-card .lead:not(:first-child){margin-top:16px;}
+  .note-card .sub{font-size:13px;color:var(--ink-soft);line-height:1.55;margin:0 0 8px;}
+  .note-card ul{margin:0 0 8px;padding-left:18px;}
+  .note-card ul:last-child{margin-bottom:0;}
+  .note-card li{font-size:13px;color:var(--ink-soft);line-height:1.55;margin:0 0 4px;}
+  .note-card li:last-child{margin-bottom:0;}
+  .note-card h5{margin:16px 0 6px;font-size:12.5px;font-weight:700;color:var(--ink);}
+  .note-card h5:first-child{margin-top:0;}
+
+  .example{background:var(--paper);border:1px solid var(--line);border-radius:8px;padding:10px 12px;margin:8px 0;font-size:12.5px;}
+  .example p{margin:0 0 4px;color:var(--ink-soft);}
+  .example p:last-child{margin-bottom:0;}
+  .example pre{margin:0;white-space:pre-wrap;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px;color:var(--ink-soft);}
+
+  pre.diagram{background:var(--navy);color:#dbe6f2;border-radius:8px;padding:14px 16px;margin:8px 0 14px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:11.5px;line-height:1.5;overflow-x:auto;}
+
+  .trap{background:var(--trap-bg);border:1px solid var(--trap-line);border-radius:8px;padding:12px 14px;margin-top:14px;}
+  .trap p{margin:0;font-size:13px;color:var(--ink);}
+
+  table.ref{width:100%;border-collapse:collapse;font-size:12.5px;margin:8px 0 14px;background:var(--card);border:1px solid var(--line);border-radius:10px;overflow:hidden;}
+  table.ref th{text-align:left;background:var(--navy);color:#fff;padding:9px 12px;font-size:11px;text-transform:uppercase;letter-spacing:.03em;}
+  table.ref td{padding:9px 12px;border-top:1px solid var(--line);color:var(--ink-soft);}
+  table.ref tr:nth-child(even) td{background:#fafbfc;}
+
+  footer{padding:32px 0 48px;color:#8b96a5;font-size:12.5px;}
+  footer .wrap{border-top:1px solid var(--line);padding-top:22px;}
+  footer a{color:#6b7686;}
+  .note-card h4:target{color:var(--accent-dark);}
+  .note-card h4:target::after{content:" \2190";color:var(--accent);}
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="wrap">
+    <a class="nav-brand" href="../index.html">AIP-C01 <span>Guide</span></a>
+    <ul class="nav-links">
+      <li><a href="index.html">All Study Notes</a></li>
+      <li><a href="domain-1.html">Domain 1 Map</a></li>
+      <li><a href="../tasks/task-1-6.html">Task 1.6 Build Log</a></li>
+    </ul>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="wrap">
+    <span class="eyebrow">Domain 1 &middot; Task 1.6</span>
+    <h1>Prompt Engineering Strategies and Governance for FM Interactions</h1>
+    <p>In a regulated enterprise environment (e.g., global banking or healthcare), a prompt is a code artifact. Changing a single line in a system prompt is functionally equivalent to deploying new application logic to production. It requires formal code review, compliance approval, automated testing, version controls, and continuous auditability.</p>
+  </div>
+</header>
+
+<section>
+  <div class="wrap">
+
+    <figure class="arch">
+      <img src="../assets/task-1-6-architecture.jpg" alt="Task 1.6 enterprise system workflow diagram">
+      <figcaption>Task 1.6 enterprise system workflow.</figcaption>
+    </figure>
+
+    <div class="note-grid">
+
+      <div class="note-card wide">
+        <h4 id="s1">Executive Architecture Overview</h4>
+        <p class="sub">In a regulated enterprise environment (e.g., global banking or healthcare), a prompt is a code artifact. Changing a single line in a system prompt is functionally equivalent to deploying new application logic to production. It requires formal code review, compliance approval, automated testing, version controls, and continuous auditability.</p>
+        <pre class="diagram">                          System Request Flow
+                                   │
+                                   ▼
+┌──────────────────────────────────────────────────────────────────────┐
+│ Layer 1: Prompt Management (System Prompt)                           │
+│ Role, Persona, Constraints ("Do this / Do NOT do this")              │
+└───────────────────────────────────┬──────────────────────────────────┘
+                                    │
+                                    ▼
+┌──────────────────────────────────────────────────────────────────────┐
+│ Layer 2: Bedrock Guardrails (Outside Model Security Layer)           │
+│ Content Filtering, PII Masking, Denied Topics, Contextual Grounding  │
+└───────────────────────────────────┬──────────────────────────────────┘
+                                    │
+                                    ▼
+┌──────────────────────────────────────────────────────────────────────┐
+│ Layer 3: JSON Schema Response Templates (Structural Enforcement)     │
+│ Enforces output shape and required legal/disclaimer fields           │
+└──────────────────────────────────────────────────────────────────────┘</pre>
+      </div>
+
+      <div class="note-card wide">
+        <h4 id="s2">Section 1: Model Instruction Frameworks</h4>
+        <p class="sub">To achieve absolute control over Foundation Model (FM) outputs, you must implement a three-tiered control architecture. No single layer is sufficient on its own.</p>
+        <pre class="diagram">Prompt Management   ──►  "Behave like this"   (Instruct)
+Bedrock Guardrails  ──►  "Never say this"     (Block)
+JSON Schema         ──►  "Answer in this shape" (Structure)</pre>
+
+        <h5>1. Prompt Management (System Prompt)</h5>
+        <p class="sub">The System Prompt persists across the entire multi-turn interaction window. In regulated domains, defining constraints (what the AI is forbidden to do) takes priority over standard instructions.</p>
+        <ul>
+          <li><strong>Persona:</strong> Defines operational scope (e.g., "You are an enterprise banking assistant for GlobalBank").</li>
+          <li><strong>Constraints:</strong> Hard boundaries on capability (e.g., "You are strictly forbidden from providing personalized investment advice or forecasting stock performance").</li>
+          <li><strong>Behavior:</strong> Regulatory compliance cues (e.g., "Always include the standard APR fee disclaimer when discussing loan products").</li>
+          <li><strong>Escalation Rules:</strong> Routing triggers (e.g., "If a customer expresses dissatisfaction with a transaction dispute, escalate immediately to a human agent").</li>
+        </ul>
+
+        <h5>2. Amazon Bedrock Guardrails</h5>
+        <p class="sub">Guardrails operate outside the model and outside the prompt. They sit as an independent security perimeter between the user request, the FM, and the downstream output.</p>
+        <ul>
+          <li><strong>Prompt Injection Resilience:</strong> System prompts can be bypassed via indirect prompt injection or adversarial jailbreaks. Guardrails evaluate raw inputs and outputs independently, making them impossible to bypass via prompt manipulation.</li>
+          <li><strong>Universal Application:</strong> A single Amazon Bedrock Guardrail policy can be applied uniformly across disparate models (e.g., Anthropic Claude, Meta Llama, Amazon Nova).</li>
+        </ul>
+        <p class="lead">Content Filter Categories &amp; Severity Thresholds</p>
+        <ul>
+          <li><strong>Categories:</strong> Hate speech, insults, sexual content, violence.</li>
+          <li><strong>Configurable levels:</strong> NONE, LOW, MEDIUM, HIGH.</li>
+          <li><strong>Critical Exam Distinction:</strong> A HIGH setting blocks only extreme content (allowing mild/moderate content through). A LOW setting is the strictest threshold, blocking even mild occurrences.</li>
+        </ul>
+        <p class="lead">Regulated Domain Controls</p>
+        <ul>
+          <li><strong>Denied Topics:</strong> Hard-blocks banned conversations (e.g., market speculation).</li>
+          <li><strong>Word Filters:</strong> Custom dictionary filters for competitor brand names or inappropriate terminology.</li>
+          <li><strong>PII Redaction/Masking:</strong> Automatically detects and masks sensitive identifiers (SSN, credit card numbers, IBANs) in both input prompts and model outputs.</li>
+          <li><strong>Contextual Grounding (Hallucination Check):</strong> Evaluates if the generated response is mathematically and factually grounded in the retrieved RAG source documents.</li>
+        </ul>
+
+        <h5>3. JSON Schema Response Templates</h5>
+        <p class="sub">While text-based system prompts instruct the model to include certain elements, FMs remain probabilistic and may occasionally omit compliance language. Enforcing a JSON Schema makes structural compliance deterministic.</p>
+        <div class="example">
+          <pre>{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "account_number": {
+      "type": "string",
+      "description": "Masked account number, e.g., ****1234"
+    },
+    "balance": {
+      "type": "number"
+    },
+    "currency": {
+      "type": "string"
+    },
+    "fees": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "fee_name": { "type": "string" },
+          "amount": { "type": "number" },
+          "disclaimer": { "type": "string" }
+        },
+        "required": ["fee_name", "amount", "disclaimer"]
+      }
+    }
+  },
+  "required": ["account_number", "balance", "currency", "fees"]
+}</pre>
+        </div>
+        <p class="lead">Why JSON Schema is Crucial (Comparison with Task 1.1)</p>
+        <ul>
+          <li><strong>Task 1.1 Focus:</strong> Unstructured conversational outputs, basic RAG grounding, and baseline model invocation.</li>
+          <li><strong>Task 1.6 Differentiation:</strong> Introduces hard structural enforcement. Defining "disclaimer" as a REQUIRED field inside the JSON Schema guarantees that downstream application parsers receive valid data and prevents the model from dropping legally mandated text.</li>
+        </ul>
+      </div>
+
+      <div class="note-card wide">
+        <h4 id="s3">Section 2: Interactive AI Systems</h4>
+        <p class="sub">Foundation Models are inherently stateless (Memory=0). Every invocation of Bedrock:InvokeModel operates without memory of prior calls. Building multi-turn conversational systems requires an external state management infrastructure.</p>
+        <pre class="diagram">                            [User Request]
+                                   │
+                                   ▼
+┌─────────────────────────────────────────────────────────────────────────┐
+│ AWS Step Functions (State Machine)                                     │
+│ Holds conversation state, tracks turns, triggers clarification loops   │
+└──────────────────────────────────────┬────────────────────────────────┘
+                                       │
+                     ┌─────────────────┴─────────────────┐
+                     ▼                                   ▼
+┌────────────────────────────────────────┐ ┌──────────────────────────────┐
+│ Amazon Comprehend (Custom Classifier)  │ │ Amazon DynamoDB              │
+│ Fast, deterministic intent extraction  │ │ Low-latency multi-turn history│
+│ Returns confidence scores (0.0 - 1.0)  │ │ 90-day TTL compliance enforcement│
+└────────────────────────────────────────┘ └──────────────────────────────┘</pre>
+
+        <h5>1. AWS Step Functions (Conversation Orchestration &amp; State Machines)</h5>
+        <p class="sub">Single AWS Lambda functions are stateless and time-bound. Multi-turn dialogues require a state machine to track context, manage retry loops, and direct routing.</p>
+        <ul>
+          <li><strong>Clarification Loops:</strong> When a customer prompt is ambiguous (e.g., "My transfer didn't go through"), guessing the transfer type (Wire, ACH, SEPA) leads to hallucinated or incorrect advice.</li>
+        </ul>
+        <p class="lead">Execution Flow</p>
+        <div class="example">
+          <pre>Input → Intent Detection → Confidence Check
+  Low (&lt; 0.70) → Ask Clarification → Re-evaluate</pre>
+        </div>
+        <ul>
+          <li><strong>Human Handoff:</strong> Step Functions maintains state history. If clarification loops fail twice, it seamlessly routes the entire state payload to a human agent queue.</li>
+        </ul>
+
+        <h5>2. Amazon Comprehend (Custom Intent Classification)</h5>
+        <p class="sub">While FMs can classify intents, using a dedicated, custom-trained Amazon Comprehend model is the architecturally preferred choice for intent routing.</p>
+        <ul>
+          <li><strong>Deterministic &amp; Fast:</strong> Returns consistent classifications at a fraction of the cost and latency of an LLM invocation.</li>
+          <li><strong>Confidence Scoring:</strong> Outputs a numeric confidence score (0.00-1.00) per intent, driving deterministic branching in AWS Step Functions.</li>
+          <li><strong>Domain Specificity:</strong> Trained on enterprise banking taxonomy (e.g., 200+ discrete financial intents).</li>
+        </ul>
+
+        <h5>3. Amazon DynamoDB (Session State &amp; Regulatory Retention)</h5>
+        <p class="sub">DynamoDB provides single-digit millisecond state lookup to construct the prompt history dynamically for each turn.</p>
+        <ul>
+          <li><strong>Partition Key (PK):</strong> session_id (String)</li>
+          <li><strong>Sort Key (SK):</strong> timestamp (Number / ISO-8601)</li>
+          <li><strong>Attributes:</strong> customer_id, role, content, detected_intent, token_count</li>
+        </ul>
+        <div class="trap">
+          <p><strong>Time-to-Live (TTL) as a Compliance Control:</strong> The Concept &mdash; Setting a 90-day TTL attribute automatically expires and purges session records. The Governance Meaning &mdash; TTL is not merely database hygiene&mdash;it is an automated Regulatory Data Retention Enforcer. It guarantees compliance with data privacy mandates (e.g., GDPR "Right to be Forgotten") without requiring custom cron scripts or manual deletion pipelines.</p>
+        </div>
+      </div>
+
+      <div class="note-card wide">
+        <h4 id="s4">Section 3: Prompt Management and Governance</h4>
+        <p class="sub">Treating prompts as production code requires formal management frameworks, role isolation, and audit trails.</p>
+
+        <h5>1. Parameterized Prompt Templates</h5>
+        <p class="sub">Instead of writing 30 distinct prompt files for 30 operating regions&mdash;which leads to prompt drift where updates fail to propagate evenly&mdash;you maintain one parameterized template.</p>
+        <div class="example">
+          <pre>You are the authorized virtual assistant for {{bank_name}}.
+Customer Profile: {{customer_name}}, Tier: {{customer_tier}}
+Account Type: {{account_type}}
+Operating Region: {{region}} — Regulatory Framework: {{regulatory_framework}}
+Mandatory Compliance Text: {{required_disclaimers}}
+
+User Query: {{query}}</pre>
+        </div>
+        <p class="sub">Runtime Injection: The backend application queries local database configurations (e.g., DynamoDB tables in ap-south-1 for India or us-east-1 for US) and injects region-specific rules dynamically at runtime.</p>
+
+        <h5>2. Three-Tier Human-in-the-Loop Approval Gate</h5>
+        <p class="sub">Automated CI/CD pipelines must contain explicit, non-bypassable human approval gates before prompt deployments.</p>
+        <pre class="diagram"> [Prompt Author]  ──►  [Compliance Reviewer]  ──►  [System Administrator]
+(Product Specialist)     (Legal/Regulatory)           (Production Deployer)</pre>
+        <ul>
+          <li><strong>Separation of Duties:</strong> The author cannot approve or deploy their own prompt. This structural isolation prevents cognitive bias and ensures legal scrutiny.</li>
+        </ul>
+
+        <h5>3. Versioning &amp; Zero-Code Rollbacks</h5>
+        <p class="sub">Prompts stored in Bedrock Prompt Management or S3 repositories are explicitly versioned (e.g., v7, v8).</p>
+        <ul>
+          <li><strong>Instant Rollbacks:</strong> If v8 exhibits undesirable behavioral drift in production, the application updates its deployment pointer back to v7. This achieves an instant rollback in seconds without modifying or redeploying backend application code.</li>
+        </ul>
+
+        <h5>4. CloudTrail vs. CloudWatch Logs (Audit Trail Mechanics)</h5>
+        <p class="sub">Service, Recorded Data, Purpose &amp; Retention:</p>
+        <table class="ref">
+          <tr><th>Service</th><th>Recorded Data</th><th>Purpose &amp; Retention</th></tr>
+          <tr><td>AWS CloudTrail</td><td>API Call Metadata (Who called InvokeModel, timestamp, caller identity, exact prompt ARN/version used, target model ID).</td><td>Audit Trail: Kept for 7 Years for regulatory investigations (e.g., proving which prompt version was live when a complaint occurred).</td></tr>
+          <tr><td>Amazon CloudWatch Logs</td><td>Full Payload Contents (Complete prompt text sent, full response returned, token counts, execution latency).</td><td>Operational Debugging &amp; Performance: Used for real-time error tracking and performance tuning.</td></tr>
+        </table>
+      </div>
+
+      <div class="note-card wide">
+        <h4 id="s5">Section 4: Quality Assurance Systems (QA)</h4>
+        <p class="sub">Because FMs are non-deterministic, traditional unit testing (assert output == expected_string) fails. A multi-layered testing strategy is required.</p>
+        <pre class="diagram">                      QA Execution Pipeline
+                                │
+         ┌──────────────────────┴──────────────────────┐
+         ▼                                             ▼
+ [Pre-Deployment Testing]                     [Production Monitoring]
+         │                                             │
+ ├─► Edge Case Testing (Step Functions)        ├─► Real-time Output Validation (Lambda)
+ └─► Regression Testing (Golden Dataset)       └─► Continuous KPI Dashboards (CloudWatch)</pre>
+
+        <h5>1. Real-Time Output Validation (AWS Lambda)</h5>
+        <p class="sub">Executed synchronously on every response before returning data to the customer.</p>
+        <ul>
+          <li><strong>Business Rule Validation:</strong> Checks for required legal text, fee precision, and schema conformity.</li>
+          <li><strong>Guardrails vs. Lambda Validation:</strong> Bedrock Guardrails handle general safety (toxicity, PII, jailbreaks). Lambda Output Validation enforces custom business logic (e.g., verifying that a calculated loan penalty fee matches core banking calculations).</li>
+        </ul>
+
+        <h5>2. Edge Case Testing Frameworks</h5>
+        <p class="sub">Failures rarely occur in standard scenarios ("Check account balance"). They manifest at boundary conditions.</p>
+        <ul>
+          <li><strong>Scenarios Tested:</strong> Joint accounts with uneven ownership, international transfers under sanction checks, minor accounts, negative balances, and deceased account holders.</li>
+          <li><strong>Automated Parallel Execution:</strong> AWS Step Functions executes hundreds of synthetic edge-case conversations against candidate prompt versions prior to deployment approval.</li>
+        </ul>
+
+        <h5>3. Regression Testing (Golden Dataset Evaluation)</h5>
+        <p class="sub">Fixing a prompt to resolve one issue often degrades performance on another scenario.</p>
+        <table class="ref">
+          <tr><th>Test Scenario</th><th>v7 (Current Live)</th><th>v8 (Candidate)</th><th>Status</th></tr>
+          <tr><td>Joint Accounts</td><td>62% Pass</td><td>94% Pass</td><td>Improved</td></tr>
+          <tr><td>Intl Transfers</td><td>91% Pass</td><td>73% Pass</td><td>REGRESSED (BLOCKED)</td></tr>
+          <tr><td>Balance Inquiries</td><td>98% Pass</td><td>97% Pass</td><td>Acceptable</td></tr>
+        </table>
+        <p class="sub">Mechanism: Both v7 and v8 are run against a static Golden Dataset. If v8 causes a performance drop on existing functionality (e.g., International Transfers dropping from 91% to 73%), the pipeline flags a Prompt Regression and blocks deployment.</p>
+
+        <h5>4. Production Metrics &amp; KPI Monitoring (CloudWatch)</h5>
+        <ul>
+          <li><strong>Accuracy Rate:</strong> Factual correctness against verified data.</li>
+          <li><strong>Latency:</strong> Response generation time (ms).</li>
+          <li><strong>Human Escalation Rate (The Early Warning Indicator):</strong> A sudden spike in human escalation rates while API error rates remain static indicates that the model is encountering confusing inputs and failing quietly.</li>
+          <li><strong>CSAT &amp; Error Rates:</strong> User ratings and raw execution failures.</li>
+        </ul>
+      </div>
+
+      <div class="note-card wide">
+        <h4 id="s6">Section 5: Enhancing FM Performance</h4>
+        <p class="sub">Prompt engineering techniques optimize model accuracy without requiring costly model retraining or fine-tuning.</p>
+        <pre class="diagram">                       Performance Enhancements
+                                  │
+     ┌────────────────────────────┼────────────────────────────┐
+     ▼                            ▼                            ▼
+Structured Inputs            Output Format Spec           Chain-of-Thought
+(Pre-parsed JSON payload)    (XML/JSON field constraints) (Step-by-step reasoning)
+     │                            │                            │
+     └────────────────────────────┼────────────────────────────┘
+                                  ▼
+                         Agent Feedback Loops
+                    (CSAT + Human Agent Edits)</pre>
+
+        <h5>1. Structured Inputs (Pre-parsed JSON)</h5>
+        <p class="sub">Instead of requiring the FM to parse unstructured conversational queries, the system preprocesses raw text into structured JSON fields (using Amazon Comprehend entities) before passing them into the model:</p>
+        <div class="example">
+          <pre>{
+  "intent": "EARLY_WITHDRAWAL_FEE",
+  "product": "fixed_deposit",
+  "amount": 500000,
+  "opened_date": "2024-03-15",
+  "tenure_remaining_months": 12,
+  "customer_tier": "premium",
+  "region": "IN"
+}</pre>
+        </div>
+        <p class="sub">Impact: Eliminates token waste on intent interpretation, allowing the FM to dedicate its full context capacity to precise logic and generation.</p>
+
+        <h5>2. Output Format Specifications</h5>
+        <p class="sub">Requiring explicit XML or JSON key-value outputs forces the FM to compute exact values rather than returning conversational approximations (e.g., returning <code>"fee_amount": 150.00</code> instead of "There might be a small fee").</p>
+
+        <h5>3. Chain-of-Thought (CoT) Prompting</h5>
+        <p class="sub">Instructing the model to "Think step by step" improves accuracy in complex financial calculations.</p>
+        <div class="example">
+          <pre>1. Identify principal ($500,000) and contract rate (6.5%).
+2. Calculate accrued interest up to current date.
+3. Lookup early withdrawal penalty percentage for 'Premium' tier (1.0%).
+4. Subtract penalty from accrued interest.
+5. Output final payout amount.</pre>
+        </div>
+        <ul>
+          <li><strong>Why CoT Works:</strong> FMs generate tokens sequentially. By forcing the model to generate its reasoning steps first, each step becomes part of the working memory context for subsequent tokens. Demanding an immediate final answer forces the calculation into a single generation step, increasing the risk of mathematical error.</li>
+          <li><strong>Auditability Advantage:</strong> The intermediate reasoning chain is captured in system execution logs for compliance auditing, even if post-processing hides the reasoning steps from the end customer.</li>
+        </ul>
+
+        <h5>4. Human-in-the-Loop Feedback Loops</h5>
+        <p class="sub">When an interaction escalates to a human support agent and the agent modifies the draft response generated by the AI, that edit is logged: Agent Edit &rArr; Identifies AI Error + Provides Ground-Truth Correction. Aggregated edits reveal weak scenarios, driving targeted updates to prompt templates (v9), which are then validated through regression testing before deployment.</p>
+      </div>
+
+      <div class="note-card wide">
+        <h4 id="s7">Section 6: Complex Prompt Systems &mdash; Bedrock Prompt Flows vs. Agents</h4>
+        <p class="sub">For multi-step, enterprise-wide workflows (e.g., Mortgage Prequalification), single-prompt executions are insufficient.</p>
+        <pre class="diagram">                       Workflow Orchestration
+                                  │
+            ┌─────────────────────┴─────────────────────┐
+            ▼                                           ▼
+  Amazon Bedrock Prompt Flows                 Amazon Bedrock Agents
+   (Deterministic Graph)                      (Autonomous Reasoning)
+            │                                           │
+  • Path: Pre-defined Graph                   • Path: Decided by Model
+  • Execution: Identical every time           • Execution: Dynamic / Variable
+  • Compliance: Fully Auditable               • Compliance: Complex to Audit</pre>
+
+        <h5>1. Amazon Bedrock Prompt Flows (Deterministic Graphs)</h5>
+        <p class="sub">Prompt Flows connect discrete steps into an explicit, directed acyclic graph (DAG).</p>
+        <p class="lead">Graph Execution</p>
+        <div class="example">
+          <pre>Input → [Pre-Processing] → [Prompt: Profile] → [Condition Node] → [Prompt: Match] → [Post-Processing] → Output</pre>
+        </div>
+        <ul>
+          <li><strong>Supported Node Types:</strong> Prompt, Condition, Lambda, Knowledge Base, S3, Iterator.</li>
+          <li><strong>Reusable Prompt Components:</strong> Core elements (such as an APR Explanation Component) are authored once and referenced across multiple flows (Mortgages, Auto Loans, Personal Loans). Updating the core component propagates compliance updates instantly across all dependent flows.</li>
+          <li><strong>Pre/Post-Processing Nodes:</strong> Handled via Lambda/code rather than prompt text. Post-processing reliably appends legal disclaimers, formats regional currencies, and redacts PII before the final payload is returned.</li>
+        </ul>
+
+        <h5>2. Comparative Matrix: Flows vs. Agents</h5>
+        <table class="ref">
+          <tr><th>Architectural Attribute</th><th>Bedrock Prompt Flows</th><th>Bedrock Agents</th></tr>
+          <tr><td>Execution Path</td><td>Deterministic: Graph paths, branch conditions, and fallback rules are defined in advance.</td><td>Dynamic: The model uses ReAct (Reasoning + Acting) logic to select tools and steps at runtime.</td></tr>
+          <tr><td>Behavioral Consistency</td><td>Identical: Given the same input and state, the exact same node path executes every time.</td><td>Variable: The model may select different tool call sequences across identical requests.</td></tr>
+          <tr><td>Auditability &amp; Compliance</td><td>High: Fully auditable. Regulators can inspect the fixed execution graph.</td><td>Medium/Low: Difficult to audit due to non-deterministic tool choice.</td></tr>
+          <tr><td>Primary Industry Fit</td><td>Regulated Industries: Banking, Insurance, Healthcare, Legal.</td><td>Exploratory Tasks: Open-ended research, dynamic troubleshooting, general assistant workflows.</td></tr>
+        </table>
+      </div>
+
+      <div class="note-card wide">
+        <h4 id="s8">Direct Cross-Task Comparison Reference</h4>
+        <p class="sub">To assist with exam preparation, the table below highlights how concepts in Task 1.6 build upon or differ from earlier tasks:</p>
+        <table class="ref">
+          <tr><th>Domain / Concept</th><th>Task 1.1&ndash;1.5 Focus</th><th>Task 1.6 Governance Focus</th></tr>
+          <tr><td>Model Security</td><td>Base model evaluation, raw prompt construction, basic RAG baseline architecture.</td><td>Three-Layer Guardrail Architecture: System Prompts + Bedrock Guardrails + JSON Schemas working in tandem.</td></tr>
+          <tr><td>State &amp; Data Storage</td><td>Storing documents in Vector Stores (Task 1.4) and chunking strategies (Task 1.3).</td><td>Session State Persistence: DynamoDB TTL as a regulatory compliance control; Step Functions for stateful conversation orchestration.</td></tr>
+          <tr><td>Testing &amp; Failures</td><td>Red Teaming for base model jailbreaks (Task 1.2) and data drift monitoring.</td><td>Prompt Regression Testing: Evaluating v8 vs v7 prompts against static Golden Datasets to prevent business logic degradation.</td></tr>
+          <tr><td>Workflow Design</td><td>Basic Agent creation and tool integration.</td><td>Prompt Flows vs. Agents: Selecting deterministic, auditable node graphs (Prompt Flows) over autonomous Agents for regulated compliance workflows.</td></tr>
+        </table>
+      </div>
+
+      <div class="note-card wide">
+        <h4 id="s9">Key Outcome Metrics Summary (Exam Quick Recall)</h4>
+        <ul>
+          <li><strong>97% Reduction in Compliance Violations:</strong> Achieved by combining Prompt Management, Bedrock Guardrails, and JSON Schemas.</li>
+          <li><strong>78% Reduction in Customer Repetition:</strong> Driven by DynamoDB session state management and Step Functions orchestration.</li>
+          <li><strong>34 Compliance Issues Prevented Pre-Launch:</strong> Caught by automated Step Functions Edge Case and Golden Dataset Regression Testing.</li>
+          <li><strong>23% CSAT Improvement:</strong> Resulting from Chain-of-Thought prompting, structured inputs, and agent feedback loops.</li>
+          <li><strong>82% Prequalification Automation:</strong> Enabled by deterministic Amazon Bedrock Prompt Flows.</li>
+        </ul>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <p>This is an independent, unofficial study resource and is not affiliated with, endorsed by, or sponsored by Amazon Web Services, Inc. AWS, Amazon Bedrock, and all related marks are trademarks of Amazon.com, Inc. or its affiliates.</p>
+    <p>Hosted on Amazon S3 + Amazon CloudFront. &middot; <a href="index.html">&larr; Back to Study Notes</a></p>
+  </div>
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Domain 1 Map | AIP-C01 Guide</title>
+<meta name="description" content="One simple diagram of how all six tasks in Domain 1 of the AWS Certified Generative AI Developer (AIP-C01) exam fit together, with a plain-English summary of each task.">
+<style>
+  :root{
+    --ink:#0b1524; --ink-soft:#3a4a5e; --paper:#f7f8fa; --card:#ffffff; --line:#e3e7ee;
+    --accent:#e8622c; --accent-dark:#c94f1f; --navy:#0f2540; --navy-2:#16345c;
+    --t11:#1f4e79; --t12:#1d6f68; --t13:#8a5a1f; --t14:#6b4c9a; --t15:#c94f1f; --t16:#a03453;
+    color-scheme: light;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{margin:0;background:var(--paper);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;line-height:1.65;}
+  a{color:var(--accent-dark);}
+  code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;background:#eef1f6;padding:1px 5px;border-radius:4px;font-size:.92em;}
+  img,svg{max-width:100%;}
+  .wrap{max-width:1000px;margin:0 auto;padding:0 24px;}
+  .wrap-wide{max-width:1380px;margin:0 auto;padding:0 24px;}
+
+  .nav{position:sticky;top:0;z-index:50;background:rgba(15,37,64,.96);backdrop-filter:blur(6px);border-bottom:1px solid rgba(255,255,255,.08);}
+  .nav .wrap{display:flex;align-items:center;justify-content:space-between;height:56px;}
+  .nav-brand{color:#fff;font-weight:700;font-size:14px;letter-spacing:.02em;text-decoration:none;}
+  .nav-brand span{color:var(--accent);}
+  .nav-links{display:flex;gap:22px;list-style:none;margin:0;padding:0;}
+  .nav-links a{color:#cdd8e6;text-decoration:none;font-size:13.5px;font-weight:500;}
+  .nav-links a:hover{color:#fff;}
+  @media (max-width:720px){ .nav-links{display:none;} }
+
+  header.hero{background:linear-gradient(180deg,var(--navy) 0%, var(--navy-2) 100%);color:#fff;padding:36px 0 30px;}
+  .eyebrow{display:inline-block;font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#ffd8c4;background:rgba(232,98,44,.18);border:1px solid rgba(232,98,44,.4);padding:5px 10px;border-radius:999px;margin-bottom:14px;}
+  h1{font-size:clamp(23px,3.4vw,31px);line-height:1.15;margin:0;font-weight:800;}
+  header.hero p{font-size:15.5px;color:#c9d5e3;max-width:680px;margin:12px 0 0;}
+
+  section{padding:34px 0;}
+  h2.sh{font-size:20px;font-weight:800;margin:0 0 6px;}
+  p.sl{font-size:14.5px;color:var(--ink-soft);margin:0 0 22px;max-width:700px;}
+
+  figure.map{margin:0;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px;}
+  .scroller{overflow-x:auto;-webkit-overflow-scrolling:touch;}
+  .scroller svg{display:block;min-width:1120px;width:100%;height:auto;}
+  .scroller svg a text{cursor:pointer;}
+  .scroller svg a:hover text{text-decoration:underline;}
+  figure.map figcaption{margin-top:14px;font-size:13px;color:var(--ink-soft);text-align:center;}
+  .hint{display:none;font-size:12.5px;color:var(--ink-soft);margin:0 0 8px;font-style:italic;}
+  @media (max-width:1200px){ .hint{display:block;} }
+
+  .tcard{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:20px 22px;margin-bottom:14px;border-left:4px solid var(--line);}
+  .tcard .th{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:8px;}
+  .tnum{color:#fff;font-size:11.5px;font-weight:700;border-radius:8px;padding:3px 9px;}
+  .tcard h3{margin:0;font-size:16.5px;font-weight:800;}
+  .tcard .one{margin:0 0 12px;font-size:14.5px;color:var(--ink);}
+  .tcard ul{margin:0 0 14px;padding-left:19px;}
+  .tcard li{font-size:14px;color:var(--ink-soft);margin-bottom:6px;}
+  .tcard li b{color:var(--ink);font-weight:700;}
+  .jump{display:flex;flex-wrap:wrap;align-items:center;gap:7px;margin:0 0 14px;}
+  .jump span{font-size:12.5px;font-weight:700;color:var(--ink-soft);}
+  .jump a{font-size:12.5px;text-decoration:none;background:#f2f5f9;border:1px solid var(--line);border-radius:7px;padding:4px 10px;color:var(--ink-soft);font-weight:600;}
+  .jump a:hover{border-color:var(--accent);color:var(--accent-dark);}
+  .tcard a.go{font-size:13px;font-weight:700;text-decoration:none;border:1px solid var(--line);border-radius:8px;padding:7px 13px;display:inline-block;}
+  .tcard a.go:hover{border-color:var(--accent);}
+  .tc11{border-left-color:var(--t11);} .tc12{border-left-color:var(--t12);} .tc13{border-left-color:var(--t13);}
+  .tc14{border-left-color:var(--t14);} .tc15{border-left-color:var(--t15);} .tc16{border-left-color:var(--t16);}
+
+  .ov{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:6px 22px;}
+  .ov dt{font-size:14.5px;font-weight:700;margin:16px 0 3px;}
+  .ov dd{margin:0 0 16px;font-size:14px;color:var(--ink-soft);}
+  .ov dd .pill{display:inline-block;color:#fff;font-size:10.5px;font-weight:700;border-radius:7px;padding:1px 7px;margin-right:2px;text-decoration:none;}
+
+  .more{background:#eef1f6;border:1px solid var(--line);border-radius:12px;padding:18px 22px;font-size:14px;color:var(--ink-soft);}
+  .more b{color:var(--ink);}
+
+  footer{padding:32px 0 48px;color:#8b96a5;font-size:12.5px;}
+  footer .wrap{border-top:1px solid var(--line);padding-top:22px;}
+  footer a{color:#6b7686;}
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="wrap">
+    <a class="nav-brand" href="../index.html">AIP-C01 <span>Guide</span></a>
+    <ul class="nav-links">
+      <li><a href="index.html">All Study Notes</a></li>
+      <li><a href="../tasks/index.html">Build Log</a></li>
+    </ul>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="wrap">
+    <span class="eyebrow">Domain 1 &middot; The Map</span>
+    <h1>All Six Tasks, One Picture</h1>
+    <p>Domain 1 is really one system. Every task describes a different part of it. Here is the whole thing in three steps. Each box says what it does, which task it belongs to, and links straight to the section of the notes that covers it.</p>
+  </div>
+</header>
+
+<section style="padding-bottom:10px;">
+  <div class="wrap-wide">
+    <p class="hint">Scroll the diagram sideways if it does not fit.</p>
+    <figure class="map">
+      <div class="scroller">
+<svg viewBox="0 0 1282 981" role="img" aria-label="Domain 1 in three steps. Step 1, runs once when documents arrive: your documents in S3, clean and check them, cut them into overlapping pieces, turn each piece into 1,536 numbers, and save the numbers in OpenSearch or a Bedrock Knowledge Base. Step 2, runs every time someone asks: someone asks, Cognito checks who they are, matching pieces are found by comparing the question against the saved numbers, a reranker keeps the best few, the prompt is built from the question plus those pieces plus your rules, Bedrock runs the model, Guardrails safety-check the reply, and the answer is sent back with links to its sources. Always on: test before launch, watch and log, fix and improve, which feeds back into the prompt and the model. Every box is labelled with the task it belongs to and links to the matching section of those task notes." xmlns="http://www.w3.org/2000/svg">
+<defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#5a6a7e"/></marker>
+<marker id="aA" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#e8622c"/></marker></defs>
+<rect width="1282" height="981" fill="#f7f8fa"/>
+<g font-family="-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica,Arial,sans-serif">
+<rect x="34" y="16" width="522.7" height="27" rx="13.5" fill="#0f2540"/>
+<text x="49" y="34.5" font-size="12.5" font-weight="800" fill="#fff" letter-spacing=".04em">STEP 1</text>
+<text x="119.80000000000001" y="34.5" font-size="12.5" font-weight="600" fill="#fff" opacity=".85">Get your documents ready  ·  runs once, when documents arrive</text>
+<rect x="34" y="61" width="222" height="150" rx="12" fill="#ffffff" stroke="#d7dee8" stroke-width="1.5"/>
+<path d="M 46 61.75 h 198 a 11.25 11.25 0 0 1 11.25 11.25 v -4 a 8 8 0 0 0 -8 -8 h -215.5 a 8 8 0 0 0 -8 8 v 4 a 11.25 11.25 0 0 1 11.25 -11.25 z" fill="#8a5a1f"/>
+<rect x="45" y="62" width="200" height="4" fill="#8a5a1f"/>
+<text x="145.0" y="90" text-anchor="middle" font-size="15" font-weight="700" fill="#0b1524">Your documents</text>
+<text x="145.0" y="111" text-anchor="middle" font-size="11.8" fill="#5a6a7e">PDFs, claim forms, photos and</text>
+<text x="145.0" y="128" text-anchor="middle" font-size="11.8" fill="#5a6a7e">call recordings, dropped into</text>
+<text x="145.0" y="145" text-anchor="middle" font-size="11.8" fill="#5a6a7e">an S3 bucket.</text>
+<rect x="129.0" y="159" width="32" height="16" rx="8" fill="#8a5a1f"/>
+<text x="145.0" y="171" text-anchor="middle" font-size="10.5" font-weight="700" fill="#fff">1.3</text>
+<line x1="50" y1="183" x2="240" y2="183" stroke="#d7dee8" stroke-width="1"/>
+<a href="task-1-3.html#s1"><text x="145.0" y="200" text-anchor="middle" font-size="11.2" font-weight="700" fill="#c94f1f">Notes 1.3 · Overview &#8594;</text></a>
+<line x1="260" y1="136.0" x2="275" y2="136.0" stroke="#5a6a7e" stroke-width="1.8" marker-end="url(#a)"/>
+<rect x="282" y="61" width="222" height="150" rx="12" fill="#ffffff" stroke="#d7dee8" stroke-width="1.5"/>
+<path d="M 294 61.75 h 198 a 11.25 11.25 0 0 1 11.25 11.25 v -4 a 8 8 0 0 0 -8 -8 h -215.5 a 8 8 0 0 0 -8 8 v 4 a 11.25 11.25 0 0 1 11.25 -11.25 z" fill="#8a5a1f"/>
+<rect x="293" y="62" width="200" height="4" fill="#8a5a1f"/>
+<text x="393.0" y="90" text-anchor="middle" font-size="15" font-weight="700" fill="#0b1524">Clean and check</text>
+<text x="393.0" y="111" text-anchor="middle" font-size="11.8" fill="#5a6a7e">Rules and custom code catch bad</text>
+<text x="393.0" y="128" text-anchor="middle" font-size="11.8" fill="#5a6a7e">records. Anything that fails goes</text>
+<text x="393.0" y="145" text-anchor="middle" font-size="11.8" fill="#5a6a7e">to a person, never to the bin.</text>
+<rect x="377.0" y="159" width="32" height="16" rx="8" fill="#8a5a1f"/>
+<text x="393.0" y="171" text-anchor="middle" font-size="10.5" font-weight="700" fill="#fff">1.3</text>
+<line x1="298" y1="183" x2="488" y2="183" stroke="#d7dee8" stroke-width="1"/>
+<a href="task-1-3.html#s2"><text x="393.0" y="200" text-anchor="middle" font-size="11.2" font-weight="700" fill="#c94f1f">Notes 1.3 · Stage 1 &#8594;</text></a>
+<line x1="508" y1="136.0" x2="523" y2="136.0" stroke="#5a6a7e" stroke-width="1.8" marker-end="url(#a)"/>
+<rect x="530" y="61" width="222" height="150" rx="12" fill="#ffffff" stroke="#d7dee8" stroke-width="1.5"/>
+<path d="M 542 61.75 h 198 a 11.25 11.25 0 0 1 11.25 11.25 v -4 a 8 8 0 0 0 -8 -8 h -215.5 a 8 8 0 0 0 -8 8 v 4 a 11.25 11.25 0 0 1 11.25 -11.25 z" fill="#c94f1f"/>
+<rect x="541" y="62" width="200" height="4" fill="#c94f1f"/>
+<text x="641.0" y="90" text-anchor="middle" font-size="15" font-weight="700" fill="#0b1524">Cut into pieces</text>
+<text x="641.0" y="111" text-anchor="middle" font-size="11.8" fill="#5a6a7e">Long documents are split into</text>
+<text x="641.0" y="128" text-anchor="middle" font-size="11.8" fill="#5a6a7e">small chunks that overlap a</text>
+<text x="641.0" y="145" text-anchor="middle" font-size="11.8" fill="#5a6a7e">little, so nothing is cut in half.</text>
+<rect x="625.0" y="159" width="32" height="16" rx="8" fill="#c94f1f"/>
+<text x="641.0" y="171" text-anchor="middle" font-size="10.5" font-weight="700" fill="#fff">1.5</text>
+<line x1="546" y1="183" x2="736" y2="183" stroke="#d7dee8" stroke-width="1"/>
+<a href="task-1-5.html#s3"><text x="641.0" y="200" text-anchor="middle" font-size="11.2" font-weight="700" fill="#c94f1f">Notes 1.5 · Section 1 &#8594;</text></a>
+<line x1="756" y1="136.0" x2="771" y2="136.0" stroke="#5a6a7e" stroke-width="1.8" marker-end="url(#a)"/>
+<rect x="778" y="61" width="222" height="150" rx="12" fill="#ffffff" stroke="#d7dee8" stroke-width="1.5"/>
+<path d="M 790 61.75 h 198 a 11.25 11.25 0 0 1 11.25 11.25 v -4 a 8 8 0 0 0 -8 -8 h -215.5 a 8 8 0 0 0 -8 8 v 4 a 11.25 11.25 0 0 1 11.25 -11.25 z" fill="#c94f1f"/>
+<rect x="789" y="62" width="200" height="4" fill="#c94f1f"/>
+<text x="889.0" y="90" text-anchor="middle" font-size="15" font-weight="700" fill="#0b1524">Turn into numbers</text>
+<text x="889.0" y="111" text-anchor="middle" font-size="11.8" fill="#5a6a7e">Each piece becomes a list of</text>
+<text x="889.0" y="128" text-anchor="middle" font-size="11.8" fill="#5a6a7e">1,536 numbers. Similar meaning</text>
+<text x="889.0" y="145" text-anchor="middle" font-size="11.8" fill="#5a6a7e">gives similar numbers.</text>
+<rect x="873.0" y="159" width="32" height="16" rx="8" fill="#c94f1f"/>
+<text x="889.0" y="171" text-anchor="middle" font-size="10.5" font-weight="700" fill="#fff">1.5</text>
+<line x1="794" y1="183" x2="984" y2="183" stroke="#d7dee8" stroke-width="1"/>
+<a href="task-1-5.html#s4"><text x="889.0" y="200" text-anchor="middle" font-size="11.2" font-weight="700" fill="#c94f1f">Notes 1.5 · Section 2 &#8594;</text></a>
+<line x1="1004" y1="136.0" x2="1019" y2="136.0" stroke="#5a6a7e" stroke-width="1.8" marker-end="url(#a)"/>
+<rect x="1026" y="61" width="222" height="150" rx="12" fill="#ffffff" stroke="#d7dee8" stroke-width="1.5"/>
+<path d="M 1038 61.75 h 198 a 11.25 11.25 0 0 1 11.25 11.25 v -4 a 8 8 0 0 0 -8 -8 h -215.5 a 8 8 0 0 0 -8 8 v 4 a 11.25 11.25 0 0 1 11.25 -11.25 z" fill="#6b4c9a"/>
+<rect x="1037" y="62" width="200" height="4" fill="#6b4c9a"/>
+<text x="1137.0" y="90" text-anchor="middle" font-size="15" font-weight="700" fill="#0b1524">Save the numbers</text>
+<text x="1137.0" y="111" text-anchor="middle" font-size="11.8" fill="#5a6a7e">Kept in OpenSearch or a Bedrock</text>
+<text x="1137.0" y="128" text-anchor="middle" font-size="11.8" fill="#5a6a7e">Knowledge Base, tagged so you</text>
+<text x="1137.0" y="145" text-anchor="middle" font-size="11.8" fill="#5a6a7e">can filter and lock them down.</text>
+<rect x="1121.0" y="159" width="32" height="16" rx="8" fill="#6b4c9a"/>
+<text x="1137.0" y="171" text-anchor="middle" font-size="10.5" font-weight="700" fill="#fff">1.4</text>
+<line x1="1042" y1="183" x2="1232" y2="183" stroke="#d7dee8" stroke-width="1"/>
+<a href="task-1-4.html#s1"><text x="1137.0" y="200" text-anchor="middle" font-size="11.2" font-weight="700" fill="#c94f1f">Notes 1.4 · Step 1 &#8594;</text></a>
+<rect x="34" y="265" width="446.8" height="27" rx="13.5" fill="#e8622c"/>
+<text x="49" y="283.5" font-size="12.5" font-weight="800" fill="#fff" letter-spacing=".04em">STEP 2</text>
+<text x="119.80000000000001" y="283.5" font-size="12.5" font-weight="600" fill="#fff" opacity=".85">Answer a question  ·  runs every time someone asks</text>
+<rect x="34" y="310" width="222" height="150" rx="12" fill="#ffffff" stroke="#d7dee8" stroke-width="1.5"/>
+<path d="M 46 310.75 h 198 a 11.25 11.25 0 0 1 11.25 11.25 v -4 a 8 8 0 0 0 -8 -8 h -215.5 a 8 8 0 0 0 -8 8 v 4 a 11.25 11.25 0 0 1 11.25 -11.25 z" fill="#1f4e79"/>
+<rect x="45" y="311" width="200" height="4" fill="#1f4e79"/>
+<text x="145.0" y="339" text-anchor="middle" font-size="15" font-weight="700" fill="#0b1524">Someone asks</text>
+<text x="145.0" y="360" text-anchor="middle" font-size="11.8" fill="#5a6a7e">A question arrives from the web</text>
+<text x="145.0" y="377" text-anchor="middle" font-size="11.8" fill="#5a6a7e">or chat app, and the reply is</text>
+<text x="145.0" y="394" text-anchor="middle" font-size="11.8" fill="#5a6a7e">streamed back word by word.</text>
+<rect x="129.0" y="408" width="32" height="16" rx="8" fill="#1f4e79"/>
+<text x="145.0" y="420" text-anchor="middle" font-size="10.5" font-weight="700" fill="#fff">1.1</text>
+<line x1="50" y1="432" x2="240" y2="432" stroke="#d7dee8" stroke-width="1"/>
+<a href="task-1-1.html#s1"><text x="145.0" y="449" text-anchor="middle" font-size="11.2" font-weight="700" fill="#c94f1f">Notes 1.1 · Section 1 &#8594;</text></a>
+<line x1="260" y1="385.0" x2="275" y2="385.0" stroke="#5a6a7e" stroke-width="1.8" marker-end="url(#a)"/>
+<rect x="282" y="310" width="222" height="150" rx="12" fill="#ffffff" stroke="#d7dee8" stroke-width="1.5"/>
+<path d="M 294 310.75 h 198 a 11.25 11.25 0 0 1 11.25 11.25 v -4 a 8 8 0 0 0 -8 -8 h -215.5 a 8 8 0 0 0 -8 8 v 4 a 11.25 11.25 0 0 1 11.25 -11.25 z" fill="#1f4e79"/>
+<rect x="293" y="311" width="200" height="4" fill="#1f4e79"/>
+<text x="393.0" y="339" text-anchor="middle" font-size="15" font-weight="700" fill="#0b1524">Check who they are</text>
+<text x="393.0" y="360" text-anchor="middle" font-size="11.8" fill="#5a6a7e">Cognito checks the login token</text>
+<text x="393.0" y="377" text-anchor="middle" font-size="11.8" fill="#5a6a7e">first, so nobody reaches data</text>
+<text x="393.0" y="394" text-anchor="middle" font-size="11.8" fill="#5a6a7e">they are not allowed to see.</text>
+<rect x="377.0" y="408" width="32" height="16" rx="8" fill="#1f4e79"/>
+<text x="393.0" y="420" text-anchor="middle" font-size="10.5" font-weight="700" fill="#fff">1.1</text>
+<line x1="298" y1="432" x2="488" y2="432" stroke="#d7dee8" stroke-width="1"/>
+<a href="task-1-1.html#s1"><text x="393.0" y="449" text-anchor="middle" font-size="11.2" font-weight="700" fill="#c94f1f">Notes 1.1 · Section 1 &#8594;</text></a>
+<line x1="508" y1="385.0" x2="523" y2="385.0" stroke="#5a6a7e" stroke-width="1.8" marker-end="url(#a)"/>
+<rect x="530" y="310" width="222" height="150" rx="12" fill="#ffffff" stroke="#d7dee8" stroke-width="1.5"/>
+<path d="M 542 310.75 h 198 a 11.25 11.25 0 0 1 11.25 11.25 v -4 a 8 8 0 0 0 -8 -8 h -215.5 a 8 8 0 0 0 -8 8 v 4 a 11.25 11.25 0 0 1 11.25 -11.25 z" fill="#c94f1f"/>
+<rect x="541" y="311" width="200" height="4" fill="#c94f1f"/>
+<text x="641.0" y="339" text-anchor="middle" font-size="15" font-weight="700" fill="#0b1524">Find matching pieces</text>
+<text x="641.0" y="360" text-anchor="middle" font-size="11.8" fill="#5a6a7e">The question is turned into</text>
+<text x="641.0" y="377" text-anchor="middle" font-size="11.8" fill="#5a6a7e">numbers too and compared with</text>
+<text x="641.0" y="394" text-anchor="middle" font-size="11.8" fill="#5a6a7e">the store. Keywords help as well.</text>
+<rect x="625.0" y="408" width="32" height="16" rx="8" fill="#c94f1f"/>
+<text x="641.0" y="420" text-anchor="middle" font-size="10.5" font-weight="700" fill="#fff">1.5</text>
+<line x1="546" y1="432" x2="736" y2="432" stroke="#d7dee8" stroke-width="1"/>
+<a href="task-1-5.html#s6"><text x="641.0" y="449" text-anchor="middle" font-size="11.2" font-weight="700" fill="#c94f1f">Notes 1.5 · Section 4 &#8594;</text></a>
+<line x1="756" y1="385.0" x2="771" y2="385.0" stroke="#5a6a7e" stroke-width="1.8" marker-end="url(#a)"/>
+<rect x="778" y="310" width="222" height="150" rx="12" fill="#ffffff" stroke="#d7dee8" stroke-width="1.5"/>
+<path d="M 790 310.75 h 198 a 11.25 11.25 0 0 1 11.25 11.25 v -4 a 8 8 0 0 0 -8 -8 h -215.5 a 8 8 0 0 0 -8 8 v 4 a 11.25 11.25 0 0 1 11.25 -11.25 z" fill="#c94f1f"/>
+<rect x="789" y="311" width="200" height="4" fill="#c94f1f"/>
+<text x="889.0" y="339" text-anchor="middle" font-size="15" font-weight="700" fill="#0b1524">Keep the best few</text>
+<text x="889.0" y="360" text-anchor="middle" font-size="11.8" fill="#5a6a7e">About 100 rough matches come</text>
+<text x="889.0" y="377" text-anchor="middle" font-size="11.8" fill="#5a6a7e">back. A reranker reads them</text>
+<text x="889.0" y="394" text-anchor="middle" font-size="11.8" fill="#5a6a7e">properly and keeps the top 10.</text>
+<rect x="873.0" y="408" width="32" height="16" rx="8" fill="#c94f1f"/>
+<text x="889.0" y="420" text-anchor="middle" font-size="10.5" font-weight="700" fill="#fff">1.5</text>
+<line x1="794" y1="432" x2="984" y2="432" stroke="#d7dee8" stroke-width="1"/>
+<a href="task-1-5.html#s6"><text x="889.0" y="449" text-anchor="middle" font-size="11.2" font-weight="700" fill="#c94f1f">Notes 1.5 · Section 4 &#8594;</text></a>
+<rect x="34" y="518" width="222" height="150" rx="12" fill="#ffffff" stroke="#d7dee8" stroke-width="1.5"/>
+<path d="M 46 518.75 h 198 a 11.25 11.25 0 0 1 11.25 11.25 v -4 a 8 8 0 0 0 -8 -8 h -215.5 a 8 8 0 0 0 -8 8 v 4 a 11.25 11.25 0 0 1 11.25 -11.25 z" fill="#a03453"/>
+<rect x="45" y="519" width="200" height="4" fill="#a03453"/>
+<text x="145.0" y="547" text-anchor="middle" font-size="15" font-weight="700" fill="#0b1524">Build the prompt</text>
+<text x="145.0" y="568" text-anchor="middle" font-size="11.8" fill="#5a6a7e">The question, the pieces found</text>
+<text x="145.0" y="585" text-anchor="middle" font-size="11.8" fill="#5a6a7e">and your rules are put together</text>
+<text x="145.0" y="602" text-anchor="middle" font-size="11.8" fill="#5a6a7e">into one instruction.</text>
+<rect x="129.0" y="616" width="32" height="16" rx="8" fill="#a03453"/>
+<text x="145.0" y="628" text-anchor="middle" font-size="10.5" font-weight="700" fill="#fff">1.6</text>
+<line x1="50" y1="640" x2="240" y2="640" stroke="#d7dee8" stroke-width="1"/>
+<a href="task-1-6.html#s2"><text x="145.0" y="657" text-anchor="middle" font-size="11.2" font-weight="700" fill="#c94f1f">Notes 1.6 · Section 1 &#8594;</text></a>
+<line x1="260" y1="593.0" x2="275" y2="593.0" stroke="#5a6a7e" stroke-width="1.8" marker-end="url(#a)"/>
+<rect x="282" y="518" width="222" height="150" rx="12" fill="#ffffff" stroke="#d7dee8" stroke-width="1.5"/>
+<path d="M 294 518.75 h 198 a 11.25 11.25 0 0 1 11.25 11.25 v -4 a 8 8 0 0 0 -8 -8 h -215.5 a 8 8 0 0 0 -8 8 v 4 a 11.25 11.25 0 0 1 11.25 -11.25 z" fill="#1d6f68"/>
+<rect x="293" y="519" width="200" height="4" fill="#1d6f68"/>
+<text x="393.0" y="547" text-anchor="middle" font-size="15" font-weight="700" fill="#0b1524">Ask the model</text>
+<text x="393.0" y="568" text-anchor="middle" font-size="11.8" fill="#5a6a7e">Bedrock runs the model. It</text>
+<text x="393.0" y="585" text-anchor="middle" font-size="11.8" fill="#5a6a7e">remembers nothing, so the whole</text>
+<text x="393.0" y="602" text-anchor="middle" font-size="11.8" fill="#5a6a7e">chat is sent again every turn.</text>
+<rect x="377.0" y="616" width="32" height="16" rx="8" fill="#1d6f68"/>
+<text x="393.0" y="628" text-anchor="middle" font-size="10.5" font-weight="700" fill="#fff">1.2</text>
+<line x1="298" y1="640" x2="488" y2="640" stroke="#d7dee8" stroke-width="1"/>
+<a href="task-1-2.html#s1"><text x="393.0" y="657" text-anchor="middle" font-size="11.2" font-weight="700" fill="#c94f1f">Notes 1.2 · Step 1 &#8594;</text></a>
+<line x1="508" y1="593.0" x2="523" y2="593.0" stroke="#5a6a7e" stroke-width="1.8" marker-end="url(#a)"/>
+<rect x="530" y="518" width="222" height="150" rx="12" fill="#ffffff" stroke="#d7dee8" stroke-width="1.5"/>
+<path d="M 542 518.75 h 198 a 11.25 11.25 0 0 1 11.25 11.25 v -4 a 8 8 0 0 0 -8 -8 h -215.5 a 8 8 0 0 0 -8 8 v 4 a 11.25 11.25 0 0 1 11.25 -11.25 z" fill="#a03453"/>
+<rect x="541" y="519" width="200" height="4" fill="#a03453"/>
+<text x="641.0" y="547" text-anchor="middle" font-size="15" font-weight="700" fill="#0b1524">Safety check</text>
+<text x="641.0" y="568" text-anchor="middle" font-size="11.8" fill="#5a6a7e">Sits outside the model. Blocks</text>
+<text x="641.0" y="585" text-anchor="middle" font-size="11.8" fill="#5a6a7e">unsafe replies, hides private</text>
+<text x="641.0" y="602" text-anchor="middle" font-size="11.8" fill="#5a6a7e">data, catches invented facts.</text>
+<rect x="625.0" y="616" width="32" height="16" rx="8" fill="#a03453"/>
+<text x="641.0" y="628" text-anchor="middle" font-size="10.5" font-weight="700" fill="#fff">1.6</text>
+<line x1="546" y1="640" x2="736" y2="640" stroke="#d7dee8" stroke-width="1"/>
+<a href="task-1-6.html#s2"><text x="641.0" y="657" text-anchor="middle" font-size="11.2" font-weight="700" fill="#c94f1f">Notes 1.6 · Section 1 &#8594;</text></a>
+<line x1="756" y1="593.0" x2="771" y2="593.0" stroke="#5a6a7e" stroke-width="1.8" marker-end="url(#a)"/>
+<rect x="778" y="518" width="222" height="150" rx="12" fill="#ffffff" stroke="#d7dee8" stroke-width="1.5"/>
+<path d="M 790 518.75 h 198 a 11.25 11.25 0 0 1 11.25 11.25 v -4 a 8 8 0 0 0 -8 -8 h -215.5 a 8 8 0 0 0 -8 8 v 4 a 11.25 11.25 0 0 1 11.25 -11.25 z" fill="#1f4e79"/>
+<rect x="789" y="519" width="200" height="4" fill="#1f4e79"/>
+<text x="889.0" y="547" text-anchor="middle" font-size="15" font-weight="700" fill="#0b1524">Send the answer</text>
+<text x="889.0" y="568" text-anchor="middle" font-size="11.8" fill="#5a6a7e">The reply goes back with links to</text>
+<text x="889.0" y="585" text-anchor="middle" font-size="11.8" fill="#5a6a7e">the exact documents it came</text>
+<text x="889.0" y="602" text-anchor="middle" font-size="11.8" fill="#5a6a7e">from, so it can be checked.</text>
+<rect x="873.0" y="616" width="32" height="16" rx="8" fill="#1f4e79"/>
+<text x="889.0" y="628" text-anchor="middle" font-size="10.5" font-weight="700" fill="#fff">1.1</text>
+<line x1="794" y1="640" x2="984" y2="640" stroke="#d7dee8" stroke-width="1"/>
+<a href="task-1-5.html#s8"><text x="889.0" y="657" text-anchor="middle" font-size="11.2" font-weight="700" fill="#c94f1f">Notes 1.5 · Section 6 &#8594;</text></a>
+<path d="M 889.0 464 V 489 H 145.0 V 511" fill="none" stroke="#5a6a7e" stroke-width="1.8" marker-end="url(#a)"/>
+<path d="M 1137.0 215 V 278 H 641.0 V 303" fill="none" stroke="#e8622c" stroke-width="2.2" marker-end="url(#aA)"/>
+<text x="889.0" y="270" text-anchor="middle" font-size="12.5" font-weight="600" fill="#e8622c">the question gets matched against these</text>
+<rect x="34" y="722" width="335.2" height="27" rx="13.5" fill="#5a6a7e"/>
+<text x="49" y="740.5" font-size="12.5" font-weight="800" fill="#fff" letter-spacing=".04em">ALWAYS ON</text>
+<text x="146.2" y="740.5" font-size="12.5" font-weight="600" fill="#fff" opacity=".85">Keep it honest  ·  never stops</text>
+<rect x="34" y="767" width="222" height="150" rx="12" fill="#ffffff" stroke="#d7dee8" stroke-width="1.5"/>
+<path d="M 46 767.75 h 198 a 11.25 11.25 0 0 1 11.25 11.25 v -4 a 8 8 0 0 0 -8 -8 h -215.5 a 8 8 0 0 0 -8 8 v 4 a 11.25 11.25 0 0 1 11.25 -11.25 z" fill="#1d6f68"/>
+<rect x="45" y="768" width="200" height="4" fill="#1d6f68"/>
+<text x="145.0" y="796" text-anchor="middle" font-size="15" font-weight="700" fill="#0b1524">Test before launch</text>
+<text x="145.0" y="817" text-anchor="middle" font-size="11.8" fill="#5a6a7e">Score the model, then have a</text>
+<text x="145.0" y="834" text-anchor="middle" font-size="11.8" fill="#5a6a7e">person sign it off. Check a new</text>
+<text x="145.0" y="851" text-anchor="middle" font-size="11.8" fill="#5a6a7e">prompt against the old one.</text>
+<rect x="110.5" y="865" width="32" height="16" rx="8" fill="#1d6f68"/>
+<text x="126.5" y="877" text-anchor="middle" font-size="10.5" font-weight="700" fill="#fff">1.2</text>
+<rect x="147.5" y="865" width="32" height="16" rx="8" fill="#a03453"/>
+<text x="163.5" y="877" text-anchor="middle" font-size="10.5" font-weight="700" fill="#fff">1.6</text>
+<line x1="50" y1="889" x2="240" y2="889" stroke="#d7dee8" stroke-width="1"/>
+<a href="task-1-2.html#s4"><text x="145.0" y="906" text-anchor="middle" font-size="11.2" font-weight="700" fill="#c94f1f">Notes 1.2 · Step 4 &#8594;</text></a>
+<line x1="260" y1="842.0" x2="275" y2="842.0" stroke="#5a6a7e" stroke-width="1.8" marker-end="url(#a)"/>
+<rect x="282" y="767" width="222" height="150" rx="12" fill="#ffffff" stroke="#d7dee8" stroke-width="1.5"/>
+<path d="M 294 767.75 h 198 a 11.25 11.25 0 0 1 11.25 11.25 v -4 a 8 8 0 0 0 -8 -8 h -215.5 a 8 8 0 0 0 -8 8 v 4 a 11.25 11.25 0 0 1 11.25 -11.25 z" fill="#1f4e79"/>
+<rect x="293" y="768" width="200" height="4" fill="#1f4e79"/>
+<text x="393.0" y="796" text-anchor="middle" font-size="15" font-weight="700" fill="#0b1524">Watch and log</text>
+<text x="393.0" y="817" text-anchor="middle" font-size="11.8" fill="#5a6a7e">CloudWatch keeps what was said</text>
+<text x="393.0" y="834" text-anchor="middle" font-size="11.8" fill="#5a6a7e">and how slow it was. CloudTrail</text>
+<text x="393.0" y="851" text-anchor="middle" font-size="11.8" fill="#5a6a7e">keeps who ran what, for years.</text>
+<rect x="358.5" y="865" width="32" height="16" rx="8" fill="#1f4e79"/>
+<text x="374.5" y="877" text-anchor="middle" font-size="10.5" font-weight="700" fill="#fff">1.1</text>
+<rect x="395.5" y="865" width="32" height="16" rx="8" fill="#a03453"/>
+<text x="411.5" y="877" text-anchor="middle" font-size="10.5" font-weight="700" fill="#fff">1.6</text>
+<line x1="298" y1="889" x2="488" y2="889" stroke="#d7dee8" stroke-width="1"/>
+<a href="task-1-6.html#s4"><text x="393.0" y="906" text-anchor="middle" font-size="11.2" font-weight="700" fill="#c94f1f">Notes 1.6 · Section 3 &#8594;</text></a>
+<line x1="508" y1="842.0" x2="523" y2="842.0" stroke="#5a6a7e" stroke-width="1.8" marker-end="url(#a)"/>
+<rect x="530" y="767" width="222" height="150" rx="12" fill="#ffffff" stroke="#d7dee8" stroke-width="1.5"/>
+<path d="M 542 767.75 h 198 a 11.25 11.25 0 0 1 11.25 11.25 v -4 a 8 8 0 0 0 -8 -8 h -215.5 a 8 8 0 0 0 -8 8 v 4 a 11.25 11.25 0 0 1 11.25 -11.25 z" fill="#1d6f68"/>
+<rect x="541" y="768" width="200" height="4" fill="#1d6f68"/>
+<text x="641.0" y="796" text-anchor="middle" font-size="15" font-weight="700" fill="#0b1524">Fix and improve</text>
+<text x="641.0" y="817" text-anchor="middle" font-size="11.8" fill="#5a6a7e">Mistakes and human corrections</text>
+<text x="641.0" y="834" text-anchor="middle" font-size="11.8" fill="#5a6a7e">feed back in: retrain the add-on</text>
+<text x="641.0" y="851" text-anchor="middle" font-size="11.8" fill="#5a6a7e">layer, or publish a new prompt.</text>
+<rect x="606.5" y="865" width="32" height="16" rx="8" fill="#1d6f68"/>
+<text x="622.5" y="877" text-anchor="middle" font-size="10.5" font-weight="700" fill="#fff">1.2</text>
+<rect x="643.5" y="865" width="32" height="16" rx="8" fill="#a03453"/>
+<text x="659.5" y="877" text-anchor="middle" font-size="10.5" font-weight="700" fill="#fff">1.6</text>
+<line x1="546" y1="889" x2="736" y2="889" stroke="#d7dee8" stroke-width="1"/>
+<a href="task-1-2.html#s5"><text x="641.0" y="906" text-anchor="middle" font-size="11.2" font-weight="700" fill="#c94f1f">Notes 1.2 · Step 5 &#8594;</text></a>
+<path d="M 641.0 921 V 953 H 16 V 593.0 H 27" fill="none" stroke="#5a6a7e" stroke-width="1.7" stroke-dasharray="6 5" marker-end="url(#a)"/>
+<text x="627.0" y="945" text-anchor="end" font-size="12.5" fill="#5a6a7e" font-style="italic">what you learn goes back into the prompt and the model</text>
+</g></svg>
+      </div>
+      <figcaption>Step 1 happens once, when documents arrive. Step 2 happens every time somebody asks a question. The bottom row never stops.<br><b>The orange link at the bottom of every box opens the exact section of the notes that explains it.</b></figcaption>
+    </figure>
+  </div>
+</section>
+
+<section style="padding-top:20px;">
+  <div class="wrap">
+    <h2 class="sh">What each task is actually about</h2>
+    <p class="sl">One line each, then the few things most worth remembering.</p>
+    
+    <div class="tcard tc11">
+      <div class="th"><span class="tnum" style="background:var(--t11)">1.1</span><h3>Architecture &amp; PoC</h3></div>
+      <p class="one">The overall shape of the system &mdash; how a question gets in, which AWS service does each job, and how the answer comes back.</p>
+      <ul><li><b>Three ways to build:</b> Amazon Q Business is ready-made, Bedrock is build-your-own, SageMaker is when you want full control of the machines.</li><li><b>Streaming the answer</b> word by word uses AppSync over WebSocket, so the user is not staring at a blank screen.</li><li><b>Worth memorising:</b> if your documents come from SharePoint, Salesforce or Confluence, you must use OpenSearch Serverless.</li></ul>
+      <div class="jump"><span>Jump into the notes:</span><a href="task-1-1.html#s7">7 · Build vs. buy</a><a href="task-1-1.html#s1">1 · Getting in &amp; streaming</a><a href="task-1-1.html#s3">3 · Which store to use</a><a href="task-1-1.html#s6">6 · Flows vs. Agents</a></div>
+      <a class="go" href="task-1-1.html">Open the whole page &rarr;</a>
+    </div>
+    <div class="tcard tc12">
+      <div class="th"><span class="tnum" style="background:var(--t12)">1.2</span><h3>Picking &amp; Looking After the Model</h3></div>
+      <p class="one">Choosing which model to use, teaching it your house style, and proving it is good enough before it goes live.</p>
+      <ul><li><b>Decide your pass marks first</b>, then test. Otherwise you talk yourself into whatever you tried first.</li><li><b>LoRA</b> trains a small add-on layer and leaves the original model untouched &mdash; cheap, fast, and easy to swap out.</li><li><b>Catch for the exam:</b> speed and cost are <i>not</i> part of model evaluation. Evaluation only measures quality.</li><li><b>Models quietly get worse</b> over time as the real world changes. That is drift, and you have to watch for it.</li></ul>
+      <div class="jump"><span>Jump into the notes:</span><a href="task-1-2.html#s1">Step 1 · Choosing a model</a><a href="task-1-2.html#s3">Step 3 · LoRA</a><a href="task-1-2.html#s4">Step 4 · Evaluation</a><a href="task-1-2.html#s5">Step 5 · Drift &amp; failures</a></div>
+      <a class="go" href="task-1-2.html">Open the whole page &rarr;</a>
+    </div>
+    <div class="tcard tc13">
+      <div class="th"><span class="tnum" style="background:var(--t13)">1.3</span><h3>Getting the Data Ready</h3></div>
+      <p class="one">Cleaning up messy input &mdash; forms, photos, phone calls &mdash; before any of it reaches the model.</p>
+      <ul><li><b>Four different checkers</b>, because each catches what the others miss: rules, visual exploration, custom code, and a trend alarm.</li><li><b>Anything that fails goes to a person</b>, never to the bin.</li><li><b>Turn the temperature down (0 to 0.2)</b> when the same question must give the same answer every time, like money decisions.</li><li><b>Change temperature or top_p, never both</b> &mdash; change both and you cannot tell which one caused the difference.</li></ul>
+      <div class="jump"><span>Jump into the notes:</span><a href="task-1-3.html#s2">Stage 1 · Validation</a><a href="task-1-3.html#s3">Stage 2 · Processing &amp; fusion</a><a href="task-1-3.html#s4">Stage 3 · Settings &amp; the prompt</a><a href="task-1-3.html#s5">Stage 4 &amp; 5 · Enrichment</a></div>
+      <a class="go" href="task-1-3.html">Open the whole page &rarr;</a>
+    </div>
+    <div class="tcard tc14">
+      <div class="th"><span class="tnum" style="background:var(--t14)">1.4</span><h3>Where the Numbers Live</h3></div>
+      <p class="one">Picking the right database for your vectors, making it fast at scale, and making sure one client cannot see another client&rsquo;s files.</p>
+      <ul><li><b>No single store fits everything.</b> Public documents, confidential files and live status flags each want a different one.</li><li><b>Narrow down first, then do the maths.</b> Filter 15 million documents to 5 by date and court, then compare vectors on just those 5.</li><li><b>Permissions are checked before results come back</b>, not filtered out afterwards.</li></ul>
+      <div class="jump"><span>Jump into the notes:</span><a href="task-1-4.html#s1">Step 1 · The stores</a><a href="task-1-4.html#s2">Step 2 · Metadata</a><a href="task-1-4.html#s3">Step 3 · Speed &amp; sharding</a><a href="task-1-4.html#s4">Step 4 · Router &amp; security</a></div>
+      <a class="go" href="task-1-4.html">Open the whole page &rarr;</a>
+    </div>
+    <div class="tcard tc15">
+      <div class="th"><span class="tnum" style="background:var(--t15)">1.5</span><h3>Finding the Right Pieces</h3></div>
+      <p class="one">The quality side of search: how documents are cut up, how they become numbers, and how the best few are chosen.</p>
+      <ul><li><b>Cut on meaning, not on word count.</b> A clause split in the wrong place can reverse what it says.</li><li><b>Titan turns each piece into 1,536 numbers.</b> Fewer numbers is cheaper and faster but loses fine detail.</li><li><b>Use the same embedding model</b> when saving and when searching, or nothing matches any more.</li><li><b>Search wide, then narrow.</b> Grab about 100 candidates quickly, then let a reranker pick the best 10 carefully.</li></ul>
+      <div class="jump"><span>Jump into the notes:</span><a href="task-1-5.html#s3">1 · Cutting up documents</a><a href="task-1-5.html#s4">2 · Embeddings</a><a href="task-1-5.html#s6">4 · Hybrid search &amp; reranking</a><a href="task-1-5.html#s7">5 · Handling the question</a></div>
+      <a class="go" href="task-1-5.html">Open the whole page &rarr;</a>
+    </div>
+    <div class="tcard tc16">
+      <div class="th"><span class="tnum" style="background:var(--t16)">1.6</span><h3>Prompts &amp; Keeping It Legal</h3></div>
+      <p class="one">Treating the prompt as real production code: reviewed, versioned, tested, and provable after the fact.</p>
+      <ul><li><b>Three layers, because one is never enough:</b> the prompt tells the model what to do, Guardrails stop it saying things, and a JSON schema forces the answer into a fixed shape.</li><li><b>Counter-intuitive:</b> on Guardrails, LOW is the <i>strictest</i> setting and HIGH is the loosest.</li><li><b>Test the new prompt against the old one</b> on the same set of questions. If it fixes one thing and breaks another, it does not ship.</li><li><b>CloudTrail records who did it; CloudWatch records what was said.</b> The first one is your seven-year audit trail.</li></ul>
+      <div class="jump"><span>Jump into the notes:</span><a href="task-1-6.html#s2">1 · The three layers</a><a href="task-1-6.html#s3">2 · Remembering the chat</a><a href="task-1-6.html#s4">3 · Versions &amp; audit</a><a href="task-1-6.html#s5">4 · Testing prompts</a></div>
+      <a class="go" href="task-1-6.html">Open the whole page &rarr;</a>
+    </div>
+  </div>
+</section>
+
+<section style="padding-top:0;">
+  <div class="wrap">
+    <h2 class="sh">Why the same thing keeps coming up</h2>
+    <p class="sl">Some ideas appear in several tasks. That is not repetition &mdash; each task looks at it from a bit closer. If two pages disagree in emphasis, trust the more detailed one.</p>
+    <dl class="ov">
+      <dt>Where the vectors are stored</dt>
+      <dd><a class="pill" style="background:var(--t11)" href="task-1-1.html">1.1</a> lists the options.
+          <a class="pill" style="background:var(--t14)" href="task-1-4.html">1.4</a> is the real explanation.
+          <a class="pill" style="background:var(--t15)" href="task-1-5.html">1.5</a> compares the same stores on how well they search.</dd>
+
+      <dt>Cutting documents into pieces</dt>
+      <dd><a class="pill" style="background:var(--t13)" href="task-1-3.html">1.3</a> mentions it as one step of preparing data.
+          <a class="pill" style="background:var(--t15)" href="task-1-5.html">1.5</a> is where it is properly explained.</dd>
+
+      <dt>Guardrails and hiding personal data</dt>
+      <dd><a class="pill" style="background:var(--t11)" href="task-1-1.html">1.1</a> introduces Guardrails.
+          <a class="pill" style="background:var(--t15)" href="task-1-5.html">1.5</a> adds one rule: remove personal data <i>before</i> turning text into numbers, because you cannot undo it afterwards.
+          <a class="pill" style="background:var(--t16)" href="task-1-6.html">1.6</a> has every setting.</dd>
+
+      <dt>Prompt Flows vs. Agents</dt>
+      <dd><a class="pill" style="background:var(--t11)" href="task-1-1.html">1.1</a> tells you what they are.
+          <a class="pill" style="background:var(--t16)" href="task-1-6.html">1.6</a> tells you which to pick: a fixed path when a regulator may ask what happened, a thinking agent when the job is open-ended.</dd>
+
+      <dt>Step Functions</dt>
+      <dd>Same service, three different jobs: running four things at once
+          <a class="pill" style="background:var(--t13)" href="task-1-3.html">1.3</a>, splitting one big question into smaller ones
+          <a class="pill" style="background:var(--t15)" href="task-1-5.html">1.5</a>, and remembering where a conversation got to
+          <a class="pill" style="background:var(--t16)" href="task-1-6.html">1.6</a>.</dd>
+
+      <dt>Testing</dt>
+      <dd><a class="pill" style="background:var(--t12)" href="task-1-2.html">1.2</a> tests the <i>model</i>.
+          <a class="pill" style="background:var(--t16)" href="task-1-6.html">1.6</a> tests the <i>prompt</i>. Same idea, different thing under test.</dd>
+    </dl>
+  </div>
+</section>
+
+<section style="padding-top:0;">
+  <div class="wrap">
+    <p class="more"><b>Want the dense version?</b> There is a <a href="domain-1-detailed.html">detailed map</a> with every service, threshold and exam rule packed onto one diagram. It is heavy going &mdash; better saved for revision once this page feels obvious.</p>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <p>This is an independent, unofficial study resource and is not affiliated with, endorsed by, or sponsored by Amazon Web Services, Inc. AWS, Amazon Bedrock, and all related marks are trademarks of Amazon.com, Inc. or its affiliates.</p>
+    <p>Hosted on Amazon S3 + Amazon CloudFront.</p>
+  </div>
+</footer>
+
+</body>
+</html>

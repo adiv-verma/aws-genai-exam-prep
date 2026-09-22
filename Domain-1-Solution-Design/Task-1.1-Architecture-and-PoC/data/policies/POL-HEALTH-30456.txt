@@ -1,0 +1,20 @@
+POLICY DOCUMENT
+Policy Number: POL-HEALTH-30456
+Policy Type: Supplemental Health Insurance (Accident & Urgent Care Rider)
+Policyholder: Daniel Ekwueme
+Coverage Period: 2025-06-01 to 2026-05-31
+
+COVERAGE SUMMARY
+- Emergency Room Visit: Up to $5,000 per visit, $200 deductible
+- Urgent Care Visit: Up to $1,500 per visit, $50 deductible
+- Ambulance Transport: Up to $1,000 per incident
+- Follow-up Specialist Visits: Up to $300 per visit, 3-visit maximum per incident
+
+EXCLUSIONS
+- Pre-existing conditions diagnosed prior to policy start date
+- Elective or cosmetic procedures
+- Injuries sustained during professional or semi-professional athletic competition
+
+CLAIMS NOTES
+Claims must be reported within 90 days of treatment, accompanied by an itemized bill
+from the treating facility.

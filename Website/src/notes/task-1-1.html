@@ -40,7 +40,7 @@
   .note-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;}
   @media (max-width:760px){.note-grid{grid-template-columns:1fr;}}
   .note-card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:18px 20px;}
-  .note-card h4{margin:0 0 12px;font-size:13px;font-weight:800;color:var(--navy-2);}
+  .note-card h4{scroll-margin-top:78px;margin:0 0 12px;font-size:13px;font-weight:800;color:var(--navy-2);}
   .note-card dl{margin:0;}
   .note-card dt{font-size:13.5px;font-weight:700;color:var(--ink);margin:0 0 3px;}
   .note-card dt:not(:first-child){margin-top:12px;}
@@ -49,6 +49,8 @@
   footer{padding:32px 0 48px;color:#8b96a5;font-size:12.5px;}
   footer .wrap{border-top:1px solid var(--line);padding-top:22px;}
   footer a{color:#6b7686;}
+  .note-card h4:target{color:var(--accent-dark);}
+  .note-card h4:target::after{content:" \2190";color:var(--accent);}
 </style>
 </head>
 <body>
@@ -58,6 +60,7 @@
     <a class="nav-brand" href="../index.html">AIP-C01 <span>Guide</span></a>
     <ul class="nav-links">
       <li><a href="index.html">All Study Notes</a></li>
+      <li><a href="domain-1.html">Domain 1 Map</a></li>
       <li><a href="../tasks/task-1-1.html">Task 1.1 Build Log</a></li>
     </ul>
   </div>
@@ -80,7 +83,7 @@
     <div class="note-grid">
 
       <div class="note-card">
-        <h4>1. Entry, Networking &amp; Authentication Layer</h4>
+        <h4 id="s1">1. Entry, Networking &amp; Authentication Layer</h4>
         <dl>
           <dt>AWS Global Accelerator</dt>
           <dd>Provides 2 Static Anycast IPs and utilizes the AWS private backbone network. Use this for global users requiring low-latency WebSocket/TCP streaming and static IP whitelisting (bypassing public internet jitter).</dd>
@@ -92,7 +95,7 @@
       </div>
 
       <div class="note-card">
-        <h4>2. Core RAG &amp; Knowledge Base Pipeline</h4>
+        <h4 id="s2">2. Core RAG &amp; Knowledge Base Pipeline</h4>
         <dl>
           <dt>Bedrock Knowledge Base (KB)</dt>
           <dd>Fully managed, serverless RAG orchestration that manages document ingestion, chunking, and vector embedding generation.</dd>
@@ -102,7 +105,7 @@
       </div>
 
       <div class="note-card">
-        <h4>3. Vector Stores &amp; Storage Decision Matrix</h4>
+        <h4 id="s3">3. Vector Stores &amp; Storage Decision Matrix</h4>
         <dl>
           <dt>OpenSearch Serverless</dt>
           <dd>The default, ultra-low latency vector engine. CRITICAL EXAM RULE: OpenSearch Serverless is mandatory when integrating SaaS data sources such as SharePoint, Salesforce, or Confluence into Bedrock KBs.</dd>
@@ -116,7 +119,7 @@
       </div>
 
       <div class="note-card">
-        <h4>4. Safety, Governance &amp; Guardrails</h4>
+        <h4 id="s4">4. Safety, Governance &amp; Guardrails</h4>
         <dl>
           <dt>Bedrock Guardrails</dt>
           <dd>Acts as an independent safety net placed outside the raw model inference path to filter both inputs and outputs.</dd>
@@ -128,7 +131,7 @@
       </div>
 
       <div class="note-card">
-        <h4>5. Asynchronous Integration &amp; Auditing Plane</h4>
+        <h4 id="s5">5. Asynchronous Integration &amp; Auditing Plane</h4>
         <dl>
           <dt>Amazon EventBridge</dt>
           <dd>A decoupled, multi-target content-based router utilizing PutEvents (fire-and-forget). Use it to trigger parallel, non-blocking post-processing tasks instantly.</dd>
@@ -138,7 +141,7 @@
       </div>
 
       <div class="note-card">
-        <h4>6. Orchestration &amp; Framework Patterns</h4>
+        <h4 id="s6">6. Orchestration &amp; Framework Patterns</h4>
         <dl>
           <dt>Bedrock Flows</dt>
           <dd>Deterministic (Node-Based). Use this when the execution path must follow a rigid, 100% predictable, step-by-step sequence (e.g., strict regulatory compliance or audit pipelines).</dd>
@@ -148,7 +151,7 @@
       </div>
 
       <div class="note-card">
-        <h4>7. Platform Selection: Build vs. Buy Matrix</h4>
+        <h4 id="s7">7. Platform Selection: Build vs. Buy Matrix</h4>
         <dl>
           <dt>Amazon Q Business</dt>
           <dd>Fully managed, turn-key enterprise search application featuring built-in native connectors. Choose this for rapid employee search solutions requiring zero custom pipeline building.</dd>
@@ -160,7 +163,7 @@
       </div>
 
       <div class="note-card">
-        <h4>8. GenAI Ops, Observability &amp; Monitoring</h4>
+        <h4 id="s8">8. GenAI Ops, Observability &amp; Monitoring</h4>
         <dl>
           <dt>AWS X-Ray</dt>
           <dd>Provides end-to-end distributed tracing across AppSync &rarr; Lambda &rarr; Bedrock KB &rarr; Vector Store &rarr; LLM to isolate latency bottlenecks.</dd>

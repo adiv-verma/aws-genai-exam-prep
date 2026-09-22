@@ -4,13 +4,14 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Task 1.1 Build Log | AIP-C01 Guide</title>
-<meta name="description" content="Domain 1, Task 1.1 bonus assignment, step by step: a customer support AI assistant built on Amazon Bedrock, with Prompt Management, Guardrails, Step Functions orchestration, and a QA/monitoring layer. Written in plain English, with the AWS ideas explained as they come up — what was built, what broke, and why.">
+<meta name="description" content="Domain 1, Task 1.1 bonus assignment: a real, live insurance claims document processor on Amazon Bedrock — extraction, a simple policy-lookup RAG component, summary generation, and a head-to-head Claude Haiku vs. Sonnet comparison, tested end to end on 3 differently-formatted sample claims.">
 <style>
   :root{
     --ink:#0b1524; --ink-soft:#3a4a5e; --paper:#f7f8fa; --card:#ffffff; --line:#e3e7ee;
     --accent:#e8622c; --accent-dark:#c94f1f; --navy:#0f2540; --navy-2:#16345c;
     --good:#1a7f5a; --good-bg:#e9f7f1; --good-line:#bfe6d6;
     --bad:#b3271f; --bad-bg:#fdecea; --bad-line:#f3c6c2;
+    --unbuilt-bg:#f4f1fb; --unbuilt-line:#d8cdf0; --unbuilt:#5b3fa3;
     --concept-bg:#eef6ff; --concept-line:#c9e0f7; --concept:#155a8a;
     color-scheme: light;
   }
@@ -20,7 +21,7 @@
   a{color:var(--accent-dark);}
   code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;background:#eef1f6;padding:1px 5px;border-radius:4px;font-size:.92em;}
   .wrap{max-width:980px;margin:0 auto;padding:0 24px;}
-  .wrap-wide{max-width:1320px;margin:0 auto;padding:0 24px;}
+  .wrap-wide{max-width:1160px;margin:0 auto;padding:0 24px;}
 
   .nav{position:sticky;top:0;z-index:50;background:rgba(15,37,64,.96);backdrop-filter:blur(6px);border-bottom:1px solid rgba(255,255,255,.08);}
   .nav .wrap{display:flex;align-items:center;justify-content:space-between;height:56px;max-width:1080px;}
@@ -29,12 +30,13 @@
   .nav-links{display:flex;gap:22px;list-style:none;margin:0;padding:0;}
   .nav-links a{color:#cdd8e6;text-decoration:none;font-size:13.5px;font-weight:500;}
   .nav-links a:hover{color:#fff;}
-  @media (max-width:720px){ .nav-links{display:none;} }
+  @media (max-width:760px){ .nav-links{display:none;} }
 
   header.hero{background:radial-gradient(900px 420px at 85% -10%, rgba(232,98,44,.3), transparent 60%), linear-gradient(180deg,var(--navy) 0%, var(--navy-2) 100%);color:#fff;padding:48px 0 36px;}
   .eyebrow{display:inline-block;font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#ffd8c4;background:rgba(232,98,44,.18);border:1px solid rgba(232,98,44,.4);padding:5px 10px;border-radius:999px;margin-bottom:16px;}
   h1{font-size:clamp(24px,3.6vw,36px);line-height:1.18;margin:0 0 12px;font-weight:800;}
-  header.hero p.lead{font-size:16px;color:#c9d5e3;max-width:720px;margin:0 0 22px;}
+  header.hero p.lead{font-size:16px;color:#c9d5e3;max-width:740px;margin:0 0 22px;}
+  header.hero p.lead a{color:#ffd8c4;}
   .stat-row{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.12);border-radius:12px;overflow:hidden;}
   .stat{background:rgba(255,255,255,.04);padding:14px 12px;text-align:center;}
   .stat .n{font-size:19px;font-weight:800;color:#fff;}
@@ -50,6 +52,12 @@
   .toc{display:flex;flex-wrap:wrap;gap:10px;margin:0 0 8px;}
   .toc a{font-size:13px;font-weight:600;background:var(--card);border:1px solid var(--line);color:var(--ink-soft);padding:7px 13px;border-radius:999px;text-decoration:none;}
   .toc a:hover{border-color:var(--accent);color:var(--accent-dark);}
+
+  .hold-banner{background:var(--unbuilt-bg);border:1px solid var(--unbuilt-line);border-radius:14px;padding:22px 24px;margin-bottom:8px;}
+  .hold-banner h3{margin:0 0 8px;font-size:15px;font-weight:800;color:var(--unbuilt);}
+  .hold-banner p{margin:0 0 10px;font-size:14px;color:var(--ink-soft);line-height:1.6;}
+  .hold-banner p:last-child{margin-bottom:0;}
+  .hold-banner code{background:#ece6f8;}
 
   /* PHASE DIVIDER */
   .phase-divider{display:flex;align-items:flex-start;gap:14px;margin:36px 0 16px;}
@@ -74,32 +82,30 @@
   .step-res{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px;color:var(--navy-2);background:#eef3fa;border:1px solid #d6e2f0;padding:2px 8px;border-radius:6px;margin:0 0 12px;display:inline-block;}
   .step-body p{margin:0 0 8px;font-size:14px;color:var(--ink-soft);}
   .step-body p strong.lbl{color:var(--ink);font-weight:700;}
+  .step-body ul{margin:0 0 8px;padding-left:20px;}
+  .step-body li{font-size:14px;color:var(--ink-soft);margin-bottom:5px;}
+  .step-body li strong{color:var(--ink);}
 
   .concept{background:var(--concept-bg);border:1px solid var(--concept-line);border-radius:8px;padding:12px 15px;margin:0 0 14px;}
   .concept p{margin:0;font-size:13.5px;color:var(--ink);}
   .concept p strong{color:var(--concept);}
 
-  .mini-bug{background:var(--bad-bg);border:1px solid var(--bad-line);border-radius:8px;padding:13px 16px;margin-top:10px;}
-  .mini-bug .mb-head{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.05em;color:var(--bad);margin:0 0 6px;}
-  .mini-bug p{margin:0 0 5px;font-size:13.5px;color:var(--ink-soft);}
-  .mini-bug p:last-child{margin-bottom:0;}
-  .mini-bug strong{color:var(--ink);}
+  .mini-find{background:var(--good-bg);border:1px solid var(--good-line);border-radius:8px;padding:13px 16px;margin-top:10px;}
+  .mini-find .mf-head{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.05em;color:var(--good);margin:0 0 4px;}
+  .mini-find p{margin:0 0 5px;font-size:13.5px;color:var(--ink);}
+  .mini-find p:last-child{margin-bottom:0;}
+  .mini-find ul{margin:6px 0 0;padding-left:18px;}
+  .mini-find li{font-size:13.5px;color:var(--ink);margin-bottom:4px;}
 
   .mini-tip{background:#fff7ed;border:1px solid #f6d9b8;border-radius:8px;padding:13px 16px;margin-top:10px;}
   .mini-tip .mt-head{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.05em;color:var(--accent-dark);margin:0 0 4px;}
   .mini-tip p{margin:0;font-size:13.5px;color:var(--ink);}
 
-  .diagram{margin:0;}
-  .diagram .svg-scroll{overflow-x:auto;}
-  .diagram svg{width:100%;min-width:900px;height:auto;display:block;color:var(--ink);}
-  .diagram figcaption{margin-top:14px;font-size:13px;color:var(--ink-soft);max-width:900px;}
-  .diagram figcaption code{font-size:.95em;}
-
   table.verify{width:100%;border-collapse:collapse;font-size:13.5px;background:var(--card);border:1px solid var(--line);border-radius:10px;overflow:hidden;}
   table.verify th{text-align:left;background:var(--navy);color:#fff;padding:10px 14px;font-size:12px;text-transform:uppercase;letter-spacing:.04em;}
   table.verify td{padding:10px 14px;border-top:1px solid var(--line);color:var(--ink-soft);}
   table.verify tr:nth-child(even) td{background:#fafbfc;}
-  .verify-wrap{overflow-x:auto;}
+  .verify-wrap{overflow-x:auto;margin:8px 0 14px;}
 
   footer{padding:32px 0 48px;color:#8b96a5;font-size:12.5px;}
   footer .wrap{border-top:1px solid var(--line);padding-top:22px;max-width:1080px;}
@@ -113,7 +119,7 @@
     <a class="nav-brand" href="../index.html">AIP-C01 <span>Guide</span></a>
     <ul class="nav-links">
       <li><a href="index.html">Build Log</a></li>
-      <li><a href="#architecture">How It Runs</a></li>
+      <li><a href="#mixup">The Mixup</a></li>
       <li><a href="#log">Step-by-Step Log</a></li>
       <li><a href="#resources">Resource Index</a></li>
       <li><a href="../notes/task-1-1.html">Study Notes</a></li>
@@ -124,544 +130,172 @@
 <header class="hero">
   <div class="wrap">
     <span class="eyebrow">Domain 1 &middot; Task 1.1 &middot; Bonus Assignment</span>
-    <h1>Customer Support AI Assistant<br>Architecture &amp; Governance PoC</h1>
+    <h1>Insurance Claims<br>Document Processor</h1>
     <p class="lead">
-      The goal of this project: build a chatbot that helps AWS customers fix a specific kind of problem
-      (an EC2 server that won't start or respond), using Amazon Bedrock — the AWS service that gives you
-      access to AI models like Claude. This page walks through every step in the order it happened. Each
-      AWS idea is explained in plain terms the first time it shows up, so you don't need to already know
-      AWS to follow along.
+      An insurance company wants to automate processing of claim documents — extract the key facts
+      (claimant, policy number, incident date, claim amount, description), match the claim to its policy,
+      and generate a short summary for an adjuster, using Amazon Bedrock. Built and live-tested end to end
+      on 3 differently-formatted sample claims, plus a real head-to-head comparison of two Bedrock models
+      on the summary-generation step.
     </p>
     <div class="stat-row">
-      <div class="stat"><div class="n">14</div><div class="l">Steps, in order</div></div>
-      <div class="stat"><div class="n">29</div><div class="l">Resources deployed</div></div>
-      <div class="stat"><div class="n">10</div><div class="l">Real errors, fixed</div></div>
-      <div class="stat"><div class="n">5/5</div><div class="l">QA tests passing</div></div>
+      <div class="stat"><div class="n">4</div><div class="l">Steps, in order</div></div>
+      <div class="stat"><div class="n">3</div><div class="l">Resources deployed</div></div>
+      <div class="stat"><div class="n">3/3</div><div class="l">Sample claims processed correctly</div></div>
+      <div class="stat"><div class="n">$0</div><div class="l">Standing infrastructure cost</div></div>
     </div>
   </div>
 </header>
 
 <section>
+  <div class="wrap" id="mixup">
+    <div class="hold-banner">
+      <h3>Why this folder's earlier build log described something else entirely</h3>
+      <p>
+        An earlier session's <code>project.md</code> for this task had the wrong content pasted into it —
+        Task 1.6's bonus assignment (a customer-support governance PoC), not this task's real brief. That
+        content was fully built and live-tested under this folder's <code>adi-1-1-</code> resource-name
+        prefix before the mistake was caught, and has since been correctly re-attributed to
+        <a href="task-1-6.html">Task 1.6's own Build Log page</a> — nothing was renamed or rebuilt, only the
+        documentation. Everything below is this task's own, freshly built work, using a distinct
+        <code>adi-1-1-claims-*</code> naming scheme so it doesn't collide with that earlier (relabeled)
+        stack.
+      </p>
+    </div>
+  </div>
+</section>
+
+<section>
   <div class="wrap">
     <div class="toc">
-      <a href="#architecture">How it runs</a>
-      <a href="#phase-1">Phase 1: Foundation</a>
-      <a href="#phase-2">Phase 2: Prompt Mgmt</a>
-      <a href="#phase-3">Phase 3: Guardrails</a>
-      <a href="#phase-4">Phase 4: Orchestration</a>
-      <a href="#phase-5">Phase 5: QA &amp; Monitoring</a>
+      <a href="#mixup">The mixup</a>
+      <a href="#phase-1">Step 1: Architecture</a>
+      <a href="#phase-2">Step 2: Sample Data</a>
+      <a href="#phase-3">Step 3: Processor</a>
+      <a href="#phase-4">Step 4: Model Comparison</a>
       <a href="#resources">Resource Index</a>
     </div>
   </div>
 </section>
 
-<section class="alt" id="architecture">
-  <div class="wrap-wide">
-    <p class="kicker">How It Runs</p>
-    <h2 class="h">One question, followed from start to finish</h2>
-    <p class="section-lead">
-      Here's what happens, in order, when a customer asks a question. Solid arrows show the path the
-      question actually takes to get an answer. Dashed arrows show logging and monitoring happening at
-      the same time in the background — they record what's going on, but they don't slow the answer
-      down or change it. Resource names below leave off the shared <code>adi-1-1-</code> prefix that
-      every resource in this project starts with, just to save space.
-    </p>
-
-    <figure class="diagram">
-      <div class="svg-scroll">
-      <svg viewBox="0 0 1350 600" role="img" aria-label="Diagram: a client starts a Step Functions run, which checks the question's intent and mood with a Lambda calling Amazon Comprehend, decides whether to ask a follow-up, diagnose the problem, or hand off to a human, then calls a Lambda that asks Amazon Bedrock for an answer using a saved prompt and a guardrail, saves the conversation to DynamoDB, and sends the answer back. CloudTrail and CloudWatch watch every step in the background, feeding a dashboard, five alarms, and an alert topic.">
-        <defs>
-          <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
-            <path d="M0,0 L10,5 L0,10 z" fill="var(--navy-2)"/>
-          </marker>
-          <marker id="arrowSoft" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
-            <path d="M0,0 L10,5 L0,10 z" fill="var(--ink-soft)"/>
-          </marker>
-        </defs>
-
-        <g font-family="-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica,Arial,sans-serif">
-
-          <!-- Client -->
-          <rect x="140" y="20" width="170" height="42" rx="10" fill="var(--card)" stroke="var(--line)" stroke-width="1.5"/>
-          <text x="225" y="46" text-anchor="middle" font-size="12" font-weight="700" fill="var(--ink)">You &#8212; CLI / Console</text>
-
-          <!-- Client -> Capture -->
-          <line x1="225" y1="62" x2="207" y2="126" stroke="var(--navy-2)" stroke-width="1.6" marker-end="url(#arrow)"/>
-          <text x="232" y="98" font-size="10.5" fill="var(--ink-soft)">1 &#183; start-execution</text>
-
-          <!-- Step Functions boundary -->
-          <rect x="120" y="85" width="1050" height="135" rx="14" fill="none" stroke="var(--navy-2)" stroke-width="1.2"/>
-          <text x="140" y="105" font-size="10.5" font-weight="700" letter-spacing="0.4" fill="var(--navy-2)">STEP FUNCTIONS &#183; support-assistant-sm (the decision flowchart)</text>
-
-          <!-- Capture -->
-          <rect x="150" y="128" width="110" height="54" rx="8" fill="var(--card)" stroke="var(--line)" stroke-width="1.5"/>
-          <text x="205" y="159" text-anchor="middle" font-size="12" font-weight="700" fill="var(--ink)">Capture</text>
-
-          <!-- Capture -> DetectIntent -->
-          <line x1="260" y1="155" x2="308" y2="155" stroke="var(--navy-2)" stroke-width="1.6" marker-end="url(#arrow)"/>
-
-          <!-- DetectIntent -->
-          <rect x="310" y="128" width="210" height="54" rx="8" fill="var(--card)" stroke="var(--line)" stroke-width="1.5"/>
-          <text x="415" y="150" text-anchor="middle" font-size="12" font-weight="700" fill="var(--ink)">DetectIntent</text>
-          <text x="415" y="168" text-anchor="middle" font-size="10" fill="var(--ink-soft)">detect-intent (Lambda)</text>
-
-          <!-- DetectIntent -> Choice -->
-          <line x1="520" y1="155" x2="573" y2="155" stroke="var(--navy-2)" stroke-width="1.6" marker-end="url(#arrow)"/>
-
-          <!-- Choice -->
-          <polygon points="575,155 650,121 725,155 650,189" fill="var(--accent)" fill-opacity="0.14" stroke="var(--accent-dark)" stroke-width="1.7"/>
-          <text x="650" y="159" text-anchor="middle" font-size="12" font-weight="700" fill="var(--accent-dark)">Choice</text>
-          <text x="650" y="207" text-anchor="middle" font-size="9.5" font-style="italic" fill="var(--ink-soft)">diagnose &#183; ask more &#183; hand off</text>
-
-          <!-- Choice -> Generate -->
-          <line x1="727" y1="155" x2="798" y2="155" stroke="var(--navy-2)" stroke-width="1.6" marker-end="url(#arrow)"/>
-          <text x="735" y="143" font-size="10.5" fill="var(--ink-soft)">3 &#183; pick a path</text>
-
-          <!-- Generate -->
-          <rect x="800" y="128" width="210" height="54" rx="8" fill="var(--card)" stroke="var(--line)" stroke-width="1.5"/>
-          <text x="905" y="150" text-anchor="middle" font-size="12" font-weight="700" fill="var(--ink)">InvokeModel</text>
-          <text x="905" y="168" text-anchor="middle" font-size="10" fill="var(--ink-soft)">invoke-model (Lambda)</text>
-
-          <!-- Generate -> Respond -->
-          <line x1="1010" y1="155" x2="1048" y2="155" stroke="var(--navy-2)" stroke-width="1.6" marker-end="url(#arrow)"/>
-
-          <!-- Respond -->
-          <rect x="1050" y="128" width="100" height="54" rx="8" fill="var(--card)" stroke="var(--line)" stroke-width="1.5"/>
-          <text x="1100" y="159" text-anchor="middle" font-size="12" font-weight="700" fill="var(--ink)">Respond</text>
-
-          <!-- Respond -> caller -->
-          <line x1="1152" y1="140" x2="1230" y2="72" stroke="var(--navy-2)" stroke-width="1.6" marker-end="url(#arrow)"/>
-          <text x="1160" y="60" font-size="10.5" fill="var(--ink-soft)">6 &#183; answer goes back</text>
-
-          <!-- DetectIntent -> Comprehend -->
-          <line x1="415" y1="182" x2="415" y2="273" stroke="var(--navy-2)" stroke-width="1.6" marker-end="url(#arrow)"/>
-          <text x="425" y="235" font-size="10.5" fill="var(--ink-soft)">2 &#183; check the mood</text>
-
-          <!-- Comprehend -->
-          <rect x="315" y="275" width="200" height="55" rx="8" fill="var(--card)" stroke="var(--line)" stroke-width="1.5"/>
-          <text x="415" y="298" text-anchor="middle" font-size="12" font-weight="700" fill="var(--ink)">Amazon Comprehend</text>
-          <text x="415" y="316" text-anchor="middle" font-size="10" fill="var(--ink-soft)">DetectSentiment</text>
-
-          <!-- Generate -> Bedrock -->
-          <line x1="905" y1="182" x2="905" y2="273" stroke="var(--navy-2)" stroke-width="1.6" marker-end="url(#arrow)"/>
-          <text x="915" y="235" font-size="10.5" fill="var(--ink-soft)">4 &#183; ask the model</text>
-
-          <!-- Bedrock -->
-          <rect x="740" y="275" width="330" height="100" rx="10" fill="var(--card)" stroke="var(--line)" stroke-width="1.5"/>
-          <text x="905" y="298" text-anchor="middle" font-size="12.5" font-weight="700" fill="var(--ink)">Amazon Bedrock &#8212; Converse API</text>
-          <text x="905" y="317" text-anchor="middle" font-size="10" fill="var(--ink-soft)">Prompt: scenario-* (+ persona)</text>
-          <text x="905" y="334" text-anchor="middle" font-size="10" fill="var(--ink-soft)">Guardrail: support-assistant-guardrail</text>
-          <text x="905" y="351" text-anchor="middle" font-size="10" fill="var(--ink-soft)">Model: Claude Haiku 4.5 (inference profile)</text>
-
-          <!-- Generate -> DynamoDB (routed) -->
-          <path d="M 960 182 L 960 255 L 1190 255 L 1190 273" fill="none" stroke="var(--navy-2)" stroke-width="1.6" marker-end="url(#arrow)"/>
-          <text x="1010" y="248" font-size="10.5" fill="var(--ink-soft)">5 &#183; save the conversation</text>
-
-          <!-- DynamoDB -->
-          <rect x="1100" y="275" width="180" height="55" rx="8" fill="var(--card)" stroke="var(--line)" stroke-width="1.5"/>
-          <text x="1190" y="298" text-anchor="middle" font-size="12" font-weight="700" fill="var(--ink)">DynamoDB</text>
-          <text x="1190" y="316" text-anchor="middle" font-size="10" fill="var(--ink-soft)">support-conversations</text>
-
-          <!-- Governance boundary -->
-          <rect x="140" y="420" width="980" height="150" rx="14" fill="none" stroke="var(--ink-soft)" stroke-width="1.2" stroke-dasharray="6,4"/>
-          <text x="160" y="442" font-size="10.5" font-weight="700" letter-spacing="0.3" fill="var(--ink-soft)">LOGGING &amp; MONITORING &#183; runs in the background, doesn't slow the answer down</text>
-
-          <!-- boundary -> CloudTrail (dashed) -->
-          <path d="M 130 220 L 300 470" fill="none" stroke="var(--ink-soft)" stroke-width="1.4" stroke-dasharray="5,4" marker-end="url(#arrowSoft)"/>
-          <text x="150" y="345" font-size="10" fill="var(--ink-soft)">logged the whole time</text>
-
-          <!-- CloudTrail -->
-          <rect x="190" y="470" width="380" height="80" rx="10" fill="var(--card)" stroke="var(--line)" stroke-width="1.5"/>
-          <text x="380" y="494" text-anchor="middle" font-size="12" font-weight="700" fill="var(--ink)">CloudTrail</text>
-          <text x="380" y="513" text-anchor="middle" font-size="10" fill="var(--ink-soft)">support-assistant-trail</text>
-          <text x="380" y="530" text-anchor="middle" font-size="10" fill="var(--ink-soft)">&#8594; S3 + CloudWatch Logs</text>
-
-          <!-- Bedrock -> CloudWatch (dashed) -->
-          <path d="M 905 375 L 850 468" fill="none" stroke="var(--ink-soft)" stroke-width="1.4" stroke-dasharray="5,4" marker-end="url(#arrowSoft)"/>
-          <text x="915" y="420" font-size="10" fill="var(--ink-soft)">speed, usage, errors</text>
-
-          <!-- CloudWatch -->
-          <rect x="620" y="470" width="460" height="80" rx="10" fill="var(--card)" stroke="var(--line)" stroke-width="1.5"/>
-          <text x="850" y="494" text-anchor="middle" font-size="12" font-weight="700" fill="var(--ink)">CloudWatch &#8212; Dashboard + 5 Alarms</text>
-          <text x="850" y="513" text-anchor="middle" font-size="10" fill="var(--ink-soft)">Watches: bad answers, guardrail blocks</text>
-          <text x="850" y="530" text-anchor="middle" font-size="10" fill="var(--ink-soft)">&#8594; sends alerts to adi-1-1-alerts</text>
-
-        </g>
-      </svg>
-      </div>
-      <figcaption>
-        Solid lines (numbered 1&ndash;6) show the path a real question takes, in order — this is what
-        happens the moment a customer asks something. Dashed lines show background logging and
-        monitoring — always running, watching for problems, but never part of the wait time for an
-        answer. Not shown here: the <code>adi-1-1-prompt-templates</code> storage bucket and the
-        <code>adi-1-1-prompt-editor-role</code> permission set, built in Steps 2 and 8 — they support the
-        system behind the scenes but aren't part of this specific live path. Also not shown:
-        <code>adi-1-1-test-harness-sm</code> (Step 13), which runs this whole flow five times over
-        automatically as a test, rather than answering a real customer.
-      </figcaption>
-    </figure>
-  </div>
-</section>
-
-<section id="log">
+<section class="alt" id="log">
   <div class="wrap">
     <p class="kicker">Step-by-Step Build Log</p>
     <h2 class="h">Every step, in the order it happened</h2>
     <p class="section-lead">
-      Each step below explains an AWS idea in plain terms first (in the blue box, where it's a new idea),
-      then says exactly what was built, where to go look at it in the AWS console, and why it mattered.
-      Any error hit while building that step is included right where it happened, along with the fix.
-      This whole project was kept to one topic on purpose — EC2 troubleshooting only — so it stayed
-      simple enough to actually finish and test properly, instead of trying to cover everything at once.
+      Everything here is pay-per-use — S3 storage plus on-demand Bedrock calls, no provisioned or
+      hourly-billed resource anywhere in this build.
     </p>
 
     <div class="phase-divider" id="phase-1">
-      <span class="pd-num">Phase 1</span>
-      <div class="pd-text"><h3>Foundation</h3><p>Before building anything AI-related, set up the basic storage and permissions everything else depends on.</p></div>
+      <span class="pd-num">Step 1</span>
+      <div class="pd-text"><h3>Design The Architecture (Skill 1.1.1)</h3><p>Confirm model access and pick which Bedrock model handles which job.</p></div>
       <span class="pd-line"></span>
     </div>
 
     <div class="step-card">
-      <div class="step-head"><span class="step-num">1</span><h4>Check access to the AI model</h4></div>
-      <p class="step-res">Claude Haiku 4.5 &middot; us.anthropic.claude-haiku-4-5-20251001-v1:0</p>
+      <div class="step-head"><h4>Architecture + model selection</h4></div>
+      <p class="step-res">Claude Haiku 4.5 &middot; Claude Sonnet 4.6</p>
       <div class="step-body">
         <div class="concept">
-          <p><strong>In plain terms:</strong> Amazon Bedrock is an AWS service that gives you access to AI models — like Claude, made by Anthropic — without having to run the AI yourself. But not every AWS account can use every model right away; some models need to be turned on for your account first, a bit like requesting access to a private app.</p>
+          <p><strong>In plain terms:</strong> Different Bedrock models trade off speed, cost, and capability differently. Picking one model for every job in a pipeline is simpler, but not always the best choice — worth actually testing before assuming.</p>
         </div>
-        <p><strong class="lbl">What was built:</strong> Sent a real test message to the model and confirmed it actually replied, in the <code>us-east-1</code> AWS region. Tried Claude Sonnet 5 first, then switched to Claude Haiku 4.5 after hitting the error below.</p>
-        <p><strong class="lbl">Where to check:</strong> AWS Console &rarr; Amazon Bedrock &rarr; Model access.</p>
-        <p><strong class="lbl">Why it matters:</strong> Every other step in this project calls this model. It's worth testing with a real question and a real answer first, instead of just trusting a green checkmark in the console that might not mean what it looks like.</p>
-      </div>
-      <div class="mini-bug">
-        <p class="mb-head">Error 1 &middot; Access looked approved, but calls still failed</p>
-        <p><strong>What happened:</strong> Accepted Claude Sonnet 5's usage terms, and the console said access was approved — but actually calling the model still failed with an access-denied error.</p>
-        <p><strong>Fix:</strong> approval can take a little time to fully apply behind the scenes, even after the console says yes. Switched to Claude Haiku 4.5 instead, which was already working right away.</p>
-      </div>
-      <div class="mini-bug">
-        <p class="mb-head">Error 2 &middot; Wrong model ID format</p>
-        <p><strong>What happened:</strong> Calling the model by its plain name failed with a message saying "on-demand throughput isn't supported...use an inference profile."</p>
-        <p><strong>Fix:</strong> some newer models need a special ID (starting with <code>us.</code>) instead of their plain name — this is called a cross-region inference profile, and it lets AWS route the request to whichever nearby data center has room, instead of just one fixed location. Using that special ID fixed the error.</p>
-      </div>
-      <div class="mini-tip">
-        <p class="mt-head">Good to know</p>
-        <p>The console can say access is approved before it's actually usable — there's a short delay behind the scenes that the console doesn't show you. And some newer Bedrock models need that special "inference profile" ID instead of their plain model name, or calls fail with a confusing error that doesn't obviously point to the real fix.</p>
-      </div>
-    </div>
-
-    <div class="step-card">
-      <div class="step-head"><span class="step-num">2</span><h4>Storage bucket for prompt templates</h4></div>
-      <p class="step-res">adi-1-1-prompt-templates</p>
-      <div class="step-body">
-        <div class="concept">
-          <p><strong>In plain terms:</strong> Amazon S3 is AWS's basic file storage service — think of it like a folder in the cloud that can hold any kind of file, accessible from anywhere. "Versioning" means every time a file gets replaced, the old copy is kept too, so nothing is ever truly overwritten.</p>
-        </div>
-        <p><strong class="lbl">What was built:</strong> Created an S3 bucket (a named storage container) to hold prompt files, turned on version history, and blocked all public access so only this project's own systems can read it.</p>
-        <p><strong class="lbl">Where to check:</strong> S3 &rarr; adi-1-1-prompt-templates &rarr; Properties tab (Bucket Versioning: Enabled).</p>
-        <p><strong class="lbl">Why it matters:</strong> If a prompt file gets edited and saved, the previous version stays available. Undoing a bad change later just means pointing back at an older version — no need to rebuild or remember what the old text was.</p>
-      </div>
-      <div class="mini-tip">
-        <p class="mt-head">Good to know</p>
-        <p>This bucket's version history is separate from Bedrock Prompt Management's own version history (Steps 5&ndash;6), which is a different feature entirely. Think of this S3 bucket as a backup copy — the actual versions the app uses to answer questions live in Bedrock Prompt Management, not here.</p>
-      </div>
-    </div>
-
-    <div class="step-card">
-      <div class="step-head"><span class="step-num">3</span><h4>Database for conversation history</h4></div>
-      <p class="step-res">adi-1-1-support-conversations</p>
-      <div class="step-body">
-        <div class="concept">
-          <p><strong>In plain terms:</strong> DynamoDB is AWS's database for storing small pieces of structured data — like rows in a spreadsheet — that can be looked up very quickly. Unlike S3 (which stores files), DynamoDB is built for storing and searching lots of small records, like one row per message in a conversation.</p>
-        </div>
-        <p><strong class="lbl">What was built:</strong> Created a DynamoDB table where every message in a conversation is saved as its own row, set old rows to automatically delete after a while, and used pay-as-you-go pricing so there's no cost when nobody's using it.</p>
-        <p><strong class="lbl">Where to check:</strong> DynamoDB &rarr; adi-1-1-support-conversations &rarr; Additional settings (Time to live: expiresAt, Enabled).</p>
-        <p><strong class="lbl">Why it matters:</strong> AI models don't remember anything between calls — each request starts completely fresh, with no memory of what was said before. This table is what gives the assistant memory: every message gets saved here, and before each new reply, the earlier messages are read back and included, so the conversation feels continuous.</p>
-      </div>
-      <div class="mini-tip">
-        <p class="mt-head">Good to know</p>
-        <p>DynamoDB's auto-delete feature isn't instant — AWS says it can take up to 48 hours after the set expiry time. It's a good way to clean up old data over time and save on storage costs, but don't rely on it to remove something at the exact moment you need it gone.</p>
-      </div>
-    </div>
-
-    <div class="step-card">
-      <div class="step-head"><span class="step-num">4</span><h4>Permissions for the Lambda functions</h4></div>
-      <p class="step-res">adi-1-1-bedrock-lambda-role</p>
-      <div class="step-body">
-        <div class="concept">
-          <p><strong>In plain terms:</strong> AWS Lambda lets you run a small piece of code without setting up or managing a server — you just upload the code, and AWS runs it whenever it's needed. IAM (Identity and Access Management) is how AWS controls who — or what — is allowed to do what. An "IAM role" is a named set of permissions that a piece of code, like a Lambda function, can be given.</p>
-        </div>
-        <p><strong class="lbl">What was built:</strong> Created an IAM role that only Lambda functions can use, starting with a small, narrow set of permissions. More permissions were only added later (Steps 9, 11), and only when a real error proved one was actually missing.</p>
-        <p><strong class="lbl">Where to check:</strong> IAM &rarr; Roles &rarr; adi-1-1-bedrock-lambda-role &rarr; Permissions.</p>
-        <p><strong class="lbl">Why it matters:</strong> This is the shared permission set every Lambda function in this project runs with. Keeping it as narrow as possible — only what's actually needed — limits how much damage could happen if something ever went wrong, like a bug or a leaked credential.</p>
-      </div>
-      <div class="mini-tip">
-        <p class="mt-head">Good to know</p>
-        <p>Build up permissions based on real errors, not guesses about what might be needed. When something fails with "access denied," the error message usually tells you exactly what permission is missing — add just that one, nothing extra. This approach is how nearly every permission problem in this build got fixed (Steps 9, 11, 13).</p>
+        <p><strong class="lbl">What was done:</strong> Confirmed AWS identity and live-tested invoke access to two current-gen models via <code>bedrock-runtime converse</code>: Claude Haiku 4.5 (already proven reliable in this account) and Claude Sonnet 4.6 (via its cross-region inference profile — the bare model ID rejects on-demand invocation, same pattern found elsewhere in this project). Both replied correctly. Architecture: S3 holds raw claims and policy documents &rarr; an S3-upload-triggered Lambda extracts fields, matches the policy, validates, and summarizes via Bedrock &rarr; result written back to S3.</p>
+        <p><strong class="lbl">Why it matters:</strong> Every later step calls one of these two models, so access had to be proven with a real request/response first. Picking Haiku for extraction and comparing both for summarization (Step 4) gives the brief's "compare model performance" requirement a real, meaningful axis to measure.</p>
       </div>
     </div>
 
     <div class="phase-divider" id="phase-2">
-      <span class="pd-num">Phase 2</span>
-      <div class="pd-text"><h3>Prompt Management &amp; Governance</h3><p>Save the assistant's instructions in one place, with version history and controlled access to editing them.</p></div>
+      <span class="pd-num">Step 2</span>
+      <div class="pd-text"><h3>Sample Data</h3><p>Storage plus three claim documents, deliberately written in three different formats.</p></div>
       <span class="pd-line"></span>
     </div>
 
     <div class="step-card">
-      <div class="step-head"><span class="step-num">5</span><h4>Base instructions for the assistant</h4></div>
-      <p class="step-res">adi-1-1-support-assistant-persona (v2)</p>
+      <div class="step-head"><h4>S3 bucket, sample claims, and policy documents</h4></div>
+      <p class="step-res">adi-1-1-claims-documents-269737522732</p>
       <div class="step-body">
-        <div class="concept">
-          <p><strong>In plain terms:</strong> Bedrock Prompt Management is a place to save and version the instructions ("prompts") you give an AI model, instead of hardcoding that text inside your application. It works a bit like the prompt templates page — you write the instructions once, save them, and every part of your app can reuse the same saved version.</p>
-        </div>
-        <p><strong class="lbl">What was built:</strong> Saved the assistant's core instructions — its role, its tone, and how it should format its replies — as a Prompt Management entry.</p>
-        <p><strong class="lbl">Where to check:</strong> Bedrock &rarr; Prompt management &rarr; adi-1-1-support-assistant-persona.</p>
-        <p><strong class="lbl">Why it matters:</strong> Keeps the assistant's personality and rules in one saved, versioned place, instead of scattered through application code where it's easy to lose track of and hard to update safely.</p>
-      </div>
-      <div class="mini-bug">
-        <p class="mb-head">Error 3 &middot; Two settings clashed with each other</p>
-        <p><strong>What happened:</strong> The very first live test failed with: "temperature and top_p cannot both be specified for this model." (Both of these are settings that control how random or predictable the AI's wording is.)</p>
-        <p><strong>Fix:</strong> removed one of the two conflicting settings (topP), and kept only temperature. Saved that as version 2.</p>
-      </div>
-      <div class="mini-tip">
-        <p class="mt-head">Good to know</p>
-        <p>Not every AI model accepts every setting the same way — always test a new prompt for real before trusting it works. Also worth knowing: the "draft" copy of a saved prompt is meant for editing, while a saved, numbered version is what the real app should actually use. That way, fixing a bad edit later just means pointing back at an older version — not a full redeploy of anything.</p>
-      </div>
-    </div>
-
-    <div class="step-card">
-      <div class="step-head"><span class="step-num">6</span><h4>Prompts for each situation</h4></div>
-      <p class="step-res">adi-1-1-scenario-diagnostic &middot; adi-1-1-scenario-clarification &middot; adi-1-1-scenario-escalation</p>
-      <div class="step-body">
-        <p><strong class="lbl">What was built:</strong> Three more saved prompts, each one carrying a copy of the base instructions from Step 5, plus extra guidance for one specific situation: diagnosing a technical problem, asking a follow-up question when details are missing, or handing off to a human when needed.</p>
-        <p><strong class="lbl">Where to check:</strong> Bedrock &rarr; Prompt management.</p>
-        <p><strong class="lbl">Why it matters:</strong> Different situations call for different kinds of replies. The decision flowchart built in Step 12 picks between these three prompts automatically, based on what the customer actually needs at that moment.</p>
-      </div>
-      <div class="mini-tip">
-        <p class="mt-head">Good to know</p>
-        <p>Bedrock's Prompt Management has no way for one prompt to automatically reuse another prompt's text — there's no "inherit from" feature. So the shared base instructions had to be manually copied into all three prompts. That's just a real limit of the tool, not a mistake in how it was used.</p>
-      </div>
-    </div>
-
-    <div class="step-card">
-      <div class="step-head"><span class="step-num">7</span><h4>Audit logging</h4></div>
-      <p class="step-res">adi-1-1-cloudtrail-logs &middot; /aws/cloudtrail/adi-1-1-support-assistant &middot; adi-1-1-cloudtrail-cwlogs-role &middot; adi-1-1-support-assistant-trail</p>
-      <div class="step-body">
-        <div class="concept">
-          <p><strong>In plain terms:</strong> CloudTrail is AWS's built-in activity log — it automatically records almost every action taken in an AWS account (who did what, and when), which is essential for security reviews later. CloudWatch is AWS's monitoring and logging dashboard, used to view logs and metrics in near real time.</p>
-        </div>
-        <p><strong class="lbl">What was built:</strong> Set up a single log trail that records every action twice: once permanently in an S3 bucket, and once in a CloudWatch log group where it can be viewed and searched right away.</p>
-        <p><strong class="lbl">Where to check:</strong> CloudTrail &rarr; Trails &rarr; adi-1-1-support-assistant-trail (status: Logging).</p>
-        <p><strong class="lbl">Why it matters:</strong> Covers two different needs with one trail — a permanent, hard-to-tamper-with record of every action (in S3), and logs that can be searched right away without any extra setup (in CloudWatch).</p>
-      </div>
-      <div class="mini-bug">
-        <p class="mb-head">Minor &middot; Tried to use a permission too soon after creating it</p>
-        <p><strong>What happened:</strong> Creating the trail right after creating the permission role it needed failed with an invalid-role error.</p>
-        <p><strong>Fix:</strong> waited about 15 seconds and tried again — it worked. Brand-new permissions just need a short moment to fully apply across AWS's systems.</p>
-      </div>
-      <div class="mini-tip">
-        <p class="mt-head">Good to know</p>
-        <p>A brand-new IAM role can take a few seconds before other AWS services are able to use it — even though the console shows it as already created. If something fails right after creating a role, waiting a bit and retrying is usually the right fix, not rewriting the permissions themselves.</p>
-      </div>
-    </div>
-
-    <div class="step-card">
-      <div class="step-head"><span class="step-num">8</span><h4>Separate access for editing prompts</h4></div>
-      <p class="step-res">adi-1-1-prompt-editor-role</p>
-      <div class="step-body">
-        <p><strong class="lbl">What was built:</strong> A permission set that's allowed to write and update saved prompts, but is specifically blocked from ever running the AI model itself — and has no other access to anything else in this project.</p>
-        <p><strong class="lbl">Where to check:</strong> IAM &rarr; Roles &rarr; adi-1-1-prompt-editor-role.</p>
-        <p><strong class="lbl">Why it matters:</strong> Keeps "who's allowed to change the instructions" separate from "who's allowed to run them" — the kind of separation a real approval process would depend on, so one person changing a prompt can't also secretly run up AI usage costs, and vice versa.</p>
-      </div>
-      <div class="mini-tip">
-        <p class="mt-head">Good to know &middot; how this was checked</p>
-        <p>Actually logging in as this role to test it would have meant creating real, temporary AWS credentials — a security risk not worth taking just to check a permission set. Instead, a built-in AWS tool was used that simulates what a role is allowed to do, without ever creating real credentials. It confirmed: editing prompts — allowed; running the AI model — blocked; everything else — blocked too. That's a safer way to test permissions than actually using them.</p>
+        <p><strong class="lbl">What was built:</strong> An S3 bucket (versioned, all public access blocked). Three synthetic insurance claims, each written in a genuinely different style: a narrative email-style auto claim, a structured intake-form property/water-damage claim, and a terse "quick submit" urgent-care claim — plus three matching policy documents, each with real coverage limits, deductibles, and exclusions.</p>
+        <p><strong class="lbl">Where to check:</strong> S3 &rarr; adi-1-1-claims-documents-269737522732 &rarr; raw-claims/ (3 objects) and policies/ (3 objects).</p>
+        <p><strong class="lbl">Why it matters:</strong> Three different formats means the extraction step (Step 3) actually has to generalize, rather than just parsing one fixed template — a single consistent format would have proven far less.</p>
       </div>
     </div>
 
     <div class="phase-divider" id="phase-3">
-      <span class="pd-num">Phase 3</span>
-      <div class="pd-text"><h3>Guardrails</h3><p>Add a safety check that works separately from the prompt, so it still catches problems even if someone tries to trick the AI.</p></div>
+      <span class="pd-num">Step 3</span>
+      <div class="pd-text"><h3>Implement PoC + Reusable Components (Skills 1.1.2 &amp; 1.1.3)</h3><p>The processing pipeline itself, built from three named, reusable pieces.</p></div>
       <span class="pd-line"></span>
     </div>
 
     <div class="step-card">
-      <div class="step-head"><span class="step-num">9</span><h4>Safety guardrail</h4></div>
-      <p class="step-res">adi-1-1-support-assistant-guardrail</p>
+      <div class="step-head"><h4>Claims processor: extraction, policy lookup, validation, summary</h4></div>
+      <p class="step-res">adi-1-1-claims-processor</p>
       <div class="step-body">
         <div class="concept">
-          <p><strong>In plain terms:</strong> A Bedrock Guardrail is a separate safety check that sits between the customer and the AI model. It can block certain topics, certain kinds of sensitive information, and even attempts to trick the AI into ignoring its instructions — checking the conversation independently of whatever the prompt itself says.</p>
+          <p><strong>In plain terms:</strong> Rather than one script that does everything, this is split into three small, reusable pieces: something that holds the prompt text, something that calls the model, and something that checks the model's answer looks right — each one usable on its own, not tangled together.</p>
         </div>
-        <p><strong class="lbl">What was built:</strong> Built a guardrail that blocks three risky topics (sharing login credentials, promising unreleased AWS features, and talking about competitors), blocks sensitive data like AWS access keys and passwords, filters out harmful content, and specifically catches attempts to trick the AI into ignoring its own rules. Tested it against all 4 of these cases and it worked as expected every time.</p>
-        <p><strong class="lbl">Where to check:</strong> Bedrock &rarr; Guardrails &rarr; adi-1-1-support-assistant-guardrail.</p>
-        <p><strong class="lbl">Why it matters:</strong> This safety check runs completely separately from the prompt's own instructions. That means it still works even if someone finds a clever way to trick the AI into ignoring what it was told to do — the guardrail doesn't rely on the AI "listening" to stay safe.</p>
+        <p><strong class="lbl">What was built:</strong> An S3-triggered Lambda, containing three reusable components:</p>
+        <ul>
+          <li><strong>Prompt template manager</strong> &mdash; holds the extraction and summary prompt text by name, so either can be tuned without hunting through code.</li>
+          <li><strong>Model invoker</strong> &mdash; a thin wrapper around Bedrock's Converse API, one place every model call goes through.</li>
+          <li><strong>Content validator</strong> &mdash; checks the extracted JSON has all 5 required fields, that the claim amount parses as a number and the date has a real year, before summarization runs.</li>
+        </ul>
+        <p>Flow: read the claim &rarr; extract 5 fields via Bedrock &rarr; validate &rarr; look up the matching policy document directly by policy number (the brief's "simple RAG component" &mdash; a plain S3 lookup is enough at this scale, same reasoning used elsewhere in this project for why a managed vector database isn't needed for a handful of documents) &rarr; generate a summary, explicitly prompted to reference the matched policy's actual coverage terms &rarr; write the result to <code>processed/</code>. Wired a real S3 event trigger and re-uploaded all 3 sample claims to fire it live, not just tested via manual invoke.</p>
+        <p><strong class="lbl">Where to check:</strong> Lambda &rarr; adi-1-1-claims-processor &rarr; Monitor &rarr; Logs. S3 &rarr; processed/ &mdash; 3 result objects.</p>
       </div>
-      <div class="mini-tip">
-        <p class="mt-head">Good to know</p>
-        <p>Bedrock already knows how to recognize things like AWS access keys and secret keys automatically — no custom setup needed for that specific case. And blocking a topic like "talking about competitors" works by understanding the meaning of what's being said, not just matching exact words, which is why it also catches someone rephrasing the same idea in different words.</p>
+      <div class="mini-find">
+        <p class="mf-head">What the results actually showed</p>
+        <p>All 3 claims extracted correctly despite the different formats, matched the right policy every time, and passed validation:</p>
+        <ul>
+          <li><strong>Auto claim</strong> (narrative): pulled out claimant, policy number, date, $4,200 claim amount, and incident description correctly. The summary — unprompted with any specific numbers — correctly cited the policy's $500 deductible and its rule that claims over $2,000 need a police report, both facts pulled from the policy document, not the claim text.</li>
+          <li><strong>Property claim</strong> (form): extracted the $8,750 water-damage claim correctly; summary cited the $75,000 coverage limit and the photographic-evidence requirement for claims over $5,000.</li>
+          <li><strong>Health claim</strong> (terse): extracted correctly even from the sparsest format; summary correctly applied the $50 urgent-care deductible.</li>
+        </ul>
+        <p>Every summary demonstrably used the matched policy's real terms — confirming the RAG lookup is actually feeding the summary step, not just sitting there unused.</p>
       </div>
     </div>
 
     <div class="phase-divider" id="phase-4">
-      <span class="pd-num">Phase 4</span>
-      <div class="pd-text"><h3>Orchestration</h3><p>Wire everything together: two Lambda functions and a flowchart that makes every decision visible and easy to review.</p></div>
+      <span class="pd-num">Step 4</span>
+      <div class="pd-text"><h3>Test And Evaluate</h3><p>A real, measured comparison between two Bedrock models on the same claim.</p></div>
       <span class="pd-line"></span>
     </div>
 
     <div class="step-card">
-      <div class="step-head"><span class="step-num">10</span><h4>Lambda: figure out what the customer needs</h4></div>
-      <p class="step-res">adi-1-1-detect-intent</p>
+      <div class="step-head"><h4>Model comparison: Claude Haiku 4.5 vs. Claude Sonnet 4.6</h4></div>
       <div class="step-body">
-        <div class="concept">
-          <p><strong>In plain terms:</strong> Amazon Comprehend is an AWS service that reads text and tells you things about it — like whether it sounds positive, negative, or neutral. That's called "sentiment," and it's basically an automatic mood-reader for written text.</p>
+        <p><strong class="lbl">What was done:</strong> Ran both models against the identical summary prompt for the property claim (real extracted data + matched policy excerpt), measuring latency, token usage, and actual output quality.</p>
+      </div>
+      <div class="mini-find">
+        <p class="mf-head">What the results actually showed</p>
+        <div class="verify-wrap">
+          <table class="verify">
+            <tr><th>Model</th><th>Time</th><th>Output tokens</th><th>Notable behavior</th></tr>
+            <tr><td>Claude Haiku 4.5</td><td>1.76s</td><td>162</td><td>Concise single paragraph; states the claim falls within the coverage limit.</td></tr>
+            <tr><td>Claude Sonnet 4.6</td><td>4.71s</td><td>257</td><td>~2.7&times; slower; adds markdown structure unprompted; <strong>actually computes the net payout after the deductible</strong> ($8,750 &minus; $1,000 = $7,750) &mdash; a real, useful detail Haiku's summary didn't include.</td></tr>
+          </table>
         </div>
-        <p><strong class="lbl">What was built:</strong> A Lambda function that reads a customer's message and figures out: the general topic, any server ID mentioned in the text, how confident it is about what's actually being asked, the customer's mood (using Amazon Comprehend), and whether the situation looks serious enough to flag for a human.</p>
-        <p><strong class="lbl">Where to check:</strong> Lambda &rarr; adi-1-1-detect-intent &rarr; Monitor tab.</p>
-        <p><strong class="lbl">Why it matters:</strong> Turns a raw, messy customer message into clear, structured information the decision flowchart in Step 12 can act on — that's exactly what decides whether to diagnose the problem right away, ask a follow-up question, or hand off to a person.</p>
-      </div>
-      <div class="mini-bug">
-        <p class="mb-head">Error 4 &middot; Mood alone triggered too many handoffs</p>
-        <p><strong>What happened:</strong> A completely normal troubleshooting message ("won't start, stuck in pending") scored as 96% negative in mood, and wrongly triggered a handoff to a human — even though it was just an ordinary technical complaint, not an angry customer.</p>
-        <p><strong>Fix:</strong> stopped using mood by itself as a trigger for handing off to a human. Mood is still measured and saved for later use, but handoffs are now only triggered by specific keywords or billing-related issues. Tested again afterward: the same message no longer triggers a handoff, while a genuinely angry billing complaint still correctly does.</p>
+        <p><strong>Recommendation:</strong> Haiku 4.5 for extraction (both models were equally reliable at structured JSON output in this test, and Haiku is faster/cheaper for a step that runs per-document at volume). Sonnet 4.6 for summary generation specifically &mdash; its willingness to actually perform the deductible arithmetic is a real accuracy advantage for an adjuster-facing summary, worth the added latency for a step that doesn't run at extraction volume.</p>
       </div>
       <div class="mini-tip">
         <p class="mt-head">Good to know</p>
-        <p>Mood-detection tools like Comprehend are built for everyday text, and ordinary technical complaints often score as surprisingly negative — that's just how frustrated troubleshooting language reads. Don't use mood by itself to trigger something important like a handoff to a human; pair it with a clearer, more specific signal, like exact keywords.</p>
-      </div>
-    </div>
-
-    <div class="step-card">
-      <div class="step-head"><span class="step-num">11</span><h4>Lambda: ask the model and save the answer</h4></div>
-      <p class="step-res">adi-1-1-invoke-model</p>
-      <div class="step-body">
-        <p><strong class="lbl">What was built:</strong> A Lambda function that picks the right saved prompt for the situation, calls Bedrock with the Step 9 safety guardrail turned on, checks that the reply actually looks like a proper answer, and saves both sides of the conversation to the Step 3 database. This step had the most real problems to work through — three in a row.</p>
-        <p><strong class="lbl">Where to check:</strong> Lambda &rarr; adi-1-1-invoke-model &rarr; Monitor tab.</p>
-        <p><strong class="lbl">Why it matters:</strong> This is the one place where the saved prompt, the safety guardrail, and conversation memory all come together in a single call — it's the actual "answer the question" step of the whole system.</p>
-      </div>
-      <div class="mini-bug">
-        <p class="mb-head">Error 5 &middot; Wrong permission type for saved prompts</p>
-        <p><strong>What happened:</strong> Kept getting "not authorized" errors, even after granting full model-calling permission in every way that seemed reasonable.</p>
-        <p><strong>Fix:</strong> it turns out calling a model through a saved prompt (instead of a plain model ID) needs two different, more specific permissions — Converse and RenderPrompt — not the general model-calling permission that was tried first. Once those exact two were granted, it worked.</p>
-      </div>
-      <div class="mini-bug">
-        <p class="mb-head">Error 6 &middot; Request landed in the wrong AWS region</p>
-        <p><strong>What happened:</strong> After fixing Error 5, a new error appeared — the request got denied because it landed in a different AWS region than expected.</p>
-        <p><strong>Fix:</strong> the special cross-region model ID from Step 1 can send requests to more than one region behind the scenes, depending on where there's capacity. The permission had only allowed one specific region, so it was updated to allow any region.</p>
-      </div>
-      <div class="mini-bug">
-        <p class="mb-head">Error 7 &middot; Guardrail blocked a perfectly normal question</p>
-        <p><strong>What happened:</strong> With permissions finally sorted out, a completely harmless question ("instance stuck in pending for 10 minutes") got blocked by the safety guardrail from Step 9.</p>
-        <p><strong>Fix:</strong> the guardrail's strictest setting was too sensitive, and mistook a normal, clearly-structured question for a trick attempt. Turning the strictness down one notch fixed it — real questions now get through, while genuine trick attempts still get caught.</p>
-      </div>
-      <div class="mini-tip">
-        <p class="mt-head">Good to know</p>
-        <p>Some AWS permissions are tied to very specific actions — a broad "allow everything" permission doesn't always cover a narrower, differently-named action, so it's worth checking the exact permission name an error asks for. Also, a guardrail's strictness setting works like a dial, not an on/off switch: turning it up catches more trick attempts, but it also blocks more real, harmless questions — it's worth testing and tuning, not just leaving it on the strictest default.</p>
-      </div>
-    </div>
-
-    <div class="step-card">
-      <div class="step-head"><span class="step-num">12</span><h4>The decision flowchart</h4></div>
-      <p class="step-res">adi-1-1-support-assistant-sm</p>
-      <div class="step-body">
-        <div class="concept">
-          <p><strong>In plain terms:</strong> AWS Step Functions lets you build a visual flowchart out of your application's steps — each box is a task or a decision, and you can watch a real request move through the boxes one at a time. It's a way of making "what happens next, and why" visible and reviewable, instead of buried inside code.</p>
-        </div>
-        <p><strong class="lbl">What was built:</strong> The full flowchart: get the customer's question &rarr; figure out what's needed (Step 10) &rarr; decide what to do (hand off, ask more, or diagnose) &rarr; ask the model for an answer (Step 11) &rarr; check that answer looks right &rarr; reply. If anything fails along the way, it automatically falls back to a simple apology message instead of crashing or showing a raw error. This worked on the first try — all three decision paths were tested, and the actual steps taken were double-checked, not just the final answer shown.</p>
-        <p><strong class="lbl">Where to check:</strong> Step Functions &rarr; adi-1-1-support-assistant-sm &rarr; Executions (shows a visual map of exactly what happened in each run).</p>
-        <p><strong class="lbl">Why it matters:</strong> Every decision the system makes is a visible, named step with a clear reason attached — easy to review after the fact, instead of having to guess why the AI ended up doing what it did.</p>
-      </div>
-      <div class="mini-tip">
-        <p class="mt-head">Good to know</p>
-        <p>Step Functions comes in two speeds: "Standard" (a bit slower, but keeps a full visual history of every single run, forever) and "Express" (faster and cheaper, but with much less detail kept afterward). Standard was picked here specifically because being able to see exactly what happened in each run — for review and debugging — mattered more than raw speed for this use case.</p>
-      </div>
-    </div>
-
-    <div class="phase-divider" id="phase-5">
-      <span class="pd-num">Phase 5</span>
-      <div class="pd-text"><h3>QA &amp; Monitoring</h3><p>Build automatic tests, plus a dashboard and alerts that catch problems early — before a customer notices.</p></div>
-      <span class="pd-line"></span>
-    </div>
-
-    <div class="step-card">
-      <div class="step-head"><span class="step-num">13</span><h4>Test suite</h4></div>
-      <p class="step-res">adi-1-1-validate-output &middot; adi-1-1-test-harness-sm</p>
-      <div class="step-body">
-        <p><strong class="lbl">What was built:</strong> A Lambda function that checks whether a given response actually met a set of expected criteria, plus a second flowchart that automatically runs 5 built-in test questions through the entire assistant and checks each result against what it should have done.</p>
-        <p><strong class="lbl">Where to check:</strong> Step Functions &rarr; adi-1-1-test-harness-sm &rarr; latest run's output.</p>
-        <p><strong class="lbl">Why it matters:</strong> Covers testing tricky cases like angry customers and vague requests, plus two extra security-style tests (someone trying to trick the AI, and someone asking for login credentials) that are specifically supposed to fail safely, not succeed. Result: <strong>5 out of 5 tests passing</strong>, including confirming that the two risky test cases correctly got blocked by the guardrail instead of slipping through.</p>
-      </div>
-      <div class="mini-bug">
-        <p class="mb-head">Error 8 &middot; Missing permission for a nested test run</p>
-        <p><strong>What happened:</strong> Creating the test flowchart failed right away with a permission error.</p>
-        <p><strong>Fix:</strong> a flowchart that runs a second flowchart and waits for its result needs one extra, specific permission to manage a background event rule that AWS uses internally for that waiting behavior. Adding that one permission fixed it.</p>
-      </div>
-      <div class="mini-bug">
-        <p class="mb-head">Error 9 &middot; Tried to convert data that was already converted</p>
-        <p><strong>What happened:</strong> The first full test run failed with a data-format error.</p>
-        <p><strong>Fix:</strong> checked the actual raw details of the run and found the nested result had already come back in the right format — it didn't need converting at all. Removing that unnecessary conversion step fixed it.</p>
-      </div>
-      <div class="mini-tip">
-        <p class="mt-head">Good to know</p>
-        <p>A flowchart that runs another flowchart and waits for its result needs a specific extra permission — easy to forget, since it's not obvious from the plain "run this" permission alone. And when a nested result's format is unclear, it's worth checking the actual run details directly, rather than guessing based on general documentation that might describe a slightly different situation.</p>
-      </div>
-    </div>
-
-    <div class="step-card">
-      <div class="step-head"><span class="step-num">14</span><h4>Dashboard and alerts</h4></div>
-      <p class="step-res">adi-1-1-alerts &middot; 5 alarms &middot; adi-1-1-support-assistant-dashboard</p>
-      <div class="step-body">
-        <p><strong class="lbl">What was built:</strong> Added extra logging that specifically tracks bad answers, guardrail blocks, and response speed. Built an alert topic (left with no actual email or text message hooked up yet, since that's a decision for whoever owns the account, not something to decide automatically), 5 alarms watching for specific problems, and one dashboard showing all of it together in one place.</p>
-        <p><strong class="lbl">Where to check:</strong> CloudWatch &rarr; Dashboards &rarr; adi-1-1-support-assistant-dashboard; CloudWatch &rarr; Alarms (search for <code>adi-1-1</code>).</p>
-        <p><strong class="lbl">Why it matters:</strong> Catches problems automatically instead of relying on someone happening to notice by hand. Two of these alarms directly cover the same kinds of bugs found in Steps 4 and 7 above — if something similar ever happens again, it triggers an alert right away instead of quietly going unnoticed.</p>
-      </div>
-      <div class="mini-bug">
-        <p class="mb-head">Error 10 &middot; A dashboard feature doesn't work in alarms</p>
-        <p><strong>What happened:</strong> Tried to build an alarm that automatically adds up a number across several categories — it failed with "not supported on Metric Alarms."</p>
-        <p><strong>Fix:</strong> that automatic-adding shortcut only works when building dashboards, not when building alarms. Replaced it with three separate entries added together by hand, one per category. Also had to add a missing time-window setting to one part of the alarm before it would work.</p>
-      </div>
-      <div class="mini-tip">
-        <p class="mt-head">Good to know</p>
-        <p>Adding custom tracking to a Lambda function needs no extra permissions at all — it's just structured log lines, and the function can already write logs by default. Also worth knowing: a feature that works fine on a dashboard doesn't always work the same way inside an alarm — alarms need a fixed, clearly defined list of exactly what to measure, with no automatic shortcuts.</p>
+        <p>The brief's own sample code targets <code>claude-v2</code> and <code>claude-instant-v1</code> via the older <code>invoke_model</code> API — both models are now retired on this account. This build uses the current Converse API against Claude Haiku 4.5 and Sonnet 4.6 instead, the same substitution already made across every other task in this project.</p>
       </div>
     </div>
   </div>
 </section>
 
-<section class="alt" id="resources">
+<section id="resources">
   <div class="wrap">
     <p class="kicker">Full Resource Index</p>
-    <h2 class="h">All 29 resources, for quick reference</h2>
-    <p class="section-lead">All in <code>us-east-1</code>, account <code>269737522732</code>, named starting with <code>adi-1-1-</code>. See the step log above for what each one does and why.</p>
+    <h2 class="h">All 3 deployed resources, for quick reference</h2>
+    <p class="section-lead">Account <code>269737522732</code>, region <code>us-east-1</code>, named starting with <code>adi-1-1-claims-</code> to avoid colliding with the pre-existing (and now correctly re-attributed) <code>adi-1-1-support-*</code> stack documented on <a href="task-1-6.html">Task 1.6's page</a>.</p>
     <div class="verify-wrap">
       <table class="verify">
         <tr><th>#</th><th>Type</th><th>Name</th><th>What it's for</th></tr>
-        <tr><td>1</td><td>S3 Bucket</td><td>adi-1-1-prompt-templates</td><td>Stores prompt files with version history — undoing a bad change is just picking an older version.</td></tr>
-        <tr><td>2</td><td>DynamoDB Table</td><td>adi-1-1-support-conversations</td><td>Saves each conversation so the assistant remembers earlier messages, and cleans up old ones automatically.</td></tr>
-        <tr><td>3</td><td>IAM Role</td><td>adi-1-1-bedrock-lambda-role</td><td>The permission set this project's Lambda functions run with, kept as narrow as possible.</td></tr>
-        <tr><td>4</td><td>Bedrock Prompt</td><td>adi-1-1-support-assistant-persona</td><td>The assistant's core instructions — role, tone, and reply format — saved once and version-tracked.</td></tr>
-        <tr><td>5</td><td>Bedrock Prompt</td><td>adi-1-1-scenario-diagnostic</td><td>Used when there's enough detail (instance ID + symptom) to actually diagnose the problem.</td></tr>
-        <tr><td>6</td><td>Bedrock Prompt</td><td>adi-1-1-scenario-clarification</td><td>Used when details are missing — asks exactly one clear follow-up instead of guessing.</td></tr>
-        <tr><td>7</td><td>Bedrock Prompt</td><td>adi-1-1-scenario-escalation</td><td>Used to hand off to a person, with a short, clear summary of the issue so far.</td></tr>
-        <tr><td>8</td><td>S3 Bucket</td><td>adi-1-1-cloudtrail-logs</td><td>Permanent, long-term storage for the full audit log.</td></tr>
-        <tr><td>9</td><td>CloudWatch Logs Group</td><td>/aws/cloudtrail/adi-1-1-support-assistant</td><td>Same audit log, but viewable right away without extra setup.</td></tr>
-        <tr><td>10</td><td>IAM Role</td><td>adi-1-1-cloudtrail-cwlogs-role</td><td>Lets the audit log service write into that CloudWatch log group.</td></tr>
-        <tr><td>11</td><td>CloudTrail Trail</td><td>adi-1-1-support-assistant-trail</td><td>Records every action touching this project — a "who did what, when" history.</td></tr>
-        <tr><td>12</td><td>IAM Role</td><td>adi-1-1-prompt-editor-role</td><td>Can edit and save new prompt versions, but is specifically blocked from running the AI model.</td></tr>
-        <tr><td>13</td><td>Bedrock Guardrail</td><td>adi-1-1-support-assistant-guardrail</td><td>Independent safety layer — blocks credential sharing, off-limits topics, and personal data leaks.</td></tr>
-        <tr><td>14</td><td>Lambda Function</td><td>adi-1-1-detect-intent</td><td>Reads a message and pulls out the topic, instance ID, confidence score, and mood (via Comprehend).</td></tr>
-        <tr><td>15</td><td>Lambda Function</td><td>adi-1-1-invoke-model</td><td>Picks the right prompt, calls Bedrock with the guardrail on, checks the answer, saves it to the database.</td></tr>
-        <tr><td>16</td><td>CloudWatch Logs Group</td><td>/aws/vendedlogs/states/adi-1-1-support-assistant-sm</td><td>Full logs for every run of the main decision flowchart.</td></tr>
-        <tr><td>17</td><td>IAM Role</td><td>adi-1-1-stepfunctions-role</td><td>Lets the flowchart call the two Lambda functions it depends on.</td></tr>
-        <tr><td>18</td><td>Step Functions State Machine</td><td>adi-1-1-support-assistant-sm</td><td>The flowchart itself: get question &rarr; figure out intent &rarr; decide &rarr; answer &rarr; reply.</td></tr>
-        <tr><td>19</td><td>Lambda Function</td><td>adi-1-1-validate-output</td><td>Checks one test run's result against what was expected (right topic, required/forbidden phrases).</td></tr>
-        <tr><td>20</td><td>CloudWatch Logs Group</td><td>/aws/vendedlogs/states/adi-1-1-test-harness-sm</td><td>Full logs for every run of the automated test suite.</td></tr>
-        <tr><td>21</td><td>IAM Role</td><td>adi-1-1-test-harness-role</td><td>Lets the test suite run the main flowchart and call the checking function.</td></tr>
-        <tr><td>22</td><td>Step Functions State Machine</td><td>adi-1-1-test-harness-sm</td><td>Runs 5 built-in test questions through the assistant and checks each result — the test suite.</td></tr>
-        <tr><td>23</td><td>SNS Topic</td><td>adi-1-1-alerts</td><td>Where all 5 alarms below send their alerts (no email/text hooked up yet — that's up to the account owner).</td></tr>
-        <tr><td>24</td><td>CloudWatch Alarm</td><td>adi-1-1-invoke-model-errors</td><td>Fires when the answer-generating step crashes or times out.</td></tr>
-        <tr><td>25</td><td>CloudWatch Alarm</td><td>adi-1-1-support-assistant-sm-failures</td><td>Fires when a run falls back to the generic error message.</td></tr>
-        <tr><td>26</td><td>CloudWatch Alarm</td><td>adi-1-1-bedrock-throttles</td><td>Early warning if Bedrock starts rate-limiting requests, before customers notice.</td></tr>
-        <tr><td>27</td><td>CloudWatch Alarm</td><td>adi-1-1-validation-failures</td><td>Fires on a spike in failed answer checks — a sign something's gone wrong with the prompts.</td></tr>
-        <tr><td>28</td><td>CloudWatch Alarm</td><td>adi-1-1-guardrail-interventions</td><td>Fires on a spike in guardrail blocks — could mean an attack, or a setting that's too strict.</td></tr>
-        <tr><td>29</td><td>CloudWatch Dashboard</td><td>adi-1-1-support-assistant-dashboard</td><td>One view combining Bedrock, Lambda, Step Functions, and the custom tracking above.</td></tr>
+        <tr><td>1</td><td>S3 Bucket</td><td>adi-1-1-claims-documents-269737522732</td><td>Sample claim documents (raw-claims/), policy documents (policies/), and results (processed/).</td></tr>
+        <tr><td>2</td><td>IAM Role</td><td>adi-1-1-claims-processor-role</td><td>Scoped to S3 read/write on this bucket and Bedrock InvokeModel on just Haiku 4.5 + Sonnet 4.6.</td></tr>
+        <tr><td>3</td><td>Lambda Function</td><td>adi-1-1-claims-processor</td><td>S3-triggered; extracts fields, matches policy, validates, summarizes.</td></tr>
       </table>
     </div>
   </div>
