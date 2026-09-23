@@ -90,6 +90,12 @@
   .mini-tip .mt-head{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.05em;color:var(--accent-dark);margin:0 0 4px;}
   .mini-tip p{margin:0;font-size:13.5px;color:var(--ink);}
 
+  .mini-update{background:var(--good-bg);border:1px solid var(--good-line);border-radius:8px;padding:13px 16px;margin-top:10px;}
+  .mini-update .mu-head{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.05em;color:var(--good);margin:0 0 6px;}
+  .mini-update p{margin:0 0 5px;font-size:13.5px;color:var(--ink-soft);}
+  .mini-update p:last-child{margin-bottom:0;}
+  .mini-update strong{color:var(--ink);}
+
   .step-card.unbuilt{background:var(--unbuilt-bg);border:1px dashed var(--unbuilt-line);}
   .step-card.unbuilt .step-res{background:#ece6f8;border-color:var(--unbuilt-line);color:var(--unbuilt);}
   .unbuilt-badge{font-size:10.5px;font-weight:800;text-transform:uppercase;letter-spacing:.05em;color:#fff;background:var(--unbuilt);padding:3px 9px;border-radius:999px;}
@@ -139,7 +145,7 @@
     </p>
     <div class="stat-row">
       <div class="stat"><div class="n">13</div><div class="l">Steps built and tested</div></div>
-      <div class="stat"><div class="n">22</div><div class="l">Resources deployed</div></div>
+      <div class="stat"><div class="n">24</div><div class="l">Resources deployed</div></div>
       <div class="stat"><div class="n">6</div><div class="l">Real bugs, fixed</div></div>
       <div class="stat"><div class="n">2</div><div class="l">Live regions (east/west)</div></div>
     </div>
@@ -281,7 +287,8 @@
         box is the backup-plan flowchart — all three of its possible outcomes (main model works, backup
         model works, or a safe reply gets shown) were actually tested and double-checked step by step, not
         just assumed to work because the flowchart looks right on paper. Not pictured: the training data
-        and fine-tuning job from Step 13, since that custom model was never switched on for live use.
+        and both Step 13 training jobs (SageMaker and Bedrock), since neither custom model was ever
+        switched on for live use.
       </figcaption>
     </figure>
   </div>
@@ -513,24 +520,29 @@
     </div>
 
     <div class="step-card">
-      <div class="step-head"><span class="step-num">13</span><h4>Train a custom model &mdash; switched tools partway through</h4></div>
-      <p class="step-res">amazon.nova-micro-v1:0:128k &rarr; adi-1-2-nova-micro-financial-qa</p>
+      <div class="step-head"><span class="step-num">13</span><h4>Train a custom model &mdash; blocked, worked around, then finished properly</h4></div>
+      <p class="step-res">SageMaker: adi-1-2-finetune-financial-qa &middot; Bedrock: adi-1-2-nova-micro-financial-qa</p>
       <div class="step-body">
         <div class="concept">
           <p><strong>In plain terms:</strong> Amazon SageMaker is AWS's dedicated machine-learning platform — more flexible and more hands-on than Bedrock, but also more work to set up, since you're managing your own training computer. Bedrock also has its own simpler, built-in fine-tuning feature for certain models, which manages all of that for you.</p>
         </div>
-        <p><strong class="lbl">What was built:</strong> Started with Amazon SageMaker, the tool the assignment specifically asked for, and had everything fully ready to go — the training script, the permissions, all of it. Hit a wall (explained below) and switched to Bedrock's own built-in fine-tuning feature instead, training a specially-adapted version of Nova Micro — the same model already picked as the overall winner back in Phase 1.</p>
-        <p><strong class="lbl">Where to check:</strong> Console &rarr; Amazon Bedrock &rarr; Custom models &rarr; Training jobs.</p>
-        <p><strong class="lbl">Why it matters:</strong> Still delivers exactly what the assignment asked for — a model trained specifically for this bank's own questions — just through a different, and arguably simpler, AWS tool. The training job ran and finished successfully.</p>
+        <p><strong class="lbl">What was built:</strong> Started with Amazon SageMaker, the tool the assignment specifically asked for, and had everything fully ready to go — the training script, the permissions, all of it. Hit a wall on the first attempt (below) and, rather than wait on an unpredictable AWS review queue, switched to Bedrock's own built-in fine-tuning feature as a working stand-in, training a specially-adapted version of Nova Micro — the same model already picked as the overall winner back in Phase 1. That Bedrock job completed successfully. Then, 8 days later, the original SageMaker blocker cleared on its own — AWS approved the limit increase in the background — so the original SageMaker job was re-launched exactly as first designed, and it also completed successfully.</p>
+        <p><strong class="lbl">Where to check:</strong> Console &rarr; Amazon SageMaker &rarr; Training &rarr; Training jobs (the primary result); Console &rarr; Amazon Bedrock &rarr; Custom models &rarr; Training jobs (the working stand-in, kept as a second, real example).</p>
+        <p><strong class="lbl">Why it matters:</strong> Delivers exactly what the assignment asked for — a model trained specifically for this bank's own questions, using SageMaker as instructed. Keeping the Bedrock version around too shows both real AWS paths for the same goal actually work, not just the one that happened to succeed first.</p>
       </div>
       <div class="mini-bug">
         <p class="mb-head">Error 5 &middot; New accounts start with zero training capacity</p>
         <p><strong>What happened:</strong> Trying to start the SageMaker training job failed immediately. AWS said the allowed number of training computers for this account was zero — and checking further, that was true for every single size of training computer available, not just the one first tried.</p>
-        <p><strong>Fix:</strong> asked AWS to raise that limit. Both requests went into a manual review queue with no guaranteed timeline — possibly hours, possibly much longer. Rather than sit and wait on an unpredictable queue, the whole step was switched over to Bedrock's built-in fine-tuning tool instead, which didn't have this limit.</p>
+        <p><strong>Fix (at the time):</strong> asked AWS to raise that limit. Both requests went into a manual review queue with no guaranteed timeline — possibly hours, possibly much longer. Rather than sit and wait on an unpredictable queue, the step was switched over to Bedrock's built-in fine-tuning tool instead, which didn't have this limit.</p>
+      </div>
+      <div class="mini-update">
+        <p class="mu-head">Update, 8 days later &middot; the SageMaker limit was approved</p>
+        <p>Checking back in, both requests showed as closed, and the actual account limit had gone from 0 to <strong>20</strong> training computers for both sizes originally requested — AWS's review had quietly finished in the background. Re-ran the exact same SageMaker job that failed in Error 5, with nothing changed. It worked immediately, no <code>ResourceLimitExceeded</code> this time.</p>
+        <p>The job finished in about <strong>3 minutes 39 seconds</strong> on a small computer (<code>ml.m5.xlarge</code>), for a total training cost of roughly <strong>1-2 cents</strong> — right in line with the estimate given before this was ever blocked. The Bedrock version built while waiting is kept as a documented, working alternative, but this SageMaker job is now the main answer for this step.</p>
       </div>
       <div class="mini-tip">
         <p class="mt-head">Good to know</p>
-        <p>A brand-new AWS account often starts with a training-computer limit of zero for SageMaker, no matter how small the request is. This isn't a broken permission or a mistake in setup — it's a safety limit that has to be specifically raised by asking AWS, and that request can take an unpredictable amount of time to actually get approved.</p>
+        <p>A brand-new AWS account often starts with a training-computer limit of zero for SageMaker, no matter how small the request is. This isn't a broken permission or a mistake in setup — it's a safety limit that has to be specifically raised by asking AWS, and that request can take an unpredictable amount of time to actually get approved. It's worth having a backup plan (like the Bedrock path here) rather than just waiting idle, but also worth checking back later — the original approach can still turn out to be the better one once the blocker clears.</p>
       </div>
     </div>
 
@@ -539,10 +551,10 @@
       <p class="step-res">Would update: model_selection_strategy.json &middot; AppConfig</p>
       <div class="step-body">
         <div class="concept">
-          <p><strong>In plain terms:</strong> A "custom model" on Bedrock — one that's been fine-tuned like the one from Step 13 — can't be used the normal pay-as-you-go way. It needs something called Provisioned Throughput: a dedicated slot that's reserved and paid for by the hour, whether or not it's actually being used, similar to renting a parking space for a month instead of paying per visit.</p>
+          <p><strong>In plain terms:</strong> A custom-trained model — whether it's the Bedrock one or the SageMaker one from Step 13 — can't be used the normal pay-as-you-go way. Bedrock needs something called Provisioned Throughput; SageMaker needs something called a real-time endpoint. Both work the same way underneath: a dedicated slot that's reserved and paid for by the hour, whether or not it's actually being used, similar to renting a parking space for a month instead of paying per visit.</p>
         </div>
-        <p><strong class="lbl">What this would have involved:</strong> Turn on the newly trained model for live use, add it as an option in the Step 5 settings file (no code changes needed, since the model-picker program already reads its choice from settings), re-run the Step 3 comparison to check whether it's actually better than the general-purpose model, and if so, make it the new default — with the old settings still saved, so undoing the switch would be instant.</p>
-        <p><strong class="lbl">Why it wasn't built:</strong> Turning on a custom-trained model for live use costs money every hour it's switched on — roughly $4 to $50 an hour, whether or not anyone's actually using it — instead of the pay-per-question pricing used everywhere else in this project. That's a real ongoing cost, and the decision was made to stop here rather than spend on that just for a test project.</p>
+        <p><strong class="lbl">What this would have involved:</strong> Turn on the trained model for live use (either the Bedrock or the SageMaker version), add it as an option in the Step 5 settings file (no code changes needed, since the model-picker program already reads its choice from settings), re-run the Step 3 comparison to check whether it's actually better than the general-purpose model, and if so, make it the new default — with the old settings still saved, so undoing the switch would be instant.</p>
+        <p><strong class="lbl">Why it wasn't built:</strong> Turning on a custom-trained model for live use costs money every hour it's switched on — roughly $4 to $50 an hour for Bedrock, or the price of a dedicated SageMaker server for the SageMaker version, whether or not anyone's actually using it — instead of the pay-per-question pricing used everywhere else in this project. That's a real ongoing cost, and the decision was made to stop here rather than spend on that just for a test project.</p>
       </div>
     </div>
 
@@ -560,7 +572,7 @@
 <section class="alt" id="resources">
   <div class="wrap">
     <p class="kicker">Full Resource Index</p>
-    <h2 class="h">All 22 resources, for quick reference</h2>
+    <h2 class="h">All 24 resources, for quick reference</h2>
     <p class="section-lead">Account <code>269737522732</code>, named starting with <code>adi-1-2-</code>, spread across <code>us-east-1</code> (main) and <code>us-west-2</code> (backup). See the step log above for what each one does and why.</p>
     <div class="verify-wrap">
       <table class="verify">
@@ -586,7 +598,9 @@
         <tr><td>19</td><td>Route 53 Health Check</td><td>adi-1-2-secondary-health-check</td><td>Checks the backup region is alive, every 30 seconds.</td></tr>
         <tr><td>20</td><td>S3 Bucket</td><td>adi-1-2-finetuning-data</td><td>Stores the training examples and the results of the training job, safely.</td></tr>
         <tr><td>21</td><td>IAM Role</td><td>adi-1-2-bedrock-customization-role</td><td>Narrow permission set just for running the Bedrock training job.</td></tr>
-        <tr><td>22</td><td>Bedrock Model Customization Job</td><td>adi-1-2-nova-micro-financial-qa</td><td>Trains a banking-specialized version of Nova Micro. Finished successfully; not switched on for live use.</td></tr>
+        <tr><td>22</td><td>Bedrock Model Customization Job</td><td>adi-1-2-nova-micro-financial-qa</td><td>Trains a banking-specialized version of Nova Micro via Bedrock. Finished successfully; kept as a working alternate path, not the primary Step 13 result.</td></tr>
+        <tr><td>23</td><td>IAM Role</td><td>adi-1-2-sagemaker-execution-role</td><td>Narrow permission set just for running the SageMaker training job.</td></tr>
+        <tr><td>24</td><td>SageMaker Training Job</td><td>adi-1-2-finetune-financial-qa</td><td>The primary Step 13 result — trains distilgpt2 on the same data via SageMaker, as the assignment asked. Finished successfully in ~3.5 minutes; not deployed to a live endpoint.</td></tr>
       </table>
     </div>
   </div>
