@@ -5,12 +5,14 @@ This task has two live, health-checked regional endpoints:
 - **Primary (us-east-1):** `https://m4pnbttjnk.execute-api.us-east-1.amazonaws.com/prod/generate`
 - **Secondary (us-west-2):** `https://bv4xaf9l6f.execute-api.us-west-2.amazonaws.com/prod/generate`
 
-Each has a real Route 53 health check polling `GET /prod/health` every 30s (3 consecutive failures to mark unhealthy):
+Each had a real Route 53 health check polling `GET /prod/health` every 30s (3 consecutive failures to mark unhealthy), **deleted on 2026-09-28** — Route 53 health checks carry a small flat *monthly* fee (unlike everything else in this task, which is pay-per-use), and nothing was actually consuming them (no DNS record ever pointed at them — see below), so they were removed to stop that recurring cost once the task was otherwise wrapped up. Deleting them had zero effect on the live system: both regional endpoints and the circuit breaker keep working exactly as before.
 
-| Health Check | Region monitored | Health Check ID |
+| Health Check | Region monitored | Health Check ID (no longer valid) |
 |---|---|---|
-| `adi-1-2-primary-health-check` | us-east-1 | `35defb83-cdb0-4ace-8760-edb9f14378c9` |
-| `adi-1-2-secondary-health-check` | us-west-2 | `d36d9429-f683-4766-8e66-285ffd09edf1` |
+| `adi-1-2-primary-health-check` (deleted) | us-east-1 | ~~`35defb83-cdb0-4ace-8760-edb9f14378c9`~~ |
+| `adi-1-2-secondary-health-check` (deleted) | us-west-2 | ~~`d36d9429-f683-4766-8e66-285ffd09edf1`~~ |
+
+If this pattern is revisited later (e.g. a real domain is added), recreate both health checks first — see Step 11 in `progress.md` for the exact `aws route53 create-health-check` commands used — then substitute the new IDs into the example below.
 
 ## Why no live DNS failover record set
 
@@ -37,7 +39,7 @@ aws route53 change-resource-record-sets \
             "DNSName": "m4pnbttjnk.execute-api.us-east-1.amazonaws.com",
             "EvaluateTargetHealth": true
           },
-          "HealthCheckId": "35defb83-cdb0-4ace-8760-edb9f14378c9"
+          "HealthCheckId": "YOUR_NEW_PRIMARY_HEALTH_CHECK_ID"
         }
       },
       {
@@ -61,7 +63,7 @@ aws route53 change-resource-record-sets \
 Notes on the values above:
 
 - `HostedZoneId` inside each `AliasTarget` is **not** your own hosted zone ID — it's API Gateway's fixed per-region "alias target hosted zone ID" (`Z1UJRXOUMOOFQ8` for us-east-1, `Z2OJLYMUO9EFXC` for us-west-2 — these are constant, published by AWS for every API Gateway regional endpoint in that region, not account-specific).
-- The **secondary** record doesn't need its own `HealthCheckId` — Route 53's failover logic only needs to know when the primary is down; if the primary health check fails, traffic automatically shifts to the secondary regardless of the secondary's own health (though in practice you'd usually health-check both, which is why both checks already exist above).
+- The **secondary** record doesn't need its own `HealthCheckId` — Route 53's failover logic only needs to know when the primary is down; if the primary health check fails, traffic automatically shifts to the secondary regardless of the secondary's own health (though in practice you'd usually health-check both, which is why the original setup created one for each region).
 - `EvaluateTargetHealth: true` is what makes an *alias* record (as opposed to a plain CNAME) responsive to the linked health check's state in near-real time.
 
 ## What already deployed instead

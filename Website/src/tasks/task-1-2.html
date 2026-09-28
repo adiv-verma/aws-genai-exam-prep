@@ -283,12 +283,13 @@
       </div>
       <figcaption>
         Solid lines show the path a real question takes in each region. The top dashed box shows health
-        checks running continuously, watching whether each region is still responding. The bottom dashed
-        box is the backup-plan flowchart — all three of its possible outcomes (main model works, backup
-        model works, or a safe reply gets shown) were actually tested and double-checked step by step, not
-        just assumed to work because the flowchart looks right on paper. Not pictured: the training data
-        and both Step 13 training jobs (SageMaker and Bedrock), since neither custom model was ever
-        switched on for live use.
+        checks as they ran during Phase 3 (they were later deleted once nothing was left depending on
+        them, to stop their small monthly fee &mdash; see Step 11's update). The bottom dashed box is the
+        backup-plan flowchart — all three of its possible outcomes (main model works, backup model works,
+        or a safe reply gets shown) were actually tested and double-checked step by step, not just assumed
+        to work because the flowchart looks right on paper. Not pictured: the training data and both
+        Step 13 training jobs (SageMaker and Bedrock), since neither custom model was ever switched on for
+        live use.
       </figcaption>
     </figure>
   </div>
@@ -490,13 +491,18 @@
           <p><strong>In plain terms:</strong> Amazon Route 53 is AWS's system for directing web traffic to the right place, including automatically checking whether a server is still responding ("health checks") and rerouting customers to a backup if it isn't.</p>
         </div>
         <p><strong class="lbl">What was built:</strong> Added a simple "are you alive?" web address to both regions, then set up 2 real Route 53 health checks watching them continuously. The full plan for automatically switching customer traffic over to the backup region the moment the main one fails is written down in detail, but not actually turned on — turning it on for real needs a registered website address (a domain name) belonging to the company, which this test account doesn't have.</p>
-        <p><strong class="lbl">Where to check:</strong> Console &rarr; Route 53 &rarr; Health checks; repo &mdash; <code>route53-failover-pattern.md</code> for the exact setup that would go live the moment a real domain name is added.</p>
-        <p><strong class="lbl">Why it matters:</strong> Covers what's actually possible to build without buying a domain name just for a test project. The health checks themselves are real and fully working, and are exactly what the automatic switch-over would plug into the moment that one missing piece — an actual domain — exists.</p>
+        <p><strong class="lbl">Where to check:</strong> repo &mdash; <code>route53-failover-pattern.md</code> for the exact setup that would go live the moment a real domain name is added (the health checks themselves were later removed &mdash; see the update below).</p>
+        <p><strong class="lbl">Why it matters:</strong> Covers what's actually possible to build without buying a domain name just for a test project. The health checks themselves were real and fully working, and were exactly what the automatic switch-over would have plugged into the moment that one missing piece — an actual domain — existed.</p>
       </div>
       <div class="mini-bug">
         <p class="mb-head">Error 4 &middot; New web address took a minute to go live</p>
         <p><strong>What happened:</strong> Both newly created health-check web addresses returned an error right after being set up, even though everything looked correctly configured on paper.</p>
         <p><strong>Fix:</strong> waited about 30&ndash;60 seconds and it started working on its own, with no changes needed. New AWS resources sometimes take a short moment to fully come online, even after the console shows them as created.</p>
+      </div>
+      <div class="mini-update">
+        <p class="mu-head">Update, 2026-09-28 &middot; health checks removed to stop a small ongoing cost</p>
+        <p>Almost everything in this project only costs money when it's actually used. Route 53 health checks are the one exception — they carry a small flat <strong>monthly</strong> fee that runs whether or not anything's using them, for as long as they exist. Since nothing was actually wired up to consume these two (no domain, no DNS record, no alarm reading their status), they were deleted once the project was otherwise finished, to stop paying for something nothing was using.</p>
+        <p>Double-checked first that nothing depended on them &mdash; no CloudWatch alarm referenced either one, and this account has no Route 53 hosted zone at all. Deleting them changed nothing about how the live system works: both regions and the backup plan still work exactly the same.</p>
       </div>
     </div>
 
@@ -594,8 +600,8 @@
         <tr><td>15</td><td>CloudFormation Stack</td><td>adi-1-2-cross-region-stack (us-west-2)</td><td>Deploys the whole backup-region copy from one file, repeatably.</td></tr>
         <tr><td>16</td><td>Lambda Function</td><td>adi-1-2-model-abstraction (us-west-2)</td><td>The same program as Step 7, running in the backup region.</td></tr>
         <tr><td>17</td><td>API Gateway REST API</td><td>adi-1-2-api (us-west-2)</td><td>A second, independent public web address in the backup region.</td></tr>
-        <tr><td>18</td><td>Route 53 Health Check</td><td>adi-1-2-primary-health-check</td><td>Checks the main region is alive, every 30 seconds.</td></tr>
-        <tr><td>19</td><td>Route 53 Health Check</td><td>adi-1-2-secondary-health-check</td><td>Checks the backup region is alive, every 30 seconds.</td></tr>
+        <tr><td>18</td><td>Route 53 Health Check</td><td>adi-1-2-primary-health-check <em>(deleted 2026-09-28)</em></td><td>Checked the main region was alive, every 30 seconds. Removed to stop paying its monthly fee once nothing was using it.</td></tr>
+        <tr><td>19</td><td>Route 53 Health Check</td><td>adi-1-2-secondary-health-check <em>(deleted 2026-09-28)</em></td><td>Checked the backup region was alive, every 30 seconds. Removed for the same reason.</td></tr>
         <tr><td>20</td><td>S3 Bucket</td><td>adi-1-2-finetuning-data</td><td>Stores the training examples and the results of the training job, safely.</td></tr>
         <tr><td>21</td><td>IAM Role</td><td>adi-1-2-bedrock-customization-role</td><td>Narrow permission set just for running the Bedrock training job.</td></tr>
         <tr><td>22</td><td>Bedrock Model Customization Job</td><td>adi-1-2-nova-micro-financial-qa</td><td>Trains a banking-specialized version of Nova Micro via Bedrock. Finished successfully; kept as a working alternate path, not the primary Step 13 result.</td></tr>
