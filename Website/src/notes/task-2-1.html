@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Task 2.1 Notes | AIP-C01 Guide</title>
+<meta name="description" content="Domain 2, Task 2.1 study notes.">
+<style>
+  :root{
+    --ink:#0b1524; --ink-soft:#3a4a5e; --paper:#f7f8fa; --card:#ffffff; --line:#e3e7ee;
+    --accent:#e8622c; --accent-dark:#c94f1f; --navy:#0f2540; --navy-2:#16345c;
+    --trap-bg:#fff7ed; --trap-line:#f6d9b8;
+    color-scheme: light;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{margin:0;background:var(--paper);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;line-height:1.6;}
+  a{color:var(--accent-dark);}
+  code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;background:#eef1f6;padding:1px 5px;border-radius:4px;font-size:.92em;}
+  img{max-width:100%;}
+  .wrap{max-width:1080px;margin:0 auto;padding:0 24px;}
+
+  .nav{position:sticky;top:0;z-index:50;background:rgba(15,37,64,.96);backdrop-filter:blur(6px);border-bottom:1px solid rgba(255,255,255,.08);}
+  .nav .wrap{display:flex;align-items:center;justify-content:space-between;height:56px;}
+  .nav-brand{color:#fff;font-weight:700;font-size:14px;letter-spacing:.02em;text-decoration:none;}
+  .nav-brand span{color:var(--accent);}
+  .nav-links{display:flex;gap:22px;list-style:none;margin:0;padding:0;}
+  .nav-links a{color:#cdd8e6;text-decoration:none;font-size:13.5px;font-weight:500;}
+  .nav-links a:hover{color:#fff;}
+  @media (max-width:720px){ .nav-links{display:none;} }
+
+  header.hero{background:linear-gradient(180deg,var(--navy) 0%, var(--navy-2) 100%);color:#fff;padding:36px 0 28px;}
+  .eyebrow{display:inline-block;font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#ffd8c4;background:rgba(232,98,44,.18);border:1px solid rgba(232,98,44,.4);padding:5px 10px;border-radius:999px;margin-bottom:14px;}
+  h1{font-size:clamp(22px,3.4vw,30px);line-height:1.15;margin:0;font-weight:800;}
+  header.hero p{font-size:14.5px;color:#c9d5e3;max-width:720px;margin:10px 0 0;}
+
+  section{padding:36px 0;}
+
+  figure.arch{margin:0 0 24px;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px;}
+  figure.arch img{display:block;border-radius:8px;width:100%;height:auto;}
+  figure.arch figcaption{margin-top:10px;font-size:12.5px;color:var(--ink-soft);text-align:center;}
+
+  .note-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;}
+  @media (max-width:760px){.note-grid{grid-template-columns:1fr;}}
+  .note-card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:18px 20px;}
+  .note-card.wide{grid-column:1 / -1;}
+  .note-card h4{scroll-margin-top:78px;margin:0 0 12px;font-size:13px;font-weight:800;color:var(--navy-2);}
+  .note-card dl{margin:0;}
+  .note-card dt{font-size:13.5px;font-weight:700;color:var(--ink);margin:0 0 3px;}
+  .note-card dt:not(:first-child){margin-top:12px;}
+  .note-card dd{margin:0;font-size:13px;color:var(--ink-soft);line-height:1.55;}
+  .note-card .lead{font-size:13.5px;font-weight:700;color:var(--ink);margin:0 0 8px;}
+  .note-card .lead:not(:first-child){margin-top:12px;}
+  .note-card .sub{font-size:13px;color:var(--ink-soft);line-height:1.55;margin:0 0 8px;}
+
+  .example{background:var(--paper);border:1px solid var(--line);border-radius:8px;padding:10px 12px;margin:8px 0;font-size:12.5px;}
+  .example p{margin:0 0 4px;color:var(--ink-soft);}
+  .example p:last-child{margin-bottom:0;}
+
+  .trap{background:var(--trap-bg);border:1px solid var(--trap-line);border-radius:8px;padding:12px 14px;margin-top:14px;}
+  .trap p{margin:0;font-size:13px;color:var(--ink);}
+
+  footer{padding:32px 0 48px;color:#8b96a5;font-size:12.5px;}
+  footer .wrap{border-top:1px solid var(--line);padding-top:22px;}
+  footer a{color:#6b7686;}
+  .note-card h4:target{color:var(--accent-dark);}
+  .note-card h4:target::after{content:" \2190";color:var(--accent);}
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="wrap">
+    <a class="nav-brand" href="../index.html">AIP-C01 <span>Guide</span></a>
+    <ul class="nav-links">
+      <li><a href="index.html">All Study Notes</a></li>
+      <li><a href="../tasks/index.html">Build Log</a></li>
+    </ul>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="wrap">
+    <span class="eyebrow">Domain 2 &middot; Task 2.1</span>
+    <h1>Agentic AI Solutions and Tool Integrations</h1>
+    <p>Real-World Scenario: A global manufacturer running 50+ production facilities across 15 countries, coordinating thousands of components and hundreds of suppliers &#8212; automating supply chain decisions without letting autonomy run unchecked.</p>
+  </div>
+</header>
+
+<section>
+  <div class="wrap">
+
+    <figure class="arch">
+      <img src="../assets/task-2-1-architecture.svg" alt="Reference architecture for an agentic supply-chain system: enterprise events enter a Step Functions orchestrator, pass through a safeguards layer of stopping conditions, timeouts and circuit breakers, then a dynamic model selector routing to Claude 3 Sonnet, Titan Text or model ensembles feeding a workflow Chain-of-Thought engine; the engine reads and writes a three-tier memory of ElastiCache/DynamoDB session state, DynamoDB tactical scratchpad and S3/Knowledge Base strategic memory, gates low-confidence decisions through a Step Functions wait-token state and human reviewer portal with corrections stored in DynamoDB GSIs, and executes approved actions through action groups, Lambda validation and an IAM least-privilege boundary into Lambda/MCP servers, Amazon ECS and API Gateway.">
+      <figcaption>Reference architecture: six layers &#8212; triggers, safeguards, model coordination, three-tier memory, human-in-the-loop, and tool integrations &#8212; wrapped around a Step Functions orchestrator.</figcaption>
+    </figure>
+
+    <div class="note-grid">
+
+      <div class="note-card wide">
+        <h4 id="overview">Overview &amp; Scenario Context</h4>
+        <dl>
+          <dt>Use Case</dt>
+          <dd>Global manufacturer operating 50+ production facilities across 15 countries, handling thousands of components and hundreds of suppliers.</dd>
+          <dt>Core Requirements</dt>
+          <dd>Automate complex supply chain decisions, optimize inventory without disrupting production, proactively detect disruptions, coordinate suppliers/logistics/plants, maintain transparent reasoning, enforce human review for critical decisions, and integrate seamlessly with enterprise systems.</dd>
+          <dt>Key Results</dt>
+          <dd>Chain-of-Thought (CoT) workflow reasoning improved decision quality by 37%; dynamic model selection reduced response time by 42%.</dd>
+        </dl>
+        <div class="trap">
+          <p>Domain Context: While Domain 1 focused on <em>what</em> to build (preferring deterministic Flows in regulated settings), Task 2.1 explores <em>how</em> to build autonomous agents safely when autonomy is genuinely required.</p>
+        </div>
+      </div>
+
+      <div class="note-card wide">
+        <h4 id="s1">Section 1: Autonomous Systems, Agents, and Memory Hierarchy</h4>
+
+        <p class="lead">1. The Core Agent Loop (Reason &#8594; Act &#8594; Observe)</p>
+        <p class="sub">Autonomous agents do not rely on hardcoded paths; instead, they are provided with tools and an objective, executing an iterative loop:</p>
+        <dl>
+          <dt>Reason</dt>
+          <dd>Analyze the current state &#8212; "Component shortage detected; check production impact first."</dd>
+          <dt>Act</dt>
+          <dd>Invoke the appropriate tool or API.</dd>
+          <dt>Observe</dt>
+          <dd>Review the output &#8212; "3 production lines affected, 2-day delay."</dd>
+          <dt>Reason &#8594; Act</dt>
+          <dd>Determine the subsequent step based on observations.</dd>
+        </dl>
+
+        <p class="lead">2. Bedrock Agents Architecture</p>
+        <p class="sub">A managed Amazon Bedrock Agent consists of three core components:</p>
+        <dl>
+          <dt>Foundation Model</dt>
+          <dd>The reasoning engine (e.g. Claude).</dd>
+          <dt>Instructions</dt>
+          <dd>Role, boundary definition, and scope &#8212; "You are the inventory optimization agent..."</dd>
+          <dt>Action Groups</dt>
+          <dd>OpenAPI schemas combined with AWS Lambda functions serving as the tools.</dd>
+          <dt>Optional Components</dt>
+          <dd>Knowledge Bases (RAG) and Guardrails.</dd>
+        </dl>
+
+        <p class="lead">3. Single vs. Multi-Agent Architecture</p>
+        <dl>
+          <dt>Single Agent</dt>
+          <dd>Suitable for a single domain, a small set of tools, and sequential workflows.</dd>
+          <dt>Multi-Agent</dt>
+          <dd>Required when distinct expertise is needed, tasks can run in parallel, and individual domains are complex.</dd>
+        </dl>
+        <div class="example">
+          <p>Example: demand forecasting requires statistics, supplier management requires negotiation, and logistics requires routing. Combining all three into one agent bloats the instructions and causes confusion.</p>
+        </div>
+
+        <p class="lead">4. Service Comparisons</p>
+        <dl>
+          <dt>Amazon Bedrock Agents</dt>
+          <dd>Fully managed service to build, test, and deploy single agents where AWS handles the execution loop.</dd>
+          <dt>AWS Strands Agents</dt>
+          <dd>Code-first framework for specialized agents requiring custom action schemas and execution handlers.</dd>
+          <dt>AWS Agent Squad</dt>
+          <dd>Orchestrates multi-agent systems via task delegation, communication protocols, and result aggregation.</dd>
+        </dl>
+
+        <p class="lead">5. Three-Tier Memory Hierarchy</p>
+        <p class="sub">Enterprise agentic workflows require a robust memory architecture spanning three tiers:</p>
+        <dl>
+          <dt>Operational (Short-Term / Session Level)</dt>
+          <dd>Stores active chat history, current session state, and immediate inputs. Storage: ElastiCache (sub-millisecond latency for fast tool calls) or DynamoDB (configured with a standard TTL, such as 90 days for user session history).</dd>
+          <dt>Tactical (Mid-Term / Decision Scratchpad)</dt>
+          <dd>Tracks recent decisions, active disruptions, and working state across related steps. Storage: DynamoDB.</dd>
+          <dt>Strategic (Long-Term / Persistent Knowledge)</dt>
+          <dd>Captures historical patterns, seasonal trends, and persistent organizational learnings. Storage: DynamoDB, S3, or Knowledge Base (RAG).</dd>
+        </dl>
+      </div>
+
+      <div class="note-card wide">
+        <h4 id="s2">Section 2: Advanced Problem-Solving &amp; Workflow Architectures</h4>
+
+        <p class="lead">1. ReAct: Step Functions ReAct vs. the Agent's Built-In ReAct</p>
+        <dl>
+          <dt>Agent's Built-In ReAct</dt>
+          <dd>The LLM manages the loop autonomously, determining the number and order of steps.</dd>
+          <dt>Step Functions ReAct (The Hybrid Approach)</dt>
+          <dd>The developer controls the macro-level structure (a deterministic state machine), while the model handles micro-level reasoning within each state.</dd>
+          <dt>Clarification on Determinism</dt>
+          <dd>This creates a macro-deterministic flow (fixed sequence of states) with micro-non-deterministic reasoning (LLM autonomy inside each state). It provides stopping conditions, state persistence, auditability, and safety without sacrificing intelligence.</dd>
+        </dl>
+
+        <p class="lead">2. Chain-of-Thought (CoT): Prompt-Based vs. Workflow-Based</p>
+        <dl>
+          <dt>Prompt-Based CoT (Task 1.6)</dt>
+          <dd>Occurs within a single LLM API call using prompting techniques ("Think step by step"). It operates as a black box with hidden intermediate steps and zero-recovery failure modes.</dd>
+          <dt>Workflow-Based CoT (Task 2.1, via Step Functions)</dt>
+          <dd>Chaining multiple separate LLM calls where each reasoning step persists its intermediate output to state.</dd>
+          <dt>Benefits</dt>
+          <dd>Intermediate data remains visible and inspectable; if step 4 fails, results from steps 1&#8211;3 survive without repeating work. This architectural shift delivers a 37% improvement in decision quality.</dd>
+        </dl>
+
+        <p class="lead">3. Problem Decomposition: Code-Driven vs. Model-Driven</p>
+        <p class="sub">Why use Lambda for decomposition instead of pure agentic splitting?</p>
+        <dl>
+          <dt>Predictability &amp; Control</dt>
+          <dd>Enterprise systems require strict enforcement of standard checks (e.g. a supplier delay always triggers the exact same 4 sub-checks). Letting agents split problems dynamically risks missing critical business validations.</dd>
+          <dt>Cost &amp; Latency</dt>
+          <dd>Programmatic parsing via Lambda functions runs in milliseconds at minimal cost compared to invoking an LLM for parsing.</dd>
+          <dt>Data Contracts</dt>
+          <dd>Lambda ensures structured JSON outputs that map cleanly to downstream specialized agent payloads.</dd>
+        </dl>
+      </div>
+
+      <div class="note-card">
+        <h4 id="s3">Section 3: Evaluating Reasoning Quality</h4>
+        <p class="sub">To ensure agents do not produce confident yet contradictory reasoning (e.g. Step 2 stating inventory is 500 while Step 4 assumes 5,000), systems implement reasoning validation:</p>
+        <dl>
+          <dt>Consistency Check</dt>
+          <dd>Ensuring intermediate steps do not contradict each other.</dd>
+          <dt>Logical Validity</dt>
+          <dd>Verifying that conclusions follow directly from premises.</dd>
+          <dt>Outcome Validation</dt>
+          <dd>Confirming that recommendations comply with real-world system constraints.</dd>
+          <dt>Implementation Tools</dt>
+          <dd>Validation Lambda functions (strict programmatic rules) and Evaluator / Judge LLMs (smaller models like Claude Haiku or Titan Text evaluating logic before allowing workflow continuation via Step Functions Choice states).</dd>
+        </dl>
+      </div>
+
+      <div class="note-card">
+        <h4 id="s4">Section 4: Safeguarded AI Workflows &#8212; The 5 Security Layers</h4>
+        <p class="sub">Autonomous agents require rigorous guardrails to prevent infinite loops, unbounded costs, and cascading failures. The security architecture relies on five non-interchangeable layers:</p>
+        <dl>
+          <dt>1. IAM Least Privilege</dt>
+          <dd>Action groups do not serve as security boundaries; IAM policies do. Ensure Lambdas hold precise permissions (e.g. <code>dynamodb:GetItem</code> on a specific table) rather than broad wildcards (<code>dynamodb:*</code>) to prevent unauthorized deletions.</dd>
+          <dt>2. Input Validation</dt>
+          <dd>Inspect model-generated tool parameters (e.g. blocking <code>delete_inventory(quantity: -500)</code>) against business rules and schemas within the Lambda function before execution.</dd>
+          <dt>3. Timeouts</dt>
+          <dd>Enforce Lambda-level limits (max 15 minutes) and Step Functions execution timeouts to trigger graceful termination &#8212; saving partial work and shutting down cleanly.</dd>
+          <dt>4. Stopping Conditions</dt>
+          <dd>Configure Step Functions state rules to halt ReAct loops (e.g. max iterations: 10, max time: 5 minutes, or confidence &gt; 0.8).</dd>
+          <dt>5. Circuit Breakers</dt>
+          <dd>Combine Step Functions and CloudWatch alarms to halt processing when error rates spike, enabling graceful degradation (e.g. switching to a conservative planning mode during a disruption rather than crashing the system).</dd>
+        </dl>
+      </div>
+
+      <div class="note-card">
+        <h4 id="s5">Section 5: Model Coordination &amp; Dynamic Routing</h4>
+        <p class="sub">Balancing cost, latency, and capability requires strategic model coordination:</p>
+        <dl>
+          <dt>Task-Based Routing</dt>
+          <dd>Assigning tasks by model strength (e.g. Claude 3 Sonnet for complex reasoning, Titan Text for report generation, Titan Embeddings for similarity matching). Low cost &#8212; 1 call.</dd>
+          <dt>Dynamic Selection</dt>
+          <dd>Choosing models at runtime based on performance history, remaining budget, latency requirements, and throttling status. Cuts response time by 42%.</dd>
+          <dt>Ensembles</dt>
+          <dd>Combining outputs from multiple models via Majority Voting (classification) or Weighted Averaging (numeric demand forecasts calculated in Lambda). Disagreement acts as a signal for human escalation. High cost &#8212; N calls.</dd>
+          <dt>Fallback Mechanisms</dt>
+          <dd>Automatically switching to an alternate model or rule-based system upon failure or low confidence scores.</dd>
+        </dl>
+      </div>
+
+      <div class="note-card">
+        <h4 id="s6">Section 6: Collaborative AI Systems (Human-in-the-Loop)</h4>
+        <p class="lead">Escalation Criteria</p>
+        <p class="sub">Driven by both risk and confidence:</p>
+        <dl>
+          <dt>Confidence &gt; 0.9</dt>
+          <dd>Fully automated.</dd>
+          <dt>0.7 &#8211; 0.9</dt>
+          <dd>Automated action with asynchronous human review.</dd>
+          <dt>&lt; 0.7</dt>
+          <dd>Synchronous human approval required prior to execution.</dd>
+          <dt>Step Functions Wait Tokens</dt>
+          <dd>Workflows pause rather than terminate when reaching human approval steps, issuing a task token and preserving state until the reviewer approves or rejects (with a 24-hour timeout fallback).</dd>
+          <dt>Feedback Collection &amp; Storage</dt>
+          <dd>Capturing human corrections (error + correct answer) in DynamoDB, utilizing Global Secondary Indexes (GSIs) indexed by decision type and reviewer ID to query rejection patterns without full table scans.</dd>
+        </dl>
+      </div>
+
+      <div class="note-card">
+        <h4 id="s7">Section 7: Intelligent Tool Integrations &amp; OpenAPI Design</h4>
+        <dl>
+          <dt>Action Group Anatomy</dt>
+          <dd>Composed of an OpenAPI schema (acting as the agent's prompt / instruction manual, where detailed descriptions are critical for correct tool selection), a Lambda function, and IAM permissions.</dd>
+          <dt>Parameter Validation</dt>
+          <dd>Occurs at two levels &#8212; Bedrock Agents (schema/type conformance) and Lambda (business rule and authorization validation).</dd>
+          <dt>Model-Readable Error Messages</dt>
+          <dd>Designing errors for LLM consumption (e.g. returning valid alternative IDs rather than a generic Error 404, so the agent can self-correct and retry) alongside error classifications: Retryable, Fixable, Fatal.</dd>
+        </dl>
+      </div>
+
+      <div class="note-card">
+        <h4 id="s8">Section 8: Model Extension Frameworks (MCP Servers)</h4>
+        <dl>
+          <dt>Action Groups vs. MCP Servers</dt>
+          <dd>Action groups are exclusive to Bedrock Agents via OpenAPI schemas; MCP servers adhere to the Model Context Protocol and are reusable across any MCP-compatible client or platform.</dd>
+          <dt>Hosting: AWS Lambda</dt>
+          <dd>Best for lightweight, stateless, short-duration tasks &#8212; calculations, data retrieval, forecasting. 15-minute limit.</dd>
+          <dt>Hosting: Amazon ECS</dt>
+          <dd>Best for heavy, stateful, long-running tasks requiring custom runtimes, specialized dependencies, or high compute/GPU &#8212; simulation engines, advanced optimizers.</dd>
+        </dl>
+        <div class="trap">
+          <p>Tool Discovery Trade-Off: MCP allows agents to dynamically discover available tools without deployment updates. Highly extensible &#8212; but it introduces predictability challenges in strictly regulated enterprise environments.</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <p>This is an independent, unofficial study resource and is not affiliated with, endorsed by, or sponsored by Amazon Web Services, Inc. AWS, Amazon Bedrock, and all related marks are trademarks of Amazon.com, Inc. or its affiliates.</p>
+    <p>Hosted on Amazon S3 + Amazon CloudFront. &middot; <a href="index.html">&larr; Back to Study Notes</a></p>
+  </div>
+</footer>
+
+</body>
+</html>
