@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Task 2.1 Build Log | AIP-C01 Guide</title>
+<meta name="description" content="Domain 2, Task 2.1: a live agentic customer-support system on AWS - code-first agent loop with three-tier DynamoDB memory, a ReAct Step Functions workflow, circuit breaker and timeout safeguards, cost-measured model routing across three Bedrock models, and a task-token human review gate.">
+<style>
+  :root{
+    --ink:#0b1524; --ink-soft:#3a4a5e; --paper:#f7f8fa; --card:#ffffff; --line:#e3e7ee;
+    --accent:#e8622c; --accent-dark:#c94f1f; --navy:#0f2540; --navy-2:#16345c;
+    --good:#1a7f5a; --good-bg:#e9f7f1; --good-line:#bfe6d6;
+    --bad:#b3271f; --bad-bg:#fdecea; --bad-line:#f3c6c2;
+    --unbuilt-bg:#f4f1fb; --unbuilt-line:#d8cdf0; --unbuilt:#5b3fa3;
+    --concept-bg:#eef6ff; --concept-line:#c9e0f7; --concept:#155a8a;
+    color-scheme: light;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{margin:0;background:var(--paper);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;line-height:1.6;}
+  a{color:var(--accent-dark);}
+  code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;background:#eef1f6;padding:1px 5px;border-radius:4px;font-size:.92em;}
+  .wrap{max-width:980px;margin:0 auto;padding:0 24px;}
+  .wrap-wide{max-width:1320px;margin:0 auto;padding:0 24px;}
+
+  .nav{position:sticky;top:0;z-index:50;background:rgba(15,37,64,.96);backdrop-filter:blur(6px);border-bottom:1px solid rgba(255,255,255,.08);}
+  .nav .wrap{display:flex;align-items:center;justify-content:space-between;height:56px;max-width:1080px;}
+  .nav-brand{color:#fff;font-weight:700;font-size:14px;letter-spacing:.02em;text-decoration:none;}
+  .nav-brand span{color:var(--accent);}
+  .nav-links{display:flex;gap:22px;list-style:none;margin:0;padding:0;}
+  .nav-links a{color:#cdd8e6;text-decoration:none;font-size:13.5px;font-weight:500;}
+  .nav-links a:hover{color:#fff;}
+  @media (max-width:720px){ .nav-links{display:none;} }
+
+  header.hero{background:radial-gradient(900px 420px at 85% -10%, rgba(232,98,44,.3), transparent 60%), linear-gradient(180deg,var(--navy) 0%, var(--navy-2) 100%);color:#fff;padding:48px 0 36px;}
+  .eyebrow{display:inline-block;font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#ffd8c4;background:rgba(232,98,44,.18);border:1px solid rgba(232,98,44,.4);padding:5px 10px;border-radius:999px;margin-bottom:16px;}
+  h1{font-size:clamp(24px,3.6vw,36px);line-height:1.18;margin:0 0 12px;font-weight:800;}
+  header.hero p.lead{font-size:16px;color:#c9d5e3;max-width:740px;margin:0 0 22px;}
+  .stat-row{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.12);border-radius:12px;overflow:hidden;}
+  .stat{background:rgba(255,255,255,.04);padding:14px 12px;text-align:center;}
+  .stat .n{font-size:19px;font-weight:800;color:#fff;}
+  .stat .l{font-size:11px;color:#a9b8cb;text-transform:uppercase;letter-spacing:.03em;margin-top:2px;}
+  @media (max-width:640px){.stat-row{grid-template-columns:repeat(2,1fr);}}
+
+  section{padding:40px 0;}
+  section.alt{background:#eef1f6;}
+  h2.h{font-size:24px;font-weight:800;letter-spacing:-.01em;margin:0 0 8px;color:var(--ink);}
+  .kicker{font-size:12.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--accent-dark);margin:0 0 8px;}
+  .section-lead{color:var(--ink-soft);max-width:740px;margin:0 0 24px;font-size:15px;}
+
+  .toc{display:flex;flex-wrap:wrap;gap:10px;margin:0 0 8px;}
+  .toc a{font-size:13px;font-weight:600;background:var(--card);border:1px solid var(--line);color:var(--ink-soft);padding:7px 13px;border-radius:999px;text-decoration:none;}
+  .toc a:hover{border-color:var(--accent);color:var(--accent-dark);}
+
+  .hold-banner{background:var(--unbuilt-bg);border:1px solid var(--unbuilt-line);border-radius:14px;padding:22px 24px;margin-bottom:8px;}
+  .hold-banner h3{margin:0 0 8px;font-size:15px;font-weight:800;color:var(--unbuilt);}
+  .hold-banner p{margin:0 0 10px;font-size:14px;color:var(--ink-soft);line-height:1.6;}
+  .hold-banner p:last-child{margin-bottom:0;}
+  .hold-banner code{background:#ece6f8;}
+
+  /* PHASE DIVIDER */
+  .phase-divider{display:flex;align-items:flex-start;gap:14px;margin:36px 0 16px;}
+  .phase-divider:first-of-type{margin-top:4px;}
+  .phase-divider .pd-num{
+    background:var(--navy);color:#fff;font-weight:800;font-size:13px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;
+    padding:6px 12px;border-radius:8px;white-space:nowrap;margin-top:2px;
+  }
+  .phase-divider .pd-text h3{margin:0;font-size:18px;font-weight:800;color:var(--ink);}
+  .phase-divider .pd-text p{margin:4px 0 0;font-size:13.5px;color:var(--ink-soft);max-width:640px;}
+  .phase-divider .pd-line{flex:1;height:1px;background:var(--line);margin-top:14px;}
+
+  /* STEP CARD */
+  .step-card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:20px 24px;margin-bottom:14px;}
+  .step-head{display:flex;align-items:center;gap:12px;margin-bottom:12px;flex-wrap:wrap;}
+  .step-num{
+    background:var(--paper);border:1px solid var(--line);color:var(--navy-2);font-weight:800;font-size:12px;
+    font-family:ui-monospace,SFMono-Regular,Menlo,monospace;width:30px;height:30px;border-radius:8px;
+    display:flex;align-items:center;justify-content:center;flex-shrink:0;
+  }
+  .step-card h4{margin:0;font-size:15.5px;font-weight:700;}
+  .step-res{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px;color:var(--navy-2);background:#eef3fa;border:1px solid #d6e2f0;padding:2px 8px;border-radius:6px;margin:0 0 12px;display:inline-block;}
+  .step-body p{margin:0 0 8px;font-size:14px;color:var(--ink-soft);}
+  .step-body p strong.lbl{color:var(--ink);font-weight:700;}
+
+  .concept{background:var(--concept-bg);border:1px solid var(--concept-line);border-radius:8px;padding:12px 15px;margin:0 0 14px;}
+  .concept p{margin:0;font-size:13.5px;color:var(--ink);}
+  .concept p strong{color:var(--concept);}
+
+  .mini-bug{background:var(--bad-bg);border:1px solid var(--bad-line);border-radius:8px;padding:13px 16px;margin-top:10px;}
+  .mini-bug .mb-head{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.05em;color:var(--bad);margin:0 0 6px;}
+  .mini-bug p{margin:0 0 5px;font-size:13.5px;color:var(--ink-soft);}
+  .mini-bug p:last-child{margin-bottom:0;}
+  .mini-bug strong{color:var(--ink);}
+
+  .mini-tip{background:#fff7ed;border:1px solid #f6d9b8;border-radius:8px;padding:13px 16px;margin-top:10px;}
+  .mini-tip .mt-head{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.05em;color:var(--accent-dark);margin:0 0 4px;}
+  .mini-tip p{margin:0;font-size:13.5px;color:var(--ink);}
+
+  .diagram{margin:0;}
+  .diagram .svg-scroll{overflow-x:auto;}
+  .diagram svg{width:100%;min-width:900px;height:auto;display:block;color:var(--ink);}
+  .diagram figcaption{margin-top:14px;font-size:13px;color:var(--ink-soft);max-width:900px;}
+  .diagram figcaption code{font-size:.95em;}
+
+  table.verify{width:100%;border-collapse:collapse;font-size:13.5px;background:var(--card);border:1px solid var(--line);border-radius:10px;overflow:hidden;}
+  table.verify th{text-align:left;background:var(--navy);color:#fff;padding:10px 14px;font-size:12px;text-transform:uppercase;letter-spacing:.04em;}
+  table.verify td{padding:10px 14px;border-top:1px solid var(--line);color:var(--ink-soft);}
+  table.verify tr:nth-child(even) td{background:#fafbfc;}
+  .verify-wrap{overflow-x:auto;}
+
+  footer{padding:32px 0 48px;color:#8b96a5;font-size:12.5px;}
+  footer .wrap{border-top:1px solid var(--line);padding-top:22px;max-width:1080px;}
+  footer a{color:#6b7686;}
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="wrap">
+    <a class="nav-brand" href="../index.html">AIP-C01 <span>Guide</span></a>
+    <ul class="nav-links">
+      <li><a href="index.html">Build Log</a></li>
+      <li><a href="#blocker">The Blocker</a></li>
+      <li><a href="#log">Step-by-Step Log</a></li>
+      <li><a href="#resources">Resource Index</a></li>
+      <li><a href="../notes/task-2-1.html">Study Notes</a></li>
+    </ul>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="wrap">
+    <span class="eyebrow">Domain 2 &middot; Task 2.1</span>
+    <h1>Agentic Customer<br>Support System</h1>
+    <p class="lead">
+      An internet service provider wants support handled by agents that reason with real tools, remember
+      customers across turns, coordinate several foundation models, protect themselves from runaway loops
+      and failing dependencies, and stop for a human before doing anything expensive. Built and live-tested
+      end to end across all five parts of the brief &mdash; including six defects found along the way, three
+      of them in the reference material itself.
+      <a href="../notes/task-2-1.html">Study notes for this task &rarr;</a>
+    </p>
+    <div class="stat-row">
+      <div class="stat"><div class="n">10</div><div class="l">Steps, in order</div></div>
+      <div class="stat"><div class="n">26</div><div class="l">Resources deployed</div></div>
+      <div class="stat"><div class="n">6</div><div class="l">Bugs found &amp; fixed</div></div>
+      <div class="stat"><div class="n">$0.09</div><div class="l">Total build cost</div></div>
+    </div>
+  </div>
+</header>
+
+<section>
+  <div class="wrap" id="blocker">
+    <div class="hold-banner">
+      <h3>Part 1 of the brief could not be built as written &mdash; Bedrock Agents is closed to new accounts</h3>
+      <p>
+        <code>create-agent</code> was rejected outright: <em>"Bedrock Agents is in Maintenance Mode. New agent
+        creation is not available for accounts without prior service usage."</em> This account had never created
+        one, so it falls on the wrong side of that grandfather clause &mdash; and no IAM change or quota request
+        gets around it. <strong>Amazon Bedrock AgentCore</strong> is the successor and is available here.
+      </p>
+      <p>
+        Rather than skip Part 1, the agent loop was written out by hand with the <code>bedrock-runtime</code>
+        Converse API &mdash; the same Reason &rarr; Act &rarr; Observe cycle a managed agent runs internally &mdash;
+        with memory in DynamoDB. That turned out to be the more instructive version: every part the managed
+        service hides is visible and tunable. It is also what the study notes prescribe, since Section 1.5 names
+        DynamoDB explicitly for all three memory tiers, and Section 6 asks for a GSI design a managed memory
+        service would have hidden.
+      </p>
+      <p>
+        Worth carrying into the exam: an answer naming classic Bedrock Agents for a greenfield build is now
+        describing a service new accounts cannot provision.
+      </p>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="toc">
+      <a href="#blocker">The blocker</a>
+      <a href="#phase-0">Phase 0: Foundations</a>
+      <a href="#phase-1">Phase 1: Agent &amp; Memory</a>
+      <a href="#phase-2">Phase 2: ReAct Workflow</a>
+      <a href="#phase-3">Phase 3: Safeguards</a>
+      <a href="#phase-4">Phase 4: Model Routing</a>
+      <a href="#phase-5">Phase 5: Human Review</a>
+      <a href="#resources">Resource Index</a>
+    </div>
+  </div>
+</section>
+
+<section class="alt" id="log">
+  <div class="wrap">
+    <p class="kicker">Step-by-Step Build Log</p>
+    <h2 class="h">Every step, in the order it happened</h2>
+    <p class="section-lead">
+      Everything here is pay-per-use &mdash; on-demand Bedrock calls, Lambda, Step Functions Standard, and
+      DynamoDB on-demand. No provisioned capacity, no container, no hourly-billed resource anywhere in the
+      build. Standing cost when idle is effectively zero.
+    </p>
+
+    <div class="phase-divider" id="phase-0">
+      <span class="pd-num">Phase 0</span>
+      <div class="pd-text"><h3>Foundations</h3><p>Prove model access before building on it, then the two IAM roles everything else assumes.</p></div>
+      <span class="pd-line"></span>
+    </div>
+
+    <div class="step-card">
+      <div class="step-head"><span class="step-num">1</span><h4>Verify model access and replace the brief's retired models</h4></div>
+      <p class="step-res">Claude Haiku 4.5 &middot; Claude Sonnet 4.5 &middot; Amazon Nova Micro</p>
+      <div class="step-body">
+        <div class="concept">
+          <p><strong>In plain terms:</strong> Every model named in the brief has been retired. Checking that a model actually answers takes five seconds; discovering it doesn't, three states deep into a workflow, takes considerably longer.</p>
+        </div>
+        <p><strong class="lbl">What was done:</strong> Invoked three candidate models with a minimal prompt. All answered. <code>anthropic.claude-3-sonnet-20240229-v1:0</code> is no longer on-demand invocable and <code>amazon.titan-text-express-v1</code> is retired entirely &mdash; only Titan <em>embedding</em> models remain. Replacements: Claude Haiku 4.5 as the default reasoning model, Claude Sonnet 4.5 as the escalation target, Amazon Nova Micro as the cheap classifier that replaces Titan Text.</p>
+        <p><strong class="lbl">Where to check:</strong> Bedrock &rarr; Model access (us-east-1), and Bedrock &rarr; Cross-region inference for the profile IDs.</p>
+        <p><strong class="lbl">Why it matters:</strong> Reference architectures written against a model ID go stale. Keeping the ID in configuration rather than in code is what makes the swap a one-line change.</p>
+        <div class="mini-tip">
+          <p class="mt-head">Exam tip</p>
+          <p><strong>No current Claude model on Bedrock supports a bare on-demand model ID.</strong> They all require a cross-region <em>inference profile</em> &mdash; a <code>us.</code> or <code>global.</code> prefix. "Why does <code>InvokeModel</code> fail with <code>ValidationException</code> on a model I can see in the console?" is an inference-profile question, not a permissions one.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="step-card">
+      <div class="step-head"><span class="step-num">2</span><h4>IAM roles for the agent and the Lambdas</h4></div>
+      <p class="step-res">adi-2-1-agent-role &middot; adi-2-1-lambda-role</p>
+      <div class="step-body">
+        <div class="concept">
+          <p><strong>In plain terms:</strong> An agent that gets talked into calling a destructive tool still cannot do anything the execution role was never granted. The boundary sits below the model, where no prompt can reach it.</p>
+        </div>
+        <p><strong class="lbl">What was built:</strong> Two roles, each with one tightly-scoped inline policy. The agent role trusts <code>bedrock.amazonaws.com</code> narrowed by <code>aws:SourceAccount</code> and <code>aws:SourceArn</code> &mdash; the confused-deputy guard. The Lambda role grants logs scoped to <code>/aws/lambda/adi-2-1-*</code>, invoke on exactly three models, DynamoDB item operations on <code>table/adi-2-1-*</code> with no <code>dynamodb:*</code>, no <code>DeleteTable</code> and no <code>Scan</code>, and Step Functions task-token callbacks.</p>
+        <p><strong class="lbl">Where to check:</strong> IAM &rarr; Roles &rarr; each role &rarr; Permissions tab and Trust relationships tab.</p>
+        <p><strong class="lbl">Why it matters:</strong> This is the study notes' Section 4, layer 1, made concrete: <em>action groups are not security boundaries; IAM policies are.</em></p>
+        <div class="mini-find">
+          <p class="mf-head">Finding &middot; Least privilege has a ceiling</p>
+          <p>The <code>states:SendTaskSuccess</code> statement uses <code>Resource: "*"</code>, and that is not laziness &mdash; <strong>that API does not support resource-level permissions at all.</strong> The authorization is carried by the task token itself, a single-use secret issued per paused execution. So the control moves from IAM to protecting the token. Knowing <em>which</em> layer actually enforces a given operation matters more than reflexively writing narrow ARNs.</p>
+        </div>
+        <div class="mini-tip">
+          <p class="mt-head">Exam tip</p>
+          <p><strong>Granting an inference-profile ARN is not enough.</strong> The profile fans out to regional foundation-model endpoints and the call is authorized against those too. The <code>us.</code> Sonnet profile routes to us-east-1, us-east-2 <em>and</em> us-west-2 &mdash; omit those <code>foundation-model/*</code> ARNs and you get an <code>AccessDeniedException</code> naming a region you never configured.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="phase-divider" id="phase-1">
+      <span class="pd-num">Phase 1</span>
+      <div class="pd-text"><h3>The Agent and Its Memory</h3><p>Tools first, then the three memory tiers, then the loop that ties them together.</p></div>
+      <span class="pd-line"></span>
+    </div>
+
+    <div class="step-card">
+      <div class="step-head"><span class="step-num">3</span><h4>Action group backend: tool Lambda and OpenAPI schema</h4></div>
+      <p class="step-res">adi-2-1-support-tools &middot; adi-2-1-agent-schemas-269737522732</p>
+      <div class="step-body">
+        <div class="concept">
+          <p><strong>In plain terms:</strong> Three read-only tools &mdash; look up an account, check for an outage in an area, run a line diagnostic &mdash; plus a schema whose prose teaches the agent which to reach for and in what order.</p>
+        </div>
+        <p><strong class="lbl">What was built:</strong> A Python 3.12 Lambda behind an OpenAPI 3.0 schema in S3, with a resource policy letting only Bedrock invoke it. Sample data covers three accounts across three service areas with two active outages, deliberately rigged so the reasoning is visible: ACC-1001 has a degraded line <em>and</em> an area outage, so "reboot your modem" is the wrong answer; ACC-1002 is past due with a perfectly healthy line, so billing is the real cause.</p>
+        <p><strong class="lbl">Where to check:</strong> Lambda &rarr; adi-2-1-support-tools &rarr; Configuration &rarr; Permissions; S3 &rarr; adi-2-1-agent-schemas-269737522732.</p>
+        <p><strong class="lbl">Why it matters:</strong> The action group is the agent's hands. Building it before the brain means the agent has something real to call the moment it exists.</p>
+        <div class="mini-tip">
+          <p class="mt-head">Exam tip</p>
+          <p><strong>Design tool errors for the model, not for a log reader.</strong> An unknown account returns the valid alternatives alongside an <code>error_class</code> of <code>fixable</code>, <code>retryable</code> or <code>fatal</code> &mdash; so the agent self-corrects on the next turn instead of apologising to the customer. A bare 404 just ends the turn.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="step-card">
+      <div class="step-head"><span class="step-num">4&ndash;5</span><h4>Path decision, then the three-tier memory hierarchy</h4></div>
+      <p class="step-res">adi-2-1-session-memory &middot; adi-2-1-decision-scratchpad &middot; adi-2-1-strategic-memory</p>
+      <div class="step-body">
+        <div class="concept">
+          <p><strong>In plain terms:</strong> Three tables, not because memory needs three technologies, but because the three kinds of memory have different lifetimes and get read in different ways.</p>
+        </div>
+        <p><strong class="lbl">What was built:</strong> Operational memory keyed on <code>sessionId</code> + <code>turnTimestamp</code> with a TTL; a tactical scratchpad keyed on <code>caseId</code> + <code>stepId</code> with a shorter TTL; and strategic memory keyed on <code>patternKey</code> + <code>observedAt</code> with <strong>no TTL</strong> and a GSI on <code>issueCategory</code>. All on-demand billing.</p>
+        <p><strong class="lbl">Where to check:</strong> DynamoDB &rarr; Tables &rarr; each table. TTL is under Additional settings; the GSI is under Indexes on the strategic table.</p>
+        <p><strong class="lbl">Why it matters:</strong> The sort key is chosen so "the last N turns of this conversation, in order" is a single <code>Query</code> with a <code>Limit</code> &mdash; no filter, no scan. Operational and tactical memory expire because a stale scratchpad is worse than none; strategic memory does not, because outliving the incident is the entire point of the tier.</p>
+        <div class="mini-tip">
+          <p class="mt-head">Exam tip</p>
+          <p><strong>A GSI is how you avoid paying for a Scan.</strong> When the question the business asks uses a different partition key than the write path does &mdash; "every billing issue this week" versus "what happened to this case" &mdash; that is the signal for a secondary index. Reaching for <code>Scan</code> with a filter instead is the wrong answer.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="step-card">
+      <div class="step-head"><span class="step-num">6</span><h4>The agent loop, over the memory tiers</h4></div>
+      <p class="step-res">adi-2-1-support-agent</p>
+      <div class="step-body">
+        <p><strong class="lbl">What was built:</strong> The Reason &rarr; Act &rarr; Observe loop written out explicitly. <code>Converse</code> with <code>toolConfig</code> returns either tool calls or a final answer; tool results are handed back and the loop repeats until the model stops or a hard iteration ceiling of 6 is hit. Prior turns are reloaded at the start of every invocation and written back with a 90-day TTL, so context survives across separate invocations.</p>
+        <p><strong class="lbl">Where to check:</strong> Lambda &rarr; adi-2-1-support-agent; DynamoDB &rarr; adi-2-1-session-memory, query a <code>sessionId</code> to see the turns.</p>
+        <p><strong class="lbl">Verified:</strong> ACC-1001 reported the fibre cut and restore time and correctly did <em>not</em> suggest rebooting. Asked "what plan am I on?" on a later invocation, it answered from memory with zero tool calls. ACC-1002 spent <strong>one</strong> tool call, not three &mdash; the schema description told it a past-due balance explains a dead connection on its own, so it never reached for the diagnostic.</p>
+        <div class="mini-bug">
+          <p class="mb-head">Bug 1 &middot; The agent confidently invented the customer's plan</p>
+          <p><strong>What happened:</strong> Asked "remind me what plan I am on?" on turn 2, the agent answered <em>"You're on the 100 Mbps plan."</em> The real plan is Fibre 500 Mbps. No tool call, no hesitation.</p>
+          <p><strong>Root cause:</strong> Operational memory stores the <em>conversation</em> &mdash; what the agent said out loud. Turn 1's answer was about the outage and never mentioned the plan, so turn 2's reloaded context had no plan fact in it. The tactical scratchpad <em>did</em> have it, but nothing read that tier back.</p>
+          <p><strong>Fix:</strong> query the scratchpad partition and inject the established facts into the system prompt as authoritative. Turn 2 now answers "Fibre 500 Mbps" with zero tool calls.</p>
+        </div>
+        <div class="mini-tip">
+          <p class="mt-head">Exam tip</p>
+          <p><strong>A prompt cannot fix a missing-context problem.</strong> The system prompt already said "never invent a plan, balance or speed" when Bug 1 happened. Instructions govern behaviour over the context the model <em>has</em>; they cannot conjure information that was never loaded. When an agent fabricates a specific value, inspect its context before rewriting the prompt.</p>
+        </div>
+      </div>
+    </div>
+    <div class="phase-divider" id="phase-2">
+      <span class="pd-num">Phase 2</span>
+      <div class="pd-text"><h3>ReAct with Step Functions</h3><p>The same loop, with the macro structure lifted out of the model's hands and into a state machine.</p></div>
+      <span class="pd-line"></span>
+    </div>
+
+    <div class="step-card">
+      <div class="step-head"><span class="step-num">7</span><h4>The ReAct state machine</h4></div>
+      <p class="step-res">adi-2-1-react-workflow &middot; 5 Lambdas &middot; adi-2-1-sfn-role</p>
+      <div class="step-body">
+        <div class="concept">
+          <p><strong>In plain terms:</strong> The developer owns the shape of the workflow &mdash; a fixed, auditable sequence of states. The model owns only the judgement inside each state. Macro-deterministic, micro-non-deterministic.</p>
+        </div>
+        <p><strong class="lbl">What was built:</strong> Nine states over five Lambdas. <code>ParseUserRequest</code> uses <strong>regex, not an LLM</strong> &mdash; intent and account-id extraction that runs in microseconds, costs nothing, and always applies the same rules. Then an LLM planner picks one of troubleshoot / billing / escalate / none, a <code>Choice</code> routes to three action branches, an LLM reasoner judges whether the facts explain the issue, and a guard decides whether to loop. Every Task state has <code>Retry</code> with exponential backoff; the two LLM states have <code>Catch</code> routing to <code>GenerateResponse</code>, so a planner failure degrades to an answer rather than a dead execution.</p>
+        <p><strong class="lbl">Where to check:</strong> Step Functions &rarr; State machines &rarr; adi-2-1-react-workflow &rarr; Executions. The visual graph shows the three branches and the loop-back edge.</p>
+        <p><strong class="lbl">Verified:</strong> all three branches. "Crawling all morning" took the troubleshoot branch at confidence 0.95; "overcharged on my last bill" took billing; "I want to cancel" escalated and opened a ticket.</p>
+        <div class="mini-bug">
+          <p class="mb-head">Bug 2 &middot; The brief's own state machine can loop forever</p>
+          <p><strong>What happened:</strong> <code>project.md</code>'s <code>NeedMoreActions</code> state loops back to <code>DetermineAction</code> whenever the model says <code>needMoreActions: true</code> &mdash; with <strong>no iteration bound at all.</strong> The only thing between that workflow and unbounded Bedrock spend is the model eventually choosing to say <code>false</code>, which is precisely the judgement Section 4 says never to trust.</p>
+          <p><strong>Fix:</strong> replaced with <code>MaxIterationsGuard</code>, which <code>And</code>s the model's vote together with <code>iteration &lt; 3</code>. The model still votes; it cannot outvote the ceiling.</p>
+        </div>
+        <div class="mini-find">
+          <p class="mf-head">Finding &middot; How a ReAct loop actually wastes money</p>
+          <p>The billing run took the loop-back edge twice, and the billing branch executed <strong>twice with identical inputs</strong>, gathering nothing new the second time. The planner has no memory of what it already did &mdash; each pass reasons afresh and judged the same evidence insufficient again.</p>
+          <p>That is the real failure mode: not an agent going haywire, but one politely repeating itself. Note that confidence fell to 0.75 against 0.95 for the clean single-pass runs &mdash; exactly the signal that routes a case to a human in Phase 5.</p>
+        </div>
+        <div class="mini-tip">
+          <p class="mt-head">Exam tip</p>
+          <p><strong>Workflow-based chain-of-thought is recoverable; prompt-based is not.</strong> Each handler writes its output to the scratchpad before returning, so a failure at the reasoning step leaves the parse and action results durable and inspectable. The same reasoning inside a single LLM call vanishes entirely when it fails.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="phase-divider" id="phase-3">
+      <span class="pd-num">Phase 3</span>
+      <div class="pd-text"><h3>Safeguards</h3><p>A timeout the model cannot outlast, and a breaker that stops calling a dependency that is failing.</p></div>
+      <span class="pd-line"></span>
+    </div>
+
+    <div class="step-card">
+      <div class="step-head"><span class="step-num">8</span><h4>Timeout budget, circuit breaker, alarm</h4></div>
+      <p class="step-res">adi-2-1-guarded-invoke &middot; adi-2-1-circuit-breaker &middot; adi-2-1-circuit-open-alarm</p>
+      <div class="step-body">
+        <div class="concept">
+          <p><strong>In plain terms:</strong> A retry policy pushes harder on something that is already failing. A circuit breaker stops calling it &mdash; which is what gives it room to recover.</p>
+        </div>
+        <p><strong class="lbl">What was built:</strong> The timeout budget is derived from <code>context.get_remaining_time_in_millis()</code> minus a reserve and applied as a botocore <code>read_timeout</code>, so the model can never be the thing that runs the function out of time. The breaker counts failures in a rolling 300-second window, opens above 50% over at least 5 calls, waits 60 seconds, then allows a single probe that either closes it or re-opens it.</p>
+        <p><strong class="lbl">Where to check:</strong> DynamoDB &rarr; adi-2-1-circuit-breaker (watch <code>status</code> change live); CloudWatch &rarr; Alarms, and Metrics &rarr; adi-2-1/Safeguards.</p>
+        <p><strong class="lbl">Verified:</strong> driven through the full cycle with injected failures &mdash; healthy call, four failures opening the circuit at an 80% rate, a fifth call <strong>refused without touching the model or the counters at all</strong>, then a successful probe after cooldown closing it again.</p>
+        <div class="mini-bug">
+          <p class="mb-head">Bug 3 &middot; The brief's circuit-breaker code does not run</p>
+          <p><strong>What happened:</strong> <code>project.md</code>'s <code>record_call_result()</code> uses <code>SET calls = if_not_exists(calls, :empty_list) + :call</code>. Run verbatim against DynamoDB: <code>ValidationException: Incorrect operand type for operator or function: +, operand type: L</code>.</p>
+          <p><strong>Fix:</strong> <code>+</code> in an update expression is arithmetic only; list concatenation needs <code>list_append()</code>. Two further problems even once fixed: that <code>calls</code> list grows without bound toward the 400 KB item limit and is re-read and filtered on every call, and <code>error_rate &gt; 0.5</code> with no minimum sample size means <strong>the first failed call is a 100% error rate</strong> and trips the breaker for every user. Rebuilt with <code>ADD</code> counters over a rolling window and a minimum of 5 calls.</p>
+        </div>
+        <div class="mini-bug">
+          <p class="mb-head">Bug 4 &middot; The brief's IAM policy grants nothing at all</p>
+          <p><strong>What happened:</strong> <code>project.md</code> offers a policy capping token count and temperature via <code>bedrock:MaxTokens</code> and <code>bedrock:Temperature</code> conditions. Run through <code>iam simulate-custom-policy</code> it returns <code>implicitDeny</code> &mdash; and it still returns <code>implicitDeny</code> <strong>when both keys are supplied and satisfied</strong> (500 &lt; 2000, 0.2 &le; 0.5).</p>
+          <p><strong>Fix:</strong> those are not real condition keys, so the condition never matches and the Allow never applies. IAM authorizes on action, resource ARN and published condition keys &mdash; it <strong>cannot inspect request body parameters</strong>. Inference caps belong in application code, which is where they live here.</p>
+        </div>
+        <div class="mini-bug">
+          <p class="mb-head">Bug 5 &middot; The alarm was watching a metric that does not exist</p>
+          <p><strong>What happened:</strong> the alarm sat at OK through two separate breaker trips, reporting "no datapoints received".</p>
+          <p><strong>The first diagnosis was wrong.</strong> CloudWatch ingestion latency looked like the culprit, and the alarm period was widened from 60 to 300 seconds on that theory. It made no difference, because that was not the problem.</p>
+          <p><strong>Root cause:</strong> <code>put-metric-alarm</code> was called with a namespace and metric name but <strong>no dimensions</strong>, while the Lambda publishes with <code>ServiceName</code>. A CloudWatch metric is identified by namespace <em>plus</em> name <em>plus</em> its complete dimension set &mdash; so the alarm was watching a genuinely different metric, one that had never received a single datapoint. Querying it directly proved it: 0 datapoints without dimensions, 3 with them.</p>
+          <p><strong>Fix:</strong> recreated with matching dimensions and re-verified against a live trip. The 300-second period was kept &mdash; still the right setting for a one-off event metric, just not the fix for this.</p>
+        </div>
+        <div class="mini-tip">
+          <p class="mt-head">Exam tip</p>
+          <p><strong>Catching your own errors hides you from CloudWatch.</strong> This Lambda returns HTTP 200 with a fallback, which is correct behaviour &mdash; and means the built-in <code>AWS/Lambda</code> <code>Errors</code> metric stays flat while the system is fully degraded. Graceful degradation has to emit its own signal. A dashboard that looks healthy during an outage is the failure mode to design against.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="phase-divider" id="phase-4">
+      <span class="pd-num">Phase 4</span>
+      <div class="pd-text"><h3>Model Coordination</h3><p>A classifier costing four millionths of a dollar decides where a call fifty times more expensive goes.</p></div>
+      <span class="pd-line"></span>
+    </div>
+
+    <div class="step-card">
+      <div class="step-head"><span class="step-num">9</span><h4>The routing layer</h4></div>
+      <p class="step-res">adi-2-1-model-router</p>
+      <div class="step-body">
+        <div class="concept">
+          <p><strong>In plain terms:</strong> "Which model is best" is the wrong question. "What does this particular request actually need" is the right one &mdash; and a tiny model can answer it before the expensive call is made.</p>
+        </div>
+        <p><strong class="lbl">What was built:</strong> Nova Micro classifies each request by <code>taskType</code> <strong>&times;</strong> <code>complexity</code>, a routing table picks the model, runtime signals can downgrade that choice, and a fallback chain covers failure. Every decision is priced from live AWS Pricing API rates: Nova Micro $0.035/$0.14 per million tokens, Haiku 4.5 $1.10/$5.50, Sonnet 4.5 $3.30/$16.50.</p>
+        <p><strong class="lbl">Where to check:</strong> Lambda &rarr; adi-2-1-model-router &rarr; Test, or its CloudWatch Logs for the routing decision on each call.</p>
+        <p><strong class="lbl">Verified &mdash; six cases, costs measured rather than asserted:</strong></p>
+        <div class="verify-wrap">
+        <table class="verify">
+          <tr><th>Input</th><th>Classified</th><th>Routed to</th><th>Cost</th><th>Sonnet equivalent</th></tr>
+          <tr><td>"What time does your support line open?"</td><td>classification / low</td><td><strong>nova-micro</strong></td><td>$0.0000141</td><td>$0.0007689</td></tr>
+          <tr><td>Credits promised twice, speed short, disputed fee, legal threat</td><td>reasoning / <strong>high</strong></td><td><strong>sonnet</strong></td><td>$0.0019365</td><td>$0.0019272</td></tr>
+          <tr><td>Same request, latency requirement set</td><td>reasoning / high</td><td><strong>haiku</strong> (downgraded)</td><td>$0.0005908</td><td>$0.0017457</td></tr>
+          <tr><td>Same request, budget cap of $0.0002</td><td>reasoning / high</td><td><strong>nova-micro</strong> (downgraded twice)</td><td>$0.0000197</td><td>$0.0011946</td></tr>
+          <tr><td>Same request, Sonnet throttled</td><td>reasoning / high</td><td><strong>haiku</strong> (fallback)</td><td>$0.0007118</td><td>$0.0021087</td></tr>
+          <tr><td>Same request, Sonnet <em>and</em> Haiku throttled</td><td>reasoning / high</td><td><strong>nova-micro</strong> (fallback &times;2)</td><td>$0.0000183</td><td>$0.0010296</td></tr>
+        </table>
+        </div>
+        <p><strong class="lbl">Why it matters:</strong> the first row is the whole argument &mdash; the same answer, <strong>54&times; cheaper</strong>, because "what time do you open" never needed a frontier model. The second row is the router declining to save money when the request genuinely warrants Sonnet. Latency told the same story: 470&nbsp;ms against 3,819&nbsp;ms. Dynamic selection does not make any model faster; it stops most requests being sent to the slow one.</p>
+        <div class="mini-find">
+          <p class="mf-head">Improvement on the brief &middot; Complexity is a second axis</p>
+          <p>The brief routes on <code>taskType</code> alone. Task type cannot separate "summarise this note" from "summarise this five-way dispute" &mdash; and the second genuinely needs the better model. Rows 2, 3 and 4 above are all the <em>same</em> <code>reasoning/high</code> input landing on three different models once runtime signals are applied.</p>
+        </div>
+        <div class="mini-tip">
+          <p class="mt-head">Exam tip</p>
+          <p><strong>Ensembles are the high-cost, high-confidence option.</strong> Running N models and combining by majority vote or weighted average costs N calls &mdash; but the useful output is the <em>disagreement</em>, which is a ready-made escalation signal. Not built here, deliberately: it would have cost the most and demonstrated the least.</p>
+        </div>
+      </div>
+    </div>
+    <div class="phase-divider" id="phase-5">
+      <span class="pd-num">Phase 5</span>
+      <div class="pd-text"><h3>Human in the Loop</h3><p>An execution that parks for free until a person answers &mdash; and a gate that cannot be talked out of stopping.</p></div>
+      <span class="pd-line"></span>
+    </div>
+
+    <div class="step-card">
+      <div class="step-head"><span class="step-num">10</span><h4>Task-token review gate</h4></div>
+      <p class="step-res">adi-2-1-hitl-workflow &middot; adi-2-1-human-reviews &middot; 5 Lambdas</p>
+      <div class="step-body">
+        <div class="concept">
+          <p><strong>In plain terms:</strong> Confidence says how sure the model is. Sensitivity says how much a mistake would cost. They are different questions, and the second one always wins.</p>
+        </div>
+        <p><strong class="lbl">What was built:</strong> Seven states implementing the escalation bands &mdash; above 0.9 sent immediately, 0.7 to 0.9 sent <em>and</em> logged for later review, below 0.7 parked for a human, and anything high-sensitivity parked regardless of confidence. Reviews land in a table with two GSIs, storing the model's draft and the human's correction side by side.</p>
+        <p><strong class="lbl">Where to check:</strong> Step Functions &rarr; adi-2-1-hitl-workflow &mdash; a parked execution sits in <code>RequestHumanReview</code> and shows as RUNNING at zero cost; DynamoDB &rarr; adi-2-1-human-reviews.</p>
+        <p><strong class="lbl">Verified &mdash; the pause and resume cycle:</strong> a cancellation request parked with a 660-character task token stored in DynamoDB, stayed RUNNING with zero state transitions, and resumed the instant <code>SendTaskSuccess</code> arrived with a rejection and a correction &mdash; the human's text replacing the model's draft in the final output.</p>
+        <div class="verify-wrap">
+        <table class="verify">
+          <tr><th>Case</th><th>Confidence</th><th>Sensitivity</th><th>Route</th></tr>
+          <tr><td>Outage question, with facts supplied</td><td>0.92</td><td>Normal</td><td><strong>AUTO</strong></td></tr>
+          <tr><td>"Why is my service slow", facts show past-due and a healthy line</td><td>0.72</td><td>Normal</td><td><strong>ASYNC_REVIEW</strong></td></tr>
+          <tr><td>Intermittent evening drops, diagnostics healthy</td><td>0.62</td><td>Normal</td><td><strong>SYNC_REVIEW</strong></td></tr>
+          <tr><td>"Refund for the downtime"</td><td>0.65</td><td><strong>High</strong></td><td><strong>SYNC_REVIEW</strong></td></tr>
+          <tr><td>"Cancel my service and refund"</td><td>0.45</td><td><strong>High</strong></td><td><strong>SYNC_REVIEW</strong></td></tr>
+        </table>
+        </div>
+        <div class="mini-find">
+          <p class="mf-head">Improvement on the brief &middot; A token, not a poll loop</p>
+          <p>The brief uses <code>Wait &rarr; CheckStatus &rarr; Choice &rarr; Wait</code>. That bills a state transition per poll, adds latency averaging half the poll interval, and still needs the reviewer's answer stored where the poller can read it. <code>.waitForTaskToken</code> inverts it: the execution parks at <strong>zero cost and zero transitions</strong> until someone calls <code>SendTaskSuccess</code>. A 24-hour timeout is caught into an escalation path, so timing out never silently sends an unreviewed reply.</p>
+        </div>
+        <div class="mini-bug">
+          <p class="mb-head">Bug 6 &middot; Every customer with an "issue" was escalated to a human</p>
+          <p><strong>What happened:</strong> sensitivity was matched with a plain substring check, and <code>"sue"</code> is a substring of <code>"issue"</code>. "I have an issue with my internet", "my connection has issues", "pursue a complaint" &mdash; all flagged HIGH sensitivity and routed to synchronous human approval.</p>
+          <p><strong>Root cause &amp; why it went unnoticed:</strong> "issue" is one of the most common words in support traffic, so this quietly sent a large share of ordinary tickets to a human &mdash; destroying the automation the system exists to provide, while <em>looking</em> like a conservative safety setting. It failed in the safe direction, which is exactly why nobody would notice.</p>
+          <p><strong>Fix:</strong> word-boundary regex, with <code>\w*</code> on the stems meant as prefixes so "cancellation" and "compensation" still match, plus a negative lookahead so "credit card" no longer reads as a credit request.</p>
+        </div>
+        <div class="mini-find">
+          <p class="mf-head">Finding &middot; A design flaw that only testing could surface</p>
+          <p>The first AUTO test parked instead of auto-approving: <em>"Is there an outage in my area?"</em> scored <strong>0.35</strong>. Nothing was broken &mdash; the review workflow has <em>no tools</em>, so the model was correctly unsure about a fact it had no way to look up. But a confidence gate placed in front of a tool-less model sends nearly everything to a human.</p>
+          <p>Adding a facts channel that carries the ReAct workflow's findings into the evaluation changed the identical question from <strong>0.35 &rarr; SYNC_REVIEW</strong> to <strong>0.92 &rarr; AUTO</strong>. The gate has to run <em>after</em> fact-gathering, not instead of it.</p>
+        </div>
+        <div class="mini-tip">
+          <p class="mt-head">Exam tip</p>
+          <p><strong>Low confidence is usually a context problem, not a model problem.</strong> Before tuning a threshold or swapping models, check what the model was actually given. Nothing about the model, the prompt bands or the threshold changed between 0.35 and 0.92 &mdash; only the facts supplied.</p>
+        </div>
+        <div class="mini-tip">
+          <p class="mt-head">Exam tip</p>
+          <p><strong>GSIs exist so the answer does not require a Scan.</strong> Querying "every cancellation review" through the index scanned 1 item and returned 1; the same question as a <code>Scan</code> with a filter scanned all 6 and threw 5 away. <code>ScannedCount</code> is the number that matters &mdash; invisible at six rows, the difference between a dashboard and an outage at six million.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="resources">
+  <div class="wrap-wide">
+    <p class="kicker">Appendix</p>
+    <h2 class="h">Resource index</h2>
+    <p class="section-lead">All 26 resources, every one prefixed <code>adi-2-1-</code>, all in us-east-1. Nothing here bills when idle.</p>
+    <div class="verify-wrap">
+    <table class="verify">
+      <tr><th>Name</th><th>Type</th><th>Purpose</th></tr>
+      <tr><td>adi-2-1-agent-role</td><td>IAM role</td><td>Bedrock Agent service role with confused-deputy conditions (orphaned by the Maintenance Mode blocker; kept, costs nothing)</td></tr>
+      <tr><td>adi-2-1-lambda-role</td><td>IAM role</td><td>Shared execution role: scoped logs, three models, item-level DynamoDB, task-token callbacks, namespace-scoped metrics</td></tr>
+      <tr><td>adi-2-1-sfn-role</td><td>IAM role</td><td>Step Functions execution role, invoke limited to <code>function:adi-2-1-*</code></td></tr>
+      <tr><td>adi-2-1-agent-schemas-269737522732</td><td>S3 bucket</td><td>OpenAPI schema for the support tools; all public access blocked</td></tr>
+      <tr><td>adi-2-1-support-tools</td><td>Lambda</td><td>The three diagnostic tools, with model-readable errors and input validation</td></tr>
+      <tr><td>adi-2-1-support-agent</td><td>Lambda</td><td>Code-first Reason/Act/Observe loop over the memory tiers</td></tr>
+      <tr><td>adi-2-1-session-memory</td><td>DynamoDB</td><td>Operational tier &mdash; conversation turns, TTL 90 days</td></tr>
+      <tr><td>adi-2-1-decision-scratchpad</td><td>DynamoDB</td><td>Tactical tier &mdash; tool calls and reasoning steps, TTL 7 days</td></tr>
+      <tr><td>adi-2-1-strategic-memory</td><td>DynamoDB</td><td>Strategic tier &mdash; persistent patterns, no TTL, GSI on issue category</td></tr>
+      <tr><td>adi-2-1-parse-request</td><td>Lambda</td><td>Deterministic decomposition &mdash; regex intent and account extraction, no LLM</td></tr>
+      <tr><td>adi-2-1-determine-action</td><td>Lambda</td><td>LLM planner: picks the next action</td></tr>
+      <tr><td>adi-2-1-action-handler</td><td>Lambda</td><td>Executes troubleshoot, billing or escalate</td></tr>
+      <tr><td>adi-2-1-reasoning</td><td>Lambda</td><td>LLM reasoner: judges whether the facts explain the issue</td></tr>
+      <tr><td>adi-2-1-generate-response</td><td>Lambda</td><td>Final customer-facing reply</td></tr>
+      <tr><td>adi-2-1-react-workflow</td><td>Step Functions</td><td>The ReAct state machine, with a hard iteration ceiling</td></tr>
+      <tr><td>adi-2-1-circuit-breaker</td><td>DynamoDB</td><td>Breaker state and rolling failure counters</td></tr>
+      <tr><td>adi-2-1-guarded-invoke</td><td>Lambda</td><td>Timeout budget plus circuit breaker around Bedrock</td></tr>
+      <tr><td>adi-2-1-circuit-open-alarm</td><td>CloudWatch alarm</td><td>Fires on the custom <code>CircuitOpened</code> metric</td></tr>
+      <tr><td>adi-2-1-model-router</td><td>Lambda</td><td>Classify, route, downgrade on budget or latency, fall back on failure</td></tr>
+      <tr><td>adi-2-1-human-reviews</td><td>DynamoDB</td><td>Review queue and feedback store; GSIs by decision type and by reviewer</td></tr>
+      <tr><td>adi-2-1-evaluate-confidence</td><td>Lambda</td><td>Drafts the reply, self-scores confidence, applies the bands and sensitivity override</td></tr>
+      <tr><td>adi-2-1-create-review-task</td><td>Lambda</td><td>Writes the pending review together with the task token</td></tr>
+      <tr><td>adi-2-1-process-feedback</td><td>Lambda</td><td>Records the human verdict and correction</td></tr>
+      <tr><td>adi-2-1-deliver-response</td><td>Lambda</td><td>Final delivery and audit record</td></tr>
+      <tr><td>adi-2-1-handle-review-timeout</td><td>Lambda</td><td>24-hour fallback &mdash; escalates rather than auto-sending</td></tr>
+      <tr><td>adi-2-1-hitl-workflow</td><td>Step Functions</td><td>The review gate, parked on a task token</td></tr>
+    </table>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <p>This is an independent, unofficial study resource and is not affiliated with, endorsed by, or sponsored by Amazon Web Services, Inc. AWS, Amazon Bedrock, and all related marks are trademarks of Amazon.com, Inc. or its affiliates.</p>
+    <p>Hosted on Amazon S3 + Amazon CloudFront. &middot; <a href="index.html">&larr; Back to Build Log</a> &middot; <a href="../notes/task-2-1.html">Study notes for this task</a></p>
+  </div>
+</footer>
+
+</body>
+</html>

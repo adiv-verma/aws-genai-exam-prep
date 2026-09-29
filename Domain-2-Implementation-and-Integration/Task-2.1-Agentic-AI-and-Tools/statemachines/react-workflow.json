@@ -1,0 +1,117 @@
+{
+  "Comment": "ReAct pattern for ISP customer support. Macro-deterministic state machine, micro-non-deterministic reasoning inside each Task state (notes 2.1). The loop back to DetermineAction is bounded by MaxIterationsGuard - the brief's version has no bound and can spin forever.",
+  "StartAt": "ParseUserRequest",
+  "TimeoutSeconds": 300,
+  "States": {
+    "ParseUserRequest": {
+      "Type": "Task",
+      "Resource": "arn:aws:states:::lambda:invoke",
+      "Parameters": {
+        "FunctionName": "arn:aws:lambda:us-east-1:269737522732:function:adi-2-1-parse-request",
+        "Payload.$": "$"
+      },
+      "OutputPath": "$.Payload",
+      "Retry": [{"ErrorEquals": ["Lambda.ServiceException", "Lambda.TooManyRequestsException", "Lambda.SdkClientException"], "IntervalSeconds": 2, "MaxAttempts": 3, "BackoffRate": 2.0}],
+      "Next": "DetermineAction"
+    },
+
+    "DetermineAction": {
+      "Type": "Task",
+      "Resource": "arn:aws:states:::lambda:invoke",
+      "Parameters": {
+        "FunctionName": "arn:aws:lambda:us-east-1:269737522732:function:adi-2-1-determine-action",
+        "Payload.$": "$"
+      },
+      "OutputPath": "$.Payload",
+      "Retry": [{"ErrorEquals": ["States.ALL"], "IntervalSeconds": 2, "MaxAttempts": 2, "BackoffRate": 2.0}],
+      "Catch": [{"ErrorEquals": ["States.ALL"], "Next": "GenerateResponse", "ResultPath": "$.plannerError"}],
+      "Next": "ActionChoice"
+    },
+
+    "ActionChoice": {
+      "Type": "Choice",
+      "Choices": [
+        {"Variable": "$.actionType", "StringEquals": "troubleshoot", "Next": "TroubleshootingAction"},
+        {"Variable": "$.actionType", "StringEquals": "billing", "Next": "BillingAction"},
+        {"Variable": "$.actionType", "StringEquals": "escalate", "Next": "EscalateAction"}
+      ],
+      "Default": "GenerateResponse"
+    },
+
+    "TroubleshootingAction": {
+      "Type": "Task",
+      "Resource": "arn:aws:states:::lambda:invoke",
+      "Parameters": {
+        "FunctionName": "arn:aws:lambda:us-east-1:269737522732:function:adi-2-1-action-handler",
+        "Payload": {"action": "troubleshoot", "caseId.$": "$.caseId", "userRequest.$": "$.userRequest", "intent.$": "$.intent", "accountId.$": "$.accountId", "hasAccountId.$": "$.hasAccountId", "iteration.$": "$.iteration", "actionResults.$": "$.actionResults"}
+      },
+      "OutputPath": "$.Payload",
+      "Retry": [{"ErrorEquals": ["States.ALL"], "IntervalSeconds": 2, "MaxAttempts": 2, "BackoffRate": 2.0}],
+      "Next": "ReasonAboutResults"
+    },
+
+    "BillingAction": {
+      "Type": "Task",
+      "Resource": "arn:aws:states:::lambda:invoke",
+      "Parameters": {
+        "FunctionName": "arn:aws:lambda:us-east-1:269737522732:function:adi-2-1-action-handler",
+        "Payload": {"action": "billing", "caseId.$": "$.caseId", "userRequest.$": "$.userRequest", "intent.$": "$.intent", "accountId.$": "$.accountId", "hasAccountId.$": "$.hasAccountId", "iteration.$": "$.iteration", "actionResults.$": "$.actionResults"}
+      },
+      "OutputPath": "$.Payload",
+      "Retry": [{"ErrorEquals": ["States.ALL"], "IntervalSeconds": 2, "MaxAttempts": 2, "BackoffRate": 2.0}],
+      "Next": "ReasonAboutResults"
+    },
+
+    "EscalateAction": {
+      "Type": "Task",
+      "Resource": "arn:aws:states:::lambda:invoke",
+      "Parameters": {
+        "FunctionName": "arn:aws:lambda:us-east-1:269737522732:function:adi-2-1-action-handler",
+        "Payload": {"action": "escalate", "caseId.$": "$.caseId", "userRequest.$": "$.userRequest", "intent.$": "$.intent", "accountId.$": "$.accountId", "hasAccountId.$": "$.hasAccountId", "iteration.$": "$.iteration", "actionResults.$": "$.actionResults"}
+      },
+      "OutputPath": "$.Payload",
+      "Retry": [{"ErrorEquals": ["States.ALL"], "IntervalSeconds": 2, "MaxAttempts": 2, "BackoffRate": 2.0}],
+      "Next": "ReasonAboutResults"
+    },
+
+    "ReasonAboutResults": {
+      "Type": "Task",
+      "Resource": "arn:aws:states:::lambda:invoke",
+      "Parameters": {
+        "FunctionName": "arn:aws:lambda:us-east-1:269737522732:function:adi-2-1-reasoning",
+        "Payload.$": "$"
+      },
+      "OutputPath": "$.Payload",
+      "Retry": [{"ErrorEquals": ["States.ALL"], "IntervalSeconds": 2, "MaxAttempts": 2, "BackoffRate": 2.0}],
+      "Catch": [{"ErrorEquals": ["States.ALL"], "Next": "GenerateResponse", "ResultPath": "$.reasonerError"}],
+      "Next": "MaxIterationsGuard"
+    },
+
+    "MaxIterationsGuard": {
+      "Type": "Choice",
+      "Comment": "Notes 4, layer 4. The model votes on whether to continue, but the ceiling is enforced here where no prompt can reach it. Both conditions must hold to loop.",
+      "Choices": [
+        {
+          "And": [
+            {"Variable": "$.needMoreActions", "BooleanEquals": true},
+            {"Variable": "$.iteration", "NumericLessThan": 3}
+          ],
+          "Next": "DetermineAction"
+        }
+      ],
+      "Default": "GenerateResponse"
+    },
+
+    "GenerateResponse": {
+      "Type": "Task",
+      "Resource": "arn:aws:states:::lambda:invoke",
+      "Parameters": {
+        "FunctionName": "arn:aws:lambda:us-east-1:269737522732:function:adi-2-1-generate-response",
+        "Payload.$": "$"
+      },
+      "OutputPath": "$.Payload",
+      "Retry": [{"ErrorEquals": ["States.ALL"], "IntervalSeconds": 2, "MaxAttempts": 2, "BackoffRate": 2.0}],
+      "End": true
+    }
+  }
+}

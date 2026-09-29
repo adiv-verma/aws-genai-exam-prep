@@ -1,0 +1,113 @@
+{
+  "Comment": "Human-in-the-loop for ISP support. Uses a Step Functions task token (notes 6) rather than the poll loop in project.md Part 5: the execution parks at zero cost until a reviewer calls SendTaskSuccess, with a 24h timeout that escalates rather than auto-sending.",
+  "StartAt": "EvaluateConfidence",
+  "TimeoutSeconds": 90000,
+  "States": {
+    "EvaluateConfidence": {
+      "Type": "Task",
+      "Resource": "arn:aws:states:::lambda:invoke",
+      "Parameters": {
+        "FunctionName": "arn:aws:lambda:us-east-1:269737522732:function:adi-2-1-evaluate-confidence",
+        "Payload.$": "$"
+      },
+      "OutputPath": "$.Payload",
+      "Retry": [{"ErrorEquals": ["States.ALL"], "IntervalSeconds": 2, "MaxAttempts": 2, "BackoffRate": 2.0}],
+      "Next": "RouteOnConfidence"
+    },
+
+    "RouteOnConfidence": {
+      "Type": "Choice",
+      "Comment": "Notes 6 escalation bands. Sensitivity is checked first in the Lambda, so a HIGH-sensitivity action arrives here already routed to SYNC_REVIEW no matter how confident the model was.",
+      "Choices": [
+        {"Variable": "$.route", "StringEquals": "AUTO", "Next": "DeliverResponse"},
+        {"Variable": "$.route", "StringEquals": "ASYNC_REVIEW", "Next": "LogForAsyncReview"}
+      ],
+      "Default": "RequestHumanReview"
+    },
+
+    "LogForAsyncReview": {
+      "Type": "Task",
+      "Comment": "0.7-0.9: the answer goes out now, and a review record is written for someone to look at afterwards. The execution does not wait.",
+      "Resource": "arn:aws:states:::lambda:invoke",
+      "Parameters": {
+        "FunctionName": "arn:aws:lambda:us-east-1:269737522732:function:adi-2-1-create-review-task",
+        "Payload": {
+          "caseId.$": "$.caseId", "decisionType.$": "$.decisionType",
+          "confidence.$": "$.confidence", "sensitivity.$": "$.sensitivity",
+          "routeWhy.$": "$.routeWhy", "userRequest.$": "$.userRequest",
+          "draft.$": "$.draft", "taskToken": "ASYNC-NO-TOKEN"
+        }
+      },
+      "ResultPath": "$.reviewRecord",
+      "Retry": [{"ErrorEquals": ["States.ALL"], "IntervalSeconds": 2, "MaxAttempts": 2, "BackoffRate": 2.0}],
+      "Next": "DeliverResponse"
+    },
+
+    "RequestHumanReview": {
+      "Type": "Task",
+      "Comment": "The token pause. This state does not complete until SendTaskSuccess is called with $$.Task.Token. Zero cost while parked - no polling, no state transitions.",
+      "Resource": "arn:aws:states:::lambda:invoke.waitForTaskToken",
+      "TimeoutSeconds": 86400,
+      "Parameters": {
+        "FunctionName": "arn:aws:lambda:us-east-1:269737522732:function:adi-2-1-create-review-task",
+        "Payload": {
+          "caseId.$": "$.caseId", "decisionType.$": "$.decisionType",
+          "confidence.$": "$.confidence", "sensitivity.$": "$.sensitivity",
+          "routeWhy.$": "$.routeWhy", "userRequest.$": "$.userRequest",
+          "draft.$": "$.draft",
+          "taskToken.$": "$$.Task.Token"
+        }
+      },
+      "ResultPath": "$.review",
+      "Catch": [{
+        "ErrorEquals": ["States.Timeout"],
+        "Next": "HandleReviewTimeout",
+        "ResultPath": "$.timeoutError"
+      }],
+      "Next": "ProcessHumanFeedback"
+    },
+
+    "HandleReviewTimeout": {
+      "Type": "Task",
+      "Comment": "Notes 6: the 24h fallback escalates to a human queue. It must never silently send an unreviewed reply.",
+      "Resource": "arn:aws:states:::lambda:invoke",
+      "Parameters": {
+        "FunctionName": "arn:aws:lambda:us-east-1:269737522732:function:adi-2-1-handle-review-timeout",
+        "Payload.$": "$"
+      },
+      "OutputPath": "$.Payload",
+      "Next": "DeliverResponse"
+    },
+
+    "ProcessHumanFeedback": {
+      "Type": "Task",
+      "Resource": "arn:aws:states:::lambda:invoke",
+      "Parameters": {
+        "FunctionName": "arn:aws:lambda:us-east-1:269737522732:function:adi-2-1-process-feedback",
+        "Payload": {
+          "caseId.$": "$.caseId", "decisionType.$": "$.decisionType",
+          "confidence.$": "$.confidence", "sensitivity.$": "$.sensitivity",
+          "route.$": "$.route", "routeWhy.$": "$.routeWhy", "draft.$": "$.draft",
+          "reviewId.$": "$.review.reviewId",
+          "verdict.$": "$.review.verdict",
+          "reviewerId.$": "$.review.reviewerId",
+          "correctedResponse.$": "$.review.correctedResponse"
+        }
+      },
+      "OutputPath": "$.Payload",
+      "Retry": [{"ErrorEquals": ["States.ALL"], "IntervalSeconds": 2, "MaxAttempts": 2, "BackoffRate": 2.0}],
+      "Next": "DeliverResponse"
+    },
+
+    "DeliverResponse": {
+      "Type": "Task",
+      "Resource": "arn:aws:states:::lambda:invoke",
+      "Parameters": {
+        "FunctionName": "arn:aws:lambda:us-east-1:269737522732:function:adi-2-1-deliver-response",
+        "Payload.$": "$"
+      },
+      "OutputPath": "$.Payload",
+      "End": true
+    }
+  }
+}
