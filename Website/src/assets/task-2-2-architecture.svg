@@ -1,0 +1,152 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1040 950" width="1040" height="950" role="img" font-family="-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica,Arial,sans-serif">
+<defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,1 L9,5 L0,9 z" fill="#8fa0b6"/></marker><marker id="ah-d" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,1 L9,5 L0,9 z" fill="#a9b6c7"/></marker></defs>
+<style>.pnum{font-size:11px;font-weight:700;fill:#fff;text-anchor:middle;}.ptitle{font-size:11.5px;font-weight:700;letter-spacing:.06em;fill:#16345c;text-transform:uppercase;}.bt{font-size:12.5px;font-weight:700;text-anchor:middle;}.bs{font-size:11px;text-anchor:middle;}.elab{font-size:10.5px;font-weight:600;fill:#6b7a8d;}</style>
+<rect width="1040" height="950" fill="#ffffff"/>
+
+<!-- ============ PANEL 1 : entry and response cache ============ -->
+<rect x="20" y="20" width="980" height="116" rx="14" fill="#f4f6fa" stroke="#e3e7ee"/>
+<rect x="42" y="33" width="19" height="18" rx="5" fill="#0f2540"/>
+<text x="51.5" y="46" class="pnum">1</text>
+<text x="69" y="46" class="ptitle">Entry and response cache</text>
+
+<rect x="45" y="58" width="250" height="58" rx="9" fill="#ffffff" stroke="#d7dde8"/>
+<text x="170" y="82" class="bt" fill="#0b1524">User / client application</text>
+<text x="170" y="99" class="bs" fill="#3a4a5e">may also call Bedrock directly (boto3)</text>
+
+<rect x="385" y="58" width="250" height="58" rx="9" fill="#ffffff" stroke="#d7dde8"/>
+<text x="510" y="82" class="bt" fill="#0b1524">Response cache</text>
+<text x="510" y="99" class="bs" fill="#3a4a5e">ElastiCache for Redis</text>
+
+<rect x="700" y="58" width="275" height="58" rx="9" fill="#eef7f1" stroke="#c7e2d1"/>
+<text x="837" y="82" class="bt" fill="#0b1524">Instant answer returned</text>
+<text x="837" y="99" class="bs" fill="#3a4a5e">model never invoked — zero token cost</text>
+
+<line x1="299" y1="87" x2="381" y2="87" stroke="#8fa0b6" stroke-width="1.6" marker-end="url(#ah)"/>
+<line x1="639" y1="87" x2="696" y2="87" stroke="#8fa0b6" stroke-width="1.6" marker-end="url(#ah)"/>
+<text x="667" y="79" class="elab" text-anchor="middle">cache hit</text>
+<text x="60" y="132" class="elab" text-anchor="start">write-back: warm the cache so the next identical query never reaches a model</text>
+
+<line x1="510" y1="138" x2="510" y2="154" stroke="#8fa0b6" stroke-width="1.6" marker-end="url(#ah)"/>
+<text x="502" y="151" class="elab" text-anchor="end">cache miss</text>
+
+<!-- ============ PANEL 2 : router ============ -->
+<rect x="20" y="156" width="980" height="124" rx="14" fill="#f4f6fa" stroke="#e3e7ee"/>
+<rect x="42" y="169" width="19" height="18" rx="5" fill="#0f2540"/>
+<text x="51.5" y="182" class="pnum">2</text>
+<text x="69" y="182" class="ptitle">Routing and gateway logic</text>
+
+<rect x="300" y="196" width="420" height="52" rx="9" fill="#ffffff" stroke="#d7dde8"/>
+<text x="510" y="219" class="bt" fill="#0b1524">Step Functions router</text>
+<text x="510" y="236" class="bs" fill="#3a4a5e">picks the path by urgency, complexity and budget</text>
+<text x="510" y="266" class="elab" text-anchor="middle">Lambda never hosts a model — it only fronts one for payload validation, caching or cascading logic</text>
+
+<line x1="510" y1="282" x2="510" y2="298" stroke="#8fa0b6" stroke-width="1.6" marker-end="url(#ah)"/>
+
+<!-- ============ PANEL 3 : execution paths ============ -->
+<rect x="20" y="300" width="980" height="262" rx="14" fill="#f4f6fa" stroke="#e3e7ee"/>
+<rect x="42" y="313" width="19" height="18" rx="5" fill="#0f2540"/>
+<text x="51.5" y="326" class="pnum">3</text>
+<text x="69" y="326" class="ptitle">Execution paths</text>
+
+<line x1="510" y1="340" x2="510" y2="368" stroke="#8fa0b6" stroke-width="1.6"/>
+<line x1="180" y1="368" x2="840" y2="368" stroke="#8fa0b6" stroke-width="1.6"/>
+<text x="48" y="361" class="elab" text-anchor="start">async / bulk — latency-tolerant</text>
+<text x="502" y="361" class="elab" text-anchor="end">interactive</text>
+<text x="972" y="361" class="elab" text-anchor="end">steady managed inference</text>
+<line x1="180" y1="368" x2="180" y2="377" stroke="#8fa0b6" stroke-width="1.6" marker-end="url(#ah)"/>
+<line x1="510" y1="368" x2="510" y2="377" stroke="#8fa0b6" stroke-width="1.6" marker-end="url(#ah)"/>
+<line x1="840" y1="368" x2="840" y2="377" stroke="#8fa0b6" stroke-width="1.6" marker-end="url(#ah)"/>
+
+<rect x="35" y="380" width="290" height="68" rx="9" fill="#ffffff" stroke="#d7dde8"/>
+<text x="180" y="405" class="bt" fill="#0b1524">Amazon SQS queue</text>
+<text x="180" y="422" class="bs" fill="#3a4a5e">spikes queue instead of throttling —</text>
+<text x="180" y="437" class="bs" fill="#3a4a5e">no request is ever dropped</text>
+
+<rect x="365" y="380" width="290" height="68" rx="9" fill="#ffffff" stroke="#d7dde8"/>
+<text x="510" y="405" class="bt" fill="#0b1524">Small, fast, cheap model</text>
+<text x="510" y="422" class="bs" fill="#3a4a5e">first hop of the cascade —</text>
+<text x="510" y="437" class="bs" fill="#3a4a5e">sized for routine, straightforward queries</text>
+
+<rect x="695" y="380" width="290" height="68" rx="9" fill="#ffffff" stroke="#d7dde8"/>
+<text x="840" y="405" class="bt" fill="#0b1524">Bedrock On-Demand / Provisioned</text>
+<text x="840" y="422" class="bs" fill="#3a4a5e">pay-per-token on shared capacity, or</text>
+<text x="840" y="437" class="bs" fill="#3a4a5e">Model Units reserving a fixed TPS</text>
+
+<line x1="180" y1="450" x2="180" y2="466" stroke="#8fa0b6" stroke-width="1.6" marker-end="url(#ah)"/>
+<line x1="510" y1="450" x2="510" y2="466" stroke="#8fa0b6" stroke-width="1.6" marker-end="url(#ah)"/>
+
+<rect x="35" y="468" width="290" height="74" rx="9" fill="#ffffff" stroke="#d7dde8"/>
+<text x="180" y="494" class="bt" fill="#0b1524">Worker consumer</text>
+<text x="180" y="511" class="bs" fill="#3a4a5e">drains the queue at a sustainable rate,</text>
+<text x="180" y="526" class="bs" fill="#3a4a5e">trading latency for zero throttling</text>
+
+<rect x="365" y="468" width="290" height="74" rx="9" fill="#ffffff" stroke="#d7dde8"/>
+<text x="510" y="491" class="bt" fill="#0b1524">Confidence check</text>
+<text x="510" y="508" class="bs" fill="#3a4a5e">high (~80% of traffic) → answer returned now</text>
+<text x="510" y="524" class="bs" fill="#3a4a5e">low → escalate to the large model below</text>
+
+<line x1="180" y1="544" x2="180" y2="558" stroke="#8fa0b6" stroke-width="1.6"/>
+<line x1="510" y1="544" x2="510" y2="558" stroke="#8fa0b6" stroke-width="1.6"/>
+<line x1="840" y1="450" x2="840" y2="558" stroke="#8fa0b6" stroke-width="1.6"/>
+<text x="852" y="500" class="elab" text-anchor="start">in-capacity traffic,</text>
+<text x="852" y="514" class="elab" text-anchor="start">no escalation needed</text>
+
+<line x1="180" y1="566" x2="180" y2="582" stroke="#8fa0b6" stroke-width="1.6" marker-end="url(#ah)"/>
+<line x1="510" y1="566" x2="510" y2="582" stroke="#8fa0b6" stroke-width="1.6" marker-end="url(#ah)"/>
+<line x1="840" y1="566" x2="840" y2="582" stroke="#8fa0b6" stroke-width="1.6" marker-end="url(#ah)"/>
+
+<!-- ============ PANEL 4 : heavy and custom hosting ============ -->
+<rect x="20" y="584" width="980" height="188" rx="14" fill="#f4f6fa" stroke="#e3e7ee"/>
+<rect x="42" y="597" width="19" height="18" rx="5" fill="#0f2540"/>
+<text x="51.5" y="610" class="pnum">4</text>
+<text x="69" y="610" class="ptitle">Heavy and custom model hosting</text>
+
+<rect x="35" y="628" width="290" height="84" rx="9" fill="#ffffff" stroke="#d7dde8"/>
+<text x="180" y="653" class="bt" fill="#0b1524">SageMaker Async endpoint</text>
+<text x="180" y="670" class="bs" fill="#3a4a5e">large payloads, long-running inference;</text>
+<text x="180" y="685" class="bs" fill="#3a4a5e">queues requests, writes output to S3,</text>
+<text x="180" y="700" class="bs" fill="#3a4a5e">signals completion via Amazon SNS</text>
+
+<rect x="365" y="628" width="290" height="84" rx="9" fill="#0f2540" stroke="#0f2540"/>
+<text x="510" y="653" class="bt" fill="#ffffff">SageMaker Real-Time endpoint</text>
+<text x="510" y="670" class="bs" fill="#c9d5e3">full container control on ml.p4d / ml.g5;</text>
+<text x="510" y="685" class="bs" fill="#c9d5e3">model sharded across GPUs with DeepSpeed,</text>
+<text x="510" y="700" class="bs" fill="#c9d5e3">Triton or FasterTransformer · billed hourly 24/7</text>
+
+<rect x="695" y="628" width="290" height="84" rx="9" fill="#ffffff" stroke="#d7dde8"/>
+<text x="840" y="653" class="bt" fill="#0b1524">Bedrock Custom Model Import</text>
+<text x="840" y="670" class="bs" fill="#3a4a5e">fine-tune in SageMaker, then serve the</text>
+<text x="840" y="685" class="bs" fill="#3a4a5e">custom model via InvokeModel —</text>
+<text x="840" y="700" class="bs" fill="#3a4a5e">per-token pricing, no idle GPU bill</text>
+
+<rect x="35" y="722" width="950" height="32" rx="8" fill="#fff7ed" stroke="#f6d9b8"/>
+<text x="510" y="742" class="bs" fill="#0b1524">Timeout trap: a 100 GB+ artifact needs 20–40 min to reach VRAM, so raise container health-check and model-download timeouts to 60 minutes or the deployment is declared dead.</text>
+
+<line x1="180" y1="776" x2="180" y2="792" stroke="#8fa0b6" stroke-width="1.6" marker-end="url(#ah)"/>
+<line x1="510" y1="776" x2="510" y2="792" stroke="#8fa0b6" stroke-width="1.6" marker-end="url(#ah)"/>
+<line x1="840" y1="776" x2="840" y2="792" stroke="#8fa0b6" stroke-width="1.6" marker-end="url(#ah)"/>
+
+<!-- ============ PANEL 5 : write-back and monitoring ============ -->
+<rect x="20" y="794" width="980" height="136" rx="14" fill="#f4f6fa" stroke="#e3e7ee"/>
+<rect x="42" y="807" width="19" height="18" rx="5" fill="#0f2540"/>
+<text x="51.5" y="820" class="pnum">5</text>
+<text x="69" y="820" class="ptitle">Cache write-back and monitoring</text>
+
+<rect x="35" y="838" width="290" height="72" rx="9" fill="#ffffff" stroke="#d7dde8"/>
+<text x="180" y="863" class="bt" fill="#0b1524">Store response in cache</text>
+<text x="180" y="880" class="bs" fill="#3a4a5e">key = user query,</text>
+<text x="180" y="895" class="bs" fill="#3a4a5e">value = final LLM answer text</text>
+
+<rect x="365" y="838" width="290" height="72" rx="9" fill="#ffffff" stroke="#d7dde8"/>
+<text x="510" y="863" class="bt" fill="#0b1524">Store embeddings in cache</text>
+<text x="510" y="880" class="bs" fill="#3a4a5e">key = chunk or query text,</text>
+<text x="510" y="895" class="bs" fill="#3a4a5e">value = vector array (RAG path)</text>
+
+<rect x="695" y="838" width="290" height="72" rx="9" fill="#ffffff" stroke="#d7dde8"/>
+<text x="840" y="863" class="bt" fill="#0b1524">Amazon CloudWatch</text>
+<text x="840" y="880" class="bs" fill="#3a4a5e">GPU VRAM utilisation, latency, error rate,</text>
+<text x="840" y="895" class="bs" fill="#3a4a5e">cache hit rate — the resize signal</text>
+
+<!-- ============ cache write-back feedback edge ============ -->
+<path d="M35,874 L10,874 L10,140 L460,140 L460,120" fill="none" stroke="#a9b6c7" stroke-width="1.5" stroke-dasharray="5 4" marker-end="url(#ah-d)"/>
+</svg>

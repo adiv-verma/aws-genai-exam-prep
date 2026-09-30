@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Task 2.2 Notes | AIP-C01 Guide</title>
+<meta name="description" content="Domain 2, Task 2.2 study notes: LLM deployment strategies and architecture.">
+<style>
+  :root{
+    --ink:#0b1524; --ink-soft:#3a4a5e; --paper:#f7f8fa; --card:#ffffff; --line:#e3e7ee;
+    --accent:#e8622c; --accent-dark:#c94f1f; --navy:#0f2540; --navy-2:#16345c;
+    --trap-bg:#fff7ed; --trap-line:#f6d9b8;
+    color-scheme: light;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{margin:0;background:var(--paper);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;line-height:1.6;}
+  a{color:var(--accent-dark);}
+  code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;background:#eef1f6;padding:1px 5px;border-radius:4px;font-size:.92em;}
+  img{max-width:100%;}
+  .wrap{max-width:1080px;margin:0 auto;padding:0 24px;}
+
+  .nav{position:sticky;top:0;z-index:50;background:rgba(15,37,64,.96);backdrop-filter:blur(6px);border-bottom:1px solid rgba(255,255,255,.08);}
+  .nav .wrap{display:flex;align-items:center;justify-content:space-between;height:56px;}
+  .nav-brand{color:#fff;font-weight:700;font-size:14px;letter-spacing:.02em;text-decoration:none;}
+  .nav-brand span{color:var(--accent);}
+  .nav-links{display:flex;gap:22px;list-style:none;margin:0;padding:0;}
+  .nav-links a{color:#cdd8e6;text-decoration:none;font-size:13.5px;font-weight:500;}
+  .nav-links a:hover{color:#fff;}
+  @media (max-width:720px){ .nav-links{display:none;} }
+
+  header.hero{background:linear-gradient(180deg,var(--navy) 0%, var(--navy-2) 100%);color:#fff;padding:36px 0 28px;}
+  .eyebrow{display:inline-block;font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#ffd8c4;background:rgba(232,98,44,.18);border:1px solid rgba(232,98,44,.4);padding:5px 10px;border-radius:999px;margin-bottom:14px;}
+  h1{font-size:clamp(22px,3.4vw,30px);line-height:1.15;margin:0;font-weight:800;}
+  header.hero p{font-size:14.5px;color:#c9d5e3;max-width:720px;margin:10px 0 0;}
+
+  section{padding:36px 0;}
+
+  figure.arch{margin:0 0 24px;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px;}
+  figure.arch img{display:block;border-radius:8px;width:100%;height:auto;}
+  figure.arch figcaption{margin-top:10px;font-size:12.5px;color:var(--ink-soft);text-align:center;}
+
+  .note-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;}
+  @media (max-width:760px){.note-grid{grid-template-columns:1fr;}}
+  .note-card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:18px 20px;}
+  .note-card.wide{grid-column:1 / -1;}
+  .note-card h4{scroll-margin-top:78px;margin:0 0 12px;font-size:13px;font-weight:800;color:var(--navy-2);}
+  .note-card dl{margin:0;}
+  .note-card dt{font-size:13.5px;font-weight:700;color:var(--ink);margin:0 0 3px;}
+  .note-card dt:not(:first-child){margin-top:12px;}
+  .note-card dd{margin:0;font-size:13px;color:var(--ink-soft);line-height:1.55;}
+  .note-card .lead{font-size:13.5px;font-weight:700;color:var(--ink);margin:0 0 8px;}
+  .note-card .lead:not(:first-child){margin-top:12px;}
+  .note-card .sub{font-size:13px;color:var(--ink-soft);line-height:1.55;margin:0 0 8px;}
+
+  .example{background:var(--paper);border:1px solid var(--line);border-radius:8px;padding:10px 12px;margin:8px 0;font-size:12.5px;}
+  .example p{margin:0 0 4px;color:var(--ink-soft);}
+  .example p:last-child{margin-bottom:0;}
+
+  .trap{background:var(--trap-bg);border:1px solid var(--trap-line);border-radius:8px;padding:12px 14px;margin-top:14px;}
+  .trap p{margin:0;font-size:13px;color:var(--ink);}
+  .trap p + p{margin-top:6px;}
+
+  .tscroll{overflow-x:auto;margin:10px 0 2px;}
+  table.cmp{border-collapse:collapse;width:100%;min-width:520px;font-size:12.5px;}
+  table.cmp th,table.cmp td{text-align:left;padding:8px 12px;border-bottom:1px solid var(--line);vertical-align:top;}
+  table.cmp thead th{font-size:11px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;color:var(--navy-2);background:var(--paper);border-bottom:1px solid #cfd6e1;}
+  table.cmp tbody th{font-weight:700;color:var(--ink);width:26%;}
+  table.cmp td{color:var(--ink-soft);}
+  table.cmp tbody tr:last-child th,table.cmp tbody tr:last-child td{border-bottom:none;}
+
+  .formula{background:var(--paper);border:1px solid var(--line);border-radius:8px;padding:10px 12px;margin:8px 0;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px;color:var(--ink);}
+
+  footer{padding:32px 0 48px;color:#8b96a5;font-size:12.5px;}
+  footer .wrap{border-top:1px solid var(--line);padding-top:22px;}
+  footer a{color:#6b7686;}
+  .note-card h4:target{color:var(--accent-dark);}
+  .note-card h4:target::after{content:" \2190";color:var(--accent);}
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="wrap">
+    <a class="nav-brand" href="../index.html">AIP-C01 <span>Guide</span></a>
+    <ul class="nav-links">
+      <li><a href="index.html">All Study Notes</a></li>
+      <li><a href="../tasks/index.html">Build Log</a></li>
+    </ul>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="wrap">
+    <span class="eyebrow">Domain 2 &middot; Task 2.2</span>
+    <h1>LLM Deployment Strategies &amp; Architecture</h1>
+    <p>Why conventional ML deployment pipelines break down at LLM scale &#8212; and the hosting, sharding, caching, cascading and monitoring choices that replace them.</p>
+  </div>
+</header>
+
+<section>
+  <div class="wrap">
+
+    <figure class="arch">
+      <img src="../assets/task-2-2-architecture.svg" alt="Reference architecture for LLM serving: a client request first hits an ElastiCache for Redis response cache, where a hit returns an instant answer with no model invocation; a miss passes to a Step Functions router that splits three ways — an asynchronous or bulk path through an Amazon SQS queue into a worker consumer that drains at a sustainable rate, an interactive path into a small cheap model whose confidence check either answers immediately or escalates, and a steady managed-inference path into Bedrock On-Demand or Provisioned Throughput. All three land in a heavy-hosting layer of a SageMaker Asynchronous endpoint writing output to S3 with SNS completion alerts, a SageMaker Real-Time endpoint sharding the model across GPUs with DeepSpeed, Triton or FasterTransformer, and Bedrock Custom Model Import serving a fine-tuned model per-token with no idle GPU bill, all subject to a 60-minute container health-check and download timeout. Responses and embeddings are written back to the cache and CloudWatch tracks GPU VRAM utilisation, latency and cache hit rate.">
+      <figcaption>Reference architecture: five layers &#8212; response cache, routing, three execution paths, heavy and custom hosting, and cache write-back with monitoring.</figcaption>
+    </figure>
+
+    <div class="note-grid">
+
+      <div class="note-card wide">
+        <h4 id="s1">Section 1: The Fundamental Paradigm Shift &#8212; Traditional ML vs. LLM Deployment</h4>
+        <p class="sub">Conventional deployment pipelines completely break down when shifting from traditional machine learning models to Large Language Models, due to drastic differences in model scale, hardware dependency, and startup behaviour.</p>
+
+        <div class="tscroll">
+          <table class="cmp">
+            <thead>
+              <tr><th>Metric / Feature</th><th>Traditional ML Model</th><th>Large Language Model (LLM)</th></tr>
+            </thead>
+            <tbody>
+              <tr><th>Model size</th><td>Lightweight (approx. 50 MB)</td><td>Massive (100 GB to 500+ GB)</td></tr>
+              <tr><th>Compute engine</th><td>Usually runs efficiently on CPU</td><td>Heavy requirement for specialised GPUs (e.g. <code>ml.p4d.24xlarge</code>, <code>ml.g5</code>)</td></tr>
+              <tr><th>Startup / load time</th><td>Loads in seconds</td><td>Takes minutes (S3 artifact download + VRAM allocation)</td></tr>
+              <tr><th>GPU fitting</th><td>Fits easily into standard memory</td><td>Often exceeds single-GPU capacity; requires model sharding</td></tr>
+              <tr><th>Batching mechanics</th><td>Simple, static batching</td><td>Continuous batching required to prevent GPU starvation and maximise throughput</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="trap">
+          <p><strong>The Critical &ldquo;Timeout Trap&rdquo; &amp; Solution.</strong> <em>The problem:</em> downloading a 100 GB+ model artifact from Amazon S3 and initialising it into GPU memory takes anywhere from 20 to 40 minutes, while default AWS container health-check and download timeouts are set to 5&#8211;10 minutes.</p>
+          <p><em>The failure:</em> under default settings AWS concludes the container is dead/unresponsive and abruptly fails the deployment. <em>The fix:</em> explicitly raise container health-check and download timeouts up to 60 minutes.</p>
+        </div>
+
+        <p class="lead">Model Parallelism &amp; Hardware Accelerators</p>
+        <p class="sub">When a model's memory footprint exceeds a single GPU's VRAM limits (e.g. a 200 GB model on an 80 GB VRAM GPU), the model must be split (sharded) across multiple accelerators using specialised libraries compatible with SageMaker AI:</p>
+        <dl>
+          <dt>Triton</dt>
+          <dd>NVIDIA's high-performance inference server.</dd>
+          <dt>FasterTransformer</dt>
+          <dd>Heavily optimised specifically for transformer-based architectures.</dd>
+          <dt>DeepSpeed</dt>
+          <dd>Microsoft's library for model parallelism and memory optimisation.</dd>
+          <dt>UltraServers</dt>
+          <dd>Connect multiple EC2 instances via low-latency, high-bandwidth accelerator interconnects for extreme multi-node AI/ML workloads.</dd>
+        </dl>
+
+        <p class="lead">Model Loading &amp; Compression Strategies</p>
+        <dl>
+          <dt>Lazy Loading</dt>
+          <dd>Loading the model on the first incoming request rather than at container startup. Trade-off: faster container startup time, but a severe latency penalty for the very first user.</dd>
+          <dt>Quantization</dt>
+          <dd>Reducing numerical precision to shrink memory footprint and accelerate inference at a minor cost to accuracy &#8212; FP32 (4 bytes) is baseline precision, FP16 (2 bytes) halves the memory, INT8 (1 byte) quarters it, and INT4 is extreme compression.</dd>
+        </dl>
+        <div class="example">
+          <p>Same fundamental principle as vector quantization in vector databases (Task 1.4), applied here directly to model weights.</p>
+        </div>
+      </div>
+
+      <div class="note-card wide">
+        <h4 id="s2">Section 2: AWS Deployment Options &amp; Hosting Patterns</h4>
+
+        <p class="lead">A. Core Hosting Choices</p>
+        <dl>
+          <dt>Bedrock On-Demand</dt>
+          <dd><em>Mechanism:</em> pay-per-token pricing with zero infrastructure management. <em>Best for:</em> uneven traffic patterns, experimentation phases, or when no long-term commitment is desired. <em>Limitation:</em> operates on shared capacity pools, so peak-hour traffic spikes can lead to throttling or delayed responses.</dd>
+          <dt>Bedrock Provisioned Throughput</dt>
+          <dd><em>Mechanism:</em> dedicated capacity reserved exclusively for your workloads, purchased in Model Units (MUs), where each MU guarantees a fixed tokens-per-second (TPS) rate. <em>Best for:</em> steady high-volume production traffic where strict, predictable latency and zero throttling are mandatory. <em>Trade-off:</em> requires a strict term commitment (e.g. 1 or 6 months) and you are billed fully even if actual traffic drops &#8212; active CloudWatch monitoring is needed to avoid paying for idle excess capacity.</dd>
+        </dl>
+        <div class="formula">Sizing: Peak requests/sec &times; Average tokens/request = Required TPS &rarr; convert to Model Units</div>
+        <dl>
+          <dt>SageMaker AI Endpoints &#8212; Real-Time</dt>
+          <dd>Always-on, sub-millisecond network latency, billed continuously per hour.</dd>
+          <dt>SageMaker AI Endpoints &#8212; Serverless</dt>
+          <dd>Scales to zero when idle; ideal for intermittent traffic where cold starts are acceptable.</dd>
+          <dt>SageMaker AI Endpoints &#8212; Asynchronous</dt>
+          <dd>Built for large payloads, long-running inferences, and queue-based processing.</dd>
+          <dt>SageMaker AI Endpoints &#8212; Batch Transform</dt>
+          <dd>Designed for offline, bulk batch data processing.</dd>
+        </dl>
+
+        <p class="lead">B. Lambda: Invocation vs. Hosting</p>
+        <dl>
+          <dt>Direct vs. Orchestrated Calls</dt>
+          <dd>Applications or frontends do <em>not</em> have to route through Lambda for every model call &#8212; clients can invoke Bedrock or SageMaker endpoints directly using standard AWS SDKs (boto3).</dd>
+          <dt>When Lambda Is Used</dt>
+          <dd>Lambda is introduced in front of models only when you need custom gateway logic &#8212; payload validation, Step Functions orchestration, managing caching layers, or executing model cascading.</dd>
+        </dl>
+        <div class="trap">
+          <p><strong>Crucial rule:</strong> Lambda does not host models; it acts strictly as an execution environment that <em>invokes</em> them.</p>
+        </div>
+
+        <p class="lead">C. Bedrock Custom Model Import Economics</p>
+        <dl>
+          <dt>The Workflow</dt>
+          <dd>Fine-tune your custom model inside SageMaker AI &rarr; import it into Amazon Bedrock &rarr; invoke it directly via the standard Bedrock <code>InvokeModel</code> API.</dd>
+          <dt>The Economic Breakthrough</dt>
+          <dd>Hosting a fine-tuned model on a standard SageMaker Real-Time endpoint means paying for a dedicated GPU instance 24/7 (hourly charges) regardless of traffic. Bedrock Custom Model Import gives you your own custom model combined with serverless pay-per-token pricing &#8212; zero hourly infrastructure fees when traffic is zero.</dd>
+          <dt>Security &amp; Access</dt>
+          <dd>Secured entirely via standard AWS IAM policies to tightly govern which applications or team roles are authorised to execute <code>InvokeModel</code> API calls.</dd>
+        </dl>
+      </div>
+
+      <div class="note-card wide">
+        <h4 id="s3">Section 3: Advanced Optimization &amp; Cost-Reduction Architecture</h4>
+
+        <p class="lead">A. Model Cascading (Cost-Complexity Routing)</p>
+        <p class="sub">Mechanism: an incoming query hits a Step Functions router and is sent first to a small, fast, inexpensive model. A confidence check then evaluates the output:</p>
+        <dl>
+          <dt>High confidence</dt>
+          <dd>Roughly 80% of routine, straightforward queries &#8212; the response is returned immediately.</dd>
+          <dt>Low confidence</dt>
+          <dd>The query is escalated to a large, high-end model for complex handling.</dd>
+          <dt>Economic Benefit</dt>
+          <dd>Cuts operational inference costs multiple-fold.</dd>
+          <dt>Trade-off</dt>
+          <dd>Escalated queries require two distinct model API calls (small model + large model), which actually <em>increases</em> latency for those specific complex tasks. Cascading only yields net value if the vast majority of your queries are genuinely simple.</dd>
+        </dl>
+
+        <p class="lead">B. Granular Caching Layers: Embedding Cache vs. Response Cache</p>
+        <p class="sub">To avoid redundant compute, production architectures implement two distinct caching layers alongside an ElastiCache (Redis) cluster:</p>
+        <dl>
+          <dt>Embedding Caching (text &rarr; vector array)</dt>
+          <dd><em>Stores:</em> the numerical vector representation of text chunks or user queries. <em>Applies to:</em> RAG and semantic search pipelines. <em>Value:</em> prevents repeatedly calling heavy embedding models for similar or duplicate user search phrases. Key = user text, value = vector array.</dd>
+          <dt>Response Caching (query &rarr; final LLM answer)</dt>
+          <dd><em>Stores:</em> the final generated natural-language answer from the LLM. <em>Applies to:</em> FAQs, common lookups, and highly repetitive user queries. <em>Value:</em> on a hit the system bypasses model invocation entirely, returning the cached text string instantly. Key = user query, value = LLM response.</dd>
+        </dl>
+
+        <p class="lead">C. Asynchronous Queuing &amp; Traffic Smoothing</p>
+        <dl>
+          <dt>Mechanism</dt>
+          <dd>App &rarr; Amazon SQS queue &rarr; worker consumer &rarr; LLM / Bedrock.</dd>
+          <dt>Benefit</dt>
+          <dd>During massive traffic spikes requests are never rejected or dropped; they sit safely in the SQS queue and are drained by consumers at a steady, sustainable rate, completely eliminating throttling errors.</dd>
+          <dt>Trade-off</dt>
+          <dd>Increases response latency. This is strictly for asynchronous workloads where an immediate interactive answer is not required &#8212; overnight batch reporting, bulk document summarisation, automated compliance auditing.</dd>
+          <dt>Managed Equivalent</dt>
+          <dd>SageMaker Asynchronous endpoints automate this by queuing requests, writing outputs directly to S3, and pushing completion alerts via Amazon SNS.</dd>
+        </dl>
+      </div>
+
+      <div class="note-card">
+        <h4 id="s4">Section 4: Multi-Model Endpoints (MMEs) vs. Large Language Models</h4>
+        <dl>
+          <dt>The MME Pattern</dt>
+          <dd>Multi-Model Endpoints allow multiple distinct models to share a single endpoint infrastructure, dynamically loading them into memory when requested and unloading them when idle.</dd>
+          <dt>Why MMEs Fail for Large LLMs</dt>
+          <dd>Because a massive LLM (100 GB+) takes 15 to 20+ minutes to load from S3 into GPU memory, MMEs are completely unviable for large LLMs &#8212; a cold-start request would cause an unacceptable multi-minute user timeout. MMEs are strictly suited for lightweight, small models (megabytes up to 1&#8211;2 GB) where cold-start loading takes only seconds.</dd>
+          <dt>Alternative: Inference Components</dt>
+          <dd>Allows independent scaling policies, VRAM reservation, and resource allocation per model variant on shared instances.</dd>
+          <dt>Alternative: Dynamic Adapters (e.g. LoRA)</dt>
+          <dd>Keeps a single massive base model permanently loaded in VRAM while dynamically swapping tiny, lightweight fine-tuned adapter weights in seconds.</dd>
+        </dl>
+      </div>
+
+      <div class="note-card">
+        <h4 id="s5">Section 5: Monitoring &amp; Security</h4>
+        <p class="lead">A. Monitoring &amp; Data-Driven Optimization</p>
+        <dl>
+          <dt>AWS CloudWatch</dt>
+          <dd>Tracks latency, throughput, error rates, and resource utilisation (CPU and GPU VRAM).</dd>
+          <dt>Rule of thumb: GPU utilisation ~20%</dt>
+          <dd>Your provisioned instance is heavily oversized and wasting money &#8212; downsize immediately.</dd>
+          <dt>Rule of thumb: cache hit rate ~5%</dt>
+          <dd>Your caching strategy is ineffective because queries are not repeating &#8212; investigate key normalisation or caching logic.</dd>
+        </dl>
+        <p class="lead">B. Security Architecture</p>
+        <dl>
+          <dt>IAM</dt>
+          <dd>Enforces strict role-based access control governing who can invoke specific models.</dd>
+          <dt>VPC &amp; AWS PrivateLink</dt>
+          <dd>Establishes a private connection between your VPC and SageMaker endpoints, ensuring all traffic stays within the AWS internal network and never traverses the public internet &#8212; maximum privacy and low latency.</dd>
+          <dt>Encryption</dt>
+          <dd>Secures model artifacts at rest in S3 and encrypts data in transit across endpoints.</dd>
+        </dl>
+      </div>
+
+      <div class="note-card wide">
+        <h4 id="cheatsheet">Complete Exam Quick-Reference Cheat Sheet</h4>
+        <div class="tscroll">
+          <table class="cmp">
+            <thead>
+              <tr><th>Requirement / operational scenario</th><th>Recommended AWS service / feature</th></tr>
+            </thead>
+            <tbody>
+              <tr><th>Uneven traffic volume, zero upfront commitment</th><td>Bedrock On-Demand</td></tr>
+              <tr><th>Steady high-volume traffic, zero tolerance for throttling</th><td>Bedrock Provisioned Throughput (Model Units)</td></tr>
+              <tr><th>Hosting a custom fine-tuned model with full container control</th><td>SageMaker Real-Time endpoint</td></tr>
+              <tr><th>Custom fine-tuned model + serverless pay-per-token pricing</th><td>Bedrock Custom Model Import</td></tr>
+              <tr><th>Absorbing traffic spikes / non-urgent background processing</th><td>SQS queues / asynchronous inference</td></tr>
+              <tr><th>Model size exceeds a single GPU's VRAM capacity</th><td>Model sharding via DeepSpeed, Triton, or FasterTransformer</td></tr>
+              <tr><th>Endpoint deployment failing repeatedly with timeout errors</th><td>Extend container health-check &amp; download timeouts to 60 minutes</td></tr>
+              <tr><th>Cost-reduction strategy for mostly simple user queries</th><td>Model cascading</td></tr>
+              <tr><th>Preventing redundant vector generation in semantic search / RAG</th><td>Embedding caching (ElastiCache)</td></tr>
+              <tr><th>Private, secure, low-latency endpoint access without internet routing</th><td>AWS PrivateLink</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <p>This is an independent, unofficial study resource and is not affiliated with, endorsed by, or sponsored by Amazon Web Services, Inc. AWS, Amazon Bedrock, and all related marks are trademarks of Amazon.com, Inc. or its affiliates.</p>
+    <p>Hosted on Amazon S3 + Amazon CloudFront. &middot; <a href="index.html">&larr; Back to Study Notes</a></p>
+  </div>
+</footer>
+
+</body>
+</html>
