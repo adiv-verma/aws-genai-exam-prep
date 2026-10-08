@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Task 2.3 Notes | AIP-C01 Guide</title>
+<meta name="description" content="Domain 2, Task 2.3 study notes: Enterprise Integration Architectures">
+<style>
+  :root{
+    --ink:#0b1524; --ink-soft:#3a4a5e; --paper:#f7f8fa; --card:#ffffff; --line:#e3e7ee;
+    --accent:#e8622c; --accent-dark:#c94f1f; --navy:#0f2540; --navy-2:#16345c;
+    color-scheme: light;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{margin:0;background:var(--paper);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;line-height:1.6;}
+  a{color:var(--accent-dark);}
+  img{max-width:100%;}
+  .wrap{max-width:1080px;margin:0 auto;padding:0 24px;}
+
+  .nav{position:sticky;top:0;z-index:50;background:rgba(15,37,64,.96);backdrop-filter:blur(6px);border-bottom:1px solid rgba(255,255,255,.08);}
+  .nav .wrap{display:flex;align-items:center;justify-content:space-between;height:56px;}
+  .nav-brand{color:#fff;font-weight:700;font-size:14px;letter-spacing:.02em;text-decoration:none;}
+  .nav-brand span{color:var(--accent);}
+  .nav-links{display:flex;gap:22px;list-style:none;margin:0;padding:0;}
+  .nav-links a{color:#cdd8e6;text-decoration:none;font-size:13.5px;font-weight:500;}
+  .nav-links a:hover{color:#fff;}
+  @media (max-width:720px){ .nav-links{display:none;} }
+
+  header.hero{background:linear-gradient(180deg,var(--navy) 0%, var(--navy-2) 100%);color:#fff;padding:36px 0 28px;}
+  .eyebrow{display:inline-block;font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#ffd8c4;background:rgba(232,98,44,.18);border:1px solid rgba(232,98,44,.4);padding:5px 10px;border-radius:999px;margin-bottom:14px;}
+  h1{font-size:clamp(20px,3vw,27px);line-height:1.2;margin:0;font-weight:800;}
+
+  section{padding:36px 0;}
+
+  figure.arch{margin:0 0 24px;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px;}
+  figure.arch img{display:block;border-radius:8px;width:100%;height:auto;}
+  figure.arch figcaption{margin-top:10px;font-size:12.5px;color:var(--ink-soft);text-align:center;}
+
+  .note-card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:18px 22px 22px;margin-bottom:16px;}
+  .note-card h4{scroll-margin-top:78px;margin:0 0 14px;font-size:13px;font-weight:800;color:var(--navy-2);}
+  .note-card h4:target{color:var(--accent-dark);}
+  .note-card h4:target::after{content:" \2190";color:var(--accent);}
+
+  .lead{font-size:13.5px;font-weight:700;color:var(--ink);margin:18px 0 8px;}
+  .lead:first-of-type{margin-top:0;}
+  .lead.num{color:var(--navy-2);}
+  .txt{font-size:13px;color:var(--ink-soft);line-height:1.6;margin:0 0 8px;}
+  .kv{font-size:13px;color:var(--ink-soft);line-height:1.6;margin:0 0 8px;padding-left:14px;border-left:2px solid var(--line);}
+  .kv strong{color:var(--ink);font-weight:700;}
+
+  .codelabel{font-size:10.5px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:#8b96a5;margin:14px 0 6px;}
+  pre.code{margin:0 0 10px;padding:12px 14px;background:#0f2540;color:#dbe6f3;border-radius:9px;overflow-x:auto;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px;line-height:1.55;}
+
+  footer{padding:32px 0 48px;color:#8b96a5;font-size:12.5px;}
+  footer .wrap{border-top:1px solid var(--line);padding-top:22px;}
+  footer a{color:#6b7686;}
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="wrap">
+    <a class="nav-brand" href="../index.html">AIP-C01 <span>Guide</span></a>
+    <ul class="nav-links">
+      <li><a href="index.html">All Study Notes</a></li>
+      <li><a href="../tasks/index.html">Build Log</a></li>
+    </ul>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="wrap">
+    <span class="eyebrow">Domain 2 &middot; Task 2.3</span>
+    <h1>Domain 2, Task 2.3 — Enterprise Integration Architectures (Detailed Revision Notes)</h1>
+  </div>
+</header>
+
+<section>
+  <div class="wrap">
+
+    <figure class="arch">
+      <img src="../assets/task-2-3-architecture.svg" alt="Reference architecture for enterprise GenAI integration, drawn as eight stacked layers that a request passes through top to bottom. Clients and legacy sources - web and mobile apps authenticated by Cognito, branch staff on Amplify DataStore offline sync, and legacy systems speaking SOAP, EBCDIC, fixed-width files and JMS/AMQP via Amazon MQ - enter a perimeter and network layer of AWS WAF rate limiting, Transit Gateway domain isolation using black hole routes, Direct Connect and PrivateLink private routing, and Network Firewall stateful inspection with domain filtering. Next an entry and translation layer of API Gateway regional or edge-optimized endpoints, Lambda protocol adapters converting SOAP to JSON and fixed-width to UTF-8, and EventBridge event filtering and input transformers. Everything then funnels through the central GenAI Gateway, which applies per-team usage plans and throttling, DynamoDB TTL webhook idempotency, multi-level caching across API Gateway, ElastiCache and the database, per-team token cost tracking, centralized guardrails, and model routing and fallback. Below it a security and authorization layer of IAM Identity Center Active Directory federation, Cognito pre-token Lambda triggers injecting roles into the JWT, IAM Verified Permissions with the Cedar engine, and KMS multi-region keys; then an orchestration layer of Step Functions parallel and map states, SQS FIFO message group IDs, and Glue and AppFlow data sync. Requests land on model execution targets - Amazon Bedrock or SageMaker in a cloud region, or edge infrastructure on AWS Outposts, Local Zones or Wavelength 5G - all wrapped by governance and CI/CD: Control Tower data-residency guardrails, CloudWatch composite alarms with X-Ray sampling, CloudTrail immutable audit logs, and CodePipeline stages for model evaluation, security scanning and approval gates.">
+      <figcaption>Reference architecture for the notes below.</figcaption>
+    </figure>
+
+    <div class="note-card">
+      <h4 id="s1">The Use Case Background</h4>
+        <p class="kv"><strong>The Scenario:</strong> A multinational financial institution operating in 30+ countries.</p>
+        <p class="kv"><strong>The Challenges:</strong> Decades-old legacy systems holding critical financial data but lacking modern APIs; strict regulatory requirements varying by jurisdiction; exceptionally high security standards; delivering consistent AI experiences across web, mobile, and branch networks; maintaining human oversight for regulated communications; and continuous delivery without disrupting vital operations.</p>
+        <p class="kv"><strong>Core Architectural Insight:</strong> Many services used here are not GenAI-specific (such as Transit Gateway, Direct Connect, Network Firewall, Control Tower, WAF, and RAM). Instead, this task applies classic, robust AWS networking and enterprise governance to a modern GenAI workload.</p>
+    </div>
+
+    <div class="note-card">
+      <h4 id="s2">Section 1: Enterprise Connectivity</h4>
+        <p class="txt">The primary problem in legacy enterprise integration is that older systems speak protocols like SOAP, fixed-width files, or message queues (JMS/AMQP) and cannot be replaced because they house core financial records. A translation and integration layer is placed in front of them.</p>
+        <p class="lead num">1. API Gateway in front of Legacy Systems</p>
+        <p class="kv"><strong>Mapping Templates:</strong> Acts as a protocol and data translator.</p>
+        <p class="kv"><strong>Example:</strong> Legacy system sends XML -&gt; API Gateway mapping template converts it to JSON -&gt; Bedrock processes it and returns JSON -&gt; API Gateway mapping template translates it back to XML/SOAP before hitting the legacy system. The legacy system remains completely untouched.</p>
+        <p class="kv"><strong>Custom Domain Mappings:</strong> Maintains consistent institutional branding (e.g., ai.bank.com).</p>
+        <p class="lead">Endpoint Types:</p>
+        <p class="kv"><strong>Regional Endpoints:</strong> Used when users reside in the same region, ensuring lower latency.</p>
+        <p class="kv"><strong>Edge-Optimized Endpoints:</strong> Uses Amazon CloudFront for global distribution.</p>
+        <p class="lead num">2. Lambda Adapters (Protocol Conversion)</p>
+        <p class="txt">Bridges disparate protocols rather than models (e.g., SOAP to REST, fixed-width files to JSON, EBCDIC to UTF-8).</p>
+        <p class="lead">Concurrency Controls:</p>
+        <p class="kv"><strong>Reserved Concurrency:</strong> Sets a hard cap on maximum concurrent executions, preventing a single function from consuming an entire account's capacity.</p>
+        <p class="kv"><strong>Provisioned Concurrency:</strong> Pre-warms instances to eliminate cold starts, guaranteeing predictable latency under heavy legacy workloads.</p>
+        <p class="lead num">3. EventBridge (Loose Coupling &amp; Event Filtering)</p>
+        <p class="txt">Decouples systems using event-driven patterns.</p>
+        <p class="kv"><strong>Event Pattern Matching:</strong> Filters incoming payloads so that only valid events trigger foundation model processing (e.g., transactions matching type: international and amount &gt; 10000).</p>
+        <p class="kv"><strong>Dead-Letter Queues (DLQ):</strong> Because financial events are audit-relevant, any processing failure is routed to a DLQ rather than being silently dropped.</p>
+        <p class="lead num">4. Step Functions (Workflow Management)</p>
+        <p class="kv"><strong>Parallel State:</strong> Executes multiple tasks concurrently (e.g., parallel fraud checks, balance verification, and limit validation).</p>
+        <p class="kv"><strong>Map State:</strong> Executes the exact same workflow iteratively across a massive batch of items (e.g., applying a GenAI compliance check to 1,000 transactions simultaneously), complete with timeout configurations and error handling.</p>
+        <p class="lead num">5. Data Synchronization: AWS Glue vs. AppFlow</p>
+        <p class="kv"><strong>AWS Glue:</strong> Tailored for large-scale data lakes (S3), databases, and heavy ETL jobs. It uses Job Bookmarks to remember historical progress, ensuring only newly added records are processed on subsequent runs.</p>
+        <p class="kv"><strong>Amazon AppFlow:</strong> Suited for SaaS applications (Salesforce, ServiceNow, Slack). Provides pre-built connectors, bidirectional data flows, selective filtering, and encryption in transit and at rest.</p>
+        <p class="lead num">6. Amazon MQ (Legacy Messaging)</p>
+        <p class="txt">Used when legacy architectures natively speak messaging protocols like JMS, AMQP, or MQTT instead of SQS. It is a managed ActiveMQ and RabbitMQ service.</p>
+        <p class="txt">Features active/standby deployments for high availability, protected by security groups and network ACLs.</p>
+        <p class="kv"><strong>Architecture Rule of Thumb:</strong> If the legacy system already uses JMS/AMQP, choose Amazon MQ. If building fresh architectures, use SQS (which is cheaper and simpler). Amazon MQ exists strictly so legacy components do not require rewriting.</p>
+    </div>
+
+    <div class="note-card">
+      <h4 id="s3">Section 2: Integrated AI Capabilities</h4>
+        <p class="txt">Once legacy systems are connected, this section focuses on securely scaling and managing GenAI features across internal consumer applications.</p>
+        <p class="lead num">1. API Gateway Usage Plans &amp; Throttling</p>
+        <p class="txt">Establishes strict operational boundaries between internal teams (e.g., Team A, Team B, Team C) using API keys and usage plans.</p>
+        <p class="txt">Prevents resource exhaustion from runaway bugs or excessive traffic and allows granular per-team cost tracking and allocation.</p>
+        <p class="lead num">2. Webhook Handlers &amp; Idempotency</p>
+        <p class="kv"><strong>The Challenge:</strong> External webhooks (like loan approval notifications) are delivered via at-least-once semantics, meaning duplicate deliveries will occur. If a duplicate webhook triggers an unmitigated model call, emails are resent incorrectly and the business is billed twice.</p>
+        <p class="kv"><strong>The Solution (Idempotency):</strong> Incoming event IDs are cross-referenced against Amazon DynamoDB (managed with Time-to-Live / TTL). If a transaction ID is already logged, the system returns the cached historical result instead of re-invoking the model.</p>
+        <p class="lead">Follow-up Question Explained — Retry &amp; Exponential Backoff:</p>
+        <p class="kv"><strong>Retry:</strong> When an external call fails due to transient network drops or rate limits, the app attempts the request again rather than failing instantly.</p>
+        <p class="kv"><strong>Exponential Backoff:</strong> To prevent overwhelming a struggling server (avoiding the "thundering herd" problem), the wait time between retries increases exponentially (e.g., 1s, 2s, 4s, 8s). Combined with random jitter, this spaces out reconnection attempts safely.</p>
+        <p class="lead num">3. EventBridge Input Transformers</p>
+        <p class="txt">Normalizes disparate upstream payloads (e.g., customerId, customer_id, and cust.id) directly on the event bus into a standardized structure, eliminating parsing logic inside Lambda functions.</p>
+        <p class="lead num">4. AppSync Resolvers with VTL</p>
+        <p class="txt">Facilitates real-time GraphQL inference by using Apache Velocity Template Language (VTL) mapping templates to declaratively transform incoming GraphQL queries into model payloads—and responses back—without writing custom procedural code.</p>
+        <p class="lead num">5. SQS FIFO &amp; Message Group IDs</p>
+        <p class="txt">Preserves strict sequencing where transaction order matters (e.g., "check balance" → "execute transfer" → "send confirmation").</p>
+        <p class="txt">Uses Message Group IDs (derived from business context like customer-id) to maintain strict ordering inside a specific group while processing multiple independent groups completely in parallel, avoiding system-wide bottlenecks.</p>
+        <p class="lead num">6. Amplify DataStore (Offline-First Clients)</p>
+        <p class="txt">Empowers branch staff or mobile users operating under intermittent network connectivity through selective data syncing and automated conflict resolution strategies (such as last-write-wins or optimistic concurrency).</p>
+        <p class="lead num">7. Response Mappings &amp; Multi-Level Caching</p>
+        <p class="txt">Transforms model outputs back into legacy-compatible structures via API Gateway.</p>
+        <p class="kv"><strong>Multi-Level Caching &amp; Invalidation:</strong> Caches responses across API Gateway, application tiers (ElastiCache), and databases.</p>
+        <p class="txt">*Follow-up Question Explained — Caching Invalidation Mechanisms ensures stale data is never served when underlying enterprise data changes. Mechanisms include:</p>
+        <p class="kv"><strong>TTL (Time-To-Live):</strong> Automatic expiration after a set duration.</p>
+        <p class="kv"><strong>Event-Driven Invalidation:</strong> Triggering an event via EventBridge upon database updates to immediately purge or refresh cache items.</p>
+        <p class="kv"><strong>Write-Through Caching:</strong> Updating the cache simultaneously with database writes.</p>
+        <p class="lead num">8. Client Libraries &amp; SDKs</p>
+        <p class="txt">Publishes centralized shared libraries containing built-in error handling, retry logic, and observability wrappers, ensuring uniform best practices and preventing individual team bugs from propagating.</p>
+    </div>
+
+    <div class="note-card">
+      <h4 id="s4">Section 3: Secure Access Frameworks</h4>
+        <p class="txt">The densest and most critical security layer of the architecture, enforcing strict multi-layered defenses.</p>
+        <p class="lead num">1. Identity Federation &amp; Cognito Lambda Triggers</p>
+        <p class="kv"><strong>IAM Identity Center:</strong> Manages workforce identities (employees and internal apps), federating directly with existing enterprise directories like Active Directory (saving 50,000+ accounts from being re-created).</p>
+        <p class="kv"><strong>Amazon Cognito:</strong> Manages external consumer identities.</p>
+        <p class="kv"><strong>Cognito Pre-Token Generation Lambda Trigger:</strong> Intercepts authentication to inject enterprise roles, security clearances, and jurisdictions (e.g., department: wealth management, clearance: confidential, region: EU) directly into the JWT claims for downstream authorization checks.</p>
+        <p class="lead num">2. IAM Condition Keys &amp; Permission Boundaries</p>
+        <p class="kv"><strong>Condition Keys:</strong> Restricts access based on contextual parameters, such as enforcing corporate network boundaries or business hours:</p>
+        <p class="codelabel">JSON</p>
+        <pre class="code">"Condition": {
+  "IpAddress": {"aws:SourceIp": "10.0.0.0/8"},
+  "DateGreaterThan": {"aws:CurrentTime": "09:00Z"},
+  "DateLessThan": {"aws:CurrentTime": "18:00Z"}
+}</pre>
+        <p class="kv"><strong>Permission Boundaries:</strong> Sets a hard security ceiling on delegated administrative rights, preventing team leads from accidentally escalating user privileges beyond permitted scopes.</p>
+        <p class="lead num">3. Verified Permissions &amp; Cedar Policy Language</p>
+        <p class="txt">While IAM determines whether a user can call Bedrock overall, IAM Verified Permissions (powered by the Cedar policy engine) evaluates fine-grained, application-level authorization based on data classification, user department, and business context.</p>
+        <p class="lead">Example Cedar Policy:</p>
+        <p class="codelabel">Code snippet</p>
+        <pre class="code">permit(principal, action, resource)
+when {
+    principal.department == "wealth management" &amp;&amp;
+    resource.classification &lt;= "confidential" &amp;&amp;
+    context.business_context == "client meeting"
+};</pre>
+        <p class="lead num">4. KMS Multi-Region Keys &amp; Grants</p>
+        <p class="txt">Replicates key material securely across multiple global regions to ensure seamless decryption across 30+ jurisdictions.</p>
+        <p class="txt">Enforces automatic key rotation and uses Grants to issue temporary, highly scoped permissions without modifying core key policies.</p>
+        <p class="lead num">5. PrivateLink Endpoint Policies</p>
+        <p class="txt">Ensures traffic routes over secure private AWS network paths rather than the public internet. Endpoint policies explicitly restrict calls to approved models (e.g., claude-*) and limit actions strictly to inference (bedrock:InvokeModel), forbidding fine-tuning or deletion capabilities.</p>
+        <p class="lead num">6. AWS WAF (Billing Attack Protection)</p>
+        <p class="txt">Protects against malicious scripts or infinite-loop bugs that could trigger millions of unauthorized token requests, resulting in catastrophic financial bills. Utilizes strict rate-based rules, geographic matching, and SQL injection filters.</p>
+        <p class="lead num">7. AWS RAM (Cross-Account Sharing)</p>
+        <p class="txt">Safely shares foundational model resources across multiple AWS accounts and Organizational Units (OUs) using explicit permission sets and tag-based conditions.</p>
+    </div>
+
+    <div class="note-card">
+      <h4 id="s5">The Layered Security Inspection (Request Lifecycle)</h4>
+        <p class="txt">Every single request processed by the architecture steps sequentially through these evaluation checkpoints:</p>
+        <p class="kv"><strong>Federation:</strong> Authenticates identity from the enterprise Identity Provider (IdP).</p>
+        <p class="kv"><strong>Cognito Trigger:</strong> Injects organizational roles into the user's JWT.</p>
+        <p class="kv"><strong>WAF:</strong> Scans for abusive traffic patterns and enforces rate limits.</p>
+        <p class="kv"><strong>PrivateLink:</strong> Validates secure network routing and endpoint policies.</p>
+        <p class="kv"><strong>IAM:</strong> Evaluates base permissions and contextual condition keys.</p>
+        <p class="kv"><strong>Verified Permissions:</strong> Assesses fine-grained application-level Cedar policies.</p>
+        <p class="kv"><strong>KMS:</strong> Manages secure data encryption and decryption.</p>
+        <p class="kv"><strong>CloudTrail:</strong> Permanently logs immutable audit trails for compliance.</p>
+    </div>
+
+    <div class="note-card">
+      <h4 id="s6">Section 4: Cross-Environment AI Solutions</h4>
+        <p class="txt">When regulatory requirements or data classification rules dictate that sensitive financial data cannot leave on-premise data centres or cross jurisdictional borders, the core architectural rule applies: "If the data cannot move to the cloud, move the model to the data."</p>
+        <p class="lead num">1. The Three Edge Options (Bringing Models to the Data)</p>
+        <p class="txt">AWS provides three distinct infrastructure deployment options to run foundation models right where the data resides:</p>
+        <p class="lead">AWS Outposts:</p>
+        <p class="kv"><strong>Deployment:</strong> Installed directly inside your own on-premise data centre.</p>
+        <p class="kv"><strong>Use Case:</strong> Compliance and Data Residency—chosen when local laws strictly forbid data from leaving corporate or national premises. Compute and storage are sized to match local data volumes, leveraging local caching to minimize heavy data movement.</p>
+        <p class="lead">AWS Local Zones:</p>
+        <p class="kv"><strong>Deployment:</strong> Placed in major metropolitan areas away from core AWS Regions.</p>
+        <p class="kv"><strong>Use Case:</strong> Distance and Latency Optimization—utilized when users are densely concentrated in a major city far from the main cloud region. Route tables direct specific localized traffic straight to the Local Zone.</p>
+        <p class="lead">AWS Wavelength:</p>
+        <p class="kv"><strong>Deployment:</strong> Embedded directly inside telecom carrier 5G networks.</p>
+        <p class="kv"><strong>Use Case:</strong> Mobile and Ultra-Low Latency—chosen for real-time mobile applications where traffic entirely bypasses the public internet, traversing the carrier's 5G network instead.</p>
+        <p class="lead num">2. Direct Connect</p>
+        <p class="txt">Establishes a dedicated, high-bandwidth physical connection between the corporate data centre and AWS, bypassing the public internet entirely.</p>
+        <p class="kv"><strong>BGP Routing Policies:</strong> Because both real-time model inference and heavy batch processing share the same physical link, BGP routing policies are configured to prioritize real-time inference traffic, ensuring that latency-sensitive AI responses never get blocked by bulk data synchronization.</p>
+        <p class="lead num">3. Transit Gateway &amp; Domain Isolation</p>
+        <p class="txt">Enterprise environments are segmented (e.g., Development, Testing, Production) to prevent lower environments from contaminating or breaching production systems.</p>
+        <p class="kv"><strong>Route Propagation Settings:</strong> Control which environments are permitted to establish communication channels.</p>
+        <p class="kv"><strong>Black Hole Routes:</strong> Deliberately configured routes that drop matching traffic instantly—acting as an absolute network guarantee that no path can ever exist from the Dev environment into Prod.</p>
+        <p class="lead num">4. Network Firewall</p>
+        <p class="kv"><strong>Stateful Rule Groups:</strong> Deeply inspects traffic flowing between internal foundation model components and legacy enterprise systems.</p>
+        <p class="kv"><strong>Domain Filtering:</strong> Restricts outbound connections exclusively to approved, white-listed endpoints. If a component is compromised by an attacker, domain filtering prevents data exfiltration.</p>
+        <p class="lead num">5. Control Tower (Enforcing Data Residency)</p>
+        <p class="txt">Enforces macro-level organizational compliance guardrails.</p>
+        <p class="kv"><strong>Example:</strong> Implements automated compliance checks establishing that "EU financial data must be processed exclusively within EU regions" and actively blocks the deployment of any non-compliant resources before they can be provisioned.</p>
+        <p class="lead num">6. Data Replication &amp; Boundary Techniques</p>
+        <p class="txt">When handling cross-border data flows safely, specific transformation techniques are deployed:</p>
+        <p class="kv"><strong>Filtering:</strong> Stripping away sensitive fields entirely before transmission.</p>
+        <p class="kv"><strong>Anonymization:</strong> Scrubbing personally identifiable information (PII) from the payload.</p>
+        <p class="kv"><strong>Tokenization:</strong> Replacing real financial values with secure tokens—ensuring the actual sensitive value never crosses jurisdictional boundaries, while the foundation model processes only the tokenized representation.</p>
+    </div>
+
+    <div class="note-card">
+      <h4 id="s7">Section 5: CI/CD and the GenAI Gateway</h4>
+        <p class="txt">This section serves as the Central Control Room of the enterprise architecture, governing how new foundation models are tested, secured, deployed, and centrally managed across all internal applications.</p>
+        <p class="lead num">1. CodePipeline — GenAI-Specific Stages</p>
+        <p class="txt">Unlike traditional software pipelines that rely solely on standard unit tests, an enterprise GenAI pipeline must rigorously test model behavior, accuracy, and safety:</p>
+        <p class="kv"><strong>Pipeline Stages:</strong> Source → Build → Model Evaluation → Security Scanning → Approval Gate → Deploy.</p>
+        <p class="kv"><strong>Model Evaluation &amp; Security Scanning:</strong> Automatically checks incoming model iterations for prompt regressions (checking if the model's outputs degrade or drift compared to historical baselines), toxic responses, and bias.</p>
+        <p class="kv"><strong>Approval Gate:</strong> Enforces mandatory human or automated sign-offs before pushing model updates to production.</p>
+        <p class="lead num">2. CodeBuild &amp; CodeDeploy</p>
+        <p class="kv"><strong>CodeBuild:</strong> Operates in compute-optimized environments for heavy model testing. It relies heavily on caching model artifacts and dependencies—otherwise, every build cycle would waste time and bandwidth re-downloading tens of gigabytes of model weights.</p>
+        <p class="kv"><strong>CodeDeploy:</strong> Because LLM containers load slowly into memory, CodeDeploy utilizes healthy host thresholds and extended deployment timeouts. If CloudWatch alarms detect that a newly deployed model is failing to initialize correctly, an automatic rollback is immediately triggered.</p>
+        <p class="lead num">3. CloudWatch Composite Alarms &amp; X-Ray</p>
+        <p class="kv"><strong>Composite Alarms:</strong> Eliminates false positives by combining multiple metrics instead of relying on a single threshold.</p>
+        <p class="kv"><strong>Example logic:</strong> IF (latency is high) AND (model confidence score is low) AND (error rate is elevated) -&gt; Trigger a critical composite alarm.</p>
+        <p class="kv"><strong>AWS X-Ray Sampling Rules:</strong> Tracing 100% of enterprise requests is prohibitively expensive. Smart sampling rules optimize visibility:</p>
+        <p class="kv"><strong>Normal requests:</strong> Sample 5%.</p>
+        <p class="kv"><strong>Slow requests or Errors:</strong> Sample 100% to capture complete debugging traces.</p>
+        <p class="txt">Custom subsegments isolate individual stages (e.g., separating vector retrieval time from raw model inference time).</p>
+        <p class="lead num">4. Service Catalog &amp; CloudFormation Custom Resources</p>
+        <p class="kv"><strong>Service Catalog Portfolios:</strong> Enables internal teams to self-serve infrastructure safely using pre-approved templates equipped with launch constraints and mandatory security tags, preventing rogue configurations.</p>
+        <p class="kv"><strong>CloudFormation Custom Resources:</strong> Implements complex, FM-specific provisioning logic, utilizing explicit DependsOn conditions to ensure resources are created in the correct sequential order.</p>
+    </div>
+
+    <div class="note-card">
+      <h4 id="s8">The Grand Finale: The GenAI Gateway</h4>
+        <p class="txt">The defining architectural centerpiece of Task 2.3 is the GenAI Gateway.</p>
+        <p class="lead">The Problem Without a Gateway:</p>
+        <p class="txt">If every internal team (Team A, Team B, Team C) builds its own custom integration code and connects directly to Bedrock:</p>
+        <p class="txt">Total enterprise spending becomes completely untrackable.</p>
+        <p class="txt">Guardrails and safety filters are applied inconsistently (or forgotten entirely).</p>
+        <p class="txt">There is no unified audit trail for compliance.</p>
+        <p class="txt">If the enterprise switches underlying foundation models, every single team must rewrite their application code.</p>
+        <p class="lead">The Solution With a GenAI Gateway:</p>
+        <p class="txt">All internal applications route their requests through a single centralized gateway layer:</p>
+        <p class="codelabel">Plaintext</p>
+        <pre class="code">Team A --+
+Team B --+--&gt; [ GenAI Gateway ] ---&gt; Amazon Bedrock / SageMaker
+Team C --+</pre>
+        <p class="lead">Core Functions of the GenAI Gateway:</p>
+        <p class="kv"><strong>Access Control:</strong> Centralizes authentication and determines which teams can invoke specific models.</p>
+        <p class="kv"><strong>Rate Limiting &amp; Throttling:</strong> Enforces per-team usage plans via API keys to prevent resource exhaustion.</p>
+        <p class="kv"><strong>Cost Tracking &amp; Allocation:</strong> Measures token consumption precisely per team for internal financial chargebacks.</p>
+        <p class="kv"><strong>Centralized Guardrails:</strong> Applies uniform safety filters and content moderation universally—no team can bypass them.</p>
+        <p class="kv"><strong>Model Routing &amp; Fallback:</strong> Manages cascading logic, automatically switching to backup models if the primary provider experiences an outage.</p>
+        <p class="kv"><strong>Multi-Level Caching:</strong> Caches frequent prompt responses across consumers to drastically cut down invocation costs and reduce latency.</p>
+        <p class="kv"><strong>Audit Logging:</strong> Records every invocation comprehensively for regulatory compliance via CloudTrail.</p>
+        <p class="kv"><strong>Abstraction Layer:</strong> If the enterprise decides to swap underlying foundation models (e.g., changing model versions), the change happens entirely inside the gateway—requiring zero code changes from any internal team.</p>
+    </div>
+
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <p>This is an independent, unofficial study resource and is not affiliated with, endorsed by, or sponsored by Amazon Web Services, Inc. AWS, Amazon Bedrock, and all related marks are trademarks of Amazon.com, Inc. or its affiliates.</p>
+    <p>Hosted on Amazon S3 + Amazon CloudFront. &middot; <a href="index.html">&larr; Back to Study Notes</a></p>
+  </div>
+</footer>
+
+</body>
+</html>
