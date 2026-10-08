@@ -1,120 +1,212 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1040 1193" width="1040" height="1193" role="img" font-family="-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica,Arial,sans-serif">
-<defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,1 L9,5 L0,9 z" fill="#8fa0b6"/></marker></defs>
-<style>.dtitle{font-size:14px;font-weight:800;letter-spacing:.04em;fill:#0f2540;}.pnum{font-size:11px;font-weight:700;fill:#fff;text-anchor:middle;}.ptitle{font-size:11.5px;font-weight:700;letter-spacing:.06em;fill:#16345c;}.ptitle-hl{font-size:11.5px;font-weight:700;letter-spacing:.06em;fill:#ffd8c4;}.it{font-size:12px;fill:#3a4a5e;}.it tspan.n{font-weight:700;fill:#0b1524;}.it-hl{font-size:12px;fill:#c9d5e3;}.it-hl tspan.n{font-weight:700;fill:#ffffff;}</style>
-<rect width="1040" height="1193" fill="#ffffff"/>
-<text x="42" y="34" class="dtitle">TASK 2.3: ENTERPRISE INTEGRATION ARCHITECTURE</text>
-<line x1="42" y1="46" x2="998" y2="46" stroke="#e3e7ee"/>
-
-<!-- CLIENTS & LEGACY SOURCES -->
-<rect x="20" y="58" width="1000" height="103" rx="14" fill="#f4f6fa" stroke="#e3e7ee"/>
-<rect x="42" y="71" width="19" height="18" rx="5" fill="#0f2540"/>
-<text x="51.5" y="84" class="pnum">1</text>
-<text x="69" y="84" class="ptitle">CLIENTS &amp; LEGACY SOURCES</text>
-<circle cx="50" cy="98.0" r="2.5" fill="#8fa0b6"/>
-<text x="62" y="102.0" class="it"><tspan class="n">Web / Mobile Apps</tspan> (Cognito Auth)</text>
-<circle cx="50" cy="117.0" r="2.5" fill="#8fa0b6"/>
-<text x="62" y="121.0" class="it"><tspan class="n">Branch Staff</tspan> (Amplify DataStore / Offline Sync)</text>
-<circle cx="50" cy="136.0" r="2.5" fill="#8fa0b6"/>
-<text x="62" y="140.0" class="it"><tspan class="n">Legacy Systems</tspan> (SOAP, EBCDIC, Fixed-Width Files, JMS/AMQP via Amazon MQ)</text>
-<line x1="520" y1="166" x2="520" y2="184" stroke="#8fa0b6" stroke-width="1.6" marker-end="url(#ah)"/>
-
-<!-- PERIMETER & NETWORK CONNECTIVITY LAYER -->
-<rect x="20" y="189" width="1000" height="122" rx="14" fill="#f4f6fa" stroke="#e3e7ee"/>
-<rect x="42" y="202" width="19" height="18" rx="5" fill="#0f2540"/>
-<text x="51.5" y="215" class="pnum">2</text>
-<text x="69" y="215" class="ptitle">PERIMETER &amp; NETWORK CONNECTIVITY LAYER</text>
-<circle cx="50" cy="229.0" r="2.5" fill="#8fa0b6"/>
-<text x="62" y="233.0" class="it"><tspan class="n">AWS WAF</tspan> (Rate Limiting &amp; Billing Attack Protection)</text>
-<circle cx="50" cy="248.0" r="2.5" fill="#8fa0b6"/>
-<text x="62" y="252.0" class="it"><tspan class="n">Transit Gateway</tspan> (Domain Isolation: Dev / Test / Prod via Black Hole Routes)</text>
-<circle cx="50" cy="267.0" r="2.5" fill="#8fa0b6"/>
-<text x="62" y="271.0" class="it"><tspan class="n">Direct Connect / PrivateLink</tspan> (Secure Enterprise-to-Cloud Routing)</text>
-<circle cx="50" cy="286.0" r="2.5" fill="#8fa0b6"/>
-<text x="62" y="290.0" class="it"><tspan class="n">Network Firewall</tspan> (Stateful Inspection &amp; Domain Filtering)</text>
-<line x1="520" y1="316" x2="520" y2="334" stroke="#8fa0b6" stroke-width="1.6" marker-end="url(#ah)"/>
-
-<!-- ENTRY & TRANSLATION LAYER -->
-<rect x="20" y="339" width="1000" height="103" rx="14" fill="#f4f6fa" stroke="#e3e7ee"/>
-<rect x="42" y="352" width="19" height="18" rx="5" fill="#0f2540"/>
-<text x="51.5" y="365" class="pnum">3</text>
-<text x="69" y="365" class="ptitle">ENTRY &amp; TRANSLATION LAYER</text>
-<circle cx="50" cy="379.0" r="2.5" fill="#8fa0b6"/>
-<text x="62" y="383.0" class="it"><tspan class="n">API Gateway</tspan> (Regional / Edge-optimized endpoints)</text>
-<circle cx="50" cy="398.0" r="2.5" fill="#8fa0b6"/>
-<text x="62" y="402.0" class="it"><tspan class="n">Lambda Adapters</tspan> (Protocol conversion: SOAP -&gt; JSON, Fixed-width -&gt; UTF-8)</text>
-<circle cx="50" cy="417.0" r="2.5" fill="#8fa0b6"/>
-<text x="62" y="421.0" class="it"><tspan class="n">EventBridge</tspan> (Event filtering &amp; Input Transformers)</text>
-<line x1="520" y1="447" x2="520" y2="465" stroke="#8fa0b6" stroke-width="1.6" marker-end="url(#ah)"/>
-
-<!-- THE GENAI GATEWAY (CENTRAL HUB) -->
-<rect x="20" y="470" width="1000" height="160" rx="14" fill="#13304f" stroke="#1b3c68"/>
-<rect x="42" y="483" width="19" height="18" rx="5" fill="#e8622c"/>
-<text x="51.5" y="496" class="pnum">4</text>
-<text x="69" y="496" class="ptitle-hl">THE GENAI GATEWAY (CENTRAL HUB)</text>
-<circle cx="50" cy="510.0" r="2.5" fill="#e8622c"/>
-<text x="62" y="514.0" class="it-hl"><tspan class="n">Usage Plans &amp; Throttling</tspan> (Per-team API keys and rate limits)</text>
-<circle cx="50" cy="529.0" r="2.5" fill="#e8622c"/>
-<text x="62" y="533.0" class="it-hl"><tspan class="n">Webhook Idempotency</tspan> (DynamoDB TTL check to prevent duplicate billing)</text>
-<circle cx="50" cy="548.0" r="2.5" fill="#e8622c"/>
-<text x="62" y="552.0" class="it-hl"><tspan class="n">Multi-Level Caching</tspan> (API Gateway, ElastiCache, Database)</text>
-<circle cx="50" cy="567.0" r="2.5" fill="#e8622c"/>
-<text x="62" y="571.0" class="it-hl"><tspan class="n">Cost Tracking &amp; Allocation</tspan> (Token consumption logs per team)</text>
-<circle cx="50" cy="586.0" r="2.5" fill="#e8622c"/>
-<text x="62" y="590.0" class="it-hl"><tspan class="n">Centralized Guardrails &amp; Safety Filters</tspan></text>
-<circle cx="50" cy="605.0" r="2.5" fill="#e8622c"/>
-<text x="62" y="609.0" class="it-hl"><tspan class="n">Model Routing &amp; Fallback Logic</tspan> (Switching models without code changes)</text>
-<line x1="520" y1="635" x2="520" y2="653" stroke="#8fa0b6" stroke-width="1.6" marker-end="url(#ah)"/>
-
-<!-- SECURITY & AUTHORIZATION LAYERS -->
-<rect x="20" y="658" width="1000" height="122" rx="14" fill="#f4f6fa" stroke="#e3e7ee"/>
-<rect x="42" y="671" width="19" height="18" rx="5" fill="#0f2540"/>
-<text x="51.5" y="684" class="pnum">5</text>
-<text x="69" y="684" class="ptitle">SECURITY &amp; AUTHORIZATION LAYERS</text>
-<circle cx="50" cy="698.0" r="2.5" fill="#8fa0b6"/>
-<text x="62" y="702.0" class="it"><tspan class="n">IAM Identity Center</tspan> (Workforce / Active Directory Federation)</text>
-<circle cx="50" cy="717.0" r="2.5" fill="#8fa0b6"/>
-<text x="62" y="721.0" class="it"><tspan class="n">Cognito Pre-Token Lambda Triggers</tspan> (Injecting enterprise roles into JWT)</text>
-<circle cx="50" cy="736.0" r="2.5" fill="#8fa0b6"/>
-<text x="62" y="740.0" class="it"><tspan class="n">IAM Verified Permissions &amp; Cedar Engine</tspan> (Fine-grained policy checks)</text>
-<circle cx="50" cy="755.0" r="2.5" fill="#8fa0b6"/>
-<text x="62" y="759.0" class="it"><tspan class="n">KMS Multi-Region Keys</tspan> (Compliant encryption &amp; automatic rotation)</text>
-<line x1="520" y1="785" x2="520" y2="803" stroke="#8fa0b6" stroke-width="1.6" marker-end="url(#ah)"/>
-
-<!-- ORCHESTRATION & WORKFLOW LAYER -->
-<rect x="20" y="808" width="1000" height="103" rx="14" fill="#f4f6fa" stroke="#e3e7ee"/>
-<rect x="42" y="821" width="19" height="18" rx="5" fill="#0f2540"/>
-<text x="51.5" y="834" class="pnum">6</text>
-<text x="69" y="834" class="ptitle">ORCHESTRATION &amp; WORKFLOW LAYER</text>
-<circle cx="50" cy="848.0" r="2.5" fill="#8fa0b6"/>
-<text x="62" y="852.0" class="it"><tspan class="n">Step Functions</tspan> (Parallel &amp; Map states for batch operations)</text>
-<circle cx="50" cy="867.0" r="2.5" fill="#8fa0b6"/>
-<text x="62" y="871.0" class="it"><tspan class="n">SQS FIFO &amp; Message Group IDs</tspan> (Maintaining transactional order per customer ID)</text>
-<circle cx="50" cy="886.0" r="2.5" fill="#8fa0b6"/>
-<text x="62" y="890.0" class="it"><tspan class="n">AWS Glue &amp; AppFlow</tspan> (Incremental data sync via Job Bookmarks &amp; SaaS connectors)</text>
-<line x1="520" y1="916" x2="520" y2="934" stroke="#8fa0b6" stroke-width="1.6" marker-end="url(#ah)"/>
-
-<!-- MODEL EXECUTION TARGETS -->
-<rect x="20" y="939" width="1000" height="84" rx="14" fill="#f4f6fa" stroke="#e3e7ee"/>
-<rect x="42" y="952" width="19" height="18" rx="5" fill="#0f2540"/>
-<text x="51.5" y="965" class="pnum">7</text>
-<text x="69" y="965" class="ptitle">MODEL EXECUTION TARGETS</text>
-<circle cx="50" cy="979.0" r="2.5" fill="#8fa0b6"/>
-<text x="62" y="983.0" class="it"><tspan class="n">Cloud Region:</tspan> Amazon Bedrock (Claude, etc.) / Amazon SageMaker</text>
-<circle cx="50" cy="998.0" r="2.5" fill="#8fa0b6"/>
-<text x="62" y="1002.0" class="it"><tspan class="n">Edge Infrastructure:</tspan> AWS Outposts (On-prem), Local Zones, or Wavelength (5G)</text>
-<line x1="520" y1="1028" x2="520" y2="1046" stroke="#8fa0b6" stroke-width="1.6" marker-end="url(#ah)"/>
-
-<!-- GOVERNANCE, OBSERVABILITY & CI/CD -->
-<rect x="20" y="1051" width="1000" height="122" rx="14" fill="#f4f6fa" stroke="#e3e7ee"/>
-<rect x="42" y="1064" width="19" height="18" rx="5" fill="#0f2540"/>
-<text x="51.5" y="1077" class="pnum">8</text>
-<text x="69" y="1077" class="ptitle">GOVERNANCE, OBSERVABILITY &amp; CI/CD</text>
-<circle cx="50" cy="1091.0" r="2.5" fill="#8fa0b6"/>
-<text x="62" y="1095.0" class="it"><tspan class="n">Control Tower</tspan> (Enforcing Data Residency &amp; Organization-level guardrails)</text>
-<circle cx="50" cy="1110.0" r="2.5" fill="#8fa0b6"/>
-<text x="62" y="1114.0" class="it"><tspan class="n">CloudWatch Composite Alarms &amp; X-Ray</tspan> (Smart sampling &amp; complex failure detection)</text>
-<circle cx="50" cy="1129.0" r="2.5" fill="#8fa0b6"/>
-<text x="62" y="1133.0" class="it"><tspan class="n">CloudTrail</tspan> (Immutable API call audit logging)</text>
-<circle cx="50" cy="1148.0" r="2.5" fill="#8fa0b6"/>
-<text x="62" y="1152.0" class="it"><tspan class="n">CodePipeline</tspan> (GenAI-specific stages: Model Evaluation, Security Scanning, Approval Gates)</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1060 2157" width="1060" height="2157" role="img" font-family="-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica,Arial,sans-serif">
+<defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,1 L9,5 L0,9 z" fill="#8fa0b6"/></marker><marker id="ahg" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,1 L9,5 L0,9 z" fill="#5e9e78"/></marker></defs>
+<style>.dtitle{font-size:14.5px;font-weight:800;letter-spacing:.03em;fill:#0f2540;}.num{font-size:10.5px;font-weight:700;fill:#fff;text-anchor:middle;}.bt{font-weight:700;}.bs{font-size:11px;}.gn{font-size:11.5px;font-weight:700;fill:#ffffff;}.gs{font-size:10.5px;fill:#c9d5e3;}.ptitle{font-size:11px;font-weight:700;letter-spacing:.06em;fill:#16345c;text-transform:uppercase;}.phase{font-size:10.5px;font-weight:700;letter-spacing:.07em;fill:#8b96a5;text-transform:uppercase;}.mode{font-size:10px;font-weight:700;fill:#c94f1f;}.orlab{font-size:10.5px;font-weight:700;fill:#8b96a5;letter-spacing:.08em;}.el{font-size:10px;font-weight:600;fill:#6b7a8d;}.elg{font-size:10px;font-weight:700;fill:#3f8a60;}.byp{font-size:11px;font-weight:700;fill:#2f6b4c;}.cohead{font-size:10.5px;font-weight:800;fill:#16345c;}.co{font-size:10.5px;fill:#3a4a5e;}.cn{font-size:11px;font-weight:700;fill:#0b1524;}</style>
+<rect width="1060" height="2157" fill="#ffffff"/>
+<text x="24" y="32" class="dtitle">TASK 2.3: ONE LEGACY REQUEST, END TO END</text>
+<line x1="24" y1="44" x2="1036" y2="44" stroke="#e3e7ee"/>
+<text x="330" y="51" class="phase">Origin</text>
+<text x="330" y="167" class="phase">Transport — three ways in</text>
+<text x="330" y="298" class="phase">Network perimeter</text>
+<text x="330" y="586" class="phase">Translation — legacy dialect to JSON</text>
+<text x="330" y="874" class="phase">Short-circuit gates — answer before spending a token</text>
+<text x="330" y="1061" class="phase">The GenAI Gateway</text>
+<text x="330" y="1329" class="phase">Private path to the model</text>
+<text x="330" y="1445" class="phase">Orchestration</text>
+<text x="330" y="1576" class="phase">Execution — or move the model to the data</text>
+<text x="330" y="1778" class="phase">Return path</text>
+<rect x="786" y="897.0" width="250" height="926.0" rx="12" fill="#eef7f1" stroke="#c7e2d1"/>
+<rect x="330" y="62" width="420" height="68" rx="10" fill="#ffffff" stroke="#d7dde8"/>
+<rect x="342" y="75" width="26" height="18" rx="5" fill="#0f2540"/>
+<text x="355" y="88" class="num">1</text>
+<text x="370" y="89" class="bt" fill="#0b1524" font-size="13">Legacy core banking system</text>
+<text x="370" y="106" class="bs" fill="#3a4a5e">SOAP · EBCDIC · fixed-width files · JMS/AMQP — holds the records,</text>
+<text x="370" y="121" class="bs" fill="#3a4a5e">cannot be rewritten</text>
+<line x1="540" y1="137" x2="540" y2="155" stroke="#8fa0b6" stroke-width="1.7" marker-end="url(#ah)"/>
+<rect x="24" y="178" width="330" height="68" rx="10" fill="#ffffff" stroke="#d7dde8"/>
+<rect x="36" y="191" width="26" height="18" rx="5" fill="#0f2540"/>
+<text x="49" y="204" class="num">2a</text>
+<text x="64" y="205" class="bt" fill="#0b1524" font-size="13">Direct Connect</text>
+<text x="64" y="222" class="bs" fill="#3a4a5e">dedicated link; BGP policies prioritize inference traffic</text>
+<text x="64" y="237" class="bs" fill="#3a4a5e">so bulk sync cannot block it</text>
+<text x="340" y="205" class="mode" text-anchor="end">synchronous, real-time</text>
+<rect x="366" y="178" width="330" height="83" rx="10" fill="#ffffff" stroke="#d7dde8"/>
+<rect x="378" y="191" width="26" height="18" rx="5" fill="#0f2540"/>
+<text x="391" y="204" class="num">2b</text>
+<text x="406" y="205" class="bt" fill="#0b1524" font-size="13">Amazon MQ</text>
+<text x="406" y="222" class="bs" fill="#3a4a5e">managed ActiveMQ / RabbitMQ, active/standby —</text>
+<text x="406" y="237" class="bs" fill="#3a4a5e">chosen only because the legacy side already speaks</text>
+<text x="406" y="252" class="bs" fill="#3a4a5e">JMS/AMQP</text>
+<text x="682" y="205" class="mode" text-anchor="end">asynchronous messaging</text>
+<rect x="708" y="178" width="330" height="68" rx="10" fill="#ffffff" stroke="#d7dde8"/>
+<rect x="720" y="191" width="26" height="18" rx="5" fill="#0f2540"/>
+<text x="733" y="204" class="num">2c</text>
+<text x="748" y="205" class="bt" fill="#0b1524" font-size="13">AWS Glue / AppFlow</text>
+<text x="748" y="222" class="bs" fill="#3a4a5e">job bookmarks replay only new records · pre-built</text>
+<text x="748" y="237" class="bs" fill="#3a4a5e">connectors for Salesforce, ServiceNow, Slack</text>
+<text x="1024" y="205" class="mode" text-anchor="end">bulk + SaaS sync</text>
+<line x1="540" y1="268" x2="540" y2="286" stroke="#8fa0b6" stroke-width="1.7" marker-end="url(#ah)"/>
+<rect x="330" y="309" width="420" height="68" rx="10" fill="#ffffff" stroke="#d7dde8"/>
+<rect x="342" y="322" width="26" height="18" rx="5" fill="#0f2540"/>
+<text x="355" y="335" class="num">3</text>
+<text x="370" y="336" class="bt" fill="#0b1524" font-size="13">Transit Gateway</text>
+<text x="370" y="353" class="bs" fill="#3a4a5e">Dev / Test / Prod isolation; black hole routes guarantee no path can exist</text>
+<text x="370" y="368" class="bs" fill="#3a4a5e">from Dev into Prod</text>
+<line x1="540" y1="382" x2="540" y2="390" stroke="#8fa0b6" stroke-width="1.7" marker-end="url(#ah)"/>
+<rect x="330" y="395" width="420" height="68" rx="10" fill="#ffffff" stroke="#d7dde8"/>
+<rect x="342" y="408" width="26" height="18" rx="5" fill="#0f2540"/>
+<text x="355" y="421" class="num">4</text>
+<text x="370" y="422" class="bt" fill="#0b1524" font-size="13">Network Firewall</text>
+<text x="370" y="439" class="bs" fill="#3a4a5e">stateful rule groups inspect FM-to-legacy traffic; domain filtering blocks</text>
+<text x="370" y="454" class="bs" fill="#3a4a5e">exfiltration to unapproved hosts</text>
+<line x1="540" y1="468" x2="540" y2="476" stroke="#8fa0b6" stroke-width="1.7" marker-end="url(#ah)"/>
+<rect x="330" y="481" width="420" height="68" rx="10" fill="#ffffff" stroke="#d7dde8"/>
+<rect x="342" y="494" width="26" height="18" rx="5" fill="#0f2540"/>
+<text x="355" y="507" class="num">5</text>
+<text x="370" y="508" class="bt" fill="#0b1524" font-size="13">AWS WAF</text>
+<text x="370" y="525" class="bs" fill="#3a4a5e">rate-based rules stop a runaway loop or malicious script before it</text>
+<text x="370" y="540" class="bs" fill="#3a4a5e">becomes a seven-figure token bill</text>
+<line x1="540" y1="556" x2="540" y2="574" stroke="#8fa0b6" stroke-width="1.7" marker-end="url(#ah)"/>
+<rect x="330" y="597" width="420" height="68" rx="10" fill="#ffffff" stroke="#d7dde8"/>
+<rect x="342" y="610" width="26" height="18" rx="5" fill="#0f2540"/>
+<text x="355" y="623" class="num">6</text>
+<text x="370" y="624" class="bt" fill="#0b1524" font-size="13">API Gateway</text>
+<text x="370" y="641" class="bs" fill="#3a4a5e">mapping template converts XML/SOAP → JSON · regional or</text>
+<text x="370" y="656" class="bs" fill="#3a4a5e">edge-optimized · custom domain ai.bank.com</text>
+<line x1="540" y1="670" x2="540" y2="678" stroke="#8fa0b6" stroke-width="1.7" marker-end="url(#ah)"/>
+<rect x="330" y="683" width="420" height="68" rx="10" fill="#ffffff" stroke="#d7dde8"/>
+<rect x="342" y="696" width="26" height="18" rx="5" fill="#0f2540"/>
+<text x="355" y="709" class="num">7</text>
+<text x="370" y="710" class="bt" fill="#0b1524" font-size="13">Lambda adapter</text>
+<text x="370" y="727" class="bs" fill="#3a4a5e">EBCDIC → UTF-8, fixed-width → JSON · reserved concurrency caps the</text>
+<text x="370" y="742" class="bs" fill="#3a4a5e">blast radius, provisioned kills cold starts</text>
+<line x1="540" y1="756" x2="540" y2="764" stroke="#8fa0b6" stroke-width="1.7" marker-end="url(#ah)"/>
+<rect x="24" y="769" width="282" height="74" rx="9" fill="#f4f6fa" stroke="#e3e7ee"/>
+<text x="37" y="789" class="cohead">On failure</text>
+<text x="37" y="805" class="co">Processing failure routes to a dead-letter queue.</text>
+<text x="37" y="819" class="co">Financial events are audit-relevant, so nothing is</text>
+<text x="37" y="833" class="co">ever silently dropped.</text>
+<rect x="330" y="769" width="420" height="68" rx="10" fill="#ffffff" stroke="#d7dde8"/>
+<rect x="342" y="782" width="26" height="18" rx="5" fill="#0f2540"/>
+<text x="355" y="795" class="num">8</text>
+<text x="370" y="796" class="bt" fill="#0b1524" font-size="13">EventBridge</text>
+<text x="370" y="813" class="bs" fill="#3a4a5e">pattern matching drops events that do not qualify · input transformer</text>
+<text x="370" y="828" class="bs" fill="#3a4a5e">normalizes customerId / customer_id / cust.id</text>
+<line x1="540" y1="844" x2="540" y2="862" stroke="#8fa0b6" stroke-width="1.7" marker-end="url(#ah)"/>
+<rect x="330" y="885" width="420" height="68" rx="10" fill="#fff8f4" stroke="#f0c9b4"/>
+<rect x="342" y="898" width="26" height="18" rx="5" fill="#0f2540"/>
+<text x="355" y="911" class="num">9</text>
+<text x="370" y="912" class="bt" fill="#0b1524" font-size="13">DynamoDB idempotency check (TTL)</text>
+<text x="370" y="929" class="bs" fill="#6b4a3a">seen this event ID before? webhooks are at-least-once, so duplicates are</text>
+<text x="370" y="944" class="bs" fill="#6b4a3a">expected, not exceptional</text>
+<line x1="540" y1="958" x2="540" y2="966" stroke="#8fa0b6" stroke-width="1.7" marker-end="url(#ah)"/>
+<rect x="330" y="971" width="420" height="53" rx="10" fill="#fff8f4" stroke="#f0c9b4"/>
+<rect x="342" y="984" width="26" height="18" rx="5" fill="#0f2540"/>
+<text x="355" y="997" class="num">10</text>
+<text x="370" y="998" class="bt" fill="#0b1524" font-size="13">Response cache — API Gateway / ElastiCache / database</text>
+<text x="370" y="1015" class="bs" fill="#6b4a3a">has this exact prompt already been answered for anyone?</text>
+<line x1="540" y1="1031" x2="540" y2="1049" stroke="#8fa0b6" stroke-width="1.7" marker-end="url(#ah)"/>
+<rect x="330" y="1072" width="420" height="220" rx="12" fill="#13304f" stroke="#1b3c68"/>
+<rect x="342" y="1085" width="26" height="18" rx="5" fill="#e8622c"/>
+<text x="355" y="1098" class="num">11</text>
+<text x="376" y="1099" class="bt" fill="#ffffff" font-size="13.5">The GenAI Gateway</text>
+<circle cx="350" cy="1116.0" r="2.5" fill="#e8622c"/>
+<text x="362" y="1120" class="gn">Usage plan + API key</text>
+<text x="362" y="1133" class="gs">per-team throttle; one team's bug cannot exhaust everyone's capacity</text>
+<circle cx="350" cy="1152.0" r="2.5" fill="#e8622c"/>
+<text x="362" y="1156" class="gn">Verified Permissions (Cedar)</text>
+<text x="362" y="1169" class="gs">department, clearance and business context — the claims the JWT already</text>
+<text x="362" y="1182" class="gs">carries</text>
+<circle cx="350" cy="1201.0" r="2.5" fill="#e8622c"/>
+<text x="362" y="1205" class="gn">Centralized guardrails</text>
+<text x="362" y="1218" class="gs">one safety filter for every team; no application can route around it</text>
+<circle cx="350" cy="1237.0" r="2.5" fill="#e8622c"/>
+<text x="362" y="1241" class="gn">Model routing, fallback &amp; cost attribution</text>
+<text x="362" y="1254" class="gs">swap models without touching a single team's code; bill tokens back per</text>
+<text x="362" y="1267" class="gs">team</text>
+<rect x="24" y="1072" width="282" height="144" rx="9" fill="#f4f6fa" stroke="#e3e7ee"/>
+<text x="37" y="1092" class="cohead">Why Cedar can read those claims</text>
+<text x="37" y="1108" class="co">Identity was established out-of-band, at login — not</text>
+<text x="37" y="1122" class="co">here. IAM Identity Center federates the corporate</text>
+<text x="37" y="1136" class="co">directory, so 50,000+ accounts are never re-created,</text>
+<text x="37" y="1150" class="co">and the Cognito pre-token Lambda injects</text>
+<text x="37" y="1164" class="co">department, clearance and region into the JWT. By</text>
+<text x="37" y="1178" class="co">the time WAF sees the packet those claims already</text>
+<text x="37" y="1192" class="co">exist, which is why Cedar can evaluate them at this</text>
+<text x="37" y="1206" class="co">step.</text>
+<line x1="540" y1="1299" x2="540" y2="1317" stroke="#8fa0b6" stroke-width="1.7" marker-end="url(#ah)"/>
+<rect x="330" y="1340" width="420" height="68" rx="10" fill="#ffffff" stroke="#d7dde8"/>
+<rect x="342" y="1353" width="26" height="18" rx="5" fill="#0f2540"/>
+<text x="355" y="1366" class="num">12</text>
+<text x="370" y="1367" class="bt" fill="#0b1524" font-size="13">PrivateLink endpoint policy</text>
+<text x="370" y="1384" class="bs" fill="#3a4a5e">never the public internet · bedrock:InvokeModel on claude-* only — no</text>
+<text x="370" y="1399" class="bs" fill="#3a4a5e">fine-tuning, no deletion</text>
+<line x1="540" y1="1415" x2="540" y2="1433" stroke="#8fa0b6" stroke-width="1.7" marker-end="url(#ah)"/>
+<rect x="330" y="1456" width="420" height="83" rx="10" fill="#ffffff" stroke="#d7dde8"/>
+<rect x="342" y="1469" width="26" height="18" rx="5" fill="#0f2540"/>
+<text x="355" y="1482" class="num">13</text>
+<text x="370" y="1483" class="bt" fill="#0b1524" font-size="13">Step Functions · SQS FIFO</text>
+<text x="370" y="1500" class="bs" fill="#3a4a5e">Parallel: fraud + balance + limit checks at once · Map: the same check</text>
+<text x="370" y="1515" class="bs" fill="#3a4a5e">across 1,000 transactions · MessageGroupId = customer-id keeps one</text>
+<text x="370" y="1530" class="bs" fill="#3a4a5e">customer's steps in order</text>
+<line x1="540" y1="1546" x2="540" y2="1564" stroke="#8fa0b6" stroke-width="1.7" marker-end="url(#ah)"/>
+<rect x="330" y="1587" width="420" height="53" rx="10" fill="#ffffff" stroke="#d7dde8"/>
+<rect x="342" y="1600" width="26" height="18" rx="5" fill="#0f2540"/>
+<text x="355" y="1613" class="num">14a</text>
+<text x="370" y="1614" class="bt" fill="#0b1524" font-size="13">Amazon Bedrock / Amazon SageMaker</text>
+<text x="370" y="1631" class="bs" fill="#3a4a5e">the default path, in-region</text>
+<text x="540" y="1655" class="orlab" text-anchor="middle">or</text>
+<rect x="330" y="1658" width="420" height="83" rx="10" fill="#ffffff" stroke="#d7dde8"/>
+<rect x="342" y="1671" width="26" height="18" rx="5" fill="#0f2540"/>
+<text x="355" y="1684" class="num">14b</text>
+<text x="370" y="1685" class="bt" fill="#0b1524" font-size="13">AWS Outposts · Local Zones · Wavelength</text>
+<text x="370" y="1702" class="bs" fill="#3a4a5e">when the data legally cannot leave the premises, the city or the carrier</text>
+<text x="370" y="1717" class="bs" fill="#3a4a5e">network · filter, anonymize or tokenize before any payload crosses a</text>
+<text x="370" y="1732" class="bs" fill="#3a4a5e">border</text>
+<line x1="540" y1="1748" x2="540" y2="1766" stroke="#8fa0b6" stroke-width="1.7" marker-end="url(#ah)"/>
+<rect x="330" y="1789" width="420" height="68" rx="10" fill="#ffffff" stroke="#d7dde8"/>
+<rect x="342" y="1802" width="26" height="18" rx="5" fill="#0f2540"/>
+<text x="355" y="1815" class="num">15</text>
+<text x="370" y="1816" class="bt" fill="#0b1524" font-size="13">API Gateway response mapping</text>
+<text x="370" y="1833" class="bs" fill="#3a4a5e">JSON → XML/SOAP — back into the exact shape the legacy system</text>
+<text x="370" y="1848" class="bs" fill="#3a4a5e">already expects</text>
+<line x1="540" y1="1862" x2="540" y2="1870" stroke="#8fa0b6" stroke-width="1.7" marker-end="url(#ah)"/>
+<rect x="330" y="1875" width="420" height="68" rx="10" fill="#ffffff" stroke="#d7dde8"/>
+<rect x="342" y="1888" width="26" height="18" rx="5" fill="#0f2540"/>
+<text x="355" y="1901" class="num">16</text>
+<text x="370" y="1902" class="bt" fill="#0b1524" font-size="13">Write back</text>
+<text x="370" y="1919" class="bs" fill="#3a4a5e">store the response in cache and the event ID in DynamoDB, so the next</text>
+<text x="370" y="1934" class="bs" fill="#3a4a5e">duplicate exits at the gates above</text>
+<line x1="540" y1="1948" x2="540" y2="1956" stroke="#8fa0b6" stroke-width="1.7" marker-end="url(#ah)"/>
+<rect x="330" y="1961" width="420" height="68" rx="10" fill="#ffffff" stroke="#d7dde8"/>
+<rect x="342" y="1974" width="26" height="18" rx="5" fill="#0f2540"/>
+<text x="355" y="1987" class="num">17</text>
+<text x="370" y="1988" class="bt" fill="#0b1524" font-size="13">Legacy core banking system</text>
+<text x="370" y="2005" class="bs" fill="#3a4a5e">receives XML/SOAP · never modified, never aware a foundation model</text>
+<text x="370" y="2020" class="bs" fill="#3a4a5e">was involved</text>
+<text x="800" y="923.0" class="byp">Returned without invoking a model — zero</text>
+<text x="800" y="938.0" class="byp">tokens billed, millisecond latency</text>
+<line x1="754" y1="919.0" x2="782" y2="919.0" stroke="#5e9e78" stroke-width="1.6" marker-end="url(#ahg)"/>
+<text x="764" y="913.0" class="elg">hit</text>
+<line x1="754" y1="997.5" x2="782" y2="997.5" stroke="#5e9e78" stroke-width="1.6" marker-end="url(#ahg)"/>
+<text x="764" y="991.5" class="elg">hit</text>
+<line x1="911" y1="953.0" x2="911" y2="1813.0" stroke="#5e9e78" stroke-width="1.4" stroke-dasharray="4 4"/>
+<text x="911" y="1801.0" class="elg" text-anchor="middle">skips every step in between</text>
+<path d="M 911 1813.0 L 911 1823.0 L 756 1823.0" fill="none" stroke="#5e9e78" stroke-width="1.6" marker-end="url(#ahg)"/>
+<line x1="24" y1="2049" x2="1036" y2="2049" stroke="#e3e7ee"/>
+<text x="24" y="2067" class="ptitle">Cross-cutting — applies at every step above</text>
+<rect x="24" y="2079" width="244" height="54" rx="9" fill="#f4f6fa" stroke="#e3e7ee"/>
+<text x="37" y="2099" class="cn">CloudTrail</text>
+<text x="37" y="2113" class="co">immutable audit trail of every step above</text>
+<rect x="280" y="2079" width="244" height="54" rx="9" fill="#f4f6fa" stroke="#e3e7ee"/>
+<text x="293" y="2099" class="cn">KMS multi-region keys</text>
+<text x="293" y="2113" class="co">one decryptable key across 30+ jurisdictions,</text>
+<text x="293" y="2126" class="co">auto-rotated</text>
+<rect x="536" y="2079" width="244" height="54" rx="9" fill="#f4f6fa" stroke="#e3e7ee"/>
+<text x="549" y="2099" class="cn">CloudWatch + X-Ray</text>
+<text x="549" y="2113" class="co">composite alarms; sample 5% normal, 100%</text>
+<text x="549" y="2126" class="co">of errors</text>
+<rect x="792" y="2079" width="244" height="54" rx="9" fill="#f4f6fa" stroke="#e3e7ee"/>
+<text x="805" y="2099" class="cn">Control Tower</text>
+<text x="805" y="2113" class="co">blocks deployments that break data</text>
+<text x="805" y="2126" class="co">residency</text>
 </svg>

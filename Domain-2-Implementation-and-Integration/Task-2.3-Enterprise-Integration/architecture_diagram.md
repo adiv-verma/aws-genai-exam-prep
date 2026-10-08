@@ -1,58 +1,112 @@
 ========================================================================================
-                    TASK 2.3: ENTERPRISE INTEGRATION ARCHITECTURE 
+                        TASK 2.3: ONE LEGACY REQUEST, END TO END
 ========================================================================================
 
-[ CLIENTS & LEGACY SOURCES ]
-  ├── Web / Mobile Apps (Cognito Auth)
-  ├── Branch Staff (Amplify DataStore / Offline Sync)
-  └── Legacy Systems (SOAP, EBCDIC, Fixed-Width Files, JMS/AMQP via Amazon MQ)
-           │
-           ▼
-[ PERIMETER & NETWORK CONNECTIVITY LAYER ]
-  ├── AWS WAF (Rate Limiting & Billing Attack Protection)
-  ├── Transit Gateway (Domain Isolation: Dev / Test / Prod via Black Hole Routes)
-  ├── Direct Connect / PrivateLink (Secure Enterprise-to-Cloud Routing)
-  └── Network Firewall (Stateful Inspection & Domain Filtering)
-           │
-           ▼
-[ ENTRY & TRANSLATION LAYER ]
-  ├── API Gateway (Regional / Edge-optimized endpoints)
-  ├── Lambda Adapters (Protocol conversion: SOAP -> JSON, Fixed-width -> UTF-8)
-  └── EventBridge (Event filtering & Input Transformers)
-           │
-           ▼
+[ ORIGIN ]
+  +-- (1) Legacy core banking system
+  |       SOAP · EBCDIC · fixed-width files · JMS/AMQP — holds the records, cannot be
+  |       rewritten
+           |
+           v
+[ TRANSPORT — THREE WAYS IN ]
+  +-- (2a) Direct Connect  --  synchronous, real-time
+  |       dedicated link; BGP policies prioritize inference traffic so bulk sync
+  |       cannot block it
+  +-- (2b) Amazon MQ  --  asynchronous messaging
+  |       managed ActiveMQ / RabbitMQ, active/standby — chosen only because the legacy
+  |       side already speaks JMS/AMQP
+  +-- (2c) AWS Glue / AppFlow  --  bulk + SaaS sync
+  |       job bookmarks replay only new records · pre-built connectors for Salesforce,
+  |       ServiceNow, Slack
+           |
+           v
+[ NETWORK PERIMETER ]
+  +-- (3) Transit Gateway
+  |       Dev / Test / Prod isolation; black hole routes guarantee no path can exist
+  |       from Dev into Prod
+  +-- (4) Network Firewall
+  |       stateful rule groups inspect FM-to-legacy traffic; domain filtering blocks
+  |       exfiltration to unapproved hosts
+  +-- (5) AWS WAF
+  |       rate-based rules stop a runaway loop or malicious script before it becomes a
+  |       seven-figure token bill
+           |
+           v
+[ TRANSLATION — LEGACY DIALECT TO JSON ]
+  +-- (6) API Gateway
+  |       mapping template converts XML/SOAP → JSON · regional or edge-optimized ·
+  |       custom domain ai.bank.com
+  +-- (7) Lambda adapter
+  |       EBCDIC → UTF-8, fixed-width → JSON · reserved concurrency caps the blast
+  |       radius, provisioned kills cold starts
+  +-- (8) EventBridge
+  |       pattern matching drops events that do not qualify · input transformer
+  |       normalizes customerId / customer_id / cust.id
+  |       DLQ: Processing failure routes to a dead-letter queue. Financial events are
+  |       audit-relevant, so nothing is ever silently dropped.
+           |
+           v
+[ SHORT-CIRCUIT GATES — ANSWER BEFORE SPENDING A TOKEN ]
+  +-- (9) DynamoDB idempotency check (TTL)
+  |       seen this event ID before? webhooks are at-least-once, so duplicates are
+  |       expected, not exceptional
+  +-- (10) Response cache — API Gateway / ElastiCache / database
+  |       has this exact prompt already been answered for anyone?
+  |       >>> HIT at either gate: Returned without invoking a model — zero tokens billed, millisecond latency
+  |           jumps straight to the response-mapping step below
+           |
+           v
+[ THE GENAI GATEWAY ]
+  +-- (11) ALL TRAFFIC FUNNELS THROUGH THE GENAI GATEWAY
+  |       - Usage plan + API key: per-team throttle; one team's bug cannot exhaust everyone's capacity
+  |       - Verified Permissions (Cedar): department, clearance and business context — the claims the JWT already carries
+  |       - Centralized guardrails: one safety filter for every team; no application can route around it
+  |       - Model routing, fallback & cost attribution: swap models without touching a single team's code; bill tokens back per team
+  |       NOTE: Identity was established out-of-band, at login — not here. IAM
+  |       Identity Center federates the corporate directory, so 50,000+ accounts are
+  |       never re-created, and the Cognito pre-token Lambda injects department,
+  |       clearance and region into the JWT. By the time WAF sees the packet those
+  |       claims already exist, which is why Cedar can evaluate them at this step.
+           |
+           v
+[ PRIVATE PATH TO THE MODEL ]
+  +-- (12) PrivateLink endpoint policy
+  |       never the public internet · bedrock:InvokeModel on claude-* only — no fine-
+  |       tuning, no deletion
+           |
+           v
+[ ORCHESTRATION ]
+  +-- (13) Step Functions · SQS FIFO
+  |       Parallel: fraud + balance + limit checks at once · Map: the same check
+  |       across 1,000 transactions · MessageGroupId = customer-id keeps one
+  |       customer's steps in order
+           |
+           v
+[ EXECUTION — OR MOVE THE MODEL TO THE DATA ]
+  +-- (14a) Amazon Bedrock / Amazon SageMaker
+  |       the default path, in-region
+  |   -- or --
+  +-- (14b) AWS Outposts · Local Zones · Wavelength
+  |       when the data legally cannot leave the premises, the city or the carrier
+  |       network · filter, anonymize or tokenize before any payload crosses a border
+           |
+           v
+[ RETURN PATH ]
+  +-- (15) API Gateway response mapping
+  |       JSON → XML/SOAP — back into the exact shape the legacy system already
+  |       expects
+  +-- (16) Write back
+  |       store the response in cache and the event ID in DynamoDB, so the next
+  |       duplicate exits at the gates above
+  +-- (17) Legacy core banking system
+  |       receives XML/SOAP · never modified, never aware a foundation model was
+  |       involved
+
 ========================================================================================
-                                THE GENAI GATEWAY (CENTRAL HUB)
+CROSS-CUTTING (applies at every step above)
 ========================================================================================
-  ├── Usage Plans & Throttling (Per-team API keys and rate limits)
-  ├── Webhook Idempotency (DynamoDB TTL check to prevent duplicate billing)
-  ├── Multi-Level Caching (API Gateway, ElastiCache, Database)
-  ├── Cost Tracking & Allocation (Token consumption logs per team)
-  ├── Centralized Guardrails & Safety Filters
-  └── Model Routing & Fallback Logic (Switching models without code changes)
-           │
-           ▼
-[ SECURITY & AUTHORIZATION LAYERS ]
-  ├── IAM Identity Center (Workforce / Active Directory Federation)
-  ├── Cognito Pre-Token Lambda Triggers (Injecting enterprise roles into JWT)
-  ├── IAM Verified Permissions & Cedar Engine (Fine-grained policy checks)
-  └── KMS Multi-Region Keys (Compliant encryption & automatic rotation)
-           │
-           ▼
-[ ORCHESTRATION & WORKFLOW LAYER ]
-  ├── Step Functions (Parallel & Map states for batch operations)
-  ├── SQS FIFO & Message Group IDs (Maintaining transactional order per customer ID)
-  └── AWS Glue & AppFlow (Incremental data sync via Job Bookmarks & SaaS connectors)
-           │
-           ▼
-[ MODEL EXECUTION TARGETS ]
-  ├── Cloud Region: Amazon Bedrock (Claude, etc.) / Amazon SageMaker
-  └── Edge Infrastructure: AWS Outposts (On-prem), Local Zones, or Wavelength (5G)
-           │
-           ▼
-[ GOVERNANCE, OBSERVABILITY & CI/CD ]
-  ├── Control Tower (Enforcing Data Residency & Organization-level guardrails)
-  ├── CloudWatch Composite Alarms & X-Ray (Smart sampling & complex failure detection)
-  ├── CloudTrail (Immutable API call audit logging)
-  └── CodePipeline (GenAI-specific stages: Model Evaluation, Security Scanning, Approval Gates)
+  +-- CloudTrail: immutable audit trail of every step above
+  +-- KMS multi-region keys: one decryptable key across 30+ jurisdictions, auto-rotated
+  +-- CloudWatch + X-Ray: composite alarms; sample 5% normal, 100% of errors
+  +-- Control Tower: blocks deployments that break data residency
 ========================================================================================
