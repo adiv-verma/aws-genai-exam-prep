@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Task 2.4 Notes | AIP-C01 Guide</title>
+<meta name="description" content="Domain 2, Task 2.4 study notes: Foundation Model API Integrations">
+<style>
+  :root{
+    --ink:#0b1524; --ink-soft:#3a4a5e; --paper:#f7f8fa; --card:#ffffff; --line:#e3e7ee;
+    --accent:#e8622c; --accent-dark:#c94f1f; --navy:#0f2540; --navy-2:#16345c;
+    color-scheme: light;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{margin:0;background:var(--paper);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;line-height:1.6;}
+  a{color:var(--accent-dark);}
+  img{max-width:100%;}
+  .wrap{max-width:1080px;margin:0 auto;padding:0 24px;}
+
+  .nav{position:sticky;top:0;z-index:50;background:rgba(15,37,64,.96);backdrop-filter:blur(6px);border-bottom:1px solid rgba(255,255,255,.08);}
+  .nav .wrap{display:flex;align-items:center;justify-content:space-between;height:56px;}
+  .nav-brand{color:#fff;font-weight:700;font-size:14px;letter-spacing:.02em;text-decoration:none;}
+  .nav-brand span{color:var(--accent);}
+  .nav-links{display:flex;gap:22px;list-style:none;margin:0;padding:0;}
+  .nav-links a{color:#cdd8e6;text-decoration:none;font-size:13.5px;font-weight:500;}
+  .nav-links a:hover{color:#fff;}
+  @media (max-width:720px){ .nav-links{display:none;} }
+
+  header.hero{background:linear-gradient(180deg,var(--navy) 0%, var(--navy-2) 100%);color:#fff;padding:36px 0 28px;}
+  .eyebrow{display:inline-block;font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#ffd8c4;background:rgba(232,98,44,.18);border:1px solid rgba(232,98,44,.4);padding:5px 10px;border-radius:999px;margin-bottom:14px;}
+  h1{font-size:clamp(20px,3vw,27px);line-height:1.2;margin:0;font-weight:800;}
+
+  section{padding:36px 0;}
+
+  figure.arch{margin:0 0 24px;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px;}
+  figure.arch img{display:block;border-radius:8px;width:100%;height:auto;}
+  figure.arch figcaption{margin-top:10px;font-size:12.5px;color:var(--ink-soft);text-align:center;}
+
+  .note-card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:18px 22px 22px;margin-bottom:16px;}
+  .note-card h4{scroll-margin-top:78px;margin:0 0 14px;font-size:13px;font-weight:800;color:var(--navy-2);}
+  .note-card h4:target{color:var(--accent-dark);}
+  .note-card h4:target::after{content:" \2190";color:var(--accent);}
+
+  .lead{font-size:13.5px;font-weight:700;color:var(--ink);margin:18px 0 8px;}
+  .lead:first-of-type{margin-top:0;}
+  .lead.num{color:var(--navy-2);}
+  .txt{font-size:13px;color:var(--ink-soft);line-height:1.6;margin:0 0 8px;}
+  .kv{font-size:13px;color:var(--ink-soft);line-height:1.6;margin:0 0 8px;padding-left:14px;border-left:2px solid var(--line);}
+  .kv strong{color:var(--ink);font-weight:700;}
+
+  .codelabel{font-size:10.5px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:#8b96a5;margin:14px 0 6px;}
+  pre.code{margin:0 0 10px;padding:12px 14px;background:#0f2540;color:#dbe6f3;border-radius:9px;overflow-x:auto;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px;line-height:1.55;}
+
+  footer{padding:32px 0 48px;color:#8b96a5;font-size:12.5px;}
+  footer .wrap{border-top:1px solid var(--line);padding-top:22px;}
+  footer a{color:#6b7686;}
+  table.cmp{width:100%;border-collapse:collapse;margin:4px 0 10px;font-size:12.5px;display:block;overflow-x:auto;}
+  table.cmp th{text-align:left;padding:8px 10px;background:#0f2540;color:#fff;font-weight:700;font-size:11.5px;letter-spacing:.02em;border:1px solid #0f2540;}
+  table.cmp td{padding:8px 10px;border:1px solid var(--line);color:var(--ink-soft);vertical-align:top;}
+  table.cmp tbody tr:nth-child(even){background:#fafbfc;}
+  table.cmp td:first-child{color:var(--ink);font-weight:600;white-space:nowrap;}
+
+  .step{font-size:13px;color:var(--ink-soft);line-height:1.6;margin:0 0 6px;padding-left:14px;border-left:2px solid var(--accent);}
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="wrap">
+    <a class="nav-brand" href="../index.html">AIP-C01 <span>Guide</span></a>
+    <ul class="nav-links">
+      <li><a href="index.html">All Study Notes</a></li>
+      <li><a href="../tasks/index.html">Build Log</a></li>
+    </ul>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="wrap">
+    <span class="eyebrow">Domain 2 &middot; Task 2.4</span>
+    <h1>Domain 2, Task 2.4 &mdash; Foundation Model API Integrations (Detailed Revision Notes)</h1>
+  </div>
+</header>
+
+<section>
+  <div class="wrap">
+
+    <figure class="arch">
+      <img src="../assets/task-2-4-architecture.svg" alt="Flexible foundation-model API architecture for a hospital platform, drawn as a request flowing top to bottom. Client apps on web, mobile and tablet reach API Gateway over HTTPS, SSE or WebSocket; the gateway runs request validation on max_tokens and JSON schema and reads custom headers such as x-model-preference. Routing is then decided in three places: AWS AppConfig and SSM hold static configuration and feature flags, AWS Step Functions choice states do content-based routing with parallel execution for multi-specialty cases, and Amazon Timestream with DynamoDB supplies metric-based routing and performance history. The routing decision dispatches either to a specialised medical model capped by a route-level limit of 50 requests per second, or to a general model with specialised prompts capped at 500 requests per second. A dashed fallback chain hangs off those models: low confidence or failure on the specialised model triggers model cascading that passes metadata and partial context down to the general model, further degradation falls back to RAG over the hospital knowledge base, and the last resort for critical functions is a rule-based system. A separate asynchronous lane runs beside the synchronous one: post-encounter requests go from the client into an Amazon SQS queue with a ten-minute visibility timeout, then to Lambda background workers holding a pool of 10 to 20 connections, which invoke the general model. Both models report into AWS X-Ray and CloudWatch, which record subsegments for preprocessing, invocation and postprocessing plus annotations and p50, p90 and p99 latency metrics, and those in turn feed the A/B testing and Timestream feedback loop.">
+      <figcaption>One request, four decision points. Routing is resolved from static config, content and live metrics before any model is invoked; the dashed edges are what happens when the chosen model fails or returns low confidence.</figcaption>
+    </figure>
+
+    <div class="note-card">
+      <h4 id="s1">Section 1 Flexible Model Interaction Systems</h4>
+        <p class="lead num">1. Synchronous vs. Asynchronous Interaction Patterns</p>
+        <p class="txt">When building enterprise Foundation Model (FM) platforms, your first major architectural fork is deciding whether client applications should wait for a response in real-time or offload the task to the background.</p>
+        <p class="lead">Synchronous Workflows (Real-Time Clinical Queries):</p>
+        <p class="kv"><strong>Use Case:</strong> A physician standing directly with a patient requires immediate diagnostic support or drug interaction checks.</p>
+        <p class="kv"><strong>Design Rule:</strong> Hard timeout capped tightly at 4 to 5 seconds.</p>
+        <p class="kv"><strong>Why:</strong> Clinicians cannot stare at a spinning loader during an active consultation. If the model or network cannot deliver an answer within 5 seconds, failing fast to a fallback mechanism or cached response provides a far superior user experience than hanging indefinitely.</p>
+        <p class="lead">Asynchronous Workflows (Post-Encounter Documentation):</p>
+        <p class="kv"><strong>Use Case:</strong> Summarizing electronic health records (EHR) after a patient leaves, or batch processing historical notes.</p>
+        <p class="kv"><strong>Design Rule:</strong> Decoupled from the client via Amazon SQS (Simple Queue Service). The client submits the payload, receives an immediate acknowledgement (HTTP 202 Accepted) with a task ID, and polls or receives a webhook when the background worker completes the generation.</p>
+        <p class="lead num">2. Timeouts Stratified by Model Complexity</p>
+        <p class="txt">To prevent resource starvation and optimize user experience, timeouts are strictly mapped to the computational weight and expected generation time of the task:</p>
+        <p class="kv"><strong>Complex Generation (e.g., multi-specialty diagnostic synthesis, long reports):</strong> Up to 120 seconds.</p>
+        <p class="kv"><strong>Simple Inference (e.g., classification, extraction, binary decision routing):</strong> 15 to 30 seconds.</p>
+        <p class="kv"><strong>Clinical Queries (Real-time interaction):</strong> 4 to 5 seconds.</p>
+        <p class="lead num">3. Resilient Retry Policies &amp; Jitter Engineering</p>
+        <p class="txt">When downstream model endpoints or APIs return transient errors, clients must retry without causing cascading service failures.</p>
+        <p class="kv"><strong>Exponential Backoff Formula:</strong> The wait time scales exponentially with each retry attempt:</p>
+        <p class="kv"><strong>Attempt 1:</strong> 100 ms</p>
+        <p class="kv"><strong>Attempt 2:</strong> 200 ms</p>
+        <p class="kv"><strong>Attempt 3:</strong> 400 ms</p>
+        <p class="kv"><strong>Attempt 4:</strong> 800 ms</p>
+        <p class="kv"><strong>Jitter (+/−100 ms):</strong> Adding random temporal variance prevents the Thundering Herd Problem (where thousands of clients experience a timeout simultaneously, fail at the exact same millisecond, and bombard the server in lockstep synchronization, creating a secondary availability outage).</p>
+        <p class="lead num">4. Connection Pooling and SQS Configurations</p>
+        <p class="lead">Connection Pooling Parameters:</p>
+        <p class="kv"><strong>Pool Size:</strong> 10 to 20 active HTTPS connections per application instance.</p>
+        <p class="kv"><strong>TTL (Time-To-Live):</strong> Set between 60 to 300 seconds.</p>
+        <p class="kv"><strong>Why TTL Matters:</strong> Establishing a fresh HTTPS connection requires an expensive TCP 3-way handshake and TLS negotiation. However, underlying load balancers and container IPs shift dynamically. TTL forces periodic, graceful connection refreshes to prevent routing stale traffic to dead backend endpoints.</p>
+        <p class="lead">SQS Visibility Timeout Tuning:</p>
+        <p class="kv"><strong>Duration:</strong> Set to 5 to 15 minutes (typically configured around 10 minutes).</p>
+        <p class="kv"><strong>The Risk of Misconfiguration:</strong> The visibility timeout dictates how long a message remains hidden from other workers while being processed. If set too low, the worker is still processing the heavy LLM call, but SQS assumes it failed and makes the message visible again—resulting in duplicate processing and doubled model inference costs.</p>
+        <p class="lead num">5. API Gateway Request Validation (Early Gatekeeping)</p>
+        <p class="txt">Before a request ever touches compute resources or consumes expensive model tokens, API Gateway Request Validators inspect incoming payloads against a strict JSON schema.</p>
+        <p class="kv"><strong>Parameter Boundaries:</strong> Enforces rules like max_tokens &lt;= 4096 and minimum confidence thresholds.</p>
+        <p class="kv"><strong>Healthcare Specifics:</strong> Validates that required medical context fields, patient authorization headers, and standardized diagnostic codes (such as ICD-10 formats) are syntactically present.</p>
+        <p class="kv"><strong>Economic Value:</strong> Malformed or bloated requests are instantly rejected with an HTTP 400 Bad Request at the edge, saving compute cycles, network bandwidth, and model licensing costs.</p>
+        <p class="lead num">6. Error Handling Strategy: Retriable vs. Non-Retriable</p>
+        <p class="txt">Production code bases segment errors into distinct operational paths:</p>
+        <p class="lead">Retriable Errors (Server-Side / Transient):</p>
+        <p class="txt">429 Too Many Requests (Throttling)</p>
+        <p class="txt">500 Internal Server Error</p>
+        <p class="txt">503 Service Unavailable</p>
+        <p class="kv"><strong>Action:</strong> Log, apply exponential backoff with jitter, and retry.</p>
+        <p class="lead">Non-Retriable Errors (Client-Side / Permanent):</p>
+        <p class="txt">400 Bad Request (Malformed syntax or invalid schema)</p>
+        <p class="txt">401 Unauthorized (Invalid or expired credentials)</p>
+        <p class="txt">403 Forbidden (Insufficient access scope)</p>
+        <p class="kv"><strong>Action:</strong> Do not retry. The request itself is fundamentally flawed and will fail identically every time. Capture metrics, log the payload, and return an immediate error response to the client.</p>
+        <p class="lead num">7. Usage Plans, Rate Limiting, and Burst Capacity</p>
+        <p class="txt">Healthcare traffic is inherently spiky—surging sharply during morning rounds, shift handovers, and emergency admissions.</p>
+        <p class="kv"><strong>Steady-State Rate:</strong> Maintained at 10 to 50 requests per second (RPS) per tenant/department.</p>
+        <p class="kv"><strong>Burst Capacity:</strong> Configured to absorb 2x to 3x the steady-state rate to handle sudden operational spikes smoothly without dropping requests or triggering mass throttling.</p>
+    </div>
+
+    <div class="note-card">
+      <h4 id="s2">Section 2: Real-Time Interaction Systems (Streaming, WebSockets, and Server-Sent Events)</h4>
+        <p class="txt">When a Foundation Model takes 8 seconds to generate a complete clinical summary, a clinician cannot simply stare at a blank spinning wheel. Real-time interaction systems solve this latency problem by streaming responses token-by-token as they are generated.</p>
+        <p class="lead">Client-Side Buffer Management</p>
+        <p class="txt">Streaming raw tokens individually as they arrive from the network creates heavy CPU overhead and causes UI text to flicker aggressively. To balance visual responsiveness with system performance:</p>
+        <p class="kv"><strong>Buffer Size:</strong> Configured to hold 5 to 20 chunks before triggering a render update.</p>
+        <p class="kv"><strong>Flush Conditions:</strong> The buffer flushes and updates the UI when:</p>
+        <p class="txt">The buffer reaches maximum chunk capacity.</p>
+        <p class="txt">100 to 500 milliseconds have elapsed (time-based fallback).</p>
+        <p class="txt">A semantic boundary is reached (such as a completed sentence or punctuation mark). Half-sentence renders look broken; semantic flushing ensures readability.</p>
+        <p class="kv"><strong>Healthcare Twist:</strong> Buffers can be prioritized so that critical diagnostic information or high-confidence recommendations render first, while supporting details or secondary context follow right after.</p>
+        <p class="lead">Transport Protocols: WebSockets vs. Server-Sent Events (SSE)</p>
+        <p class="txt">Choosing the right wire protocol determines architectural complexity and connection reliability.</p>
+        <table class="cmp">
+          <thead><tr><th>Feature</th><th>WebSockets</th><th>Server-Sent Events (SSE)</th></tr></thead>
+          <tbody>
+            <tr><td>Direction</td><td>Bidirectional (Client ⇄ Server)</td><td>Unidirectional (Server → Client only)</td></tr>
+            <tr><td>Protocol</td><td>Custom TCP/WebSocket protocol</td><td>Plain HTTP / HTTPS</td></tr>
+            <tr><td>Complexity</td><td>Higher (requires stateful connection management)</td><td>Lower (standard HTTP stack)</td></tr>
+            <tr><td>Resuming Disconnections</td><td>Must build custom state recovery</td><td>Built-in via Event IDs</td></tr>
+            <tr><td>Best For</td><td>Collaborative editing, real-time chat</td><td>Streaming model responses</td></tr>
+          </tbody>
+        </table>
+        <p class="txt">For LLM text generation, SSE is almost always sufficient because the client has nothing to send back to the server mid-stream.</p>
+        <p class="kv"><strong>Server-Sent Events (SSE):</strong> Uses standard HTTP. Its superpower is Event IDs. If a mobile connection drops at event #47, the client automatically reconnects and sends the header Last-Event-ID: 47. The server then resumes streaming from #48 instead of regenerating the entire response from scratch. Reconnections use exponential backoff (starting at 1 second up to a 30-60 second cap).</p>
+        <p class="kv"><strong>WebSockets:</strong> Maintained via periodic Ping frames every 30 to 60 seconds to prevent network firewalls or load balancers from killing idle connections (which typically time out around 10 minutes).</p>
+        <p class="lead">Chunked Transfer Encoding &amp; Mobile Network Handling</p>
+        <p class="kv"><strong>Chunked Transfer Encoding:</strong> The simplest form of plain HTTP streaming (chunk sizes typically 1 to 4 KB), used when downstream clients cannot support specialized streaming protocols. Ensure your API Gateway integration response templates preserve Transfer-Encoding: chunked headers.</p>
+        <p class="kv"><strong>Mobile Network Switching:</strong> Clinicians constantly move through hospital hallways, switching seamlessly between Wi-Fi access points and cellular networks. Client-side adapters must dynamically detect connection state changes and adapt buffer sizes to shifting bandwidth and latency.</p>
+        <p class="kv"><strong>UI Debouncing:</strong> Applied at 300 to 500 milliseconds to batch UI re-renders, preventing excessive CPU thrashing on mobile devices.</p>
+        <p class="kv"><strong>Streaming Error Recovery:</strong> If a stream fails mid-generation:</p>
+        <p class="txt">Attempt recovery using the last known SSE Event ID.</p>
+        <p class="txt">If persistent failure occurs, gracefully fall back to the standard full-response API. A complete non-streamed response always beats a broken, frozen stream.</p>
+    </div>
+
+    <div class="note-card">
+      <h4 id="s3">Section 3 Resilient FM Systems</h4>
+        <p class="lead">SDK Retry Settings &amp; The Necessity of Caps</p>
+        <p class="kv"><strong>Parameters:</strong> Max attempts (3–5), Initial backoff (100 ms), Maximum backoff cap (20 seconds), Jitter factor (0.1–0.3).</p>
+        <p class="kv"><strong>The Importance of the Cap:</strong> Without an upper limit, exponential growth compounds wait times into minutes. Bounding the backoff ensures that clients fail fast or recover within a predictable operational window.</p>
+        <p class="lead">Multi-Level Throttling Architecture</p>
+        <p class="kv"><strong>Hierarchy:</strong> Account level (~10,000 RPS) → Stage level (1,000–5,000 RPS) → Route level (50–500 RPS).</p>
+        <p class="kv"><strong>Why Route-Level Limits Matter Most:</strong> Different foundation models have vastly different compute profiles. A heavy multi-specialty clinical reasoning model might only handle 50 RPS, whereas a lightweight classification model handles 500 RPS. Relying solely on account-level limits allows a heavy model endpoint to be easily overwhelmed and starved of resources. Limits must be derived from downstream model capacity, not arbitrary preferences.</p>
+        <p class="lead">Fallback Degradation Paths</p>
+        <p class="txt">When a primary AI model fails or underperforms, enterprise systems execute graceful degradation:</p>
+        <p class="lead">Healthcare Chain Example:</p>
+        <p class="step">Primary specialised medical model</p>
+        <p class="step">→ General model + specialized medical prompts</p>
+        <p class="step">→ RAG over hospital internal knowledge bases (Using grounded, verified hospital documents when the LLM degrades)</p>
+        <p class="step">→ Rule-based fallback system for critical life-support functions.</p>
+        <p class="kv"><strong>Design Rule:</strong> Each degradation step requires a strict quality threshold and automated transition logic.</p>
+        <p class="lead">X-Ray Subsegments, Annotations, and Monitoring</p>
+        <p class="kv"><strong>Distributed Tracing:</strong> Requests are broken down into subsegments (preprocessing, model invocation, postprocessing).</p>
+        <p class="kv"><strong>Annotations:</strong> Rich metadata tags (model name, input complexity, output quality score, clinical workflow context) allow engineers to filter traces later—e.g., "Show every slow cardiology request."</p>
+        <p class="lead">Multi-Dimensional Metrics:</p>
+        <p class="kv"><strong>Latency Percentiles (p50, p90, p99):</strong> Averages hide outliers. p50 reflects the typical user experience, while p99 exposes the worst 1% experience.</p>
+        <p class="kv"><strong>Error Categories:</strong> Separately tracking 429 (throttling), 500 (server errors), and 400 (client errors).</p>
+        <p class="kv"><strong>Throughput &amp; Cost:</strong> Tracking token throughput and spend per request against strict SLA thresholds.</p>
+        <p class="lead">Circuit Breaker Tuning</p>
+        <p class="kv"><strong>Failure Threshold:</strong> 50% failure rate over a window of 10 requests.</p>
+        <p class="kv"><strong>Recovery Timeout:</strong> 30 to 60 seconds.</p>
+        <p class="kv"><strong>Half-Open Traffic State:</strong> Sends only 10% to 20% of normal traffic to verify backend recovery before fully reopening the circuit.</p>
+        <p class="lead">Multi-Region Resilience &amp; Priority Queuing</p>
+        <p class="kv"><strong>Topologies:</strong> Active-Active (both regions serve live traffic) or Active-Passive (standby failover).</p>
+        <p class="kv"><strong>Health Checks:</strong> Polled every 30 seconds; failover triggers after 3 consecutive failures (~90 seconds), strictly respecting Route 53 regional compliance and data residency boundaries.</p>
+        <p class="kv"><strong>Priority Queuing:</strong> Emergency room (ER) clinical requests bypass normal queues to ensure high-priority medical workflows are never delayed by routine administrative documentation.</p>
+    </div>
+
+    <div class="note-card">
+      <h4 id="s4">Section 4 Intelligent Model Routing</h4>
+        <p class="txt">Routing strategies ensure that incoming requests are dynamically dispatched to the most cost-effective and capable Foundation Model (FM) based on real-time context, content complexity, and performance metrics.</p>
+        <p class="lead num">1. Static Configuration Routing</p>
+        <p class="kv"><strong>Mechanisms:</strong> AWS AppConfig or Parameter Store (Simple key-value configuration).</p>
+        <p class="kv"><strong>Operational Benefit:</strong> Allows dynamic updates to routing rules, feature flags, and gradual rollouts without requiring a code deployment.</p>
+        <p class="lead num">2. Content-Based Routing (Step Functions Choice States)</p>
+        <p class="kv"><strong>Evaluation Criteria:</strong> Token count, semantic complexity score, language detection, and medical domain classification.</p>
+        <p class="lead">Logic Example:</p>
+        <pre class="code">IF specialty == "cardiology" -&gt; route to cardiology-specialized model
+IF token count &gt; 4000 -&gt; route to large-context window model
+ELSE -&gt; route to general enterprise model</pre>
+        <p class="kv"><strong>Healthcare Twist:</strong> Patient data and standardized medical codes drive the routing decision. Complex multi-specialty consultations utilize parallel execution states to run several specialist models simultaneously.</p>
+        <p class="lead num">3. Metric-Based Routing</p>
+        <p class="kv"><strong>Databases Used:</strong> Amazon DynamoDB (for fast lookup of current state/metrics) and Amazon Timestream (for time-series historical analysis).</p>
+        <p class="kv"><strong>Optimization Goal:</strong> Continuously tracks diagnostic accuracy, response quality, and latency trends to optimize model selection dynamically based on system objectives (e.g., maximum cost-efficiency vs. highest clinical precision).</p>
+        <p class="lead num">4. API Gateway Mapping Templates</p>
+        <p class="kv"><strong>Capabilities:</strong> Intercepts incoming requests to inspect custom headers (x-model-preference), query parameters (?complexity=high&amp;quality=max), or parse request bodies.</p>
+        <p class="kv"><strong>Outcome:</strong> Specialty-specific prompts and formatting rules are injected at the edge before the request ever hits downstream Lambda functions.</p>
+        <p class="lead num">5. Model Cascading &amp; Metadata Passing</p>
+        <p class="kv"><strong>Confidence Threshold:</strong> Typically set between 0.7 and 0.9. If a smaller, faster model outputs a confidence score below this threshold, the request escalates to a heavy, highly accurate model.</p>
+        <p class="kv"><strong>Metadata Preservation:</strong> When escalating, the system passes along intermediate findings, partial extractions, and context from the first model so the second model does not waste time starting from scratch.</p>
+        <p class="lead num">6. A/B Testing &amp; Ensemble Aggregation</p>
+        <p class="kv"><strong>A/B Testing Splits:</strong> Diverts 5% to 10% of live traffic to a candidate model while keeping 90% to 95% on the baseline model, followed by rigorous statistical significance testing.</p>
+        <p class="lead">Ensemble Aggregation Strategies:</p>
+        <p class="kv"><strong>Majority Voting:</strong> For classification tasks.</p>
+        <p class="kv"><strong>Weighted Averaging:</strong> For numeric predictions.</p>
+        <p class="kv"><strong>Ranked Fusion:</strong> For merging multiple retrieved result lists into a single cohesive output ranking.</p>
+        <p class="lead">The Complete Integrated Flow</p>
+        <p class="step">Request Arrives → API Gateway (evaluates routing hints from headers/parameters).</p>
+        <p class="step">→ AppConfig checks static configuration flags.</p>
+        <p class="step">→ Step Functions Choice State evaluates content parameters.</p>
+        <p class="step">→ Timestream reviews real-time performance metrics.</p>
+        <p class="step">→ Model Selected and invoked.</p>
+        <p class="step">→ Cascade triggered if confidence score is low (passing cached metadata).</p>
+        <p class="step">→ 5–10% Diverted for ongoing A/B testing.</p>
+        <p class="step">→ Metrics Logged back to Timestream to close the feedback loop.</p>
+    </div>
+
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <p>This is an independent, unofficial study resource and is not affiliated with, endorsed by, or sponsored by Amazon Web Services, Inc. AWS, Amazon Bedrock, and all related marks are trademarks of Amazon.com, Inc. or its affiliates.</p>
+    <p>Hosted on Amazon S3 + Amazon CloudFront. &middot; <a href="index.html">&larr; Back to Study Notes</a></p>
+  </div>
+</footer>
+
+</body>
+</html>
