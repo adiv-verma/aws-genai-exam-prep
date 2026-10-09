@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Domain 2 Map | AIP-C01 Guide</title>
+<meta name="description" content="One diagram of how all five tasks in Domain 2 of the AWS Certified Generative AI Developer (AIP-C01) exam fit together, with a plain-English summary of each task.">
+<style>
+  :root{
+    --ink:#0b1524; --ink-soft:#3a4a5e; --paper:#f7f8fa; --card:#ffffff; --line:#e3e7ee;
+    --accent:#e8622c; --accent-dark:#c94f1f; --navy:#0f2540; --navy-2:#16345c;
+    --t21:#6b4c9a; --t22:#1d6f68; --t23:#1f4e79; --t24:#c94f1f; --t25:#a03453;
+    color-scheme: light;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{margin:0;background:var(--paper);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;line-height:1.65;}
+  a{color:var(--accent-dark);}
+  code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;background:#eef1f6;padding:1px 5px;border-radius:4px;font-size:.92em;}
+  img,svg{max-width:100%;}
+  .wrap{max-width:1000px;margin:0 auto;padding:0 24px;}
+  .wrap-wide{max-width:1380px;margin:0 auto;padding:0 24px;}
+
+  .nav{position:sticky;top:0;z-index:50;background:rgba(15,37,64,.96);backdrop-filter:blur(6px);border-bottom:1px solid rgba(255,255,255,.08);}
+  .nav .wrap{display:flex;align-items:center;justify-content:space-between;height:56px;}
+  .nav-brand{color:#fff;font-weight:700;font-size:14px;letter-spacing:.02em;text-decoration:none;}
+  .nav-brand span{color:var(--accent);}
+  .nav-links{display:flex;gap:22px;list-style:none;margin:0;padding:0;}
+  .nav-links a{color:#cdd8e6;text-decoration:none;font-size:13.5px;font-weight:500;}
+  .nav-links a:hover{color:#fff;}
+  @media (max-width:720px){ .nav-links{display:none;} }
+
+  header.hero{background:linear-gradient(180deg,var(--navy) 0%, var(--navy-2) 100%);color:#fff;padding:36px 0 30px;}
+  .eyebrow{display:inline-block;font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#ffd8c4;background:rgba(232,98,44,.18);border:1px solid rgba(232,98,44,.4);padding:5px 10px;border-radius:999px;margin-bottom:14px;}
+  h1{font-size:clamp(23px,3.4vw,31px);line-height:1.15;margin:0;font-weight:800;}
+  header.hero p{font-size:15.5px;color:#c9d5e3;max-width:680px;margin:12px 0 0;}
+
+  section{padding:34px 0;}
+  h2.sh{font-size:20px;font-weight:800;margin:0 0 6px;}
+  p.sl{font-size:14.5px;color:var(--ink-soft);margin:0 0 22px;max-width:700px;}
+
+  figure.map{margin:0;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px;}
+  .scroller{overflow-x:auto;-webkit-overflow-scrolling:touch;}
+  .scroller svg{display:block;min-width:1150px;width:100%;height:auto;}
+  .scroller svg a text{cursor:pointer;}
+  .scroller svg a:hover text{text-decoration:underline;}
+  figure.map figcaption{margin-top:14px;font-size:13px;color:var(--ink-soft);text-align:center;}
+  .hint{display:none;font-size:12.5px;color:var(--ink-soft);margin:0 0 8px;font-style:italic;}
+  @media (max-width:1200px){ .hint{display:block;} }
+
+  .tcard{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:20px 22px;margin-bottom:14px;border-left:4px solid var(--line);}
+  .tcard .th{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:8px;}
+  .tnum{color:#fff;font-size:11.5px;font-weight:700;border-radius:8px;padding:3px 9px;}
+  .tcard h3{margin:0;font-size:16.5px;font-weight:800;}
+  .tcard .one{margin:0 0 12px;font-size:14.5px;color:var(--ink);}
+  .tcard ul{margin:0 0 14px;padding-left:19px;}
+  .tcard li{font-size:14px;color:var(--ink-soft);margin-bottom:6px;}
+  .tcard li b{color:var(--ink);font-weight:700;}
+  .jump{display:flex;flex-wrap:wrap;align-items:center;gap:7px;margin:0 0 14px;}
+  .jump span{font-size:12.5px;font-weight:700;color:var(--ink-soft);}
+  .jump a{font-size:12.5px;text-decoration:none;background:#f2f5f9;border:1px solid var(--line);border-radius:7px;padding:4px 10px;color:var(--ink-soft);font-weight:600;}
+  .jump a:hover{border-color:var(--accent);color:var(--accent-dark);}
+  .tcard a.go{font-size:13px;font-weight:700;text-decoration:none;border:1px solid var(--line);border-radius:8px;padding:7px 13px;display:inline-block;}
+  .tcard a.go:hover{border-color:var(--accent);}
+  .tc21{border-left-color:var(--t21);} .tc22{border-left-color:var(--t22);} .tc23{border-left-color:var(--t23);}
+  .tc24{border-left-color:var(--t24);} .tc25{border-left-color:var(--t25);}
+
+  .ov{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:6px 22px;}
+  .ov dt{font-size:14.5px;font-weight:700;margin:16px 0 3px;}
+  .ov dd{margin:0 0 16px;font-size:14px;color:var(--ink-soft);}
+  .ov dd .pill{display:inline-block;color:#fff;font-size:10.5px;font-weight:700;border-radius:7px;padding:1px 7px;margin-right:2px;text-decoration:none;}
+
+  .more{background:#eef1f6;border:1px solid var(--line);border-radius:12px;padding:18px 22px;font-size:14px;color:var(--ink-soft);}
+  .more b{color:var(--ink);}
+
+  footer{padding:32px 0 48px;color:#8b96a5;font-size:12.5px;}
+  footer .wrap{border-top:1px solid var(--line);padding-top:22px;}
+  footer a{color:#6b7686;}
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="wrap">
+    <a class="nav-brand" href="../index.html">AIP-C01 <span>Guide</span></a>
+    <ul class="nav-links">
+      <li><a href="index.html">All Study Notes</a></li>
+      <li><a href="domain-1.html">Domain 1 Map</a></li>
+      <li><a href="../tasks/index.html">Build Log</a></li>
+    </ul>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="wrap">
+    <span class="eyebrow">Domain 2 &middot; The Map</span>
+    <h1>All Five Tasks, One Request</h1>
+    <p>Domain 2 is not a second system. It is everything it takes to put <a href="domain-1.html" style="color:#ffd8c4;">Domain 1&rsquo;s system</a> inside a real company and keep it running. Follow one request through three bands &mdash; getting in, deciding what to do, and the work that never stops. Each box says what it does, lists the concepts it teaches, and links straight to that section of the notes.</p>
+  </div>
+</header>
+
+<section style="padding-bottom:10px;">
+  <div class="wrap-wide">
+    <p class="hint">Scroll the diagram sideways if it does not fit.</p>
+    <figure class="map">
+      <div class="scroller">
+<svg viewBox="0 0 1282 872" role="img" aria-label="Domain 2 in three bands. Band one, how a request gets in, on every call: the client built on Amplify UI with ARIA live regions and a similarity cache; three kinds of caller - browser and branch staff, legacy cores speaking SOAP, and partner webhooks delivered twice; the front door where API Gateway validates the payload before it costs a token and picks an edge or regional endpoint by caller; four tiers of timeout that must line up, model under Lambda under API Gateway under client; and streaming the answer back over SSE, resuming from the last event id rather than the beginning. Band two, deciding and doing, per request: picking the model from a config flag, the content, and live metrics, cheapest first; or handing the job to a Bedrock agent that reasons, acts and observes with OpenAPI tools and three tiers of memory; where the model actually runs, on-demand tokens, reserved Model Units, or your own endpoint, where a 100 GB model takes 20 to 40 minutes to load; what happens when it fails, retry with jitter, trip the circuit breaker, then degrade through cascading to RAG to rules; and writing the answer back into the existing CRM field rather than a replacement system, pausing for a human when confidence is low. Band three, always on: shipping a change through a pipeline that evaluates the model and not just the code; watching it with X-Ray subsegments, annotations and p99 latency; finding what broke using Logs Insights, a prompt registry and retrieval logs; and staying legal and private with Cedar policies, PrivateLink, Outposts and Control Tower. What you learn at the bottom feeds back into the routing, the prompt and the model. Each box lists the concepts it teaches and links to the matching section of the task notes." xmlns="http://www.w3.org/2000/svg">
+<defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#5a6a7e"/></marker></defs>
+<rect width="1282" height="872" fill="#f7f8fa"/>
+<g font-family="-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica,Arial,sans-serif">
+<rect x="34" y="16" width="434.9" height="27" rx="13.5" fill="#0f2540"/>
+<text x="49" y="34.5" font-size="12.5" font-weight="800" fill="#fff" letter-spacing=".04em">STEP 1</text>
+<text x="114.8" y="34.5" font-size="12.5" font-weight="600" fill="#fff" opacity=".85">How a request gets in  ·  every call, at the edge</text>
+<rect x="34" y="61" width="222" height="186" rx="12" fill="#ffffff" stroke="#d7dee8" stroke-width="1.5"/>
+<rect x="45" y="62" width="200" height="4" fill="#a03453"/>
+<text x="145.0" y="90" text-anchor="middle" font-size="15" font-weight="700" fill="#0b1524">The client</text>
+<text x="145.0" y="111" text-anchor="middle" font-size="11.8" fill="#5a6a7e">Skeleton blocks instead of a spinner,</text>
+<text x="145.0" y="128" text-anchor="middle" font-size="11.8" fill="#5a6a7e">the answer read aloud as it streams,</text>
+<text x="145.0" y="145" text-anchor="middle" font-size="11.8" fill="#5a6a7e">and a cache for near-identical asks.</text>
+<rect x="53.7" y="161" width="69.6" height="16" rx="6" fill="#eef2f7"/>
+<text x="88.5" y="172.5" text-anchor="middle" font-size="9.6" font-weight="600" fill="#4a5a70">Amplify UI</text>
+<rect x="129.3" y="161" width="107.0" height="16" rx="6" fill="#eef2f7"/>
+<text x="182.8" y="172.5" text-anchor="middle" font-size="9.6" font-weight="600" fill="#4a5a70">ARIA live regions</text>
+<rect x="91.5" y="181" width="107.0" height="16" rx="6" fill="#eef2f7"/>
+<text x="145.0" y="192.5" text-anchor="middle" font-size="9.6" font-weight="600" fill="#4a5a70">85-95% similarity</text>
+<rect x="129.0" y="201" width="32" height="16" rx="8" fill="#a03453"/>
+<text x="145.0" y="213" text-anchor="middle" font-size="10.5" font-weight="700" fill="#fff">2.5</text>
+<line x1="50" y1="223" x2="240" y2="223" stroke="#d7dee8" stroke-width="1"/>
+<a href="task-2-5.html#s2"><text x="145.0" y="239" text-anchor="middle" font-size="11.2" font-weight="700" fill="#c94f1f">Notes 2.5 · Section 2 &#8594;</text></a>
+<rect x="282" y="61" width="222" height="186" rx="12" fill="#ffffff" stroke="#d7dee8" stroke-width="1.5"/>
+<rect x="293" y="62" width="200" height="4" fill="#1f4e79"/>
+<text x="393.0" y="90" text-anchor="middle" font-size="15" font-weight="700" fill="#0b1524">Three kinds of caller</text>
+<text x="393.0" y="111" text-anchor="middle" font-size="11.8" fill="#5a6a7e">Browser and branch staff, legacy</text>
+<text x="393.0" y="128" text-anchor="middle" font-size="11.8" fill="#5a6a7e">cores that speak SOAP and fixed-width</text>
+<text x="393.0" y="145" text-anchor="middle" font-size="11.8" fill="#5a6a7e">files, and webhooks sent twice.</text>
+<rect x="317.8" y="161" width="53.5" height="16" rx="6" fill="#eef2f7"/>
+<text x="344.5" y="172.5" text-anchor="middle" font-size="9.6" font-weight="600" fill="#4a5a70">Cognito</text>
+<rect x="377.2" y="161" width="91.0" height="16" rx="6" fill="#eef2f7"/>
+<text x="422.8" y="172.5" text-anchor="middle" font-size="9.6" font-weight="600" fill="#4a5a70">Direct Connect</text>
+<rect x="320.4" y="181" width="64.2" height="16" rx="6" fill="#eef2f7"/>
+<text x="352.6" y="192.5" text-anchor="middle" font-size="9.6" font-weight="600" fill="#4a5a70">Amazon MQ</text>
+<rect x="390.6" y="181" width="74.9" height="16" rx="6" fill="#eef2f7"/>
+<text x="428.1" y="192.5" text-anchor="middle" font-size="9.6" font-weight="600" fill="#4a5a70">idempotency</text>
+<rect x="377.0" y="201" width="32" height="16" rx="8" fill="#1f4e79"/>
+<text x="393.0" y="213" text-anchor="middle" font-size="10.5" font-weight="700" fill="#fff">2.3</text>
+<line x1="298" y1="223" x2="488" y2="223" stroke="#d7dee8" stroke-width="1"/>
+<a href="task-2-3.html#s2"><text x="393.0" y="239" text-anchor="middle" font-size="11.2" font-weight="700" fill="#c94f1f">Notes 2.3 · Section 1 &#8594;</text></a>
+<line x1="260" y1="154" x2="275" y2="154" stroke="#5a6a7e" stroke-width="1.8" marker-end="url(#a)"/>
+<rect x="530" y="61" width="222" height="186" rx="12" fill="#ffffff" stroke="#d7dee8" stroke-width="1.5"/>
+<rect x="541" y="62" width="200" height="4" fill="#c94f1f"/>
+<text x="641.0" y="90" text-anchor="middle" font-size="15" font-weight="700" fill="#0b1524">The front door</text>
+<text x="641.0" y="111" text-anchor="middle" font-size="11.8" fill="#5a6a7e">API Gateway checks the payload before</text>
+<text x="641.0" y="128" text-anchor="middle" font-size="11.8" fill="#5a6a7e">it costs a token, caps each team, and</text>
+<text x="641.0" y="145" text-anchor="middle" font-size="11.8" fill="#5a6a7e">picks edge or regional by caller.</text>
+<rect x="544.4" y="161" width="112.4" height="16" rx="6" fill="#eef2f7"/>
+<text x="600.6" y="172.5" text-anchor="middle" font-size="9.6" font-weight="600" fill="#4a5a70">request validators</text>
+<rect x="662.8" y="161" width="74.9" height="16" rx="6" fill="#eef2f7"/>
+<text x="700.2" y="172.5" text-anchor="middle" font-size="9.6" font-weight="600" fill="#4a5a70">usage plans</text>
+<rect x="592.5" y="181" width="32.1" height="16" rx="6" fill="#eef2f7"/>
+<text x="608.5" y="192.5" text-anchor="middle" font-size="9.6" font-weight="600" fill="#4a5a70">WAF</text>
+<rect x="630.6" y="181" width="58.9" height="16" rx="6" fill="#eef2f7"/>
+<text x="660.1" y="192.5" text-anchor="middle" font-size="9.6" font-weight="600" fill="#4a5a70">JWT auth</text>
+<rect x="606.5" y="201" width="32" height="16" rx="8" fill="#c94f1f"/>
+<text x="622.5" y="213" text-anchor="middle" font-size="10.5" font-weight="700" fill="#fff">2.4</text>
+<rect x="643.5" y="201" width="32" height="16" rx="8" fill="#1f4e79"/>
+<text x="659.5" y="213" text-anchor="middle" font-size="10.5" font-weight="700" fill="#fff">2.3</text>
+<line x1="546" y1="223" x2="736" y2="223" stroke="#d7dee8" stroke-width="1"/>
+<a href="task-2-4.html#s1"><text x="641.0" y="239" text-anchor="middle" font-size="11.2" font-weight="700" fill="#c94f1f">Notes 2.4 · Section 1 &#8594;</text></a>
+<line x1="508" y1="154" x2="523" y2="154" stroke="#5a6a7e" stroke-width="1.8" marker-end="url(#a)"/>
+<rect x="778" y="61" width="222" height="186" rx="12" fill="#ffffff" stroke="#d7dee8" stroke-width="1.5"/>
+<rect x="789" y="62" width="200" height="4" fill="#a03453"/>
+<text x="889.0" y="90" text-anchor="middle" font-size="15" font-weight="700" fill="#0b1524">Timeouts that line up</text>
+<text x="889.0" y="111" text-anchor="middle" font-size="11.8" fill="#5a6a7e">Four tiers, each shorter than the one</text>
+<text x="889.0" y="128" text-anchor="middle" font-size="11.8" fill="#5a6a7e">above: Model &lt; Lambda ≤ API GW</text>
+<text x="889.0" y="145" text-anchor="middle" font-size="11.8" fill="#5a6a7e">&lt; Client. Get one wrong and it hangs.</text>
+<rect x="816.4" y="161" width="53.5" height="16" rx="6" fill="#eef2f7"/>
+<text x="843.1" y="172.5" text-anchor="middle" font-size="9.6" font-weight="600" fill="#4a5a70">4 tiers</text>
+<rect x="875.9" y="161" width="85.7" height="16" rx="6" fill="#eef2f7"/>
+<text x="918.8" y="172.5" text-anchor="middle" font-size="9.6" font-weight="600" fill="#4a5a70">4-5s clinical</text>
+<rect x="848.9" y="181" width="80.3" height="16" rx="6" fill="#eef2f7"/>
+<text x="889.0" y="192.5" text-anchor="middle" font-size="9.6" font-weight="600" fill="#4a5a70">120s complex</text>
+<rect x="854.5" y="201" width="32" height="16" rx="8" fill="#a03453"/>
+<text x="870.5" y="213" text-anchor="middle" font-size="10.5" font-weight="700" fill="#fff">2.5</text>
+<rect x="891.5" y="201" width="32" height="16" rx="8" fill="#c94f1f"/>
+<text x="907.5" y="213" text-anchor="middle" font-size="10.5" font-weight="700" fill="#fff">2.4</text>
+<line x1="794" y1="223" x2="984" y2="223" stroke="#d7dee8" stroke-width="1"/>
+<a href="task-2-5.html#s1"><text x="889.0" y="239" text-anchor="middle" font-size="11.2" font-weight="700" fill="#c94f1f">Notes 2.5 · Section 1 &#8594;</text></a>
+<line x1="756" y1="154" x2="771" y2="154" stroke="#5a6a7e" stroke-width="1.8" marker-end="url(#a)"/>
+<rect x="1026" y="61" width="222" height="186" rx="12" fill="#ffffff" stroke="#d7dee8" stroke-width="1.5"/>
+<rect x="1037" y="62" width="200" height="4" fill="#c94f1f"/>
+<text x="1137.0" y="90" text-anchor="middle" font-size="15" font-weight="700" fill="#0b1524">Streaming it back</text>
+<text x="1137.0" y="111" text-anchor="middle" font-size="11.8" fill="#5a6a7e">SSE is enough — the client has</text>
+<text x="1137.0" y="128" text-anchor="middle" font-size="11.8" fill="#5a6a7e">nothing to say mid-stream. Drop at</text>
+<text x="1137.0" y="145" text-anchor="middle" font-size="11.8" fill="#5a6a7e">event 47 and it resumes at 48.</text>
+<rect x="1037.7" y="161" width="107.0" height="16" rx="6" fill="#eef2f7"/>
+<text x="1091.2" y="172.5" text-anchor="middle" font-size="9.6" font-weight="600" fill="#4a5a70">SSE vs WebSockets</text>
+<rect x="1150.7" y="161" width="85.7" height="16" rx="6" fill="#eef2f7"/>
+<text x="1193.5" y="172.5" text-anchor="middle" font-size="9.6" font-weight="600" fill="#4a5a70">Last-Event-ID</text>
+<rect x="1099.5" y="181" width="74.9" height="16" rx="6" fill="#eef2f7"/>
+<text x="1137.0" y="192.5" text-anchor="middle" font-size="9.6" font-weight="600" fill="#4a5a70">5-20 chunks</text>
+<rect x="1102.5" y="201" width="32" height="16" rx="8" fill="#c94f1f"/>
+<text x="1118.5" y="213" text-anchor="middle" font-size="10.5" font-weight="700" fill="#fff">2.4</text>
+<rect x="1139.5" y="201" width="32" height="16" rx="8" fill="#a03453"/>
+<text x="1155.5" y="213" text-anchor="middle" font-size="10.5" font-weight="700" fill="#fff">2.5</text>
+<line x1="1042" y1="223" x2="1232" y2="223" stroke="#d7dee8" stroke-width="1"/>
+<a href="task-2-4.html#s2"><text x="1137.0" y="239" text-anchor="middle" font-size="11.2" font-weight="700" fill="#c94f1f">Notes 2.4 · Section 2 &#8594;</text></a>
+<line x1="1004" y1="154" x2="1019" y2="154" stroke="#5a6a7e" stroke-width="1.8" marker-end="url(#a)"/>
+<rect x="34" y="301" width="365.9" height="27" rx="13.5" fill="#e8622c"/>
+<text x="49" y="319.5" font-size="12.5" font-weight="800" fill="#fff" letter-spacing=".04em">STEP 2</text>
+<text x="114.8" y="319.5" font-size="12.5" font-weight="600" fill="#fff" opacity=".85">Deciding and doing  ·  once per request</text>
+<rect x="34" y="346" width="222" height="186" rx="12" fill="#ffffff" stroke="#d7dee8" stroke-width="1.5"/>
+<rect x="45" y="347" width="200" height="4" fill="#c94f1f"/>
+<text x="145.0" y="375" text-anchor="middle" font-size="15" font-weight="700" fill="#0b1524">Pick the model</text>
+<text x="145.0" y="396" text-anchor="middle" font-size="11.8" fill="#5a6a7e">Three inputs decide: a config flag,</text>
+<text x="145.0" y="413" text-anchor="middle" font-size="11.8" fill="#5a6a7e">the content, and live metrics.</text>
+<text x="145.0" y="430" text-anchor="middle" font-size="11.8" fill="#5a6a7e">Cheapest first, escalate if unsure.</text>
+<rect x="67.0" y="446" width="64.2" height="16" rx="6" fill="#eef2f7"/>
+<text x="99.2" y="457.5" text-anchor="middle" font-size="9.6" font-weight="600" fill="#4a5a70">AppConfig</text>
+<rect x="137.2" y="446" width="85.7" height="16" rx="6" fill="#eef2f7"/>
+<text x="180.1" y="457.5" text-anchor="middle" font-size="9.6" font-weight="600" fill="#4a5a70">Choice states</text>
+<rect x="75.1" y="466" width="69.6" height="16" rx="6" fill="#eef2f7"/>
+<text x="109.9" y="477.5" text-anchor="middle" font-size="9.6" font-weight="600" fill="#4a5a70">Timestream</text>
+<rect x="150.7" y="466" width="64.2" height="16" rx="6" fill="#eef2f7"/>
+<text x="182.8" y="477.5" text-anchor="middle" font-size="9.6" font-weight="600" fill="#4a5a70">cascading</text>
+<rect x="110.5" y="486" width="32" height="16" rx="8" fill="#c94f1f"/>
+<text x="126.5" y="498" text-anchor="middle" font-size="10.5" font-weight="700" fill="#fff">2.4</text>
+<rect x="147.5" y="486" width="32" height="16" rx="8" fill="#1d6f68"/>
+<text x="163.5" y="498" text-anchor="middle" font-size="10.5" font-weight="700" fill="#fff">2.2</text>
+<line x1="50" y1="508" x2="240" y2="508" stroke="#d7dee8" stroke-width="1"/>
+<a href="task-2-4.html#s4"><text x="145.0" y="524" text-anchor="middle" font-size="11.2" font-weight="700" fill="#c94f1f">Notes 2.4 · Section 4 &#8594;</text></a>
+<rect x="282" y="346" width="222" height="186" rx="12" fill="#ffffff" stroke="#d7dee8" stroke-width="1.5"/>
+<rect x="293" y="347" width="200" height="4" fill="#6b4c9a"/>
+<text x="393.0" y="375" text-anchor="middle" font-size="15" font-weight="700" fill="#0b1524">Hand it to an agent</text>
+<text x="393.0" y="396" text-anchor="middle" font-size="11.8" fill="#5a6a7e">Reason, act, observe, repeat. A</text>
+<text x="393.0" y="413" text-anchor="middle" font-size="11.8" fill="#5a6a7e">tool is an OpenAPI schema plus a</text>
+<text x="393.0" y="430" text-anchor="middle" font-size="11.8" fill="#5a6a7e">Lambda. Memory comes in three tiers.</text>
+<rect x="301.6" y="446" width="91.0" height="16" rx="6" fill="#eef2f7"/>
+<text x="347.1" y="457.5" text-anchor="middle" font-size="9.6" font-weight="600" fill="#4a5a70">Bedrock Agents</text>
+<rect x="398.6" y="446" width="85.7" height="16" rx="6" fill="#eef2f7"/>
+<text x="441.5" y="457.5" text-anchor="middle" font-size="9.6" font-weight="600" fill="#4a5a70">action groups</text>
+<rect x="331.1" y="466" width="42.9" height="16" rx="6" fill="#eef2f7"/>
+<text x="352.6" y="477.5" text-anchor="middle" font-size="9.6" font-weight="600" fill="#4a5a70">ReAct</text>
+<rect x="380.0" y="466" width="74.9" height="16" rx="6" fill="#eef2f7"/>
+<text x="417.4" y="477.5" text-anchor="middle" font-size="9.6" font-weight="600" fill="#4a5a70">MCP servers</text>
+<rect x="377.0" y="486" width="32" height="16" rx="8" fill="#6b4c9a"/>
+<text x="393.0" y="498" text-anchor="middle" font-size="10.5" font-weight="700" fill="#fff">2.1</text>
+<line x1="298" y1="508" x2="488" y2="508" stroke="#d7dee8" stroke-width="1"/>
+<a href="task-2-1.html#s1"><text x="393.0" y="524" text-anchor="middle" font-size="11.2" font-weight="700" fill="#c94f1f">Notes 2.1 · Section 1 &#8594;</text></a>
+<line x1="260" y1="439" x2="275" y2="439" stroke="#5a6a7e" stroke-width="1.8" marker-end="url(#a)"/>
+<rect x="530" y="346" width="222" height="186" rx="12" fill="#ffffff" stroke="#d7dee8" stroke-width="1.5"/>
+<rect x="541" y="347" width="200" height="4" fill="#1d6f68"/>
+<text x="641.0" y="375" text-anchor="middle" font-size="15" font-weight="700" fill="#0b1524">Where the model runs</text>
+<text x="641.0" y="396" text-anchor="middle" font-size="11.8" fill="#5a6a7e">Pay per token, reserve Model Units,</text>
+<text x="641.0" y="413" text-anchor="middle" font-size="11.8" fill="#5a6a7e">or run your own endpoint. 100 GB</text>
+<text x="641.0" y="430" text-anchor="middle" font-size="11.8" fill="#5a6a7e">takes 20-40 min — raise the timeouts.</text>
+<rect x="568.5" y="446" width="64.2" height="16" rx="6" fill="#eef2f7"/>
+<text x="600.6" y="457.5" text-anchor="middle" font-size="9.6" font-weight="600" fill="#4a5a70">on-demand</text>
+<rect x="638.7" y="446" width="74.9" height="16" rx="6" fill="#eef2f7"/>
+<text x="676.1" y="457.5" text-anchor="middle" font-size="9.6" font-weight="600" fill="#4a5a70">Model Units</text>
+<rect x="555.0" y="466" width="85.7" height="16" rx="6" fill="#eef2f7"/>
+<text x="597.9" y="477.5" text-anchor="middle" font-size="9.6" font-weight="600" fill="#4a5a70">custom import</text>
+<rect x="646.7" y="466" width="80.3" height="16" rx="6" fill="#eef2f7"/>
+<text x="686.9" y="477.5" text-anchor="middle" font-size="9.6" font-weight="600" fill="#4a5a70">quantization</text>
+<rect x="625.0" y="486" width="32" height="16" rx="8" fill="#1d6f68"/>
+<text x="641.0" y="498" text-anchor="middle" font-size="10.5" font-weight="700" fill="#fff">2.2</text>
+<line x1="546" y1="508" x2="736" y2="508" stroke="#d7dee8" stroke-width="1"/>
+<a href="task-2-2.html#s2"><text x="641.0" y="524" text-anchor="middle" font-size="11.2" font-weight="700" fill="#c94f1f">Notes 2.2 · Section 2 &#8594;</text></a>
+<line x1="508" y1="439" x2="523" y2="439" stroke="#5a6a7e" stroke-width="1.8" marker-end="url(#a)"/>
+<rect x="778" y="346" width="222" height="186" rx="12" fill="#ffffff" stroke="#d7dee8" stroke-width="1.5"/>
+<rect x="789" y="347" width="200" height="4" fill="#c94f1f"/>
+<text x="889.0" y="375" text-anchor="middle" font-size="15" font-weight="700" fill="#0b1524">When it fails</text>
+<text x="889.0" y="396" text-anchor="middle" font-size="11.8" fill="#5a6a7e">429 retries with jitter; 400 never.</text>
+<text x="889.0" y="413" text-anchor="middle" font-size="11.8" fill="#5a6a7e">Four failures in 30s trips the</text>
+<text x="889.0" y="430" text-anchor="middle" font-size="11.8" fill="#5a6a7e">breaker. Then cascade, RAG, rules.</text>
+<rect x="813.8" y="446" width="48.2" height="16" rx="6" fill="#eef2f7"/>
+<text x="837.9" y="457.5" text-anchor="middle" font-size="9.6" font-weight="600" fill="#4a5a70">jitter</text>
+<rect x="868.0" y="446" width="96.3" height="16" rx="6" fill="#eef2f7"/>
+<text x="916.1" y="457.5" text-anchor="middle" font-size="9.6" font-weight="600" fill="#4a5a70">circuit breaker</text>
+<rect x="843.5" y="466" width="91.0" height="16" rx="6" fill="#eef2f7"/>
+<text x="889.0" y="477.5" text-anchor="middle" font-size="9.6" font-weight="600" fill="#4a5a70">fallback chain</text>
+<rect x="854.5" y="486" width="32" height="16" rx="8" fill="#c94f1f"/>
+<text x="870.5" y="498" text-anchor="middle" font-size="10.5" font-weight="700" fill="#fff">2.4</text>
+<rect x="891.5" y="486" width="32" height="16" rx="8" fill="#6b4c9a"/>
+<text x="907.5" y="498" text-anchor="middle" font-size="10.5" font-weight="700" fill="#fff">2.1</text>
+<line x1="794" y1="508" x2="984" y2="508" stroke="#d7dee8" stroke-width="1"/>
+<a href="task-2-4.html#s3"><text x="889.0" y="524" text-anchor="middle" font-size="11.2" font-weight="700" fill="#c94f1f">Notes 2.4 · Section 3 &#8594;</text></a>
+<line x1="756" y1="439" x2="771" y2="439" stroke="#5a6a7e" stroke-width="1.8" marker-end="url(#a)"/>
+<rect x="1026" y="346" width="222" height="186" rx="12" fill="#ffffff" stroke="#d7dee8" stroke-width="1.5"/>
+<rect x="1037" y="347" width="200" height="4" fill="#a03453"/>
+<text x="1137.0" y="375" text-anchor="middle" font-size="15" font-weight="700" fill="#0b1524">Write it back</text>
+<text x="1137.0" y="396" text-anchor="middle" font-size="11.8" fill="#5a6a7e">The answer goes into the existing</text>
+<text x="1137.0" y="413" text-anchor="middle" font-size="11.8" fill="#5a6a7e">CRM field, not a new system. Unsure?</text>
+<text x="1137.0" y="430" text-anchor="middle" font-size="11.8" fill="#5a6a7e">It waits for a person, and is logged.</text>
+<rect x="1070.1" y="446" width="133.8" height="16" rx="6" fill="#eef2f7"/>
+<text x="1137.0" y="457.5" text-anchor="middle" font-size="9.6" font-weight="600" fill="#4a5a70">enhance, don't replace</text>
+<rect x="1059.1" y="466" width="74.9" height="16" rx="6" fill="#eef2f7"/>
+<text x="1096.5" y="477.5" text-anchor="middle" font-size="9.6" font-weight="600" fill="#4a5a70">wait tokens</text>
+<rect x="1140.0" y="466" width="74.9" height="16" rx="6" fill="#eef2f7"/>
+<text x="1177.5" y="477.5" text-anchor="middle" font-size="9.6" font-weight="600" fill="#4a5a70">audit trail</text>
+<rect x="1102.5" y="486" width="32" height="16" rx="8" fill="#a03453"/>
+<text x="1118.5" y="498" text-anchor="middle" font-size="10.5" font-weight="700" fill="#fff">2.5</text>
+<rect x="1139.5" y="486" width="32" height="16" rx="8" fill="#6b4c9a"/>
+<text x="1155.5" y="498" text-anchor="middle" font-size="10.5" font-weight="700" fill="#fff">2.1</text>
+<line x1="1042" y1="508" x2="1232" y2="508" stroke="#d7dee8" stroke-width="1"/>
+<a href="task-2-5.html#s3"><text x="1137.0" y="524" text-anchor="middle" font-size="11.2" font-weight="700" fill="#c94f1f">Notes 2.5 · Section 3 &#8594;</text></a>
+<line x1="1004" y1="439" x2="1019" y2="439" stroke="#5a6a7e" stroke-width="1.8" marker-end="url(#a)"/>
+<path d="M 1137 251 V 274 H 145 V 339" fill="none" stroke="#5a6a7e" stroke-width="1.8" marker-end="url(#a)"/>
+<rect x="34" y="586" width="456.8" height="27" rx="13.5" fill="#5a6a7e"/>
+<text x="49" y="604.5" font-size="12.5" font-weight="800" fill="#fff" letter-spacing=".04em">ALWAYS ON</text>
+<text x="136.7" y="604.5" font-size="12.5" font-weight="600" fill="#fff" opacity=".85">Shipping, watching and proving it  ·  never stops</text>
+<rect x="34" y="631" width="222" height="186" rx="12" fill="#ffffff" stroke="#d7dee8" stroke-width="1.5"/>
+<rect x="45" y="632" width="200" height="4" fill="#1f4e79"/>
+<text x="145.0" y="660" text-anchor="middle" font-size="15" font-weight="700" fill="#0b1524">Shipping a change</text>
+<text x="145.0" y="681" text-anchor="middle" font-size="11.8" fill="#5a6a7e">The pipeline tests the model, not</text>
+<text x="145.0" y="698" text-anchor="middle" font-size="11.8" fill="#5a6a7e">just the code: evaluation, security</text>
+<text x="145.0" y="715" text-anchor="middle" font-size="11.8" fill="#5a6a7e">scan, approval gate, then deploy.</text>
+<rect x="51.0" y="731" width="80.3" height="16" rx="6" fill="#eef2f7"/>
+<text x="91.2" y="742.5" text-anchor="middle" font-size="9.6" font-weight="600" fill="#4a5a70">CodePipeline</text>
+<rect x="137.3" y="731" width="101.7" height="16" rx="6" fill="#eef2f7"/>
+<text x="188.2" y="742.5" text-anchor="middle" font-size="9.6" font-weight="600" fill="#4a5a70">model evaluation</text>
+<rect x="102.2" y="751" width="85.7" height="16" rx="6" fill="#eef2f7"/>
+<text x="145.0" y="762.5" text-anchor="middle" font-size="9.6" font-weight="600" fill="#4a5a70">approval gate</text>
+<rect x="110.5" y="771" width="32" height="16" rx="8" fill="#1f4e79"/>
+<text x="126.5" y="783" text-anchor="middle" font-size="10.5" font-weight="700" fill="#fff">2.3</text>
+<rect x="147.5" y="771" width="32" height="16" rx="8" fill="#1d6f68"/>
+<text x="163.5" y="783" text-anchor="middle" font-size="10.5" font-weight="700" fill="#fff">2.2</text>
+<line x1="50" y1="793" x2="240" y2="793" stroke="#d7dee8" stroke-width="1"/>
+<a href="task-2-3.html#s7"><text x="145.0" y="809" text-anchor="middle" font-size="11.2" font-weight="700" fill="#c94f1f">Notes 2.3 · Section 5 &#8594;</text></a>
+<rect x="282" y="631" width="222" height="186" rx="12" fill="#ffffff" stroke="#d7dee8" stroke-width="1.5"/>
+<rect x="293" y="632" width="200" height="4" fill="#c94f1f"/>
+<text x="393.0" y="660" text-anchor="middle" font-size="15" font-weight="700" fill="#0b1524">Watching it</text>
+<text x="393.0" y="681" text-anchor="middle" font-size="11.8" fill="#5a6a7e">Averages hide the problem — track</text>
+<text x="393.0" y="698" text-anchor="middle" font-size="11.8" fill="#5a6a7e">p50, p90 and p99. Annotate traces</text>
+<text x="393.0" y="715" text-anchor="middle" font-size="11.8" fill="#5a6a7e">so you can ask for every slow one.</text>
+<rect x="299.1" y="731" width="107.0" height="16" rx="6" fill="#eef2f7"/>
+<text x="352.6" y="742.5" text-anchor="middle" font-size="9.6" font-weight="600" fill="#4a5a70">X-Ray subsegments</text>
+<rect x="412.1" y="731" width="74.9" height="16" rx="6" fill="#eef2f7"/>
+<text x="449.5" y="742.5" text-anchor="middle" font-size="9.6" font-weight="600" fill="#4a5a70">annotations</text>
+<rect x="376.9" y="751" width="32.1" height="16" rx="6" fill="#eef2f7"/>
+<text x="393.0" y="762.5" text-anchor="middle" font-size="9.6" font-weight="600" fill="#4a5a70">p99</text>
+<rect x="358.5" y="771" width="32" height="16" rx="8" fill="#c94f1f"/>
+<text x="374.5" y="783" text-anchor="middle" font-size="10.5" font-weight="700" fill="#fff">2.4</text>
+<rect x="395.5" y="771" width="32" height="16" rx="8" fill="#a03453"/>
+<text x="411.5" y="783" text-anchor="middle" font-size="10.5" font-weight="700" fill="#fff">2.5</text>
+<line x1="298" y1="793" x2="488" y2="793" stroke="#d7dee8" stroke-width="1"/>
+<a href="task-2-4.html#s3"><text x="393.0" y="809" text-anchor="middle" font-size="11.2" font-weight="700" fill="#c94f1f">Notes 2.4 · Section 3 &#8594;</text></a>
+<line x1="260" y1="724" x2="275" y2="724" stroke="#5a6a7e" stroke-width="1.8" marker-end="url(#a)"/>
+<rect x="530" y="631" width="222" height="186" rx="12" fill="#ffffff" stroke="#d7dee8" stroke-width="1.5"/>
+<rect x="541" y="632" width="200" height="4" fill="#a03453"/>
+<text x="641.0" y="660" text-anchor="middle" font-size="15" font-weight="700" fill="#0b1524">Finding what broke</text>
+<text x="641.0" y="681" text-anchor="middle" font-size="11.8" fill="#5a6a7e">Raw logs, a registry that says v8</text>
+<text x="641.0" y="698" text-anchor="middle" font-size="11.8" fill="#5a6a7e">doubled the prompt yesterday, and</text>
+<text x="641.0" y="715" text-anchor="middle" font-size="11.8" fill="#5a6a7e">retrieval logs that assign the blame.</text>
+<rect x="547.0" y="731" width="85.7" height="16" rx="6" fill="#eef2f7"/>
+<text x="589.9" y="742.5" text-anchor="middle" font-size="9.6" font-weight="600" fill="#4a5a70">Logs Insights</text>
+<rect x="638.7" y="731" width="96.3" height="16" rx="6" fill="#eef2f7"/>
+<text x="686.9" y="742.5" text-anchor="middle" font-size="9.6" font-weight="600" fill="#4a5a70">prompt registry</text>
+<rect x="595.5" y="751" width="91.0" height="16" rx="6" fill="#eef2f7"/>
+<text x="641.0" y="762.5" text-anchor="middle" font-size="9.6" font-weight="600" fill="#4a5a70">retrieval logs</text>
+<rect x="625.0" y="771" width="32" height="16" rx="8" fill="#a03453"/>
+<text x="641.0" y="783" text-anchor="middle" font-size="10.5" font-weight="700" fill="#fff">2.5</text>
+<line x1="546" y1="793" x2="736" y2="793" stroke="#d7dee8" stroke-width="1"/>
+<a href="task-2-5.html#s6"><text x="641.0" y="809" text-anchor="middle" font-size="11.2" font-weight="700" fill="#c94f1f">Notes 2.5 · Section 6 &#8594;</text></a>
+<line x1="508" y1="724" x2="523" y2="724" stroke="#5a6a7e" stroke-width="1.8" marker-end="url(#a)"/>
+<rect x="778" y="631" width="222" height="186" rx="12" fill="#ffffff" stroke="#d7dee8" stroke-width="1.5"/>
+<rect x="789" y="632" width="200" height="4" fill="#1f4e79"/>
+<text x="889.0" y="660" text-anchor="middle" font-size="15" font-weight="700" fill="#0b1524">Legal and private</text>
+<text x="889.0" y="681" text-anchor="middle" font-size="11.8" fill="#5a6a7e">Cedar per request, PrivateLink so</text>
+<text x="889.0" y="698" text-anchor="middle" font-size="11.8" fill="#5a6a7e">traffic never leaves AWS. If the data</text>
+<text x="889.0" y="715" text-anchor="middle" font-size="11.8" fill="#5a6a7e">cannot move, move the model to it.</text>
+<rect x="787.0" y="731" width="123.1" height="16" rx="6" fill="#eef2f7"/>
+<text x="848.5" y="742.5" text-anchor="middle" font-size="9.6" font-weight="600" fill="#4a5a70">Verified Permissions</text>
+<rect x="916.1" y="731" width="74.9" height="16" rx="6" fill="#eef2f7"/>
+<text x="953.6" y="742.5" text-anchor="middle" font-size="9.6" font-weight="600" fill="#4a5a70">PrivateLink</text>
+<rect x="813.7" y="751" width="58.9" height="16" rx="6" fill="#eef2f7"/>
+<text x="843.2" y="762.5" text-anchor="middle" font-size="9.6" font-weight="600" fill="#4a5a70">Outposts</text>
+<rect x="878.6" y="751" width="85.7" height="16" rx="6" fill="#eef2f7"/>
+<text x="921.5" y="762.5" text-anchor="middle" font-size="9.6" font-weight="600" fill="#4a5a70">Control Tower</text>
+<rect x="873.0" y="771" width="32" height="16" rx="8" fill="#1f4e79"/>
+<text x="889.0" y="783" text-anchor="middle" font-size="10.5" font-weight="700" fill="#fff">2.3</text>
+<line x1="794" y1="793" x2="984" y2="793" stroke="#d7dee8" stroke-width="1"/>
+<a href="task-2-3.html#s4"><text x="889.0" y="809" text-anchor="middle" font-size="11.2" font-weight="700" fill="#c94f1f">Notes 2.3 · Section 3 &#8594;</text></a>
+<line x1="756" y1="724" x2="771" y2="724" stroke="#5a6a7e" stroke-width="1.8" marker-end="url(#a)"/>
+<path d="M 1137 536 V 559 H 145 V 624" fill="none" stroke="#5a6a7e" stroke-width="1.8" marker-end="url(#a)"/>
+<path d="M 1137 821 V 849 H 16 V 439 H 27" fill="none" stroke="#5a6a7e" stroke-width="1.7" stroke-dasharray="6 5" marker-end="url(#a)"/>
+<text x="1123" y="841" text-anchor="end" font-size="12.5" fill="#5a6a7e" font-style="italic">what you learn goes back into the routing, the prompt and the model</text>
+</g></svg>
+      </div>
+      <figcaption>Band 1 happens on every call, at the edge. Band 2 is the decision and the invocation. The bottom band never stops.<br>The <b>grey tags</b> are the concepts and services that box teaches. The <b>orange link</b> under them opens the exact section of the notes that explains it.</figcaption>
+    </figure>
+  </div>
+</section>
+
+<section style="padding-top:20px;">
+  <div class="wrap">
+    <h2 class="sh">What each task is actually about</h2>
+    <p class="sl">One line each, then the few things most worth remembering.</p>
+    
+    <div class="tcard tc21">
+      <div class="th"><span class="tnum" style="background:var(--t21)">2.1</span><h3>Agentic AI &amp; Tool Integrations</h3></div>
+      <p class="one">When the system has to work out its own next step &mdash; agents that reason, call tools, and know when to stop.</p>
+      <ul><li><b>Reason, act, observe, repeat.</b> The agent gets tools and an objective, not a fixed path. A Bedrock Agent is just the model, the instructions, and action groups.</li><li><b>Action groups are not a security boundary &mdash; IAM is.</b> Give the Lambda <code>dynamodb:GetItem</code> on one table, never <code>dynamodb:*</code>.</li><li><b>Memory comes in three tiers:</b> session state in ElastiCache or DynamoDB, a decision scratchpad in DynamoDB, long-term patterns in S3 or a Knowledge Base.</li><li><b>Workflow chain-of-thought beats prompt chain-of-thought:</b> each step persists, so when step 4 fails, steps 1&ndash;3 survive instead of being redone.</li><li><b>Confidence decides who signs off:</b> above 0.9 runs itself, 0.7&ndash;0.9 is reviewed afterwards, below 0.7 waits for a human &mdash; and a wait token pauses the workflow rather than killing it.</li></ul>
+      <div class="jump"><span>Jump into the notes:</span><a href="task-2-1.html#s1">1 &middot; Agent loop &amp; memory</a><a href="task-2-1.html#s2">2 &middot; ReAct &amp; CoT</a><a href="task-2-1.html#s4">4 &middot; The 5 security layers</a><a href="task-2-1.html#s6">6 &middot; Human-in-the-loop</a><a href="task-2-1.html#s8">8 &middot; MCP servers</a></div>
+      <a class="go" href="task-2-1.html">Open the whole page &rarr;</a>
+    </div>
+    
+    <div class="tcard tc22">
+      <div class="th"><span class="tnum" style="background:var(--t22)">2.2</span><h3>Deployment Strategies</h3></div>
+      <p class="one">Where the model physically runs, what that costs, and why deploying an LLM breaks every habit from traditional ML.</p>
+      <ul><li><b>The timeout trap:</b> a 100&nbsp;GB+ model takes 20&ndash;40 minutes to pull from S3 into GPU memory, but default health-check timeouts are 5&ndash;10 minutes &mdash; so AWS declares a perfectly healthy container dead. Raise them to 60 minutes.</li><li><b>On-demand vs Provisioned Throughput:</b> pay per token when traffic is uneven; buy Model Units when steady volume cannot tolerate throttling &mdash; and accept that you pay for them when traffic drops.</li><li><b>Custom Model Import is the economics trick:</b> fine-tune in SageMaker, import into Bedrock, and get your own model on pay-per-token pricing instead of a GPU billed around the clock.</li><li><b>Multi-model endpoints do not work for LLMs.</b> They assume seconds-long cold starts. Use inference components, or swap LoRA adapters against one base model that stays resident in VRAM.</li></ul>
+      <div class="jump"><span>Jump into the notes:</span><a href="task-2-2.html#s1">1 &middot; ML vs LLM</a><a href="task-2-2.html#s2">2 &middot; Hosting options</a><a href="task-2-2.html#s3">3 &middot; Cascading &amp; caching</a><a href="task-2-2.html#s5">5 &middot; Monitoring &amp; cheat sheet</a></div>
+      <a class="go" href="task-2-2.html">Open the whole page &rarr;</a>
+    </div>
+    
+    <div class="tcard tc23">
+      <div class="th"><span class="tnum" style="background:var(--t23)">2.3</span><h3>Enterprise Integration Architectures</h3></div>
+      <p class="one">Plugging GenAI into a bank that cannot be rewritten &mdash; legacy protocols, private networks, and one governed way in.</p>
+      <ul><li><b>Endpoint type follows the caller, not the workload:</b> edge-optimized when users are spread across 30+ countries, regional when the caller is already in-region.</li><li><b>The legacy system is never touched.</b> Mapping templates turn XML/SOAP into JSON and back; a Lambda adapter handles EBCDIC and fixed-width files.</li><li><b>Webhooks arrive more than once.</b> An event ID checked against DynamoDB with a TTL is what stops you paying for the same inference &mdash; and sending the same email &mdash; twice.</li><li><b>If the data cannot move, move the model:</b> Outposts for residency, Local Zones for distance, Wavelength for 5G.</li><li><b>The GenAI Gateway is the one front door:</b> per-team usage plans, Cedar policies, central guardrails, caching and cost attribution. Swap the model underneath and no team changes code.</li></ul>
+      <div class="jump"><span>Jump into the notes:</span><a href="task-2-3.html#s2">1 &middot; Connectivity</a><a href="task-2-3.html#s3">2 &middot; AI capabilities</a><a href="task-2-3.html#s4">3 &middot; Secure access</a><a href="task-2-3.html#s6">4 &middot; Cross-environment</a><a href="task-2-3.html#s8">The GenAI Gateway</a></div>
+      <a class="go" href="task-2-3.html">Open the whole page &rarr;</a>
+    </div>
+    
+    <div class="tcard tc24">
+      <div class="th"><span class="tnum" style="background:var(--t24)">2.4</span><h3>Foundation Model API Integrations</h3></div>
+      <p class="one">Calling the model like a production dependency: timeouts, retries, streaming, and what happens on a bad day.</p>
+      <ul><li><b>Timeouts are stratified by the job:</b> 4&ndash;5 seconds for a clinician standing with a patient, 15&ndash;30 for classification, up to 120 for long synthesis.</li><li><b>Jitter is the point, not the backoff.</b> Without random variance, every client that timed out together retries together and takes the service down a second time.</li><li><b>SSE beats WebSockets for generation</b> &mdash; the client has nothing to say mid-stream, and <code>Last-Event-ID</code> resumes at event 48 instead of regenerating the whole answer.</li><li><b>Route-level limits matter most.</b> A heavy reasoning model may handle 50 RPS where a classifier handles 500; rely on account-level limits and the heavy one gets crushed.</li><li><b>Circuit breaker tuning:</b> 50% failures over 10 requests trips it, 30&ndash;60 seconds before recovery, then only 10&ndash;20% of traffic in half-open to test the water.</li></ul>
+      <div class="jump"><span>Jump into the notes:</span><a href="task-2-4.html#s1">1 &middot; Sync vs async</a><a href="task-2-4.html#s2">2 &middot; Streaming</a><a href="task-2-4.html#s3">3 &middot; Resilience</a><a href="task-2-4.html#s4">4 &middot; Routing</a></div>
+      <a class="go" href="task-2-4.html">Open the whole page &rarr;</a>
+    </div>
+    
+    <div class="tcard tc25">
+      <div class="th"><span class="tnum" style="background:var(--t25)">2.5</span><h3>Application Patterns &amp; Developer Tools</h3></div>
+      <p class="one">The parts people actually touch &mdash; the interface, the business system behind it, and the tooling around both.</p>
+      <ul><li><b>Four tiers of timeout must line up:</b> Model &lt; Lambda &le; API Gateway &lt; Client. Get the order wrong and the gateway returns 504 while Lambda keeps burning resources invisibly.</li><li><b>Streaming output is invisible to a screen reader</b> unless the container is an ARIA live region. That is a requirement, not a nice-to-have.</li><li><b>Enhance, don&rsquo;t replace:</b> Lambda writes a sentiment score into a field on the existing CRM record. The CRM itself is never rewritten.</li><li><b>Retrieval logs assign the blame.</b> If the answer was wrong but the retrieved chunks were already irrelevant, the model did its job &mdash; the fault is upstream.</li><li><b>Q Business and Q Developer are not the same product:</b> one answers enterprise knowledge seekers, the other works inside your repository.</li></ul>
+      <div class="jump"><span>Jump into the notes:</span><a href="task-2-5.html#s1">1 &middot; FM API interfaces</a><a href="task-2-5.html#s2">2 &middot; Accessible interfaces</a><a href="task-2-5.html#s3">3 &middot; Business systems</a><a href="task-2-5.html#s4">4 &middot; Q Developer</a><a href="task-2-5.html#s6">6 &middot; Troubleshooting</a></div>
+      <a class="go" href="task-2-5.html">Open the whole page &rarr;</a>
+    </div>
+  </div>
+</section>
+
+<section style="padding-top:0;">
+  <div class="wrap">
+    <h2 class="sh">Why the same thing keeps coming up</h2>
+    <p class="sl">Some ideas appear in several tasks. That is not repetition &mdash; each task uses the same tool for a different job. Knowing which task owns the detail is half the battle in the exam.</p>
+    <dl class="ov">
+      <dt>Step Functions, four different jobs</dt>
+      <dd><a class="pill" style="background:var(--t21)" href="task-2-1.html#s2">2.1</a> controls the macro shape of an agent&rsquo;s reasoning loop so it cannot wander. <a class="pill" style="background:var(--t23)" href="task-2-3.html#s2">2.3</a> runs parallel and map states over a thousand transactions. <a class="pill" style="background:var(--t24)" href="task-2-4.html#s4">2.4</a> uses Choice states to pick a model. <a class="pill" style="background:var(--t25)" href="task-2-5.html#s3">2.5</a> splits one document into sections and processes them at once.</dd>
+      <dt>Model cascading, two reasons to want it</dt>
+      <dd><a class="pill" style="background:var(--t22)" href="task-2-2.html#s3">2.2</a> frames it as cost &mdash; a small model answers about 80% of queries for a fraction of the price. <a class="pill" style="background:var(--t24)" href="task-2-4.html#s4">2.4</a> frames it as routing &mdash; confidence under the threshold escalates, carrying the partial context forward. Same mechanism, different motive.</dd>
+      <dt>Retries, jitter and circuit breakers</dt>
+      <dd><a class="pill" style="background:var(--t24)" href="task-2-4.html#s3">2.4</a> has the numbers. <a class="pill" style="background:var(--t21)" href="task-2-1.html#s4">2.1</a> makes the breaker one of five layers that stop an agent looping forever. <a class="pill" style="background:var(--t25)" href="task-2-5.html#s1">2.5</a> splits it by status code: 429 retries almost immediately, 5xx backs off exponentially, 4xx never retries at all.</dd>
+      <dt>Caching, three different caches</dt>
+      <dd><a class="pill" style="background:var(--t22)" href="task-2-2.html#s3">2.2</a> separates the embedding cache from the response cache. <a class="pill" style="background:var(--t23)" href="task-2-3.html#s3">2.3</a> stacks them across gateway, ElastiCache and database. <a class="pill" style="background:var(--t25)" href="task-2-5.html#s2">2.5</a> adds the client-side one that matches at 85&ndash;95% <i>similarity</i> rather than exact text.</dd>
+      <dt>Confidence thresholds, gating different things</dt>
+      <dd><a class="pill" style="background:var(--t21)" href="task-2-1.html#s6">2.1</a> uses 0.7 and 0.9 to decide whether a human sees it. <a class="pill" style="background:var(--t24)" href="task-2-4.html#s4">2.4</a> uses roughly the same band to decide whether to escalate to a bigger model. <a class="pill" style="background:var(--t25)" href="task-2-5.html#s3">2.5</a> sets 80&ndash;90% for critical decisions. The number repeats; what it gates does not.</dd>
+      <dt>Observability, split in two</dt>
+      <dd><a class="pill" style="background:var(--t24)" href="task-2-4.html#s3">2.4</a> is the measuring side: subsegments, annotations, p50/p90/p99. <a class="pill" style="background:var(--t25)" href="task-2-5.html#s6">2.5</a> is the debugging side: Logs Insights over raw logs, the prompt registry that tells you v8 doubled the prompt yesterday, and the retrieval log that decides whose fault it was.</dd>
+      <dt>Timeouts, three unrelated senses</dt>
+      <dd><a class="pill" style="background:var(--t24)" href="task-2-4.html#s1">2.4</a> sizes them by how hard the job is. <a class="pill" style="background:var(--t25)" href="task-2-5.html#s1">2.5</a> makes sure the four tiers are ordered. <a class="pill" style="background:var(--t22)" href="task-2-2.html#s1">2.2</a> warns about the one that catches people out &mdash; model <i>loading</i> taking 20&ndash;40 minutes.</dd>
+    </dl>
+  </div>
+</section>
+
+<section style="padding-top:0;">
+  <div class="wrap">
+    <p class="more"><b>Coming from Domain 1?</b> That map shows <a href="domain-1.html">the system being built</a> &mdash; documents in, question out. This one shows what has to be true for that system to survive contact with a real company: legacy callers, budgets, failures, auditors and a deploy pipeline. Same machine, one level further out.</p>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <p>This is an independent, unofficial study resource and is not affiliated with, endorsed by, or sponsored by Amazon Web Services, Inc. AWS, Amazon Bedrock, and all related marks are trademarks of Amazon.com, Inc. or its affiliates.</p>
+    <p>Hosted on Amazon S3 + Amazon CloudFront. &middot; <a href="index.html">&larr; Back to Study Notes</a></p>
+  </div>
+</footer>
+
+</body>
+</html>
