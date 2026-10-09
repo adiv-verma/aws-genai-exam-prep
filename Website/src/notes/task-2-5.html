@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Task 2.5 Notes | AIP-C01 Guide</title>
+<meta name="description" content="Domain 2, Task 2.5 study notes: Application Patterns and Developer Tools">
+<style>
+  :root{
+    --ink:#0b1524; --ink-soft:#3a4a5e; --paper:#f7f8fa; --card:#ffffff; --line:#e3e7ee;
+    --accent:#e8622c; --accent-dark:#c94f1f; --navy:#0f2540; --navy-2:#16345c;
+    color-scheme: light;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{margin:0;background:var(--paper);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;line-height:1.6;}
+  a{color:var(--accent-dark);}
+  img{max-width:100%;}
+  .wrap{max-width:1080px;margin:0 auto;padding:0 24px;}
+
+  .nav{position:sticky;top:0;z-index:50;background:rgba(15,37,64,.96);backdrop-filter:blur(6px);border-bottom:1px solid rgba(255,255,255,.08);}
+  .nav .wrap{display:flex;align-items:center;justify-content:space-between;height:56px;}
+  .nav-brand{color:#fff;font-weight:700;font-size:14px;letter-spacing:.02em;text-decoration:none;}
+  .nav-brand span{color:var(--accent);}
+  .nav-links{display:flex;gap:22px;list-style:none;margin:0;padding:0;}
+  .nav-links a{color:#cdd8e6;text-decoration:none;font-size:13.5px;font-weight:500;}
+  .nav-links a:hover{color:#fff;}
+  @media (max-width:720px){ .nav-links{display:none;} }
+
+  header.hero{background:linear-gradient(180deg,var(--navy) 0%, var(--navy-2) 100%);color:#fff;padding:36px 0 28px;}
+  .eyebrow{display:inline-block;font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#ffd8c4;background:rgba(232,98,44,.18);border:1px solid rgba(232,98,44,.4);padding:5px 10px;border-radius:999px;margin-bottom:14px;}
+  h1{font-size:clamp(20px,3vw,27px);line-height:1.2;margin:0;font-weight:800;}
+
+  section{padding:36px 0;}
+
+  figure.arch{margin:0 0 24px;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px;}
+  figure.arch img{display:block;border-radius:8px;width:100%;height:auto;}
+  figure.arch figcaption{margin-top:10px;font-size:12.5px;color:var(--ink-soft);text-align:center;}
+
+  .note-card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:18px 22px 22px;margin-bottom:16px;}
+  .note-card h4{scroll-margin-top:78px;margin:0 0 14px;font-size:13px;font-weight:800;color:var(--navy-2);}
+  .note-card h4:target{color:var(--accent-dark);}
+  .note-card h4:target::after{content:" \2190";color:var(--accent);}
+
+  .lead{font-size:13.5px;font-weight:700;color:var(--ink);margin:18px 0 8px;}
+  .lead:first-of-type{margin-top:0;}
+  .lead.num{color:var(--navy-2);}
+  .txt{font-size:13px;color:var(--ink-soft);line-height:1.6;margin:0 0 8px;}
+  .kv{font-size:13px;color:var(--ink-soft);line-height:1.6;margin:0 0 8px;padding-left:14px;border-left:2px solid var(--line);}
+  .kv strong{color:var(--ink);font-weight:700;}
+
+  .codelabel{font-size:10.5px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:#8b96a5;margin:14px 0 6px;}
+  pre.code{margin:0 0 10px;padding:12px 14px;background:#0f2540;color:#dbe6f3;border-radius:9px;overflow-x:auto;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px;line-height:1.55;}
+
+  footer{padding:32px 0 48px;color:#8b96a5;font-size:12.5px;}
+  footer .wrap{border-top:1px solid var(--line);padding-top:22px;}
+  footer a{color:#6b7686;}
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="wrap">
+    <a class="nav-brand" href="../index.html">AIP-C01 <span>Guide</span></a>
+    <ul class="nav-links">
+      <li><a href="index.html">All Study Notes</a></li>
+      <li><a href="../tasks/index.html">Build Log</a></li>
+    </ul>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="wrap">
+    <span class="eyebrow">Domain 2 &middot; Task 2.5</span>
+    <h1>Domain 2, Task 2.5 &mdash; Application Patterns &amp; Developer Tools (Detailed Revision Notes)</h1>
+  </div>
+</header>
+
+<section>
+  <div class="wrap">
+
+    <figure class="arch">
+      <img src="../assets/task-2-5-architecture.svg" alt="Application and developer-tooling architecture for an insurance GenAI platform, drawn as a request flowing down into two lanes that converge. At the top, the client built on Amplify UI carries ARIA live regions and similarity caching, and reaches Amazon API Gateway over WebSocket or HTTPS through content filtering middleware; the gateway applies rate limiting and JWT auth. The gateway then forks into two lanes. The left lane is orchestration: Amazon EventBridge acts as the reactive trigger and starts an AWS Step Functions declarative workflow, whose three branches are parallel chunk processing, Bedrock Data Automation, and quality threshold gates. The right lane is direct invocation: AWS Lambda carries CRM sentiment analysis, four-tier timeouts and a circuit breaker, and calls Amazon Q Business and Q Developer. Both lanes converge on the same place - the quality threshold gates branch exits sideways into enterprise data, CRM and audit logs, and Q Business writes down into it as well. From there a single arrow drops into CloudWatch Logs Insights and AWS X-Ray observability at the bottom, which is where every path is traced.">
+      <figcaption>Two lanes out of one gateway: EventBridge and Step Functions orchestrate declaratively on the left, Lambda and Amazon Q invoke directly on the right. Both write to the same enterprise record, and everything lands in observability.</figcaption>
+    </figure>
+
+    <div class="note-card">
+      <h4 id="s1">Section 1 — FM API Interfaces</h4>
+        <p class="txt">This section covers the production-grade architectural patterns required to integrate Foundation Models (FMs) reliably into backend systems, moving beyond simple proof-of-concept API calls.</p>
+        <p class="lead num">1. Token Windowing &amp; Context Management</p>
+        <p class="kv"><strong>The Challenge:</strong> LLMs operate under strict context window limits (typically ranging from 4K to 32K+ tokens). As conversations or document processing pipelines progress, token counts approach these limits, risking truncation errors or skyrocketing latency costs.</p>
+        <p class="kv"><strong>The Solution:</strong> Implement active token tracking. When usage approaches the threshold, the system dynamically retains critical context (such as core constraints, initial user intent, or key entities) while removing less relevant content or older conversational turns.</p>
+        <p class="kv"><strong>Enterprise Context:</strong> In the insurance claims transcript model, token management maintains context strictly within an 8,000-token limit, operationalizing Task 1.6's theoretical context windowing into concrete token-counting logic.</p>
+        <p class="lead num">2. Request Chunking &amp; Recursive Summarization</p>
+        <p class="kv"><strong>The Challenge:</strong> Extremely large documents (such as complex commercial insurance policies or multi-page medical records) cannot be passed to a model in a single prompt without hitting token bounds or diluting attention.</p>
+        <p class="kv"><strong>The Solution:</strong> Split large payloads into sequential segments (chunks) and use recursive summarization:</p>
+        <p class="txt">Chunk 1 is processed and generates a distilled summary.</p>
+        <p class="txt">Chunk 2 plus the summary of Chunk 1 are fed together into the next invocation, producing an updated, cumulative summary.</p>
+        <p class="txt">This rolling context preserves cross-boundary coherence without losing vital details.</p>
+        <p class="lead num">3. Tiered Retry Strategies &amp; Circuit Breakers</p>
+        <p class="txt">Different error codes require completely different operational recovery strategies:</p>
+        <p class="lead">HTTP 429 (Throttling / Rate Limit):</p>
+        <p class="kv"><strong>Meaning:</strong> Capacity is momentarily unavailable and will recover shortly.</p>
+        <p class="kv"><strong>Action:</strong> Execute an immediate retry using a short randomized jitter (100–300 ms) to prevent thundering herd problems.</p>
+        <p class="lead">HTTP 5xx (Server-Side Errors):</p>
+        <p class="kv"><strong>Meaning:</strong> Infrastructure or model provider failure.</p>
+        <p class="kv"><strong>Action:</strong> Use exponential backoff, starting from 500 ms and scaling up.</p>
+        <p class="lead">Circuit Breaker Pattern:</p>
+        <p class="txt">If a service experiences 3 to 5 failures within a 30-second sliding window (the transcript specifies 4 failures), the circuit breaker trips. It halts outgoing requests temporarily, preventing resource exhaustion and failing fast until downstream stability is restored.</p>
+        <p class="lead num">4. Multi-Level Timeout Alignment</p>
+        <p class="txt">Timeouts must be configured across four distinct architectural tiers to prevent hanging connections and opaque failures:</p>
+        <p class="kv"><strong>Client Tier:</strong> The user-facing application timeout (e.g., matching the maximum expected wait time with progress indicators).</p>
+        <p class="kv"><strong>API Gateway Tier:</strong> The gateway's strict integration limit (e.g., AWS API Gateway HTTP API limits).</p>
+        <p class="kv"><strong>Compute Tier (AWS Lambda / ECS):</strong> Function execution time limits.</p>
+        <p class="kv"><strong>Model Invocation Tier:</strong> Direct SDK call timeout to the Foundation Model (standard 30–60s, extending to 120s+ for complex generation).</p>
+        <p class="kv"><strong>The Alignment Rule:</strong> Timeouts must scale cleanly from bottom to top (Model&lt;Lambda≤API Gateway&lt;Client). If a Lambda function times out after the API Gateway cuts the connection, the gateway returns a generic 504 error, and Lambda continues burning resources invisibly without notifying the client.</p>
+        <p class="lead num">5. WebSocket Settings &amp; Content Filtering Middleware</p>
+        <p class="kv"><strong>WebSockets for Streaming:</strong> Configured with idle timeouts of 10 to 30 minutes (the transcript uses 20 minutes) for long-running GenAI generation tasks, accompanied by periodic ping/pong heartbeats every 30–60 seconds to keep connections alive.</p>
+        <p class="kv"><strong>Content Filtering Middleware:</strong> Acts as an explicit security and policy layer that validates both input prompts and model responses, logs violations, and triggers safe fallbacks if content is rejected (operationalizing Task 1.6 Guardrails).</p>
+        <p class="kv"><strong>Response Content Type Headers:</strong> Explicitly set to ensure correct client-side handling—using text/event-stream for Server-Sent Events (SSE) and application/json for chunked payload delivery. (Note: This clarifies the source documentation note correcting the mix-up between text/event-stream and server-side encryption).</p>
+    </div>
+
+    <div class="note-card">
+      <h4 id="s2">Section 2  — Accessible AI Interfaces (Incorporating ARIA &amp; Frontend Patterns)</h4>
+        <p class="txt">This section shifts focus from backend API plumbing to the front-end user experience and accessibility architecture, ensuring generative AI applications remain usable, performant, and inclusive across all client environments.</p>
+        <p class="lead num">1. Amplify UI with Progressive Enhancement</p>
+        <p class="kv"><strong>Skeleton Screens:</strong> Instead of locking the interface behind a generic loading spinner while a model processes a request, UI components render grey placeholder blocks that mirror the shape of the incoming content. This significantly reduces perceived latency and signals progress.</p>
+        <p class="kv"><strong>Error States:</strong> Clear, actionable messaging replaces blank screens or raw error codes when requests fail.</p>
+        <p class="kv"><strong>Progressive Enhancement:</strong> Core functionality is guaranteed across all clients, while richer, dynamic behaviors are progressively layered on top for supported modern browsers.</p>
+        <p class="lead num">2. Progressive Rendering &amp; Client-Side Caching</p>
+        <p class="kv"><strong>Smooth Rendering Intervals:</strong> Incremental text streams are rendered to the DOM at controlled intervals (every 50 to 200 ms) to balance visual smoothness with CPU throttling constraints.</p>
+        <p class="kv"><strong>Similarity-Based Caching:</strong> Unlike exact-match caching, AI interfaces leverage similarity-based caching (matching inputs with an 85% to 95% similarity threshold alongside time-based expirations). This captures cases where users phrase identical questions slightly differently, reducing redundant model compute costs. (Note: This tighter interval contrasts with Task 2.4's 300–500 ms debounce, which optimized network efficiency rather than rendering).</p>
+        <p class="lead num">3. Deep Dive: Accessibility (A11y) &amp; ARIA for GenAI</p>
+        <p class="kv"><strong>The Challenge:</strong> Generative AI content arrives incrementally (streaming tokens). Standard web components and screen readers assume static content, meaning blind or visually impaired users would hear nothing as text types onto the screen.</p>
+        <p class="txt">What is ARIA? Accessible Rich Internet Applications (ARIA) is a W3C specification utilizing attributes (aria-*) that bridge the gap between complex web apps and assistive technologies like screen readers.</p>
+        <p class="lead">ARIAN Live Regions for GenAI:</p>
+        <p class="txt">Developers use ARIA live regions (aria-live="polite" or aria-live="assertive") to designate streaming output containers.</p>
+        <p class="txt">As the model streams words into the DOM, the browser automatically notifies the screen reader to voice the newly appended text in real time, ensuring equitable access to dynamic generation.</p>
+        <p class="txt">Additional requirements include robust keyboard navigation, explicit focus management, and descriptive loading indicators.</p>
+        <p class="lead num">4. OpenAPI Specifications (API-First Approach)</p>
+        <p class="txt">Beyond documenting parameter types and schemas, production OpenAPI specs for GenAI document token usage metrics, generation metadata, and error handling conditions. In enterprise transcripts, these are published to streamline partner integrations. (Contrast with Task 2.1, where OpenAPI described tool definitions to an LLM agent).</p>
+        <p class="lead num">5. Prompt Flows for Non-Technical Users</p>
+        <p class="txt">Drag-and-drop or node-based builders allow business analysts to design and test workflows without direct developer intervention. This pattern requires built-in business logic validation across nodes and localized error paths that output human-readable messages instead of raw developer stack traces.</p>
+        <p class="lead num">6. Multimodal Input &amp; User Feedback</p>
+        <p class="kv"><strong>Preprocessing Pipeline:</strong> Text, image, and document uploads undergo rigorous validation, format conversion, and sanitization before model submission (matching the Task 1.3 architecture pattern).</p>
+        <p class="kv"><strong>Transparency &amp; Trust:</strong> Interfaces must clearly indicate model limitations and confidence scores, cite source documents (Task 1.5), and maintain an unambiguous visual distinction between AI-generated content and human-verified content.</p>
+    </div>
+
+    <div class="note-card">
+      <h4 id="s3">Section 3 - Business System Enhancements</h4>
+        <p class="txt">This section focuses on enterprise integration philosophy: enhance existing core business systems rather than replacing them, layering intelligence, automated pipelines, and governance around legacy architectures.</p>
+        <p class="lead num">1. Lambda &amp; CRM Integration (Non-Invasive Intelligence)</p>
+        <p class="kv"><strong>The Architecture:</strong> Customer interactions (e.g., claim submissions) fire events that trigger AWS Lambda functions. Lambda performs real-time sentiment analysis on the payload.</p>
+        <p class="kv"><strong>The Outcome:</strong> The resulting insight (e.g., customer frustration level) is written directly to a specific field in the existing CRM record. The CRM itself is never modified or rewritten; it is simply enriched with AI-derived context so that downstream human agents are fully prepared before engaging the customer.</p>
+        <p class="lead num">2. Step Functions &amp; Parallel Document Processing</p>
+        <p class="kv"><strong>Concurrent Execution:</strong> Large or multi-part documents leverage AWS Step Functions parallel states to process different document sections concurrently.</p>
+        <p class="kv"><strong>Quality Threshold Gate:</strong> After aggregation, payloads pass through an explicit Quality Threshold check. If extraction confidence or formatting quality falls below threshold standards, the pipeline halts or routes the record to an exception queue rather than propagating flawed data downstream.</p>
+        <p class="lead num">3. Amazon Q Business (Managed Enterprise Search &amp; Chat)</p>
+        <p class="kv"><strong>Managed Knowledge Retrieval:</strong> Rather than building a custom RAG application from scratch, organizations connect enterprise data sources directly to Amazon Q Business.</p>
+        <p class="lead">Key Configuration Elements:</p>
+        <p class="kv"><strong>Refresh Schedules:</strong> Configured as daily for rapidly changing repositories and weekly for stable reference documentation.</p>
+        <p class="kv"><strong>Custom Document Parsers:</strong> Ingests and parses proprietary enterprise file formats.</p>
+        <p class="kv"><strong>Metadata Extraction:</strong> Tags documents by claim type and coverage category (operationalizing Task 1.4's relevance-tuning inside a fully managed AWS service).</p>
+        <p class="lead num">4. Amazon Bedrock Data Automation (BDA) vs. Custom Pipelines</p>
+        <p class="kv"><strong>Managed Unstructured Ingestion:</strong> BDA extracts structured data from multi-modal unstructured assets (documents, images, audio, video) through managed workflows.</p>
+        <p class="kv"><strong>Pipeline Structure:</strong> Triggers → automated transformation steps → validation checkpoints → notification triggers for human review.</p>
+        <p class="kv"><strong>Architecture Contrast:</strong> In Task 1.3, developers manually wired AWS Textract, Amazon Rekognition, and Amazon Transcribe into a custom pipeline. Bedrock Data Automation packages this into an out-of-the-box managed service.</p>
+        <p class="lead num">5. Bidirectional Synchronization &amp; Audit Logging</p>
+        <p class="kv"><strong>Conflict Resolution:</strong> Establishes deterministic rules for handling race conditions where both an AI agent and a human user modify the same record concurrently.</p>
+        <p class="kv"><strong>Comprehensive Audit Trails:</strong> Every AI-driven write must be logged with granular traceability—answering historical queries like "Who changed this field months ago?" with "Modified by AI using Model X at 94% confidence."</p>
+        <p class="lead num">6. Measuring Business Impact &amp; Hybrid Human-AI Workflows</p>
+        <p class="kv"><strong>Baseline Discipline:</strong> Deploying AI requires establishing baseline metrics prior to release, tracking KPIs post-deployment, and applying statistical significance testing to prove performance gains rather than attributing random noise to the model.</p>
+        <p class="kv"><strong>Confidence Thresholds &amp; Trust:</strong> Critical decisions enforce an 80–90% confidence threshold. Furthermore, UIs must maintain absolute visual clarity between AI-generated outputs and human-verified entries, empowering adjusters to make informed trust decisions.</p>
+    </div>
+
+    <div class="note-card">
+      <h4 id="s4">Section 4 - Developer Productivity with Amazon Q Developer</h4>
+        <p class="txt">This section explores how Amazon Q Developer accelerates software engineering lifecycles, contrasting with Amazon Q Business (which serves enterprise knowledge seekers). Q Developer integrates deep contextual understanding directly into the development workflow.</p>
+        <p class="lead num">1. Code Generation with Project-Specific Context</p>
+        <p class="kv"><strong>The Challenge:</strong> Generic AI code generation often produces isolated snippets that ignore custom repository conventions, internal architectural patterns, or specific dependency versions.</p>
+        <p class="kv"><strong>The Solution:</strong> Q Developer ingests repository-level context—including domain frameworks (such as the insurance codebase conventions used in the transcript)—ensuring that generated boilerplate, business logic, and integrations comply fully with internal enterprise standards.</p>
+        <p class="lead num">2. Automated Refactoring Pipelines</p>
+        <p class="kv"><strong>Targeted Debt Reduction:</strong> Teams cannot refactor an entire legacy codebase at once. Q Developer identifies technical debt across the repository and prioritizes it using a combination of complexity metrics and execution usage patterns.</p>
+        <p class="kv"><strong>Actionable Proposals:</strong> Generates structured refactoring proposals complete with estimated effort, architectural risk assessments, and expected performance gains, allowing teams to target high-impact bottlenecks first.</p>
+        <p class="lead num">3. API Assistance, Testing, Profiling, and Automated Code Review</p>
+        <p class="kv"><strong>API Optimization:</strong> Analyzes SDK and API call patterns across the codebase, automatically recommending optimizations such as connection pooling, batching, and asynchronous execution (automating the optimization concepts from Task 2.4).</p>
+        <p class="kv"><strong>AI-Assisted Testing:</strong> Automatically generates comprehensive test suites based on static code analysis, scaling test coverage targets to code criticality and addressing GenAI-specific vulnerabilities like prompt injection edge cases.</p>
+        <p class="kv"><strong>Performance Profiling:</strong> Delivers expert tuning recommendations for memory management, concurrency limits, and caching layers.</p>
+        <p class="kv"><strong>Automated Code Review:</strong> Evaluates Pull Requests (PRs) against organizational best practices, security baselines, and GenAI security guidelines before human merge review.</p>
+        <p class="lead num">4. Developer Knowledge Base (Institutional RAG)</p>
+        <p class="kv"><strong>Institutional Memory:</strong> Captures architectural design decisions, past incident lessons, and project-specific patterns, indexing them into a dedicated repository.</p>
+        <p class="kv"><strong>Context-Aware Assistance:</strong> Exposes this institutional memory through Amazon Q so that newly onboarded engineers can query internal development standards, deployment rules, and architectural history conversationally (applying RAG principles directly to internal developer documentation).</p>
+    </div>
+
+    <div class="note-card">
+      <h4 id="s5">Section 5 - Advanced GenAI Applications</h4>
+        <p class="txt">This section builds upon Task 2.1's foundational agent concepts, introducing advanced operational patterns required to stabilize, govern, and orchestrate multi-agent systems at scale.</p>
+        <p class="lead num">1. Rate Limiting in Agent Tool Configurations</p>
+        <p class="kv"><strong>The Challenge:</strong> Autonomous agents can occasionally enter execution loops, repeatedly hammering tools and exhausting compute quotas or API limits.</p>
+        <p class="kv"><strong>The Solution:</strong> Tool configurations incorporate built-in rate limiting, explicit parameter validation, and robust error handling. If an agent loops, the rate limiter caps execution, adding another crucial layer alongside stopping conditions, timeouts, and IAM guardrails.</p>
+        <p class="lead num">2. Agent Squad Supervision &amp; Inter-Agent Handoff Validation</p>
+        <p class="kv"><strong>Multi-Agent Collaboration:</strong> Complex enterprise cases (such as a commercial insurance claim) distribute labor across specialized agents—such as a Policy Expert, Damage Assessor, Fraud Investigator, and Customer Advocate.</p>
+        <p class="kv"><strong>Supervision &amp; Handoff Validation:</strong> Supervision mechanisms prevent multi-agent drift. Furthermore, strict validation steps between agent handoffs ensure semantic consistency. If Agent A interprets a claim as auto collision while Agent B processes it as property damage, the pipeline halts or forces re-alignment before passing context downstream.</p>
+        <p class="lead num">3. Prompt Chaining Strategies (Preserving Context Within Token Limits)</p>
+        <p class="txt">To maintain multi-step reasoning without exceeding token windows, systems apply specific reduction techniques:</p>
+        <p class="kv"><strong>Compression:</strong> Shrinking the physical footprint of carried context.</p>
+        <p class="kv"><strong>Summarization:</strong> Condensing dialogue into a core thematic gist.</p>
+        <p class="kv"><strong>Key Information Extraction:</strong> Stripping out narrative noise and retaining only essential ground-truth facts (often the most reliable method, as summaries can still introduce drift).</p>
+        <p class="lead num">4. Dynamic RAG</p>
+        <p class="txt">Rather than relying on a static k parameter for chunk retrieval, dynamic RAG scales search parameters based on query complexity. Simple queries retrieve a minimal set (e.g., k=3), whereas complex multi-faceted queries retrieve a broad set (e.g., k=20) followed by cross-encoder re-ranking (Task 1.5).</p>
+        <p class="lead num">5. Hybrid Orchestration (Step Functions + EventBridge)</p>
+        <p class="lead">Declarative vs. Reactive:</p>
+        <p class="txt">AWS Step Functions provides declarative orchestration (defining what steps to execute).</p>
+        <p class="txt">Amazon EventBridge provides reactive orchestration (triggering when execution begins based on real-time events).</p>
+        <p class="kv"><strong>Real-World Interaction:</strong> A claim submission fires an EventBridge rule that initiates a Step Functions workflow. If an asynchronous fraud alert fires mid-flight, EventBridge reacts by spinning up a secondary parallel workflow, creating a resilient, event-driven agent architecture.</p>
+    </div>
+
+    <div class="note-card">
+      <h4 id="s6">Section 6 Troubleshooting Efficiency (Debugging aur Monitoring)</h4>
+        <p class="txt">This final section covers production observability, debugging methodologies, and incident root-cause analysis for enterprise generative AI systems.</p>
+        <p class="lead num">1. CloudWatch Logs Insights</p>
+        <p class="kv"><strong>Deep Log Querying:</strong> Moving beyond high-level dashboard metrics to query raw execution logs. Operators filter for latency spikes, error codes, prompt-response patterns, and anomalous token consumption (e.g., a sudden 10x token spike indicating context leakage or a looping agent).</p>
+        <p class="lead num">2. AWS X-Ray with GenAI Annotations</p>
+        <p class="kv"><strong>Granular Correlation:</strong> Correlating performance degradation with specific input attributes by annotating traces with prompt complexity metrics, token counts, and model invocation parameters (answering operational questions like "Why do requests with prompts over 4,000 tokens experience disproportionate latency?").</p>
+        <p class="lead num">3. Centralized Prompt Registry</p>
+        <p class="kv"><strong>Version Control &amp; Accountability:</strong> Centralized storage tracking prompt template versions alongside historical performance metrics.</p>
+        <p class="kv"><strong>Debugging Workflow:</strong> When latency spikes post-deployment, engineers cross-reference the registry, identifying that version v8 (deployed yesterday) doubled the prompt length, instantly isolating the root cause. (This mirrors Task 1.6's Prompt Management viewed through an operational lens).</p>
+        <p class="lead num">4. Synthetic Monitoring vs. Real User Monitoring (RUM)</p>
+        <p class="kv"><strong>Proactive Detection:</strong> While standard RUM observes live user traffic after impact occurs, synthetic monitoring runs scheduled, representative test prompts against endpoints. This catches latency or drift proactively—even during quiet off-peak hours when real traffic is absent.</p>
+        <p class="lead num">5. Attention Visualisation (Theoretical Concept)</p>
+        <p class="txt">Visualizing attention weights and token influence to audit why a model generated a specific output. Constraint: Because Amazon Bedrock managed models do not expose internal attention weights, this technique applies strictly to open-weight models. Understand it conceptually for the exam.</p>
+        <p class="lead num">6. Comprehensive Logging Pipeline (Blame Assignment)</p>
+        <p class="kv"><strong>Full-Lifecycle Tracing:</strong> Logging preprocessing steps, retrieval results (the critical audit point), model I/O, and post-processing transformations.</p>
+        <p class="kv"><strong>Why Retrieval Logs Matter:</strong> If a generated answer is incorrect but the logged retrieval chunks were already irrelevant, the Foundation Model functioned correctly—the fault lies entirely within the RAG retrieval tier. Comprehensive logging prevents engineers from tuning the wrong component during incidents.</p>
+    </div>
+
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <p>This is an independent, unofficial study resource and is not affiliated with, endorsed by, or sponsored by Amazon Web Services, Inc. AWS, Amazon Bedrock, and all related marks are trademarks of Amazon.com, Inc. or its affiliates.</p>
+    <p>Hosted on Amazon S3 + Amazon CloudFront. &middot; <a href="index.html">&larr; Back to Study Notes</a></p>
+  </div>
+</footer>
+
+</body>
+</html>
