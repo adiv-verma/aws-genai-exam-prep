@@ -1,0 +1,118 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1180 890" width="1180" height="890" role="img" font-family="-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica,Arial,sans-serif">
+<defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,1 L9,5 L0,9 z" fill="#8fa0b6"/></marker><marker id="ahr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,1 L9,5 L0,9 z" fill="#c0564a"/></marker></defs>
+<style>.dtitle{font-size:14.5px;font-weight:800;letter-spacing:.03em;fill:#0f2540;}.phase{font-size:10.5px;font-weight:700;letter-spacing:.07em;fill:#8b96a5;text-transform:uppercase;}.lh{font-size:12.5px;font-weight:800;fill:#ffffff;letter-spacing:.02em;}.ln{font-size:10px;font-weight:700;fill:#ffd8c4;letter-spacing:.05em;}.it{font-size:11.8px;fill:#2b3a4d;}.pill{font-size:12px;font-weight:700;fill:#0b1524;}.ch{font-size:10.5px;font-weight:700;fill:#16345c;}.bh{font-size:11.5px;font-weight:800;fill:#0f2540;}.bn{font-size:11px;font-weight:700;fill:#0b1524;}.bs{font-size:10.3px;fill:#5a6a7e;}.bm{font-size:10.3px;font-weight:700;fill:#2f6b4c;}.out{font-size:11.3px;font-weight:700;fill:#0b1524;}.outs{font-size:10.3px;fill:#5a6a7e;}.leg{font-size:10px;fill:#9aa5b4;}</style>
+<rect width="1180" height="890" fill="#ffffff"/>
+<text x="24" y="32" class="dtitle">TASK 3.1: FOUR LAYERS, CHEAPEST FIRST &#8212; AND WHAT EACH ONE CANNOT SEE</text>
+<line x1="24" y1="44" x2="1156" y2="44" stroke="#e3e7ee"/>
+<text x="24" y="68" class="phase">A request arrives</text>
+<rect x="249.0" y="78" width="250" height="34" rx="17" fill="#eef2f7" stroke="#d7dde8"/>
+<text x="374.0" y="100" text-anchor="middle" class="pill">Incoming Request</text>
+<line x1="374.0" y1="112" x2="374.0" y2="138" stroke="#8fa0b6" stroke-width="1.8" marker-end="url(#ah)"/>
+<rect x="24" y="142" width="700" height="118" rx="11" fill="#ffffff" stroke="#d7dde8"/>
+<path d="M35 142 h678 a11 11 0 0 1 11 11 v23 h-700 v-23 a11 11 0 0 1 11 -11 z" fill="#0f2540"/>
+<text x="40" y="165" class="lh">Layer 1: Pre-Processing</text>
+<text x="708" y="165" text-anchor="end" class="ln">CHEAPEST</text>
+<circle cx="48" cy="190" r="2.8" fill="#7f94b0"/>
+<text x="60" y="194" class="it">API Gateway WAF &amp; Throttling / Rate Limits</text>
+<circle cx="48" cy="214" r="2.8" fill="#7f94b0"/>
+<text x="60" y="218" class="it">Amazon Comprehend Content &amp; Risk Classification</text>
+<circle cx="48" cy="238" r="2.8" fill="#7f94b0"/>
+<text x="60" y="242" class="it">Lambda Input Sanitization (SQLi, XSS, Format)</text>
+<path d="M724 201 H752" fill="none" stroke="#c0564a" stroke-width="1.8" stroke-dasharray="5 4" marker-end="url(#ahr)"/>
+<rect x="760" y="170" width="396" height="62" rx="11" fill="#fdf1ef" stroke="#eccbc5"/>
+<text x="776" y="192" class="bn" fill="#a8453a">High risk: blocked and logged here</text>
+<text x="776" y="210" class="bs">Step Functions branches on the risk score, so a malicious</text>
+<text x="776" y="224" class="bs">prompt never reaches the model and never bills a token.</text>
+<line x1="374.0" y1="260" x2="374.0" y2="286" stroke="#8fa0b6" stroke-width="1.8" marker-end="url(#ah)"/>
+<rect x="24" y="290" width="700" height="94" rx="11" fill="#ffffff" stroke="#d7dde8"/>
+<path d="M35 290 h678 a11 11 0 0 1 11 11 v23 h-700 v-23 a11 11 0 0 1 11 -11 z" fill="#0f2540"/>
+<text x="40" y="313" class="lh">Layer 2: Model Level</text>
+<text x="708" y="313" text-anchor="end" class="ln">MODEL-ADJACENT</text>
+<circle cx="48" cy="338" r="2.8" fill="#7f94b0"/>
+<text x="60" y="342" class="it">Amazon Bedrock Guardrails (Content Safety Policies)</text>
+<circle cx="48" cy="362" r="2.8" fill="#7f94b0"/>
+<text x="60" y="366" class="it">Knowledge Base Grounding (RAG Context Control)</text>
+<line x1="374.0" y1="384" x2="374.0" y2="410" stroke="#8fa0b6" stroke-width="1.8" marker-end="url(#ah)"/>
+<rect x="24" y="414" width="700" height="94" rx="11" fill="#ffffff" stroke="#d7dde8"/>
+<path d="M35 414 h678 a11 11 0 0 1 11 11 v23 h-700 v-23 a11 11 0 0 1 11 -11 z" fill="#0f2540"/>
+<text x="40" y="437" class="lh">Layer 3: Post-Processing</text>
+<text x="708" y="437" text-anchor="end" class="ln">AFTER INFERENCE</text>
+<circle cx="48" cy="462" r="2.8" fill="#7f94b0"/>
+<text x="60" y="466" class="it">Lambda Response Validation (Custom Business Logic)</text>
+<circle cx="48" cy="486" r="2.8" fill="#7f94b0"/>
+<text x="60" y="490" class="it">API Gateway Response Filtering (Data Leakage Prevention)</text>
+<line x1="374.0" y1="508" x2="374.0" y2="534" stroke="#8fa0b6" stroke-width="1.8" marker-end="url(#ah)"/>
+<rect x="24" y="538" width="700" height="94" rx="11" fill="#f7fbf8" stroke="#c7e2d1"/>
+<text x="40" y="560" class="bh">Confidence Scoring</text>
+<rect x="40" y="570" width="54" height="17" rx="6" fill="#2f6b4c"/>
+<text x="67" y="582.5" text-anchor="middle" font-size="10" font-weight="700" fill="#fff">High</text>
+<text x="104" y="583" class="out">&#8594; Validated Response</text>
+<rect x="40" y="590" width="54" height="17" rx="6" fill="#8a5a1f"/>
+<text x="67" y="602.5" text-anchor="middle" font-size="10" font-weight="700" fill="#fff">Med</text>
+<text x="104" y="603" class="out">&#8594; Response + Disclaimer</text>
+<rect x="40" y="610" width="54" height="17" rx="6" fill="#a03453"/>
+<text x="67" y="622.5" text-anchor="middle" font-size="10" font-weight="700" fill="#fff">Low</text>
+<text x="104" y="623" class="out">&#8594; Human Review Flag</text>
+<line x1="374.0" y1="632" x2="374.0" y2="658" stroke="#8fa0b6" stroke-width="1.8" marker-end="url(#ah)"/>
+<rect x="24" y="662" width="700" height="94" rx="11" fill="#ffffff" stroke="#d7dde8"/>
+<path d="M35 662 h678 a11 11 0 0 1 11 11 v23 h-700 v-23 a11 11 0 0 1 11 -11 z" fill="#5a6a7e"/>
+<text x="40" y="685" class="lh">Layer 4: Monitoring &amp; Incident Response</text>
+<text x="708" y="685" text-anchor="end" class="ln">NEVER STOPS</text>
+<circle cx="48" cy="710" r="2.8" fill="#7f94b0"/>
+<text x="60" y="714" class="it">CloudWatch Metrics &amp; Pattern Alarms</text>
+<circle cx="48" cy="734" r="2.8" fill="#7f94b0"/>
+<text x="60" y="738" class="it">AWS Security Hub (Centralized Findings Aggregation)</text>
+<text x="760" y="162" class="phase">Caught early</text>
+<text x="760" y="244" class="phase">Why one layer is never enough</text>
+<rect x="760" y="252" width="396" height="286" rx="11" fill="#fdfaf8" stroke="#e8d9cf"/>
+<text x="776" y="273" class="bh">Every layer has a blind spot</text>
+<line x1="776" y1="282" x2="1140" y2="282" stroke="#eee2d9"/>
+<text x="776" y="300" class="bn">AWS WAF</text>
+<text x="776" y="316" class="bs">cannot see: Semantic / Plain English Attacks</text>
+<text x="776" y="332" class="bm">covered by: Amazon Comprehend &amp; Bedrock Guardrails</text>
+<line x1="776" y1="344" x2="1140" y2="344" stroke="#eee2d9"/>
+<text x="776" y="362" class="bn">Amazon Comprehend</text>
+<text x="776" y="378" class="bs">cannot see: Novel Attack Patterns</text>
+<text x="776" y="394" class="bm">covered by: Bedrock Guardrails</text>
+<line x1="776" y1="406" x2="1140" y2="406" stroke="#eee2d9"/>
+<text x="776" y="424" class="bn">Bedrock Guardrails</text>
+<text x="776" y="440" class="bs">cannot see: Domain-Specific Rules</text>
+<text x="776" y="456" class="bm">covered by: Post-Processing Lambda</text>
+<line x1="776" y1="468" x2="1140" y2="468" stroke="#eee2d9"/>
+<text x="776" y="486" class="bn">Post-Processing</text>
+<text x="776" y="502" class="bs">cannot see: Cost Prevention</text>
+<text x="776" y="518" class="bm">covered by: Pre-Processing Layers</text>
+<text x="760" y="564" class="phase">Cost order</text>
+<rect x="760" y="574" width="396" height="126" rx="11" fill="#f3f7fd" stroke="#dbe6f5"/>
+<circle cx="784" cy="592" r="2.8" fill="#7f94b0"/>
+<text x="796" y="596" class="ch">WAF (Near-Free)</text>
+<line x1="784" y1="595" x2="784" y2="607" stroke="#b9c7da" stroke-width="1.4"/>
+<circle cx="784" cy="614" r="2.8" fill="#7f94b0"/>
+<text x="796" y="618" class="ch">Lambda Regex (Very Cheap)</text>
+<line x1="784" y1="617" x2="784" y2="629" stroke="#b9c7da" stroke-width="1.4"/>
+<circle cx="784" cy="636" r="2.8" fill="#7f94b0"/>
+<text x="796" y="640" class="ch">Comprehend (Cheap)</text>
+<line x1="784" y1="639" x2="784" y2="651" stroke="#b9c7da" stroke-width="1.4"/>
+<circle cx="784" cy="658" r="2.8" fill="#7f94b0"/>
+<text x="796" y="662" class="ch">Guardrails (Moderate)</text>
+<line x1="784" y1="661" x2="784" y2="673" stroke="#b9c7da" stroke-width="1.4"/>
+<circle cx="784" cy="680" r="2.8" fill="#7f94b0"/>
+<text x="796" y="684" class="ch">Model Invocation (Most Expensive)</text>
+<text x="24" y="774" class="phase">Automated escalation workflow (Step Functions)</text>
+<rect x="24" y="782" width="115.4" height="30" rx="8" fill="#f3f7fd" stroke="#dbe6f5"/>
+<text x="81.7" y="801" text-anchor="middle" font-size="10" font-weight="700" fill="#16345c">Violation Detected</text>
+<line x1="142.4" y1="797" x2="175.4" y2="797" stroke="#8fa0b6" stroke-width="1.6" marker-end="url(#ah)"/>
+<rect x="179.4" y="782" width="99.5" height="30" rx="8" fill="#f3f7fd" stroke="#dbe6f5"/>
+<text x="229.2" y="801" text-anchor="middle" font-size="10" font-weight="700" fill="#16345c">Assess Severity</text>
+<line x1="281.9" y1="797" x2="315.0" y2="797" stroke="#8fa0b6" stroke-width="1.6" marker-end="url(#ah)"/>
+<rect x="319.0" y="782" width="120.7" height="30" rx="8" fill="#f3f7fd" stroke="#dbe6f5"/>
+<text x="379.3" y="801" text-anchor="middle" font-size="10" font-weight="700" fill="#16345c">Throttle/Block User</text>
+<line x1="442.7" y1="797" x2="475.7" y2="797" stroke="#8fa0b6" stroke-width="1.6" marker-end="url(#ah)"/>
+<rect x="479.7" y="782" width="120.7" height="30" rx="8" fill="#f3f7fd" stroke="#dbe6f5"/>
+<text x="540.0" y="801" text-anchor="middle" font-size="10" font-weight="700" fill="#16345c">Alert Security Team</text>
+<line x1="603.4" y1="797" x2="636.4" y2="797" stroke="#8fa0b6" stroke-width="1.6" marker-end="url(#ah)"/>
+<rect x="640.4" y="782" width="83.6" height="30" rx="8" fill="#f3f7fd" stroke="#dbe6f5"/>
+<text x="682.2" y="801" text-anchor="middle" font-size="10" font-weight="700" fill="#16345c">Log Incident</text>
+<line x1="24" y1="850" x2="1156" y2="850" stroke="#e3e7ee"/>
+<text x="24" y="870" class="leg">Catching a threat early is a model call you never pay for. Layer names and items are taken verbatim from the diagrams in notes.md.</text>
+</svg>
