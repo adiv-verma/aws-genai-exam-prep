@@ -48,7 +48,13 @@
     background:var(--accent);color:#fff;text-decoration:none;font-size:13px;font-weight:700;
     padding:8px 14px;border-radius:6px;white-space:nowrap;
   }
-  @media (max-width:720px){ .nav-links{display:none;} }
+  @media (max-width:720px){
+    .nav .wrap{gap:12px;}
+    .nav-links{gap:16px;overflow-x:auto;scrollbar-width:none;-ms-overflow-style:none;
+      flex:1;justify-content:flex-end;}
+    .nav-links::-webkit-scrollbar{display:none;}
+    .nav-links a{white-space:nowrap;font-size:13px;}
+  }
 
   /* HERO */
   .hero{
