@@ -1,2 +1,11 @@
 .DS_Store
 function.zip
+
+# Exam-dump source + the decrypted quiz bank.
+# This repo is public: the quiz questions must only ever be published
+# as the AES-encrypted Website/src/quiz/bank.enc.js, never in plaintext.
+AWS AIP C01.pdf
+**/AWS AIP C01.pdf
+Website/quiz-build/bank.json
+Website/quiz-build/PASSPHRASE.txt
+Website/quiz-build/*.txt
