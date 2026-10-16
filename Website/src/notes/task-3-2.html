@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Task 3.2 Notes | AIP-C01 Guide</title>
+<meta name="description" content="Domain 3, Task 3.2 study notes: Data Security and Privacy Controls">
+<style>
+  :root{
+    --ink:#0b1524; --ink-soft:#3a4a5e; --paper:#f7f8fa; --card:#ffffff; --line:#e3e7ee;
+    --accent:#e8622c; --accent-dark:#c94f1f; --navy:#0f2540; --navy-2:#16345c;
+    color-scheme: light;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{margin:0;background:var(--paper);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;line-height:1.6;}
+  a{color:var(--accent-dark);}
+  img{max-width:100%;}
+  .wrap{max-width:1080px;margin:0 auto;padding:0 24px;}
+
+  .nav{position:sticky;top:0;z-index:50;background:rgba(15,37,64,.96);backdrop-filter:blur(6px);border-bottom:1px solid rgba(255,255,255,.08);}
+  .nav .wrap{display:flex;align-items:center;justify-content:space-between;height:56px;}
+  .nav-brand{color:#fff;font-weight:700;font-size:14px;letter-spacing:.02em;text-decoration:none;}
+  .nav-brand span{color:var(--accent);}
+  .nav-links{display:flex;gap:22px;list-style:none;margin:0;padding:0;}
+  .nav-links a{color:#cdd8e6;text-decoration:none;font-size:13.5px;font-weight:500;}
+  .nav-links a:hover{color:#fff;}
+  @media (max-width:720px){
+    .nav .wrap{gap:12px;}
+    .nav-links{gap:16px;overflow-x:auto;scrollbar-width:none;-ms-overflow-style:none;
+      flex:1;justify-content:flex-end;}
+    .nav-links::-webkit-scrollbar{display:none;}
+    .nav-links a{white-space:nowrap;font-size:13px;}
+  }
+
+  header.hero{background:linear-gradient(180deg,var(--navy) 0%, var(--navy-2) 100%);color:#fff;padding:36px 0 28px;}
+  .eyebrow{display:inline-block;font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#ffd8c4;background:rgba(232,98,44,.18);border:1px solid rgba(232,98,44,.4);padding:5px 10px;border-radius:999px;margin-bottom:14px;}
+  h1{font-size:clamp(20px,3vw,27px);line-height:1.2;margin:0;font-weight:800;}
+
+  section{padding:36px 0;}
+
+  figure.arch{margin:0 0 24px;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px;}
+  figure.arch img{display:block;border-radius:8px;width:100%;height:auto;}
+  figure.arch figcaption{margin-top:10px;font-size:12.5px;color:var(--ink-soft);text-align:center;}
+
+  .note-card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:18px 22px 22px;margin-bottom:16px;}
+  .note-card h4{scroll-margin-top:78px;margin:0 0 14px;font-size:13px;font-weight:800;color:var(--navy-2);}
+  .note-card h4:target{color:var(--accent-dark);}
+  .note-card h4:target::after{content:" \2190";color:var(--accent);}
+
+  .lead{font-size:13.5px;font-weight:700;color:var(--ink);margin:18px 0 8px;}
+  .lead:first-of-type{margin-top:0;}
+  .lead.num{color:var(--navy-2);}
+  .txt{font-size:13px;color:var(--ink-soft);line-height:1.6;margin:0 0 8px;}
+  .kv{font-size:13px;color:var(--ink-soft);line-height:1.6;margin:0 0 8px;padding-left:14px;border-left:2px solid var(--line);}
+  .kv strong{color:var(--ink);font-weight:700;}
+
+  .codelabel{font-size:10.5px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:#8b96a5;margin:14px 0 6px;}
+  pre.code{margin:0 0 10px;padding:12px 14px;background:#0f2540;color:#dbe6f3;border-radius:9px;overflow-x:auto;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px;line-height:1.55;}
+
+  footer{padding:32px 0 48px;color:#8b96a5;font-size:12.5px;}
+  footer .wrap{border-top:1px solid var(--line);padding-top:22px;}
+  footer a{color:#6b7686;}
+  table.cmp{width:100%;border-collapse:collapse;margin:4px 0 12px;font-size:12.5px;display:block;overflow-x:auto;}
+  table.cmp th{text-align:left;padding:8px 10px;background:#0f2540;color:#fff;font-weight:700;font-size:11.5px;letter-spacing:.02em;border:1px solid #0f2540;}
+  table.cmp td{padding:8px 10px;border:1px solid var(--line);color:var(--ink-soft);vertical-align:top;}
+  table.cmp tbody tr:nth-child(even){background:#fafbfc;}
+  table.cmp td:first-child{color:var(--ink);font-weight:600;}
+
+  pre.art{margin:4px 0 12px;padding:14px 16px;background:#0f2540;color:#dbe6f3;border-radius:9px;overflow-x:auto;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:11.5px;line-height:1.45;white-space:pre;}
+
+  .step{display:flex;gap:11px;align-items:flex-start;margin:0 0 10px;}
+  .step .stepn{flex:none;width:22px;height:22px;border-radius:7px;background:var(--navy);color:#fff;font-size:11.5px;font-weight:700;display:flex;align-items:center;justify-content:center;margin-top:1px;}
+  .step .stept{margin:0;font-size:13.5px;font-weight:700;color:var(--ink);}
+  .step .steps{margin:0;font-size:11.5px;font-weight:600;letter-spacing:.03em;text-transform:uppercase;color:#8b96a5;}
+
+  .chain{margin:4px 0 12px;padding:11px 14px;background:#f3f7fd;border:1px solid #dbe6f5;border-radius:9px;font-size:12.5px;font-weight:600;color:var(--navy-2);text-align:center;overflow-x:auto;}
+  .cardeyebrow{margin:0 0 4px;font-size:10.5px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:#8b96a5;}
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="wrap">
+    <a class="nav-brand" href="../index.html">AIP-C01 <span>Guide</span></a>
+    <ul class="nav-links">
+      <li><a href="index.html">All Study Notes</a></li>
+      <li><a href="../tasks/index.html">Build Log</a></li>
+    </ul>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="wrap">
+    <span class="eyebrow">Domain 3 &middot; Task 3.2</span>
+    <h1>Domain 3, Task 3.2 &mdash; Data Security &amp; Privacy Controls (Detailed Revision Notes)</h1>
+  </div>
+</header>
+
+<section>
+  <div class="wrap">
+
+    <figure class="arch">
+      <img src="../assets/task-3-2-architecture.svg" alt="Private-by-default architecture for a healthcare AI workload. Healthcare users and applications enter a dedicated VPC boundary. Inside a private subnet, an application or processing Lambda hands the request to a pre-processing and sanitization stage that runs PII detection with Amazon Comprehend and a de-identification Lambda offering tokenization mapping, format-preserving encryption and differential privacy, followed by a quality control check. The sanitized request then leaves through VPC endpoints built on AWS PrivateLink. Two endpoint types split the traffic, both staying on the private AWS network: an interface VPC endpoint governed by security groups, and a gateway VPC endpoint governed by a route table entry. The interface endpoint reaches Amazon Bedrock, which applies guardrails for PII and topics, contextual access controls, zero model training on customer data, and KMS encryption. The gateway endpoint reaches Amazon S3 and data storage, where Macie scans for PII, Lake Formation enforces column, row and cell level controls, and lifecycle rules handle retention. Both paths converge on continuous audit and monitoring: CloudTrail API audit logs, CloudWatch insights and alarms, GuardDuty threat detection, and Security Hub as the central place findings are collected.">
+      <figcaption>Nothing leaves the private network. Data is de-identified before it goes anywhere, the two endpoint types split by which service is being called, and every path ends in the same audit trail.</figcaption>
+    </figure>
+
+    <div class="note-card">
+      <p class="cardeyebrow">Domain 3, Task 3.2: Data Security &amp; Privacy Controls</p>
+      <h4 id="s1">Part 1 — Protected AI Environments (Revision Notes)</h4>
+        <p class="lead num">1. Network Isolation &amp; Architecture</p>
+        <p class="lead">Core Challenge</p>
+        <p class="txt">Amazon Bedrock is a public AWS service by default. In highly regulated domains like healthcare (HIPAA compliance), routing inference traffic or prompt data over the public internet is unacceptable due to data leakage and exfiltration risks.</p>
+        <p class="lead">Solution: AWS PrivateLink &amp; VPC Endpoints</p>
+        <p class="txt">All traffic between your workload components (e.g., Lambda, ECS, EC2) and AWS GenAI services must stay entirely within the AWS internal backbone network using VPC Endpoints.</p>
+        <pre class="art">[ Private Subnet ]                                 [ AWS Backbone ]
++----------------------+     PrivateLink           +-------------------+
+| App / Lambda Server  | ------------------------&gt; | Amazon Bedrock    |
+| (No Internet Egress) |   (VPC Endpoint Traffic)  | / Comprehend / S3 |
++----------------------+                           +-------------------+</pre>
+        <p class="lead">Types of VPC Endpoints</p>
+        <table class="cmp">
+          <thead><tr><th>Endpoint Type</th><th>Supported Services</th><th>Deployment Mechanism</th><th>Security &amp; Governance Controls</th></tr></thead>
+          <tbody>
+            <tr><td>Interface Endpoint</td><td>Amazon Bedrock, Amazon Comprehend, and most AWS services</td><td>Creates an Elastic Network Interface (ENI) with a private IP inside your specific VPC Subnet.</td><td>Governed directly by Security Groups (stateful firewalls) and Network ACLs (NACLs).</td></tr>
+            <tr><td>Gateway Endpoint</td><td>Amazon S3 &amp; Amazon DynamoDB only</td><td>Exists at the VPC level as a Target Entry in the VPC Route Table (does NOT consume subnet IPs or create an ENI).</td><td>Governed via Route Tables and VPC Endpoint Policies (no Security Groups attached).</td></tr>
+          </tbody>
+        </table>
+        <p class="lead">Target Architecture Checklist</p>
+        <p class="kv"><strong>Dedicated VPC:</strong> Isolated AWS environment for the healthcare AI workload.</p>
+        <p class="kv"><strong>Private Subnets:</strong> All compute, database, and model invocation layers reside in private subnets with zero direct internet routes (no IGW / NAT Gateways attached unless strictly required).</p>
+        <p class="kv"><strong>Security Groups:</strong> Enforce strict, stateful port-level traffic rules between application tiers.</p>
+        <p class="kv"><strong>Network ACLs (NACLs):</strong> Provide a secondary stateless defense layer at the subnet boundary.</p>
+        <p class="kv"><strong>Strict Egress Filtering:</strong> Prevents compromised compute components from exfiltrating patient data outside the VPC perimeter.</p>
+        <p class="lead num">2. Fine-Grained Access Control (IAM &amp; Lake Formation)</p>
+        <p class="lead">A. Identity and Access Management (IAM) for Bedrock</p>
+        <p class="txt">Enforces the principle of least privilege across three main operational axes:</p>
+        <pre class="art">                          ┌─ Restrict to Specific MODELS (e.g., Anthropic Claude 3 Sonnet)
+                          │
+IAM Policy Restrictions ──┼─ Restrict to Specific FEATURES (e.g., Provisioned Throughput vs. On-Demand)
+                          │
+                          └─ Restrict to Specific OPERATIONS (e.g., Allow InvokeModel, Deny Customization)</pre>
+        <p class="kv"><strong>Resource-Based Policies:</strong> Applied directly to Bedrock resources (e.g., Knowledge Bases, Custom Models) to control which principals can access them.</p>
+        <p class="kv"><strong>Condition Keys:</strong> Used within policies to enforce strict runtime constraints (e.g., requiring requests to originate from a specific VPC Endpoint ID aws:sourceVpce, enforcing KMS encryption keys, or checking tag matching).</p>
+        <p class="lead">Access Models:</p>
+        <p class="kv"><strong>RBAC (Role-Based Access Control):</strong> Permissions assigned strictly based on a static role (e.g., Doctor, Nurse, Billing Administrator).</p>
+        <p class="kv"><strong>ABAC (Attribute-Based Access Control):</strong> Permissions evaluated dynamically based on attributes (e.g., Department, Clearance Level, Assigned Patient ID). Offers greater scalability without creating new IAM policies for every new condition.</p>
+        <p class="lead">B. AWS Lake Formation Governance</p>
+        <p class="txt">While IAM grants bucket-level or database-level permissions, Lake Formation enforces fine-grained data access controls inside tables for datasets used in training, fine-tuning, or RAG grounding.</p>
+        <pre class="art">+-------------------+-----------------------------------------------------------------------+
+| Control Level     | Healthcare Example                                                    |
++-------------------+-----------------------------------------------------------------------+
+| Column-Level      | Doctors see "Diagnosis" and "Treatment Plan", but NOT "SSN" / "DOB".  |
+| Row-Level         | Doctors can query ONLY rows corresponding to their assigned patients. |
+| Cell-Level        | Hides specific sensitive values in individual cells dynamically.     |
++-------------------+-----------------------------------------------------------------------+</pre>
+        <p class="kv"><strong>Data Catalogs:</strong> Centralized metadata repositories that continuously track, index, and enforce fine-grained access over AI-related datasets across the organization.</p>
+        <p class="lead num">3. Monitoring, Auditing &amp; Threat Detection</p>
+        <p class="txt">Continuous monitoring ensures full traceability of all generative AI interactions for HIPAA compliance.</p>
+        <pre class="art">[ Bedrock API Calls ] ──&gt; Amazon CloudTrail (Full API Audit Logs)
+                       ──&gt; CloudWatch Logs Insights (Query &amp; Log Analysis)
+                       ──&gt; Amazon GuardDuty (Threat Detection &amp; Anomaly Alerts)
+                       ──&gt; AWS Security Hub (Centralized Findings &amp; Automated Remediation)</pre>
+        <p class="kv"><strong>AWS CloudTrail:</strong> Captures a complete, immutable audit trail of every Bedrock API invocation (e.g., InvokeModel, RetrieveAndGenerate), including requester identity and timestamp.</p>
+        <p class="kv"><strong>Amazon CloudWatch Logs Insights:</strong> Enables fast querying and pattern matching across API access logs to identify policy violations or unusual query behavior.</p>
+        <p class="kv"><strong>Amazon GuardDuty:</strong> Employs threat detection and machine learning to identify suspicious data access patterns, credential compromise, or unusual API usage.</p>
+        <p class="kv"><strong>AWS Security Hub:</strong> Aggregates and correlates security findings from GuardDuty, Macie, and Inspector.</p>
+        <p class="kv"><strong>Automated Remediation &amp; Log Retention:</strong> Triggers automated AWS Lambda workflows to isolate resources upon security alerts while maintaining log retention policies aligned with healthcare regulatory standards (e.g., 3–7 years).</p>
+    </div>
+
+    <div class="note-card">
+      <p class="cardeyebrow">Domain 3, Task 3.2: Data Security &amp; Privacy Controls</p>
+      <h4 id="s2">Part 2 — Privacy-Preserving Systems (Revision Notes)</h4>
+        <p class="lead num">1. PII Detection (Two Services, Two Places)</p>
+        <p class="lead">Amazon Comprehend:</p>
+        <p class="txt">Operates on text in real-time (at request time) to detect 25+ types of PII.</p>
+        <p class="kv"><strong>Comprehend Medical:</strong> The healthcare-specific variant that detects PHI (Protected Health Information), extracts medical entities from unstructured text, and classifies sensitive clinical information.</p>
+        <p class="lead">Amazon Macie:</p>
+        <p class="txt">Operates on data stored in Amazon S3.</p>
+        <p class="txt">Automatically discovers and classifies sensitive data using built-in and custom data identifiers tailored for organization-specific formats.</p>
+        <p class="lead num">2. Bedrock's Native Privacy Guarantees</p>
+        <p class="kv"><strong>Zero Model Training on Customer Data:</strong> Customer prompts, inputs, and outputs are never used to train or improve Bedrock's foundation models. This is a foundational compliance requirement for healthcare workloads.</p>
+        <p class="kv"><strong>Encryption:</strong> Full encryption in transit and at rest for all data processed by foundation models.</p>
+        <p class="kv"><strong>Secure Knowledge Bases:</strong> Provides secure vector storage and retrieval mechanisms for grounded generation.</p>
+        <p class="lead num">3. Bedrock Guardrails for Privacy</p>
+        <p class="kv"><strong>PII Filters:</strong> Automatically strip or mask sensitive information from model inputs and outputs.</p>
+        <p class="kv"><strong>Custom Topic Filters:</strong> Block specific undesirable or non-compliant categories.</p>
+        <p class="kv"><strong>Contextual Controls:</strong> Filtering adapts dynamically based on the user's role and access level. For example, the same foundation model can serve a doctor and a billing clerk under completely different guardrail configurations.</p>
+        <p class="lead num">4. S3 Lifecycle &amp; Retention as Compliance</p>
+        <p class="kv"><strong>Automated Retention Enforcement:</strong> Implements lifecycle policies to transition data to cold storage or execute automated deletions aligned with regulatory mandates:</p>
+        <p class="kv"><strong>Patient Records:</strong> 7 years (regulatory requirement)</p>
+        <p class="kv"><strong>Access Logs:</strong> 3 years</p>
+        <p class="kv"><strong>Temporary Processing Data:</strong> 30 days</p>
+        <p class="kv"><strong>Audit Trails for Deletion:</strong> Compliant deletion requires more than just deleting data—you must maintain a verifiable audit trail proving when and how the deletion occurred.</p>
+        <p class="lead num">5. Encryption &amp; Processing Pipeline</p>
+        <p class="kv"><strong>AWS KMS Integration:</strong> Enforces encryption at rest, key rotation policies, and strict access controls on encryption keys.</p>
+        <p class="lead">Pipeline Architecture:</p>
+        <p class="txt">Pre-processing Lambda sanitizes inputs → real-time PII detection and redaction → separate logging of PII detection events.</p>
+        <p class="kv"><strong>Note:</strong> Logging what was detected and redacted is a separate compliance requirement from performing the redaction itself.</p>
+    </div>
+
+    <div class="note-card">
+      <p class="cardeyebrow">Domain 3, Task 3.2: Data Security &amp; Privacy Controls</p>
+      <h4 id="s3">Part 3 — Privacy-Focused AI Systems &amp; De-identification (Revision Notes)</h4>
+        <p class="lead num">1. Record-Level Masking Strategies</p>
+        <p class="txt">When PII/PHI is detected, deleting it entirely destroys prompt context for the LLM, while leaving it intact violates HIPAA compliance. Masking strategies preserve semantic utility while obscuring identity.</p>
+        <table class="cmp">
+          <thead><tr><th>Technique</th><th>Mechanism</th><th>Example</th><th>Reversible?</th><th>Primary Use Case &amp; Context Impact</th></tr></thead>
+          <tbody>
+            <tr><td>Redaction</td><td>Irreversibly strips sensitive values</td><td>"John Smith" → "[NAME]"</td><td>No</td><td>Least Context Retained. Model cannot infer whether two mentions refer to the same individual. Choose when sensitive data must simply be erased.</td></tr>
+            <tr><td>Tokenization</td><td>Replaces sensitive data with a unique surrogate token</td><td>"John Smith" → "PATIENT_8472"</td><td>Yes (via Secure Token Mapping Table)</td><td>Consistent References Preserved. Enables cross-border/cross-domain tracking or recovery of original values later.</td></tr>
+            <tr><td>Pseudonymization</td><td>Replaces sensitive data with realistic fake values</td><td>"John Smith" → "Patient A"</td><td>Yes (via Mapping Table)</td><td>Most Context Retained. Reads as natural text, allowing the model to process input with maximum semantic fluency.</td></tr>
+            <tr><td>Format-Preserving Encryption (FPE)</td><td>Encrypts value while preserving exact length and shape</td><td>4532-1234-5678-9010 → 8821-9945-2210-3387</td><td>Yes</td><td>Structure Retained. Essential when legacy systems or strict downstream parsers validate field formats.</td></tr>
+          </tbody>
+        </table>
+        <p class="lead num">2. Dataset-Level Anonymization</p>
+        <p class="txt">When handling entire datasets for RAG Knowledge Bases, fine-tuning, or model evaluation, individual record masking is insufficient. Dataset-level anonymization prevents re-identification across broader populations:</p>
+        <p class="kv"><strong>Generalization:</strong> Reduces data precision by grouping specific values into broader intervals.</p>
+        <p class="kv"><strong>Example:</strong> Age 34→30–40; ZIP 90210→902; Date 2024-03-15→March 2024.</p>
+        <p class="kv"><strong>Perturbation:</strong> Adds small statistical variations to numerical values so aggregate properties remain consistent while individual records are modified.</p>
+        <p class="kv"><strong>Example:</strong> Salary $85,000→$84,200.</p>
+        <p class="kv"><strong>Synthetic Data Generation:</strong> Learns the mathematical distribution of a real dataset to generate an entirely artificial dataset.</p>
+        <p class="kv"><strong>Advantage:</strong> Safest model (no real individuals exist in the data).</p>
+        <p class="kv"><strong>Challenge:</strong> High complexity in preserving exact statistical relationships without introducing bias.</p>
+        <p class="lead num">3. Advanced Mathematical Privacy Controls</p>
+        <p class="lead">A. Differential Privacy</p>
+        <p class="txt">Prevents attackers from inferring an individual's inclusion in a dataset by comparing aggregate queries (e.g., querying total cardiology patients before and after one patient is discharged).</p>
+        <p class="kv"><strong>Mechanism:</strong> Adds controlled randomized statistical noise to query outputs (e.g., actual count =500, returned count =502,498,or 501).</p>
+        <p class="kv"><strong>Privacy Budget (ϵ):</strong> Tracks privacy loss over time. Every query consumes a portion of the budget. Without a budget, repeated queries average out the noise to reveal the true underlying value. Once depleted, further queries are denied.</p>
+        <p class="kv"><strong>Core Trade-off:</strong> Direct balance between privacy and utility (↑Noise=↑Privacy,↓Utility).</p>
+        <p class="lead">B. K-Anonymity</p>
+        <p class="txt">Ensures that any individual's quasi-identifiers (e.g., Age, ZIP, Gender) in a released dataset are identical to at least k−1 other individuals.</p>
+        <p class="chain">Group Size≥k</p>
+        <p class="kv"><strong>Example:</strong> Generalizing Age to 30–40 and ZIP to 902 results in 8 matching individuals for a specific diagnosis record. If k=5, k-anonymity is satisfied because no single person can be uniquely isolated.</p>
+        <p class="lead num">4. End-to-End De-identification Architecture</p>
+        <pre class="art">[ Raw PHI / Patient Records ]
+             │
+             ▼
+[ Anonymization AWS Lambda ]
+   ├── Tokenization Service (Mapping Table)
+   ├── Format-Preserving Encryption Engine
+   ├── Differential Privacy Engine
+   └── De-identification Workflow Orchestrator
+             │
+             ▼
+[ Data Quality Control Check ]  &lt;── CRITICAL STEP: Validates utility vs. anonymization
+             │
+             ▼
+[ Anonymized S3 Data Bucket ]
+             │
+             ▼
+[ Amazon Bedrock Models ] &lt;── Guardrails (Content Filtering, Contextual Controls)</pre>
+        <p class="kv"><strong>Exam Warning:</strong> Over-anonymizing data to the point where it destroys downstream model utility is a primary architectural failure mode. Anonymization pipelines must include a Data Quality Control step to verify that data utility is preserved before pushing to Bedrock.</p>
+    </div>
+
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <p>This is an independent, unofficial study resource and is not affiliated with, endorsed by, or sponsored by Amazon Web Services, Inc. AWS, Amazon Bedrock, and all related marks are trademarks of Amazon.com, Inc. or its affiliates.</p>
+    <p>Hosted on Amazon S3 + Amazon CloudFront. &middot; <a href="index.html">&larr; Back to Study Notes</a></p>
+  </div>
+</footer>
+
+</body>
+</html>
