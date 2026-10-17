@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Task 3.3 Notes | AIP-C01 Guide</title>
+<meta name="description" content="Domain 3, Task 3.3 study notes: Governance and Compliance">
+<style>
+  :root{
+    --ink:#0b1524; --ink-soft:#3a4a5e; --paper:#f7f8fa; --card:#ffffff; --line:#e3e7ee;
+    --accent:#e8622c; --accent-dark:#c94f1f; --navy:#0f2540; --navy-2:#16345c;
+    color-scheme: light;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{margin:0;background:var(--paper);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;line-height:1.6;}
+  a{color:var(--accent-dark);}
+  img{max-width:100%;}
+  .wrap{max-width:1080px;margin:0 auto;padding:0 24px;}
+
+  .nav{position:sticky;top:0;z-index:50;background:rgba(15,37,64,.96);backdrop-filter:blur(6px);border-bottom:1px solid rgba(255,255,255,.08);}
+  .nav .wrap{display:flex;align-items:center;justify-content:space-between;height:56px;}
+  .nav-brand{color:#fff;font-weight:700;font-size:14px;letter-spacing:.02em;text-decoration:none;}
+  .nav-brand span{color:var(--accent);}
+  .nav-links{display:flex;gap:22px;list-style:none;margin:0;padding:0;}
+  .nav-links a{color:#cdd8e6;text-decoration:none;font-size:13.5px;font-weight:500;}
+  .nav-links a:hover{color:#fff;}
+  @media (max-width:720px){
+    .nav .wrap{gap:12px;}
+    .nav-links{gap:16px;overflow-x:auto;scrollbar-width:none;-ms-overflow-style:none;
+      flex:1;justify-content:flex-end;}
+    .nav-links::-webkit-scrollbar{display:none;}
+    .nav-links a{white-space:nowrap;font-size:13px;}
+  }
+
+  header.hero{background:linear-gradient(180deg,var(--navy) 0%, var(--navy-2) 100%);color:#fff;padding:36px 0 28px;}
+  .eyebrow{display:inline-block;font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#ffd8c4;background:rgba(232,98,44,.18);border:1px solid rgba(232,98,44,.4);padding:5px 10px;border-radius:999px;margin-bottom:14px;}
+  h1{font-size:clamp(20px,3vw,27px);line-height:1.2;margin:0;font-weight:800;}
+
+  section{padding:36px 0;}
+
+  figure.arch{margin:0 0 24px;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px;}
+  figure.arch img{display:block;border-radius:8px;width:100%;height:auto;}
+  figure.arch figcaption{margin-top:10px;font-size:12.5px;color:var(--ink-soft);text-align:center;}
+
+  .note-card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:18px 22px 22px;margin-bottom:16px;}
+  .note-card h4{scroll-margin-top:78px;margin:0 0 14px;font-size:13px;font-weight:800;color:var(--navy-2);}
+  .note-card h4:target{color:var(--accent-dark);}
+  .note-card h4:target::after{content:" \2190";color:var(--accent);}
+
+  .lead{font-size:13.5px;font-weight:700;color:var(--ink);margin:18px 0 8px;}
+  .lead:first-of-type{margin-top:0;}
+  .lead.num{color:var(--navy-2);}
+  .txt{font-size:13px;color:var(--ink-soft);line-height:1.6;margin:0 0 8px;}
+  .kv{font-size:13px;color:var(--ink-soft);line-height:1.6;margin:0 0 8px;padding-left:14px;border-left:2px solid var(--line);}
+  .kv strong{color:var(--ink);font-weight:700;}
+
+  .codelabel{font-size:10.5px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:#8b96a5;margin:14px 0 6px;}
+  pre.code{margin:0 0 10px;padding:12px 14px;background:#0f2540;color:#dbe6f3;border-radius:9px;overflow-x:auto;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px;line-height:1.55;}
+
+  footer{padding:32px 0 48px;color:#8b96a5;font-size:12.5px;}
+  footer .wrap{border-top:1px solid var(--line);padding-top:22px;}
+  footer a{color:#6b7686;}
+  table.cmp{width:100%;border-collapse:collapse;margin:4px 0 12px;font-size:12.5px;display:block;overflow-x:auto;}
+  table.cmp th{text-align:left;padding:8px 10px;background:#0f2540;color:#fff;font-weight:700;font-size:11.5px;letter-spacing:.02em;border:1px solid #0f2540;}
+  table.cmp td{padding:8px 10px;border:1px solid var(--line);color:var(--ink-soft);vertical-align:top;}
+  table.cmp tbody tr:nth-child(even){background:#fafbfc;}
+  table.cmp td:first-child{color:var(--ink);font-weight:600;}
+
+  pre.art{margin:4px 0 12px;padding:14px 16px;background:#0f2540;color:#dbe6f3;border-radius:9px;overflow-x:auto;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:11.5px;line-height:1.45;white-space:pre;}
+
+  .step{display:flex;gap:11px;align-items:flex-start;margin:0 0 10px;}
+  .step .stepn{flex:none;width:22px;height:22px;border-radius:7px;background:var(--navy);color:#fff;font-size:11.5px;font-weight:700;display:flex;align-items:center;justify-content:center;margin-top:1px;}
+  .step .stept{margin:0;font-size:13.5px;font-weight:700;color:var(--ink);}
+  .step .steps{margin:0;font-size:11.5px;font-weight:600;letter-spacing:.03em;text-transform:uppercase;color:#8b96a5;}
+
+  .chain{margin:4px 0 12px;padding:11px 14px;background:#f3f7fd;border:1px solid #dbe6f5;border-radius:9px;font-size:12.5px;font-weight:600;color:var(--navy-2);text-align:center;overflow-x:auto;}
+  .cardeyebrow{margin:0 0 4px;font-size:10.5px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:#8b96a5;}
+  .cardeyebrow{margin:0 0 4px;font-size:10.5px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:#8b96a5;}
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="wrap">
+    <a class="nav-brand" href="../index.html">AIP-C01 <span>Guide</span></a>
+    <ul class="nav-links">
+      <li><a href="index.html">All Study Notes</a></li>
+      <li><a href="../tasks/index.html">Build Log</a></li>
+    </ul>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="wrap">
+    <span class="eyebrow">Domain 3 &middot; Task 3.3</span>
+    <h1>Domain 3, Task 3.3 &mdash; Governance &amp; Compliance (Detailed Revision Notes)</h1>
+  </div>
+</header>
+
+<section>
+  <div class="wrap">
+
+    <figure class="arch">
+      <img src="../assets/task-3-3-architecture.svg" alt="Governance and compliance for a regulated financial AI platform, drawn as six stacked layers with the regulators outside them. Layer 1, organisation and account governance: AWS Organizations SCPs and tag policies, and IAM policies with permission boundaries, which push rules down into the pipeline - tagging and region blocks onto training, and separation of duties onto the approval step so the builder cannot be the approver. Layer 2, data source tracking and lineage: an S3 data lake of financial documents and market feeds, read by Glue crawlers into the Glue Data Catalog which registers source, jurisdiction, licensing and schema; CloudTrail with data event logging switched on records every object access and Athena queries those audit trails; Glue ETL jobs push data lineage into the catalog. Layer 3, the compliance framework pipeline: CodePipeline triggers SageMaker training, which is checked by Clarify for pre-training bias and paired with S3 versioning and Feature Store time travel for reproducibility; training automatically emits ML lineage artifacts, actions and contexts, and metrics into SageMaker model cards; a Step Functions approval workflow verifies the bias metrics and the model card before logging an approved signature into DynamoDB. Layer 4, Bedrock governance: the data lake feeds Bedrock knowledge bases, which supply context chunks to the foundation models, with guardrails applying content and PII policies. Layer 5, continuous monitoring: the trained model deploys to a SageMaker inference endpoint wrapped in handlers that redact PII before and after; Model Monitor watches data quality, model quality, bias and feature attribution against a baseline from the data lake, with Clarify measuring post-training bias drift; an alert goes to EventBridge, which triggers a Lambda that rolls back or shifts traffic on the endpoint - a closed loop. Layer 6, analytics and reporting: decision logs with alternatives, timestamps and correlation IDs go to CloudWatch Logs, metrics to CloudWatch Metrics, and both feed QuickSight compliance dashboards that produce the quarterly compliance reports the regulators asked for.">
+      <figcaption>Six layers, and the rules travel downward. Governance is set at the top, evidence is collected at every step, and the bottom layer turns that evidence into the report a regulator asks for.</figcaption>
+    </figure>
+
+    <div class="note-card">
+      <h4 id="s1">Domain 3, Task 3.3 — Step 1: Compliance Frameworks (Detailed Notes)</h4>
+        <p class="lead num">1. SageMaker Model Cards</p>
+        <p class="kv"><strong>Definition &amp; Concept:</strong> A SageMaker Model Card serves as a central repository for model metadata throughout its lifecycle. It functions as both a "birth certificate" (documenting intent, origin, and setup) and a "report card" (documenting evaluation scores, bias, and compliance readiness).</p>
+        <p class="lead">Core Standard Contents:</p>
+        <p class="kv"><strong>Model Overview:</strong> Intended business use cases, operational constraints, and explicitly unsupported uses.</p>
+        <p class="kv"><strong>Data Lineage:</strong> Characteristics, schema, volume, and potential limitations/biases of training and validation datasets.</p>
+        <p class="kv"><strong>Evaluation Metrics:</strong> Baseline performance metrics across test split distributions and specialized stress-testing scenarios.</p>
+        <p class="kv"><strong>Risk &amp; Guardrails:</strong> Known operational limitations, failure modes, safety boundaries, and recommended human oversight practices.</p>
+        <p class="lead">Financial &amp; Regulatory Additions:</p>
+        <p class="kv"><strong>SEC / FINRA Documentation:</strong> Explicit audit fields documenting regulatory compliance checks and risk assessments.</p>
+        <p class="kv"><strong>Demographic Fairness &amp; Explainability:</strong> Fairness scores across sensitive demographic groups and explainability metrics (e.g., feature attribution scores) justifying output logic.</p>
+        <p class="kv"><strong>Version Control &amp; Lifecycle Management:</strong> Built-in SDK/API lifecycle methods (create_model_card(), update_model_card(), export_model_card()) to handle state transitions from creation to approval.</p>
+        <p class="kv"><strong>Programmatic Generation via CI/CD:</strong> Manual documentation quickly becomes outdated when models are retrained. To keep cards synchronized with production, SageMaker Model Cards are generated and updated automatically inside automated CI/CD deployment pipelines. Metrics and artifacts are programmatically extracted directly from SageMaker Training Jobs, Processing Jobs, and Inference Endpoints without manual human intervention.</p>
+        <p class="lead num">2. SageMaker ML Lineage Tracking</p>
+        <p class="kv"><strong>Definition &amp; Purpose:</strong> Tracks the end-to-end lineage of an ML workflow to reconstruct how a specific model version was built, covering the exact training data, source code, execution parameters, and output artifacts.</p>
+        <p class="kv"><strong>DAG (Directed Acyclic Graph) Architecture:</strong> Lineage is modeled as a graph composed of three core entity types connected by Associations:</p>
+        <p class="kv"><strong>Artifacts (create_artifact()):</strong> Physical or digital entities, such as S3 URI references to raw datasets, trained model weights, evaluation metrics files, or ECR Docker container images.</p>
+        <p class="kv"><strong>Actions (create_action()):</strong> Computational work or processing steps performed, such as ETL data preparation jobs, SageMaker training jobs, or model transformation steps.</p>
+        <p class="kv"><strong>Contexts (create_context()):</strong> Logical groupings that tie actions and artifacts together, such as an active SageMaker Endpoint, an MLflow/SageMaker Experiment, or a pipeline execution run.</p>
+        <p class="lead">Custom Entities &amp; AWS Glue Integration:</p>
+        <p class="kv"><strong>Custom Entity Linking:</strong> While SageMaker automatically records lineage for native SageMaker components, external components (e.g., third-party data pipelines or external API calls) must be linked explicitly using custom Lineage entities.</p>
+        <p class="kv"><strong>Data vs. Model Lineage:</strong> Model lineage tracks how the model was trained, whereas AWS Glue tracks data lineage (how raw data was transformed before reaching the ML step).</p>
+        <p class="kv"><strong>AWS Glue Provenance:</strong> Glue ETL jobs leverage custom job parameters, source-to-target schema mappings stored in the Glue Data Catalog, and the DynamicFrame class to maintain precise field-level data transformations.</p>
+        <p class="lead num">3. Metadata Tagging &amp; Access Controls</p>
+        <p class="kv"><strong>Standardized Tagging Framework:</strong> Applies consistent metadata across all AWS resources using the TagResource API to establish governance scope. Example taxonomy:</p>
+        <p class="kv"><strong>DataSensitivity:</strong> confidential</p>
+        <p class="kv"><strong>RegulatoryScope:</strong> SEC</p>
+        <p class="kv"><strong>DataProvider:</strong> Bloomberg</p>
+        <p class="kv"><strong>ModelVersion:</strong> v3</p>
+        <p class="kv"><strong>Jurisdiction:</strong> EU</p>
+        <p class="kv"><strong>Tag-Based Access Control (TBAC):</strong> IAM policies restrict access based on resource tags (e.g., granting production model access only to authorized compliance roles).</p>
+        <p class="kv"><strong>Preventative Governance via SCPs:</strong> AWS Organizations Service Control Policies (SCPs) and AWS Tag Policies strictly enforce tagging policies at the account boundary. Any API call attempting to create an untagged resource is automatically denied before deployment.</p>
+        <p class="lead num">4. CloudWatch Logs — Decision Logging &amp; Audit Trails</p>
+        <p class="kv"><strong>Financial Advisory Decision Logging:</strong> Regulators require institutions to justify why a specific recommendation was selected over another. CloudWatch Logs must record comprehensive transaction payloads:</p>
+        <p class="kv"><strong>Input &amp; Decision Parameters:</strong> Full prompt payload, user risk context, market inputs, and decision criteria.</p>
+        <p class="kv"><strong>Model Outputs &amp; Confidence Scores:</strong> Recommendation outcome alongside calculated confidence thresholds.</p>
+        <p class="kv"><strong>Alternative Recommendations:</strong> Crucial for compliance. Logs must capture candidate recommendations that were evaluated but rejected, proving why the primary recommendation was chosen.</p>
+        <p class="lead">Audit Trail Requirements:</p>
+        <p class="kv"><strong>End-to-End Traceability:</strong> Unbroken tracking chain from initial user query to the final financial advisory response.</p>
+        <p class="kv"><strong>Human Oversight Tracking:</strong> Logging explicit human-in-the-loop interventions, approvals, or manual overrides to verify operational human oversight.</p>
+        <p class="kv"><strong>Correlation IDs:</strong> Unique IDs injected into requests to trace a single transaction across distributed microservices and API gateways.</p>
+        <p class="kv"><strong>Structured Logging &amp; Metrics:</strong> Logs are emitted in structured JSON format to allow for direct querying via CloudWatch Logs Insights. Metric Filters extract specific patterns from log streams to trigger real-time CloudWatch custom governance metrics and alerts.</p>
+    </div>
+
+    <div class="note-card">
+      <h4 id="s2">Domain 3, Task 3.3 — Step 2: Data Source Tracking (Detailed Notes)</h4>
+        <p class="lead num">1. Glue Data Catalog — Source Registration &amp; Licensing</p>
+        <p class="kv"><strong>Centralized Metadata Repository:</strong> Serves as the authoritative registry for all financial datasets, market feeds, and internal document repositories used by AI models and RAG systems.</p>
+        <p class="kv"><strong>Automated Schema &amp; Format Classification:</strong> Utilizes Glue Crawlers equipped with custom classifiers to ingest and parse specialized financial file formats. Programmatic query APIs (GetTables, GetDatabases) enable automated system integration.</p>
+        <p class="lead">Licensing &amp; Provider Governance:</p>
+        <p class="kv"><strong>Metadata Categorization:</strong> Data assets are explicitly tagged and categorized by Data Type, Provider (e.g., Bloomberg, Refinitiv, internal research), and Jurisdiction (e.g., US, EU, APAC).</p>
+        <p class="kv"><strong>Licensing Rights Management:</strong> Tracks legally permissible usage constraints per data vendor—specifically recording whether a dataset can be used for LLM pre-training, fine-tuning, or dynamic RAG prompt injection.</p>
+        <p class="kv"><strong>Data Reliability Scoring:</strong> Maintains data quality and reliability metrics within catalog metadata to weigh downstream confidence scores.</p>
+        <p class="lead num">2. CloudTrail Configuration — Data Access Auditing</p>
+        <p class="kv"><strong>Multi-Region Logging:</strong> CloudTrail trails must be configured across all active AWS Regions to guarantee complete audit coverage without unmonitored blind spots.</p>
+        <p class="lead">Management vs. Data Events:</p>
+        <p class="kv"><strong>Management Events:</strong> Log control plane operations (e.g., CreateBucket, UpdateModel) and are enabled by default.</p>
+        <p class="kv"><strong>Data Events (Critical Exam Distinction):</strong> Log data plane access operations (e.g., S3 GetObject, PutObject). Data events are OFF by default due to high volume and cost. They must be explicitly enabled to audit precisely which S3 objects or documents were read during training, fine-tuning, or RAG context construction.</p>
+        <p class="kv"><strong>Audit Reporting via Athena:</strong> CloudTrail logs stored in S3 are queried using Amazon Athena SQL queries to generate point-in-time compliance and access audit reports.</p>
+        <p class="lead num">3. Cross-Account Lineage</p>
+        <p class="kv"><strong>Enterprise Multi-Account Architectures:</strong> In enterprise environments, datasets frequently reside in a centralized Data Lake account, while SageMaker model training or Bedrock inference runs in separate workload accounts.</p>
+        <p class="kv"><strong>Lineage Persistence:</strong> To prevent lineage breakage across account boundaries, systems utilize the SageMaker AddAssociation API paired with cross-account IAM roles and explicitly qualified Resource ARNs (Amazon Resource Names).</p>
+        <p class="lead num">4. Data Versioning &amp; Exact Reproducibility</p>
+        <p class="kv"><strong>Regulatory Requirement:</strong> Regulators (e.g., SEC/FINRA) often mandate that a financial firm reproduce the exact AI output generated on a specific date in the past.</p>
+        <p class="lead">Versioning Mechanisms:</p>
+        <p class="kv"><strong>S3 Versioning &amp; Lifecycle Policies:</strong> Preserves immutable versions of unstructured raw documents, PDFs, and training files over time.</p>
+        <p class="kv"><strong>SageMaker Feature Store Time Travel:</strong> Allows point-in-time queries on structured feature tables (e.g., "What was customer X's credit score feature on March 1, 2024?").</p>
+        <p class="kv"><strong>The Reproducibility Guarantee:</strong> Executing the Same Model Version against the Same Data Version guarantees the Same Output Result.</p>
+        <p class="lead num">5. Source Attribution &amp; Output Auditing</p>
+        <p class="kv"><strong>Attribution in AI Responses:</strong> AI outputs track and store references to the underlying data sources that influenced a given recommendation.</p>
+        <p class="kv"><strong>Weighted Confidence Scores:</strong> Recommendations built upon lower-reliability or unverified data sources are programmatically assigned lower confidence scores.</p>
+        <p class="kv"><strong>Practical RAG Attribution Boundary:</strong> While exact sentence-to-chunk token mapping inside an LLM is non-deterministic, regulatory compliance requires tracking and logging the exact data chunks included in the LLM prompt context window.</p>
+        <p class="kv"><strong>Auditing the Attribution Engine:</strong> The attribution mechanism itself is subject to continuous audit through:</p>
+        <p class="kv"><strong>Verification Workflows:</strong> Testing attribution accuracy against known ground truths.</p>
+        <p class="kv"><strong>Completeness Audits:</strong> Identifying un-attributed or orphan output responses.</p>
+        <p class="kv"><strong>Remediation Processes:</strong> Fixing gaps in context tracking and logging pipelines.</p>
+    </div>
+
+    <div class="note-card">
+      <h4 id="s3">Domain 3, Task 3.3 — Step 3: Organisational Governance Systems (Detailed Notes)</h4>
+        <p class="lead num">1. Three Layers of Control (Permission Hierarchy)</p>
+        <p class="txt">Enforces multi-layered access boundaries and governance limits across large-scale enterprise environments:</p>
+        <p class="lead">AWS Organizations Level — Service Control Policies (SCPs):</p>
+        <p class="kv"><strong>Permission Ceiling:</strong> Sets the maximum allowable permissions across AWS accounts. SCPs never grant permissions; they only restrict/deny.</p>
+        <p class="kv"><strong>Inviolable Restrictions:</strong> An account administrator (even root in a member account) cannot bypass an SCP limit.</p>
+        <p class="kv"><strong>Governance Examples:</strong> Enforcing region restrictions (e.g., prohibiting Bedrock deployments outside us-east-1), denying creation of untagged resources, or restricting model customization jobs strictly to approved accounts.</p>
+        <p class="lead">Account Level — IAM Policies:</p>
+        <p class="txt">Grants explicit identity-based or role-based permissions to users, services, and execution roles.</p>
+        <p class="lead">Service Level — Resource Policies:</p>
+        <p class="txt">Controls access directly on individual resources (e.g., S3 Bucket Policies, KMS Key Policies, SageMaker Endpoint Policies).</p>
+        <p class="lead num">2. Automated Approval Workflows &amp; Separation of Duties</p>
+        <p class="kv"><strong>AWS Step Functions Orchestration:</strong> Automated governance workflows enforce strict validation gates before promoting models to production:</p>
+        <p class="chain">Governance Metrics Check→Compliance Checks→Approval Tracking (DynamoDB)→Promote / Reject</p>
+        <p class="lead">Automated Stage Gates:</p>
+        <p class="kv"><strong>Bias Metrics Check:</strong> Validates whether pre/post-training bias metrics fall within legal thresholds.</p>
+        <p class="kv"><strong>Model Card Completeness:</strong> Verifies 100% completion of mandatory documentation fields.</p>
+        <p class="kv"><strong>Evaluation Thresholds:</strong> Confirms that benchmark and accuracy tests pass required targets.</p>
+        <p class="kv"><strong>Human-in-the-Loop Approval:</strong> Requires explicit approval signatures prior to deployment.</p>
+        <p class="kv"><strong>Separation of Duties:</strong> Enforces organizational compliance rules preventing the developer who built/trained a model from approving its deployment to production.</p>
+        <p class="lead num">3. Centralized Model Dashboard &amp; Governance at Scale</p>
+        <p class="kv"><strong>SageMaker Model Dashboard:</strong> Provides a single-pane-of-glass operational view across hundreds of production models, tracking performance, drift status, and compliance posture.</p>
+        <p class="kv"><strong>Automated Alerting &amp; Eventing:</strong> Integrates create_monitoring_schedule() with Amazon EventBridge to automatically publish alerts when models deviate from governance rules.</p>
+        <p class="kv"><strong>Quantitative Governance Metrics:</strong> Replaces static documentation with measurable operational CloudWatch metrics:</p>
+        <p class="txt">Percentage of active models with up-to-date SageMaker Model Cards.</p>
+        <p class="txt">Percentage of models operating within approved bias thresholds.</p>
+        <p class="txt">Days elapsed since the last formal model re-evaluation.</p>
+        <p class="txt">Count and tracking of non-compliant/untagged resources.</p>
+        <p class="lead num">4. SageMaker Clarify — Bias &amp; Explainability Metrics</p>
+        <p class="txt">Measuring demographic fairness is a legal requirement under financial regulations (e.g., fair lending laws). SageMaker Clarify computes three primary quantitative bias metrics:</p>
+        <p class="lead">DPPL (Difference in Positive Proportions in Labels):</p>
+        <p class="txt">Measures the gap in the proportion of positive outcomes between a favored demographic group (q) and an un-favored group (a).</p>
+        <p class="chain">DPPL=q−a</p>
+        <p class="lead">DI (Disparate Impact):</p>
+        <p class="txt">Measures the ratio of positive outcomes received by an un-favored group relative to a favored group.</p>
+        <pre class="art">DI=
+q
+a
+​</pre>
+        <p class="kv"><strong>Rule of Thumb:</strong> Values significantly below 0.8 indicate potential disparate impact/bias.</p>
+        <p class="lead">DCR (Difference in Conditional Rejection):</p>
+        <p class="txt">Measures the gap in rejection rates between demographic groups after conditioning on baseline qualification factors (e.g., comparing rejection rates for applicants with equal credit scores).</p>
+        <p class="lead">Stages of Bias Analysis:</p>
+        <p class="kv"><strong>Pre-training Bias:</strong> Evaluates whether historical training datasets contain inherent baseline imbalances or demographic skew.</p>
+        <p class="kv"><strong>Post-training Bias:</strong> Evaluates whether the trained model's predictions output biased decisions (even if trained on seemingly balanced data).</p>
+    </div>
+
+    <div class="note-card">
+      <h4 id="s4">Domain 3, Task 3.3 — Step 4: Continuous Monitoring &amp; Advanced Controls (Detailed Notes)</h4>
+        <p class="lead num">1. SageMaker Model Monitor &amp; Drift Types</p>
+        <p class="kv"><strong>Baseline Establishment:</strong> Uses constraint suggestion algorithms during training to build a statistical baseline representing expected input schemas and statistical distributions.</p>
+        <p class="lead">Four Core Monitoring Modules:</p>
+        <p class="kv"><strong>Data Quality Drift:</strong> Detects changes in data structure, schema violations, null values, or statistical shifts in input features.</p>
+        <p class="kv"><strong>Model Quality Drift:</strong> Evaluates ground truth labels against endpoint predictions to detect degradation in performance metrics (e.g., F1 score, MSE).</p>
+        <p class="kv"><strong>Bias Drift (SageMaker Clarify Integration):</strong> Evaluates whether model predictions exhibit demographic bias over time due to real-world population shifts.</p>
+        <p class="kv"><strong>Feature Attribution Drift:</strong> Measures whether the relative importance/weighting of input features driving predictions has shifted compared to the baseline.</p>
+        <p class="kv"><strong>Jensen-Shannon (JS) Divergence:</strong> Used to calculate distance/divergence between baseline probability distributions and production prediction distributions. Requires precise threshold calibration to balance false alarms against un-alerted real drift.</p>
+        <p class="lead num">2. Automated Remediation &amp; The Closed Governance Loop</p>
+        <p class="kv"><strong>Real-time Event-driven Mitigation:</strong> When a monitoring alarm fires due to drift or bias threshold violations, waiting for human manual review introduces compliance risk.</p>
+        <p class="lead">Remediation Pipeline:</p>
+        <p class="chain">Model Monitor Alarm→Amazon EventBridge Rule→AWS Lambda / Step Functions→Automated Rollback / Traffic Shift</p>
+        <p class="kv"><strong>Automated Actions:</strong> Triggers automated Blue/Green endpoint traffic shifts, falling back to a known compliant model version or cutting off live traffic entirely while notifying compliance officers.</p>
+        <p class="lead num">3. Token-Level PII Redaction</p>
+        <p class="kv"><strong>Endpoint Custom Handlers:</strong> Implemented using pre-processing and post-processing handlers on SageMaker endpoints or middleware wrappers around Bedrock calls.</p>
+        <p class="kv"><strong>Redaction Techniques:</strong> Combined usage of deterministic pattern matching (regex for SSNs, credit card numbers) and semantic Named Entity Recognition (NER) ML models for broader contextual PII detection.</p>
+        <p class="kv"><strong>Token-Level Precision:</strong> Rather than blocking or rejecting the entire prompt/response, sensitive tokens are stripped or masked while leaving the non-sensitive response intact and functional.</p>
+        <p class="kv"><strong>Example:</strong> "Account 4532-1234 balance is $5,000" → "Account [REDACTED] balance is $5,000"</p>
+        <p class="lead num">4. Output Filtering &amp; Misuse Monitoring</p>
+        <p class="kv"><strong>Bedrock Guardrails &amp; Policy Filters:</strong> Applied as a defensive layer to block unsafe content, restrict topics, prevent PII leakage, and mitigate hallucinated outputs. Combined with prompt engineering and RAG context limits.</p>
+        <p class="kv"><strong>Misuse Anomaly Detection:</strong> Continuous tracking of usage patterns to identify malicious activity, such as:</p>
+        <p class="txt">Sudden spikes in query volume (100× normal baseline).</p>
+        <p class="txt">Off-hours access anomalies or systematic jailbreak/probing attempts.</p>
+        <p class="txt">Unusual automated batch extraction patterns.</p>
+        <p class="lead num">5. Automated Compliance Reporting</p>
+        <p class="lead">Pipeline Architecture:</p>
+        <p class="chain">CloudWatch Custom Governance Metrics→AWS Glue / QuickSight Data Ingestion→Amazon QuickSight Compliance Dashboards</p>
+        <p class="kv"><strong>Regulatory Readiness:</strong> Keeps compliance audit reports in a state of continuous generation rather than requiring weeks of manual log collation at the end of each fiscal quarter.</p>
+    </div>
+
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <p>This is an independent, unofficial study resource and is not affiliated with, endorsed by, or sponsored by Amazon Web Services, Inc. AWS, Amazon Bedrock, and all related marks are trademarks of Amazon.com, Inc. or its affiliates.</p>
+    <p>Hosted on Amazon S3 + Amazon CloudFront. &middot; <a href="index.html">&larr; Back to Study Notes</a></p>
+  </div>
+</footer>
+
+</body>
+</html>

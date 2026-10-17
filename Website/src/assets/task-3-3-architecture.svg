@@ -1,0 +1,228 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1240 1526" width="1240" height="1526" role="img" font-family="-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica,Arial,sans-serif">
+<defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,1 L9,5 L0,9 z" fill="#8fa0b6"/></marker><marker id="ahs" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,1 L9,5 L0,9 z" fill="#6f7f95"/></marker><marker id="ahb" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,1 L9,5 L0,9 z" fill="#1565c0"/></marker></defs>
+<style>.dtitle{font-size:15px;font-weight:800;letter-spacing:.03em;fill:#0f2540;}.ph{font-size:12.5px;font-weight:800;fill:#ffffff;letter-spacing:.02em;}.nt{font-size:12px;font-weight:700;fill:#0b1524;}.ns{font-size:9.8px;fill:#5a6a7e;}.el{font-size:9.2px;font-weight:700;fill:#5c6b80;}.ml{font-size:9.5px;font-weight:700;fill:#1565c0;}.pill{font-size:12px;font-weight:700;fill:#0b1524;}.leg{font-size:10px;fill:#9aa5b4;}</style>
+<rect width="1240" height="1526" fill="#ffffff"/>
+<text x="24" y="34" class="dtitle">TASK 3.3: SIX LAYERS OF GOVERNANCE, AND THE EVIDENCE THEY LEAVE BEHIND</text>
+<line x1="24" y1="48" x2="1216" y2="48" stroke="#e3e7ee"/>
+<rect x="90" y="112" width="1060" height="108" rx="14" fill="#f5f5f5" stroke="#616161" stroke-width="1.8" stroke-dasharray="7 5"/>
+<rect x="102" y="99" width="306.2" height="26" rx="9" fill="#616161"/>
+<text x="114" y="117" class="ph">Layer 1: Organisation &amp; Account Governance</text>
+<rect x="90" y="266" width="1060" height="194" rx="14" fill="#e3f2fd" stroke="#1565c0" stroke-width="1.8"/>
+<rect x="102" y="253" width="284.9" height="26" rx="9" fill="#1565c0"/>
+<text x="114" y="271" class="ph">Layer 2: Data Source Tracking &amp; Lineage</text>
+<rect x="90" y="506" width="1060" height="280" rx="14" fill="#e8f5e9" stroke="#2e7d32" stroke-width="1.8"/>
+<rect x="102" y="493" width="377.2" height="26" rx="9" fill="#2e7d32"/>
+<text x="114" y="511" class="ph">Layer 3: Compliance Framework Pipeline (Custom / SM)</text>
+<rect x="90" y="832" width="1060" height="108" rx="14" fill="#f3e5f5" stroke="#7b1fa2" stroke-width="1.8"/>
+<rect x="102" y="819" width="235.2" height="26" rx="9" fill="#7b1fa2"/>
+<text x="114" y="837" class="ph">Layer 4: Bedrock / FM Governance</text>
+<rect x="90" y="986" width="1060" height="194" rx="14" fill="#fff3e0" stroke="#e65100" stroke-width="1.8"/>
+<rect x="102" y="973" width="221.0" height="26" rx="9" fill="#e65100"/>
+<text x="114" y="991" class="ph">Layer 5: Continuous Monitoring</text>
+<rect x="90" y="1226" width="1060" height="194" rx="14" fill="#ffebee" stroke="#c62828" stroke-width="1.8"/>
+<rect x="102" y="1213" width="221.0" height="26" rx="9" fill="#c62828"/>
+<text x="114" y="1231" class="ph">Layer 6: Analytics &amp; Reporting</text>
+<rect x="105" y="142" width="270" height="64" rx="10" fill="#ffffff" stroke="#c9d3e0"/>
+<rect x="105" y="156" width="4" height="36" rx="2" fill="#616161"/>
+<text x="121" y="168" class="nt">AWS Organizations</text>
+<text x="121" y="183" class="ns">SCPs &amp; Tag Policies</text>
+<rect x="485" y="142" width="270" height="64" rx="10" fill="#ffffff" stroke="#c9d3e0"/>
+<rect x="485" y="156" width="4" height="36" rx="2" fill="#616161"/>
+<text x="501" y="168" class="nt">IAM Policies &amp;</text>
+<text x="501" y="183" class="ns">Permission Boundaries</text>
+<rect x="105" y="296" width="270" height="64" rx="10" fill="#ffffff" stroke="#c9d3e0"/>
+<rect x="105" y="310" width="4" height="36" rx="2" fill="#1565c0"/>
+<text x="121" y="322" class="nt">S3 Data Lake</text>
+<text x="121" y="337" class="ns">Financial Docs &amp; Market Feeds</text>
+<rect x="485" y="296" width="270" height="64" rx="10" fill="#ffffff" stroke="#c9d3e0"/>
+<rect x="485" y="310" width="4" height="36" rx="2" fill="#1565c0"/>
+<text x="501" y="333" class="nt">AWS Glue Crawlers</text>
+<rect x="865" y="296" width="270" height="64" rx="10" fill="#ffffff" stroke="#c9d3e0"/>
+<rect x="865" y="310" width="4" height="36" rx="2" fill="#1565c0"/>
+<text x="881" y="322" class="nt">AWS Glue Data Catalog</text>
+<text x="881" y="337" class="ns">(Source Registry, Jurisdiction,</text>
+<text x="881" y="350" class="ns">Licensing, Schema)</text>
+<rect x="105" y="382" width="270" height="64" rx="10" fill="#ffffff" stroke="#c9d3e0"/>
+<rect x="105" y="396" width="4" height="36" rx="2" fill="#1565c0"/>
+<text x="121" y="408" class="nt">AWS CloudTrail</text>
+<text x="121" y="423" class="ns">(DATA Event Logging ON)</text>
+<rect x="485" y="382" width="270" height="64" rx="10" fill="#ffffff" stroke="#c9d3e0"/>
+<rect x="485" y="396" width="4" height="36" rx="2" fill="#1565c0"/>
+<text x="501" y="408" class="nt">Amazon Athena</text>
+<text x="501" y="423" class="ns">(Audit Queries)</text>
+<rect x="865" y="382" width="270" height="64" rx="10" fill="#ffffff" stroke="#c9d3e0"/>
+<rect x="865" y="396" width="4" height="36" rx="2" fill="#1565c0"/>
+<text x="881" y="408" class="nt">AWS Glue ETL Jobs</text>
+<text x="881" y="423" class="ns">(DynamicFrame,</text>
+<text x="881" y="436" class="ns">Custom Job Parameters)</text>
+<rect x="105" y="536" width="270" height="64" rx="10" fill="#ffffff" stroke="#c9d3e0"/>
+<rect x="105" y="550" width="4" height="36" rx="2" fill="#2e7d32"/>
+<text x="121" y="562" class="nt">CI/CD Pipeline</text>
+<text x="121" y="577" class="ns">(CodePipeline)</text>
+<rect x="485" y="536" width="270" height="64" rx="10" fill="#ffffff" stroke="#c9d3e0"/>
+<rect x="485" y="550" width="4" height="36" rx="2" fill="#2e7d32"/>
+<text x="501" y="562" class="nt">SageMaker</text>
+<text x="501" y="577" class="ns">Training / Fine-Tuning</text>
+<rect x="865" y="536" width="270" height="64" rx="10" fill="#ffffff" stroke="#c9d3e0"/>
+<rect x="865" y="550" width="4" height="36" rx="2" fill="#2e7d32"/>
+<text x="881" y="562" class="nt">S3 Versioning +</text>
+<text x="881" y="577" class="ns">SM Feature Store Time Travel</text>
+<rect x="105" y="622" width="270" height="64" rx="10" fill="#ffffff" stroke="#c9d3e0"/>
+<rect x="105" y="636" width="4" height="36" rx="2" fill="#2e7d32"/>
+<text x="121" y="648" class="nt">AWS Step Functions</text>
+<text x="121" y="663" class="ns">Approval Workflow</text>
+<rect x="485" y="622" width="270" height="64" rx="10" fill="#ffffff" stroke="#c9d3e0"/>
+<rect x="485" y="636" width="4" height="36" rx="2" fill="#2e7d32"/>
+<text x="501" y="648" class="nt">SageMaker Model Cards</text>
+<text x="501" y="663" class="ns">(Purpose, Data, Performance,</text>
+<text x="501" y="676" class="ns">Limitations)</text>
+<rect x="865" y="622" width="270" height="64" rx="10" fill="#ffffff" stroke="#c9d3e0"/>
+<rect x="865" y="636" width="4" height="36" rx="2" fill="#2e7d32"/>
+<text x="881" y="648" class="nt">SageMaker Clarify</text>
+<text x="881" y="663" class="ns">(Pre-Training Bias)</text>
+<rect x="105" y="708" width="270" height="64" rx="10" fill="#ffffff" stroke="#c9d3e0"/>
+<rect x="105" y="722" width="4" height="36" rx="2" fill="#2e7d32"/>
+<text x="121" y="734" class="nt">Amazon DynamoDB</text>
+<text x="121" y="749" class="ns">(Approval Audit Trail)</text>
+<rect x="485" y="708" width="270" height="64" rx="10" fill="#ffffff" stroke="#c9d3e0"/>
+<rect x="485" y="722" width="4" height="36" rx="2" fill="#2e7d32"/>
+<text x="501" y="734" class="nt">SageMaker ML Lineage</text>
+<text x="501" y="749" class="ns">(Artifacts, Actions, Contexts,</text>
+<text x="501" y="762" class="ns">Associations)</text>
+<rect x="105" y="862" width="270" height="64" rx="10" fill="#ffffff" stroke="#c9d3e0"/>
+<rect x="105" y="876" width="4" height="36" rx="2" fill="#7b1fa2"/>
+<text x="121" y="888" class="nt">Bedrock Knowledge Bases</text>
+<text x="121" y="903" class="ns">(RAG Data Sources)</text>
+<rect x="485" y="862" width="270" height="64" rx="10" fill="#ffffff" stroke="#c9d3e0"/>
+<rect x="485" y="876" width="4" height="36" rx="2" fill="#7b1fa2"/>
+<text x="501" y="888" class="nt">AWS Bedrock</text>
+<text x="501" y="903" class="ns">(Foundation Models)</text>
+<rect x="865" y="862" width="270" height="64" rx="10" fill="#ffffff" stroke="#c9d3e0"/>
+<rect x="865" y="876" width="4" height="36" rx="2" fill="#7b1fa2"/>
+<text x="881" y="888" class="nt">Bedrock Guardrails</text>
+<text x="881" y="903" class="ns">(Content Filters / PII)</text>
+<rect x="105" y="1016" width="270" height="64" rx="10" fill="#ffffff" stroke="#c9d3e0"/>
+<rect x="105" y="1030" width="4" height="36" rx="2" fill="#e65100"/>
+<text x="121" y="1042" class="nt">SageMaker</text>
+<text x="121" y="1057" class="ns">Inference Endpoint</text>
+<rect x="485" y="1016" width="270" height="64" rx="10" fill="#ffffff" stroke="#c9d3e0"/>
+<rect x="485" y="1030" width="4" height="36" rx="2" fill="#e65100"/>
+<text x="501" y="1042" class="nt">Endpoint Handlers</text>
+<text x="501" y="1057" class="ns">(PII Redaction pre/post)</text>
+<rect x="865" y="1016" width="270" height="64" rx="10" fill="#ffffff" stroke="#c9d3e0"/>
+<rect x="865" y="1030" width="4" height="36" rx="2" fill="#e65100"/>
+<text x="881" y="1042" class="nt">SageMaker</text>
+<text x="881" y="1057" class="ns">Model Monitor</text>
+<rect x="105" y="1102" width="270" height="64" rx="10" fill="#ffffff" stroke="#c9d3e0"/>
+<rect x="105" y="1116" width="4" height="36" rx="2" fill="#e65100"/>
+<text x="121" y="1128" class="nt">AWS Lambda</text>
+<text x="121" y="1143" class="ns">Remediation (Rollback/Shift)</text>
+<rect x="485" y="1102" width="270" height="64" rx="10" fill="#ffffff" stroke="#c9d3e0"/>
+<rect x="485" y="1116" width="4" height="36" rx="2" fill="#e65100"/>
+<text x="501" y="1139" class="nt">Amazon EventBridge</text>
+<rect x="865" y="1102" width="270" height="64" rx="10" fill="#ffffff" stroke="#c9d3e0"/>
+<rect x="865" y="1116" width="4" height="36" rx="2" fill="#e65100"/>
+<text x="881" y="1128" class="nt">SageMaker Clarify</text>
+<text x="881" y="1143" class="ns">(Post-Training/Bias Drift)</text>
+<rect x="105" y="1256" width="270" height="64" rx="10" fill="#ffffff" stroke="#c9d3e0"/>
+<rect x="105" y="1270" width="4" height="36" rx="2" fill="#c62828"/>
+<text x="121" y="1282" class="nt">Amazon CloudWatch Logs</text>
+<text x="121" y="1297" class="ns">(Alternatives, Timestamps,</text>
+<text x="121" y="1310" class="ns">Correlation IDs)</text>
+<rect x="485" y="1256" width="270" height="64" rx="10" fill="#ffffff" stroke="#c9d3e0"/>
+<rect x="485" y="1270" width="4" height="36" rx="2" fill="#c62828"/>
+<text x="501" y="1293" class="nt">Amazon CloudWatch Metrics</text>
+<rect x="865" y="1256" width="270" height="64" rx="10" fill="#ffffff" stroke="#c9d3e0"/>
+<rect x="865" y="1270" width="4" height="36" rx="2" fill="#c62828"/>
+<text x="881" y="1282" class="nt">Amazon QuickSight</text>
+<text x="881" y="1297" class="ns">(Compliance Dashboards</text>
+<text x="881" y="1310" class="ns">&amp; Reports)</text>
+<rect x="485" y="1342" width="270" height="64" rx="10" fill="#ffffff" stroke="#c9d3e0"/>
+<rect x="485" y="1356" width="4" height="36" rx="2" fill="#c62828"/>
+<text x="501" y="1368" class="nt">Quarterly</text>
+<text x="501" y="1383" class="ns">Compliance Reports</text>
+<path d="M378 328.0 H481" fill="none" stroke="#8fa0b6" stroke-width="1.6" stroke-dasharray="5 4" marker-end="url(#ah)"/>
+<text x="430.0" y="321.0" class="el" text-anchor="middle">Read</text>
+<path d="M758 328.0 H861" fill="none" stroke="#8fa0b6" stroke-width="1.6" marker-end="url(#ah)"/>
+<text x="810.0" y="321.0" class="el" text-anchor="middle">Catalog Metadata</text>
+<path d="M240.0 363 V378" fill="none" stroke="#8fa0b6" stroke-width="1.6" stroke-dasharray="5 4" marker-end="url(#ah)"/>
+<text x="248.0" y="374.0" class="el" text-anchor="start">Data Events</text>
+<path d="M378 414.0 H481" fill="none" stroke="#8fa0b6" stroke-width="1.6" marker-end="url(#ah)"/>
+<text x="430.0" y="407.0" class="el" text-anchor="middle">Query Audit Trails</text>
+<path d="M1000.0 379 V364" fill="none" stroke="#8fa0b6" stroke-width="1.6" marker-end="url(#ah)"/>
+<text x="1008.0" y="374.0" class="el" text-anchor="start">Data Lineage</text>
+<path d="M378 568.0 H481" fill="none" stroke="#8fa0b6" stroke-width="1.6" marker-end="url(#ah)"/>
+<text x="430.0" y="561.0" class="el" text-anchor="middle">Trigger</text>
+<path d="M240.0 603 V618" fill="none" stroke="#8fa0b6" stroke-width="1.6" marker-end="url(#ah)"/>
+<text x="248.0" y="614.0" class="el" text-anchor="start">Execute</text>
+<path d="M620.0 603 V618" fill="none" stroke="#8fa0b6" stroke-width="1.6" stroke-dasharray="5 4" marker-end="url(#ah)"/>
+<text x="628.0" y="614.0" class="el" text-anchor="start">Metrics/Parameters</text>
+<path d="M378 654.0 H481" fill="none" stroke="#8fa0b6" stroke-width="1.6" marker-end="url(#ah)"/>
+<text x="430.0" y="647.0" class="el" text-anchor="middle">Verify</text>
+<path d="M758 654.0 H861" fill="none" stroke="#8fa0b6" stroke-width="1.6" marker-end="url(#ah)"/>
+<text x="810.0" y="647.0" class="el" text-anchor="middle">Verify</text>
+<path d="M240.0 689 V704" fill="none" stroke="#8fa0b6" stroke-width="1.6" marker-end="url(#ah)"/>
+<text x="248.0" y="700.0" class="el" text-anchor="start">Log Approved Signature</text>
+<path d="M758 586.0 H810 V740.0 H759" fill="none" stroke="#8fa0b6" stroke-width="1.6" stroke-dasharray="5 4" marker-end="url(#ah)"/>
+<text x="802" y="706.0" class="el" fill="#5c6b80" text-anchor="middle" transform="rotate(-90 802 706.0)">Automatic Lineage</text>
+<path d="M1000.0 619 V604" fill="none" stroke="#8fa0b6" stroke-width="1.6" marker-end="url(#ah)"/>
+<text x="1008.0" y="614.0" class="el" text-anchor="start">Pre-training Bias</text>
+<path d="M378 894.0 H481" fill="none" stroke="#8fa0b6" stroke-width="1.6" marker-end="url(#ah)"/>
+<text x="430.0" y="887.0" class="el" text-anchor="middle">Context Chunks</text>
+<path d="M758 894.0 H861" fill="none" stroke="#8fa0b6" stroke-width="1.6" marker-end="url(#ah)"/>
+<text x="810.0" y="887.0" class="el" text-anchor="middle">Apply Policies</text>
+<path d="M378 1048.0 H481" fill="none" stroke="#8fa0b6" stroke-width="1.6" marker-end="url(#ah)"/>
+<text x="430.0" y="1041.0" class="el" text-anchor="middle">Apply NER/Regex</text>
+<path d="M758 1048.0 H861" fill="none" stroke="#8fa0b6" stroke-width="1.6" marker-end="url(#ah)"/>
+<text x="810.0" y="1041.0" class="el" text-anchor="middle">Continuously Monitor</text>
+<text x="810.0" y="1019.0" class="el" text-anchor="middle">(Data/Model Quality, Bias,</text>
+<text x="810.0" y="1030.0" class="el" text-anchor="middle">Feature Attribution)</text>
+<path d="M1000.0 1083 V1098" fill="none" stroke="#8fa0b6" stroke-width="1.6" marker-end="url(#ah)"/>
+<text x="1008.0" y="1094.0" class="el" text-anchor="start">Bias/Attribution</text>
+<path d="M482 1134.0 H379" fill="none" stroke="#8fa0b6" stroke-width="1.6" marker-end="url(#ah)"/>
+<text x="430.0" y="1127.0" class="el" text-anchor="middle">Trigger</text>
+<path d="M1000.0 1083 V1091.0 H620.0 V1098" fill="none" stroke="#8fa0b6" stroke-width="1.6" marker-end="url(#ah)"/>
+<text x="770.0" y="1085.0" class="el" text-anchor="middle">Alert</text>
+<path d="M240.0 1099 V1084" fill="none" stroke="#8fa0b6" stroke-width="1.6" marker-end="url(#ah)"/>
+<text x="248.0" y="1094.0" class="el" text-anchor="start">Execute Remediation</text>
+<path d="M378 1288.0 H481" fill="none" stroke="#8fa0b6" stroke-width="1.6" marker-end="url(#ah)"/>
+<text x="430.0" y="1281.0" class="el" text-anchor="middle">Filter Metrics</text>
+<path d="M758 1288.0 H861" fill="none" stroke="#8fa0b6" stroke-width="1.6" marker-end="url(#ah)"/>
+<text x="810.0" y="1281.0" class="el" text-anchor="middle">Visualize Governance</text>
+<path d="M1000.0 1323 V1331.0 H620.0 V1338" fill="none" stroke="#8fa0b6" stroke-width="1.6" marker-end="url(#ah)"/>
+<path d="M240.0 363 V471 H620.0 V532" fill="none" stroke="#8fa0b6" stroke-width="1.6" marker-end="url(#ah)"/>
+<text x="420" y="465" class="el" text-anchor="middle">Input</text>
+<path d="M1000.0 449 V484 H620.0 V704" fill="none" stroke="#8fa0b6" stroke-width="1.6" marker-end="url(#ah)"/>
+<text x="880" y="478" class="el" text-anchor="middle">Data Lineage Associations</text>
+<path d="M240.0 363 V497 H1000.0 V532" fill="none" stroke="#8fa0b6" stroke-width="1.6" marker-end="url(#ah)"/>
+<text x="640" y="491" class="el" text-anchor="middle">Versioning/Reproducibility</text>
+<path d="M620.0 1083 V1193 H240.0 V1252" fill="none" stroke="#8fa0b6" stroke-width="1.6" marker-end="url(#ah)"/>
+<text x="400" y="1187" class="el" text-anchor="middle">Decision Logs (JSON, Alternatives)</text>
+<path d="M1000.0 1083 V1211 H620.0 V1252" fill="none" stroke="#8fa0b6" stroke-width="1.6" marker-end="url(#ah)"/>
+<text x="850" y="1205" class="el" text-anchor="middle">Metrics</text>
+<path d="M102 174.0 H70 V568.0 H481" fill="none" stroke="#1565c0" stroke-width="1.6" marker-end="url(#ahb)"/>
+<text x="65" y="371.0" class="ml" text-anchor="middle" transform="rotate(-90 65 371.0)">Enforce Tagging / Region Blocks</text>
+<rect x="105" y="225" width="118" height="20" rx="11" fill="#ffffff" stroke="#9aa5b4" stroke-dasharray="4 3"/>
+<text x="164.0" y="239" class="nt" text-anchor="middle">Deployable</text>
+<path d="M620.0 209 V235.0 H227" fill="none" stroke="#1565c0" stroke-width="1.6" marker-end="url(#ahb)"/>
+<text x="421.5" y="228.0" class="ml" text-anchor="middle">Separation of Duties (Builder != Approver)</text>
+<path d="M102 235.0 H84 V654.0 H101" fill="none" stroke="#1565c0" stroke-width="1.6" stroke-dasharray="5 4" marker-end="url(#ahb)"/>
+<path d="M102 328.0 H18 V894.0 H101" fill="none" stroke="#1565c0" stroke-width="1.6" marker-end="url(#ahb)"/>
+<text x="13" y="611.0" class="ml" text-anchor="middle" transform="rotate(-90 13 611.0)">Ingest</text>
+<path d="M378 328.0 H1196 V1048.0 H1139" fill="none" stroke="#1565c0" stroke-width="1.6" marker-end="url(#ahb)"/>
+<text x="1191" y="688.0" class="ml" text-anchor="middle" transform="rotate(-90 1191 688.0)">Baseline</text>
+<path d="M1138 328.0 H1222 V1288.0 H1139" fill="none" stroke="#1565c0" stroke-width="1.6" marker-end="url(#ahb)"/>
+<text x="1217" y="808.0" class="ml" text-anchor="middle" transform="rotate(-90 1217 808.0)">Data Catalog Metrics</text>
+<path d="M758 568.0 H1170 V1048.0 H379" fill="none" stroke="#1565c0" stroke-width="1.6" marker-end="url(#ahb)"/>
+<text x="1165" y="808.0" class="ml" text-anchor="middle" transform="rotate(-90 1165 808.0)">Deploy</text>
+<path d="M620.0 859 V776" fill="none" stroke="#7b1fa2" stroke-width="1.6" stroke-dasharray="5 4" marker-end="url(#ahs)"/>
+<text x="612.0" y="817.0" class="el" fill="#7b1fa2" text-anchor="middle" transform="rotate(-90 612.0 817.0)">Lineage Context</text>
+<path d="M644.0 929 V960 H84 V1274.0 H101" fill="none" stroke="#7b1fa2" stroke-width="1.6" stroke-dasharray="5 4" marker-end="url(#ahs)"/>
+<text x="76" y="1124.0" class="el" fill="#7b1fa2" text-anchor="middle" transform="rotate(-90 76 1124.0)">Decision Logs</text>
+<rect x="90" y="60" width="300" height="34" rx="17" fill="#eef2f7" stroke="#b9c7da"/>
+<text x="240" y="82" class="pill" text-anchor="middle">Regulators (SEC, FINRA, EU)</text>
+<path d="M393 77 H1224 V1374.0 H759" fill="none" stroke="#6f7f95" stroke-width="1.6" stroke-dasharray="5 4" marker-end="url(#ahs)"/>
+<text x="1218" y="717.0" class="el" text-anchor="middle" transform="rotate(-90 1218 717.0)">Audit Mandates</text>
+<line x1="24" y1="1488" x2="1216" y2="1488" stroke="#e3e7ee"/>
+<text x="24" y="1508" class="leg">Blue lines skip a layer; dashed lines are the dotted edges in the source. Layer names, node text and edge labels are taken verbatim from architecture_diagram.md.</text>
+</svg>
