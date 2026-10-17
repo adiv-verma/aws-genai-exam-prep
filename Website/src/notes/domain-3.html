@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Domain 3 Map | AIP-C01 Guide</title>
+<meta name="description" content="One diagram of how all four tasks in Domain 3 of the AWS Certified Generative AI Developer (AIP-C01) exam fit together, in plain English.">
+<style>
+  :root{
+    --ink:#0b1524; --ink-soft:#3a4a5e; --paper:#f7f8fa; --card:#ffffff; --line:#e3e7ee;
+    --accent:#e8622c; --accent-dark:#c94f1f; --navy:#0f2540; --navy-2:#16345c;
+    --t31:#1f4e79; --t32:#1d6f68; --t33:#6b4c9a; --t34:#c94f1f;
+    color-scheme: light;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{margin:0;background:var(--paper);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;line-height:1.65;}
+  a{color:var(--accent-dark);}
+  code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;background:#eef1f6;padding:1px 5px;border-radius:4px;font-size:.92em;}
+  img,svg{max-width:100%;}
+  .wrap{max-width:1000px;margin:0 auto;padding:0 24px;}
+  .wrap-wide{max-width:1380px;margin:0 auto;padding:0 24px;}
+
+  .nav{position:sticky;top:0;z-index:50;background:rgba(15,37,64,.96);backdrop-filter:blur(6px);border-bottom:1px solid rgba(255,255,255,.08);}
+  .nav .wrap{display:flex;align-items:center;justify-content:space-between;height:56px;}
+  .nav-brand{color:#fff;font-weight:700;font-size:14px;letter-spacing:.02em;text-decoration:none;}
+  .nav-brand span{color:var(--accent);}
+  .nav-links{display:flex;gap:22px;list-style:none;margin:0;padding:0;}
+  .nav-links a{color:#cdd8e6;text-decoration:none;font-size:13.5px;font-weight:500;}
+  .nav-links a:hover{color:#fff;}
+  @media (max-width:720px){
+    .nav .wrap{gap:12px;}
+    .nav-links{gap:16px;overflow-x:auto;scrollbar-width:none;-ms-overflow-style:none;
+      flex:1;justify-content:flex-end;}
+    .nav-links::-webkit-scrollbar{display:none;}
+    .nav-links a{white-space:nowrap;font-size:13px;}
+  }
+
+  header.hero{background:linear-gradient(180deg,var(--navy) 0%, var(--navy-2) 100%);color:#fff;padding:36px 0 30px;}
+  .eyebrow{display:inline-block;font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#ffd8c4;background:rgba(232,98,44,.18);border:1px solid rgba(232,98,44,.4);padding:5px 10px;border-radius:999px;margin-bottom:14px;}
+  h1{font-size:clamp(23px,3.4vw,31px);line-height:1.15;margin:0;font-weight:800;}
+  header.hero p{font-size:15.5px;color:#c9d5e3;max-width:680px;margin:12px 0 0;}
+
+  section{padding:34px 0;}
+  h2.sh{font-size:20px;font-weight:800;margin:0 0 6px;}
+  p.sl{font-size:14.5px;color:var(--ink-soft);margin:0 0 22px;max-width:700px;}
+
+  figure.map{margin:0;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px;}
+  .scroller{overflow-x:auto;-webkit-overflow-scrolling:touch;}
+  .scroller svg{display:block;min-width:1150px;width:100%;height:auto;}
+  .scroller svg a text{cursor:pointer;}
+  .scroller svg a:hover text{text-decoration:underline;}
+  figure.map figcaption{margin-top:14px;font-size:13px;color:var(--ink-soft);text-align:center;}
+  .hint{display:none;font-size:12.5px;color:var(--ink-soft);margin:0 0 8px;font-style:italic;}
+  @media (max-width:1200px){ .hint{display:block;} }
+
+  .tcard{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:20px 22px;margin-bottom:14px;border-left:4px solid var(--line);}
+  .tcard .th{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:8px;}
+  .tnum{color:#fff;font-size:11.5px;font-weight:700;border-radius:8px;padding:3px 9px;}
+  .tcard h3{margin:0;font-size:16.5px;font-weight:800;}
+  .tcard .one{margin:0 0 12px;font-size:14.5px;color:var(--ink);}
+  .tcard ul{margin:0 0 14px;padding-left:19px;}
+  .tcard li{font-size:14px;color:var(--ink-soft);margin-bottom:6px;}
+  .tcard li b{color:var(--ink);font-weight:700;}
+  .jump{display:flex;flex-wrap:wrap;align-items:center;gap:7px;margin:0 0 14px;}
+  .jump span{font-size:12.5px;font-weight:700;color:var(--ink-soft);}
+  .jump a{font-size:12.5px;text-decoration:none;background:#f2f5f9;border:1px solid var(--line);border-radius:7px;padding:4px 10px;color:var(--ink-soft);font-weight:600;}
+  .jump a:hover{border-color:var(--accent);color:var(--accent-dark);}
+  .tcard a.go{font-size:13px;font-weight:700;text-decoration:none;border:1px solid var(--line);border-radius:8px;padding:7px 13px;display:inline-block;}
+  .tcard a.go:hover{border-color:var(--accent);}
+  .tc31{border-left-color:var(--t31);} .tc32{border-left-color:var(--t32);}
+  .tc33{border-left-color:var(--t33);} .tc34{border-left-color:var(--t34);}
+
+  .ov{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:6px 22px;}
+  .ov dt{font-size:14.5px;font-weight:700;margin:16px 0 3px;}
+  .ov dd{margin:0 0 16px;font-size:14px;color:var(--ink-soft);}
+  .ov dd .pill{display:inline-block;color:#fff;font-size:10.5px;font-weight:700;border-radius:7px;padding:1px 7px;margin-right:2px;text-decoration:none;}
+
+  .more{background:#eef1f6;border:1px solid var(--line);border-radius:12px;padding:18px 22px;font-size:14px;color:var(--ink-soft);}
+  .more b{color:var(--ink);}
+
+  footer{padding:32px 0 48px;color:#8b96a5;font-size:12.5px;}
+  footer .wrap{border-top:1px solid var(--line);padding-top:22px;}
+  footer a{color:#6b7686;}
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="wrap">
+    <a class="nav-brand" href="../index.html">AIP-C01 <span>Guide</span></a>
+    <ul class="nav-links">
+      <li><a href="index.html">All Study Notes</a></li>
+      <li><a href="domain-1.html">Domain 1 Map</a></li>
+      <li><a href="domain-2.html">Domain 2 Map</a></li>
+      <li><a href="../tasks/index.html">Build Log</a></li>
+    </ul>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="wrap">
+    <span class="eyebrow">Domain 3 &middot; The Map</span>
+    <h1>All Four Tasks, One Picture</h1>
+    <p>Domain 3 is one idea done four times: stop the bad thing, then be able to show later that you stopped it. Here are all four tasks as a single request &mdash; what gets checked before the model, what gets checked after it, and what you write down either way. Each box says what it does, lists the concepts it teaches, and links straight to the section of the notes that covers it.</p>
+  </div>
+</header>
+
+<section style="padding-bottom:10px;">
+  <div class="wrap-wide">
+    <p class="hint">Scroll the diagram sideways if it does not fit.</p>
+    <figure class="map">
+      <div class="scroller">
+<svg viewBox="0 0 1282 872" role="img" aria-label="Domain 3 in three bands. Band one, before the model sees the request: API Gateway throws out a badly formed request at the door; a Lambda looks for the old web attacks with plain pattern matching, costing almost nothing; Comprehend reads the mood and spots personal data so Step Functions can let low risk carry on and block high risk outright; real names and numbers are swapped for stand-ins so the sentence still makes sense; and traffic never touches the public internet, with the model moved to the data when the data cannot move. Band two, after the model answers and before anyone reads it: guardrails either block the whole answer or strip out just the bad part; the answer is compared with the pages it was given to see whether the model invented anything; a schema catches an impossible value such as a 150 percent interest rate even when the JSON is valid; a confidence score sends a sure answer straight back, a half-sure answer back with a warning and an unsure answer to a person; and tracing, once switched on, shows every step taken, every page read and how sure the model was at each one. Band three, proving it later: CloudTrail records every call, though who read the file is off by default; model cards, lineage and approval signatures record how the model was built and who agreed to it; the same questions are asked for every group with a second model marking the answers; and drift is watched so an alarm can put the last good version back on its own. What you find in the bottom band changes the checks in the top one. Each box lists the concepts it teaches and links to the matching section of the task notes." xmlns="http://www.w3.org/2000/svg">
+<defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#5a6a7e"/></marker></defs>
+<rect width="1282" height="872" fill="#f7f8fa"/>
+<g font-family="-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica,Arial,sans-serif">
+<rect x="34" y="16" width="434.9" height="27" rx="13.5" fill="#0f2540"/>
+<text x="49" y="34.5" font-size="12.5" font-weight="800" fill="#fff" letter-spacing=".04em">STEP 1</text>
+<text x="114.8" y="34.5" font-size="12.5" font-weight="600" fill="#fff" opacity=".85">Before the model sees it  ·  cheapest check first</text>
+<rect x="34" y="61" width="222" height="186" rx="12" fill="#ffffff" stroke="#d7dee8" stroke-width="1.5"/>
+<rect x="45" y="62" width="200" height="4" fill="#1f4e79"/>
+<text x="145.0" y="90" text-anchor="middle" font-size="15" font-weight="700" fill="#0b1524">Check the shape</text>
+<text x="145.0" y="111" text-anchor="middle" font-size="11.8" fill="#5a6a7e">API Gateway throws out a badly formed</text>
+<text x="145.0" y="128" text-anchor="middle" font-size="11.8" fill="#5a6a7e">request at the door, before any of</text>
+<text x="145.0" y="145" text-anchor="middle" font-size="11.8" fill="#5a6a7e">your code runs and costs money.</text>
+<rect x="69.8" y="161" width="112.4" height="16" rx="6" fill="#eef2f7"/>
+<text x="126.0" y="172.5" text-anchor="middle" font-size="9.6" font-weight="600" fill="#4a5a70">request validators</text>
+<rect x="188.2" y="161" width="32.1" height="16" rx="6" fill="#eef2f7"/>
+<text x="204.2" y="172.5" text-anchor="middle" font-size="9.6" font-weight="600" fill="#4a5a70">WAF</text>
+<rect x="107.5" y="181" width="74.9" height="16" rx="6" fill="#eef2f7"/>
+<text x="145.0" y="192.5" text-anchor="middle" font-size="9.6" font-weight="600" fill="#4a5a70">rate limits</text>
+<rect x="129.0" y="201" width="32" height="16" rx="8" fill="#1f4e79"/>
+<text x="145.0" y="213" text-anchor="middle" font-size="10.5" font-weight="700" fill="#fff">3.1</text>
+<line x1="50" y1="223" x2="240" y2="223" stroke="#d7dee8" stroke-width="1"/>
+<a href="task-3-1.html#s1"><text x="145.0" y="239" text-anchor="middle" font-size="11.2" font-weight="700" fill="#c94f1f">Notes 3.1 · Section 1 &#8594;</text></a>
+<rect x="282" y="61" width="222" height="186" rx="12" fill="#ffffff" stroke="#d7dee8" stroke-width="1.5"/>
+<rect x="293" y="62" width="200" height="4" fill="#1f4e79"/>
+<text x="393.0" y="90" text-anchor="middle" font-size="15" font-weight="700" fill="#0b1524">Cheap checks first</text>
+<text x="393.0" y="111" text-anchor="middle" font-size="11.8" fill="#5a6a7e">A Lambda looks for the old web</text>
+<text x="393.0" y="128" text-anchor="middle" font-size="11.8" fill="#5a6a7e">attacks with plain pattern matching.</text>
+<text x="393.0" y="145" text-anchor="middle" font-size="11.8" fill="#5a6a7e">No model call, so almost no cost.</text>
+<rect x="314.8" y="161" width="37.5" height="16" rx="6" fill="#eef2f7"/>
+<text x="333.5" y="172.5" text-anchor="middle" font-size="9.6" font-weight="600" fill="#4a5a70">SQLi</text>
+<rect x="358.2" y="161" width="32.1" height="16" rx="6" fill="#eef2f7"/>
+<text x="374.3" y="172.5" text-anchor="middle" font-size="9.6" font-weight="600" fill="#4a5a70">XSS</text>
+<rect x="396.4" y="161" width="74.9" height="16" rx="6" fill="#eef2f7"/>
+<text x="433.8" y="172.5" text-anchor="middle" font-size="9.6" font-weight="600" fill="#4a5a70">JSON format</text>
+<rect x="377.0" y="201" width="32" height="16" rx="8" fill="#1f4e79"/>
+<text x="393.0" y="213" text-anchor="middle" font-size="10.5" font-weight="700" fill="#fff">3.1</text>
+<line x1="298" y1="223" x2="488" y2="223" stroke="#d7dee8" stroke-width="1"/>
+<a href="task-3-1.html#s1"><text x="393.0" y="239" text-anchor="middle" font-size="11.2" font-weight="700" fill="#c94f1f">Notes 3.1 · Section 1 &#8594;</text></a>
+<line x1="260" y1="154" x2="275" y2="154" stroke="#5a6a7e" stroke-width="1.8" marker-end="url(#a)"/>
+<rect x="530" y="61" width="222" height="186" rx="12" fill="#ffffff" stroke="#d7dee8" stroke-width="1.5"/>
+<rect x="541" y="62" width="200" height="4" fill="#1f4e79"/>
+<text x="641.0" y="90" text-anchor="middle" font-size="15" font-weight="700" fill="#0b1524">Score the risk</text>
+<text x="641.0" y="111" text-anchor="middle" font-size="11.8" fill="#5a6a7e">Comprehend reads the mood and spots</text>
+<text x="641.0" y="128" text-anchor="middle" font-size="11.8" fill="#5a6a7e">personal data. Low risk carries on,</text>
+<text x="641.0" y="145" text-anchor="middle" font-size="11.8" fill="#5a6a7e">high risk is blocked right here.</text>
+<rect x="538.6" y="161" width="69.6" height="16" rx="6" fill="#eef2f7"/>
+<text x="573.4" y="172.5" text-anchor="middle" font-size="9.6" font-weight="600" fill="#4a5a70">Comprehend</text>
+<rect x="614.2" y="161" width="32.1" height="16" rx="6" fill="#eef2f7"/>
+<text x="630.3" y="172.5" text-anchor="middle" font-size="9.6" font-weight="600" fill="#4a5a70">PII</text>
+<rect x="652.4" y="161" width="91.0" height="16" rx="6" fill="#eef2f7"/>
+<text x="697.9" y="172.5" text-anchor="middle" font-size="9.6" font-weight="600" fill="#4a5a70">Step Functions</text>
+<rect x="625.0" y="201" width="32" height="16" rx="8" fill="#1f4e79"/>
+<text x="641.0" y="213" text-anchor="middle" font-size="10.5" font-weight="700" fill="#fff">3.1</text>
+<line x1="546" y1="223" x2="736" y2="223" stroke="#d7dee8" stroke-width="1"/>
+<a href="task-3-1.html#s1"><text x="641.0" y="239" text-anchor="middle" font-size="11.2" font-weight="700" fill="#c94f1f">Notes 3.1 · Section 1 &#8594;</text></a>
+<line x1="508" y1="154" x2="523" y2="154" stroke="#5a6a7e" stroke-width="1.8" marker-end="url(#a)"/>
+<rect x="778" y="61" width="222" height="186" rx="12" fill="#ffffff" stroke="#d7dee8" stroke-width="1.5"/>
+<rect x="789" y="62" width="200" height="4" fill="#1d6f68"/>
+<text x="889.0" y="90" text-anchor="middle" font-size="15" font-weight="700" fill="#0b1524">Hide the person</text>
+<text x="889.0" y="111" text-anchor="middle" font-size="11.8" fill="#5a6a7e">Swap real names and numbers for</text>
+<text x="889.0" y="128" text-anchor="middle" font-size="11.8" fill="#5a6a7e">stand-ins before the model sees them,</text>
+<text x="889.0" y="145" text-anchor="middle" font-size="11.8" fill="#5a6a7e">so the sentence still makes sense.</text>
+<rect x="795.0" y="161" width="80.3" height="16" rx="6" fill="#eef2f7"/>
+<text x="835.1" y="172.5" text-anchor="middle" font-size="9.6" font-weight="600" fill="#4a5a70">tokenization</text>
+<rect x="881.3" y="161" width="101.7" height="16" rx="6" fill="#eef2f7"/>
+<text x="932.1" y="172.5" text-anchor="middle" font-size="9.6" font-weight="600" fill="#4a5a70">pseudonymisation</text>
+<rect x="873.0" y="181" width="32.1" height="16" rx="6" fill="#eef2f7"/>
+<text x="889.0" y="192.5" text-anchor="middle" font-size="9.6" font-weight="600" fill="#4a5a70">FPE</text>
+<rect x="873.0" y="201" width="32" height="16" rx="8" fill="#1d6f68"/>
+<text x="889.0" y="213" text-anchor="middle" font-size="10.5" font-weight="700" fill="#fff">3.2</text>
+<line x1="794" y1="223" x2="984" y2="223" stroke="#d7dee8" stroke-width="1"/>
+<a href="task-3-2.html#s3"><text x="889.0" y="239" text-anchor="middle" font-size="11.2" font-weight="700" fill="#c94f1f">Notes 3.2 · Part 3 &#8594;</text></a>
+<line x1="756" y1="154" x2="771" y2="154" stroke="#5a6a7e" stroke-width="1.8" marker-end="url(#a)"/>
+<rect x="1026" y="61" width="222" height="186" rx="12" fill="#ffffff" stroke="#d7dee8" stroke-width="1.5"/>
+<rect x="1037" y="62" width="200" height="4" fill="#1d6f68"/>
+<text x="1137.0" y="90" text-anchor="middle" font-size="15" font-weight="700" fill="#0b1524">Keep it private</text>
+<text x="1137.0" y="111" text-anchor="middle" font-size="11.8" fill="#5a6a7e">Traffic never touches the internet.</text>
+<text x="1137.0" y="128" text-anchor="middle" font-size="11.8" fill="#5a6a7e">If the data cannot move, move the</text>
+<text x="1137.0" y="145" text-anchor="middle" font-size="11.8" fill="#5a6a7e">model to the data instead.</text>
+<rect x="1053.7" y="161" width="85.7" height="16" rx="6" fill="#eef2f7"/>
+<text x="1096.5" y="172.5" text-anchor="middle" font-size="9.6" font-weight="600" fill="#4a5a70">VPC endpoints</text>
+<rect x="1145.4" y="161" width="74.9" height="16" rx="6" fill="#eef2f7"/>
+<text x="1182.9" y="172.5" text-anchor="middle" font-size="9.6" font-weight="600" fill="#4a5a70">PrivateLink</text>
+<rect x="1107.5" y="181" width="58.9" height="16" rx="6" fill="#eef2f7"/>
+<text x="1137.0" y="192.5" text-anchor="middle" font-size="9.6" font-weight="600" fill="#4a5a70">Outposts</text>
+<rect x="1121.0" y="201" width="32" height="16" rx="8" fill="#1d6f68"/>
+<text x="1137.0" y="213" text-anchor="middle" font-size="10.5" font-weight="700" fill="#fff">3.2</text>
+<line x1="1042" y1="223" x2="1232" y2="223" stroke="#d7dee8" stroke-width="1"/>
+<a href="task-3-2.html#s1"><text x="1137.0" y="239" text-anchor="middle" font-size="11.2" font-weight="700" fill="#c94f1f">Notes 3.2 · Part 1 &#8594;</text></a>
+<line x1="1004" y1="154" x2="1019" y2="154" stroke="#5a6a7e" stroke-width="1.8" marker-end="url(#a)"/>
+<rect x="34" y="301" width="393.5" height="27" rx="13.5" fill="#e8622c"/>
+<text x="49" y="319.5" font-size="12.5" font-weight="800" fill="#fff" letter-spacing=".04em">STEP 2</text>
+<text x="114.8" y="319.5" font-size="12.5" font-weight="600" fill="#fff" opacity=".85">After it answers  ·  before anyone reads it</text>
+<rect x="34" y="346" width="222" height="186" rx="12" fill="#ffffff" stroke="#d7dee8" stroke-width="1.5"/>
+<rect x="45" y="347" width="200" height="4" fill="#1f4e79"/>
+<text x="145.0" y="375" text-anchor="middle" font-size="15" font-weight="700" fill="#0b1524">Guard the answer</text>
+<text x="145.0" y="396" text-anchor="middle" font-size="11.8" fill="#5a6a7e">Guardrails read what came back.</text>
+<text x="145.0" y="413" text-anchor="middle" font-size="11.8" fill="#5a6a7e">Block the whole thing, or strip out</text>
+<text x="145.0" y="430" text-anchor="middle" font-size="11.8" fill="#5a6a7e">the bad part and keep the rest.</text>
+<rect x="45.7" y="446" width="69.6" height="16" rx="6" fill="#eef2f7"/>
+<text x="80.5" y="457.5" text-anchor="middle" font-size="9.6" font-weight="600" fill="#4a5a70">block mode</text>
+<rect x="121.2" y="446" width="123.1" height="16" rx="6" fill="#eef2f7"/>
+<text x="182.8" y="457.5" text-anchor="middle" font-size="9.6" font-weight="600" fill="#4a5a70">filtered alternative</text>
+<rect x="129.0" y="486" width="32" height="16" rx="8" fill="#1f4e79"/>
+<text x="145.0" y="498" text-anchor="middle" font-size="10.5" font-weight="700" fill="#fff">3.1</text>
+<line x1="50" y1="508" x2="240" y2="508" stroke="#d7dee8" stroke-width="1"/>
+<a href="task-3-1.html#s2"><text x="145.0" y="524" text-anchor="middle" font-size="11.2" font-weight="700" fill="#c94f1f">Notes 3.1 · Section 2 &#8594;</text></a>
+<rect x="282" y="346" width="222" height="186" rx="12" fill="#ffffff" stroke="#d7dee8" stroke-width="1.5"/>
+<rect x="293" y="347" width="200" height="4" fill="#1f4e79"/>
+<text x="393.0" y="375" text-anchor="middle" font-size="15" font-weight="700" fill="#0b1524">Did it make it up?</text>
+<text x="393.0" y="396" text-anchor="middle" font-size="11.8" fill="#5a6a7e">Compare the answer with the pages it</text>
+<text x="393.0" y="413" text-anchor="middle" font-size="11.8" fill="#5a6a7e">was given. If they do not match, the</text>
+<text x="393.0" y="430" text-anchor="middle" font-size="11.8" fill="#5a6a7e">model invented it.</text>
+<rect x="299.0" y="446" width="117.8" height="16" rx="6" fill="#eef2f7"/>
+<text x="357.9" y="457.5" text-anchor="middle" font-size="9.6" font-weight="600" fill="#4a5a70">semantic similarity</text>
+<rect x="422.8" y="446" width="64.2" height="16" rx="6" fill="#eef2f7"/>
+<text x="454.9" y="457.5" text-anchor="middle" font-size="9.6" font-weight="600" fill="#4a5a70">grounding</text>
+<rect x="377.0" y="486" width="32" height="16" rx="8" fill="#1f4e79"/>
+<text x="393.0" y="498" text-anchor="middle" font-size="10.5" font-weight="700" fill="#fff">3.1</text>
+<line x1="298" y1="508" x2="488" y2="508" stroke="#d7dee8" stroke-width="1"/>
+<a href="task-3-1.html#s3"><text x="393.0" y="524" text-anchor="middle" font-size="11.2" font-weight="700" fill="#c94f1f">Notes 3.1 · Section 3 &#8594;</text></a>
+<line x1="260" y1="439" x2="275" y2="439" stroke="#5a6a7e" stroke-width="1.8" marker-end="url(#a)"/>
+<rect x="530" y="346" width="222" height="186" rx="12" fill="#ffffff" stroke="#d7dee8" stroke-width="1.5"/>
+<rect x="541" y="347" width="200" height="4" fill="#1f4e79"/>
+<text x="641.0" y="375" text-anchor="middle" font-size="15" font-weight="700" fill="#0b1524">Is the shape right?</text>
+<text x="641.0" y="396" text-anchor="middle" font-size="11.8" fill="#5a6a7e">A schema catches an interest rate of</text>
+<text x="641.0" y="413" text-anchor="middle" font-size="11.8" fill="#5a6a7e">150% even when the JSON itself is</text>
+<text x="641.0" y="430" text-anchor="middle" font-size="11.8" fill="#5a6a7e">perfectly valid.</text>
+<rect x="560.4" y="446" width="74.9" height="16" rx="6" fill="#eef2f7"/>
+<text x="597.9" y="457.5" text-anchor="middle" font-size="9.6" font-weight="600" fill="#4a5a70">JSON schema</text>
+<rect x="641.3" y="446" width="80.3" height="16" rx="6" fill="#eef2f7"/>
+<text x="681.4" y="457.5" text-anchor="middle" font-size="9.6" font-weight="600" fill="#4a5a70">value bounds</text>
+<rect x="625.0" y="486" width="32" height="16" rx="8" fill="#1f4e79"/>
+<text x="641.0" y="498" text-anchor="middle" font-size="10.5" font-weight="700" fill="#fff">3.1</text>
+<line x1="546" y1="508" x2="736" y2="508" stroke="#d7dee8" stroke-width="1"/>
+<a href="task-3-1.html#s3"><text x="641.0" y="524" text-anchor="middle" font-size="11.2" font-weight="700" fill="#c94f1f">Notes 3.1 · Section 3 &#8594;</text></a>
+<line x1="508" y1="439" x2="523" y2="439" stroke="#5a6a7e" stroke-width="1.8" marker-end="url(#a)"/>
+<rect x="778" y="346" width="222" height="186" rx="12" fill="#ffffff" stroke="#d7dee8" stroke-width="1.5"/>
+<rect x="789" y="347" width="200" height="4" fill="#1f4e79"/>
+<text x="889.0" y="375" text-anchor="middle" font-size="15" font-weight="700" fill="#0b1524">How sure is it?</text>
+<text x="889.0" y="396" text-anchor="middle" font-size="11.8" fill="#5a6a7e">High goes straight back. Medium goes</text>
+<text x="889.0" y="413" text-anchor="middle" font-size="11.8" fill="#5a6a7e">back with a warning. Low is held and</text>
+<text x="889.0" y="430" text-anchor="middle" font-size="11.8" fill="#5a6a7e">shown to a person.</text>
+<rect x="795.0" y="446" width="101.7" height="16" rx="6" fill="#eef2f7"/>
+<text x="845.9" y="457.5" text-anchor="middle" font-size="9.6" font-weight="600" fill="#4a5a70">confidence score</text>
+<rect x="902.7" y="446" width="80.3" height="16" rx="6" fill="#eef2f7"/>
+<text x="942.9" y="457.5" text-anchor="middle" font-size="9.6" font-weight="600" fill="#4a5a70">human review</text>
+<rect x="854.5" y="486" width="32" height="16" rx="8" fill="#1f4e79"/>
+<text x="870.5" y="498" text-anchor="middle" font-size="10.5" font-weight="700" fill="#fff">3.1</text>
+<rect x="891.5" y="486" width="32" height="16" rx="8" fill="#c94f1f"/>
+<text x="907.5" y="498" text-anchor="middle" font-size="10.5" font-weight="700" fill="#fff">3.4</text>
+<line x1="794" y1="508" x2="984" y2="508" stroke="#d7dee8" stroke-width="1"/>
+<a href="task-3-1.html#s3"><text x="889.0" y="524" text-anchor="middle" font-size="11.2" font-weight="700" fill="#c94f1f">Notes 3.1 · Section 3 &#8594;</text></a>
+<line x1="756" y1="439" x2="771" y2="439" stroke="#5a6a7e" stroke-width="1.8" marker-end="url(#a)"/>
+<rect x="1026" y="346" width="222" height="186" rx="12" fill="#ffffff" stroke="#d7dee8" stroke-width="1.5"/>
+<rect x="1037" y="347" width="200" height="4" fill="#c94f1f"/>
+<text x="1137.0" y="375" text-anchor="middle" font-size="15" font-weight="700" fill="#0b1524">Show the working</text>
+<text x="1137.0" y="396" text-anchor="middle" font-size="11.8" fill="#5a6a7e">Turn tracing on and you see every</text>
+<text x="1137.0" y="413" text-anchor="middle" font-size="11.8" fill="#5a6a7e">step it took, every page it read,</text>
+<text x="1137.0" y="430" text-anchor="middle" font-size="11.8" fill="#5a6a7e">and how sure it was at each one.</text>
+<rect x="1051.0" y="446" width="101.7" height="16" rx="6" fill="#eef2f7"/>
+<text x="1101.9" y="457.5" text-anchor="middle" font-size="9.6" font-weight="600" fill="#4a5a70">enableTrace=true</text>
+<rect x="1158.8" y="446" width="64.2" height="16" rx="6" fill="#eef2f7"/>
+<text x="1190.8" y="457.5" text-anchor="middle" font-size="9.6" font-weight="600" fill="#4a5a70">citations</text>
+<rect x="1121.0" y="486" width="32" height="16" rx="8" fill="#c94f1f"/>
+<text x="1137.0" y="498" text-anchor="middle" font-size="10.5" font-weight="700" fill="#fff">3.4</text>
+<line x1="1042" y1="508" x2="1232" y2="508" stroke="#d7dee8" stroke-width="1"/>
+<a href="task-3-4.html#s1"><text x="1137.0" y="524" text-anchor="middle" font-size="11.2" font-weight="700" fill="#c94f1f">Notes 3.4 · Section 1 &#8594;</text></a>
+<line x1="1004" y1="439" x2="1019" y2="439" stroke="#5a6a7e" stroke-width="1.8" marker-end="url(#a)"/>
+<path d="M 1137 251 V 274 H 145 V 339" fill="none" stroke="#5a6a7e" stroke-width="1.8" marker-end="url(#a)"/>
+<rect x="34" y="586" width="339.5" height="27" rx="13.5" fill="#5a6a7e"/>
+<text x="49" y="604.5" font-size="12.5" font-weight="800" fill="#fff" letter-spacing=".04em">ALWAYS ON</text>
+<text x="136.7" y="604.5" font-size="12.5" font-weight="600" fill="#fff" opacity=".85">Proving it later  ·  never stops</text>
+<rect x="34" y="631" width="222" height="186" rx="12" fill="#ffffff" stroke="#d7dee8" stroke-width="1.5"/>
+<rect x="45" y="632" width="200" height="4" fill="#6b4c9a"/>
+<text x="145.0" y="660" text-anchor="middle" font-size="15" font-weight="700" fill="#0b1524">Who did what</text>
+<text x="145.0" y="681" text-anchor="middle" font-size="11.8" fill="#5a6a7e">CloudTrail records every call. But</text>
+<text x="145.0" y="698" text-anchor="middle" font-size="11.8" fill="#5a6a7e">who read the file is off by default.</text>
+<text x="145.0" y="715" text-anchor="middle" font-size="11.8" fill="#5a6a7e">Turn it on or the trail has a hole.</text>
+<rect x="42.7" y="731" width="69.6" height="16" rx="6" fill="#eef2f7"/>
+<text x="77.5" y="742.5" text-anchor="middle" font-size="9.6" font-weight="600" fill="#4a5a70">CloudTrail</text>
+<rect x="118.2" y="731" width="74.9" height="16" rx="6" fill="#eef2f7"/>
+<text x="155.7" y="742.5" text-anchor="middle" font-size="9.6" font-weight="600" fill="#4a5a70">data events</text>
+<rect x="199.2" y="731" width="48.2" height="16" rx="6" fill="#eef2f7"/>
+<text x="223.2" y="742.5" text-anchor="middle" font-size="9.6" font-weight="600" fill="#4a5a70">Athena</text>
+<rect x="110.5" y="771" width="32" height="16" rx="8" fill="#6b4c9a"/>
+<text x="126.5" y="783" text-anchor="middle" font-size="10.5" font-weight="700" fill="#fff">3.3</text>
+<rect x="147.5" y="771" width="32" height="16" rx="8" fill="#1d6f68"/>
+<text x="163.5" y="783" text-anchor="middle" font-size="10.5" font-weight="700" fill="#fff">3.2</text>
+<line x1="50" y1="793" x2="240" y2="793" stroke="#d7dee8" stroke-width="1"/>
+<a href="task-3-3.html#s2"><text x="145.0" y="809" text-anchor="middle" font-size="11.2" font-weight="700" fill="#c94f1f">Notes 3.3 · Step 2 &#8594;</text></a>
+<rect x="282" y="631" width="222" height="186" rx="12" fill="#ffffff" stroke="#d7dee8" stroke-width="1.5"/>
+<rect x="293" y="632" width="200" height="4" fill="#6b4c9a"/>
+<text x="393.0" y="660" text-anchor="middle" font-size="15" font-weight="700" fill="#0b1524">The paper trail</text>
+<text x="393.0" y="681" text-anchor="middle" font-size="11.8" fill="#5a6a7e">A model card is a birth certificate.</text>
+<text x="393.0" y="698" text-anchor="middle" font-size="11.8" fill="#5a6a7e">Lineage says how it was built. A</text>
+<text x="393.0" y="715" text-anchor="middle" font-size="11.8" fill="#5a6a7e">signature says who agreed to it.</text>
+<rect x="317.8" y="731" width="74.9" height="16" rx="6" fill="#eef2f7"/>
+<text x="355.2" y="742.5" text-anchor="middle" font-size="9.6" font-weight="600" fill="#4a5a70">model cards</text>
+<rect x="398.6" y="731" width="69.6" height="16" rx="6" fill="#eef2f7"/>
+<text x="433.4" y="742.5" text-anchor="middle" font-size="9.6" font-weight="600" fill="#4a5a70">ML lineage</text>
+<rect x="360.9" y="751" width="64.2" height="16" rx="6" fill="#eef2f7"/>
+<text x="393.0" y="762.5" text-anchor="middle" font-size="9.6" font-weight="600" fill="#4a5a70">approvals</text>
+<rect x="377.0" y="771" width="32" height="16" rx="8" fill="#6b4c9a"/>
+<text x="393.0" y="783" text-anchor="middle" font-size="10.5" font-weight="700" fill="#fff">3.3</text>
+<line x1="298" y1="793" x2="488" y2="793" stroke="#d7dee8" stroke-width="1"/>
+<a href="task-3-3.html#s1"><text x="393.0" y="809" text-anchor="middle" font-size="11.2" font-weight="700" fill="#c94f1f">Notes 3.3 · Step 1 &#8594;</text></a>
+<line x1="260" y1="724" x2="275" y2="724" stroke="#5a6a7e" stroke-width="1.8" marker-end="url(#a)"/>
+<rect x="530" y="631" width="222" height="186" rx="12" fill="#ffffff" stroke="#d7dee8" stroke-width="1.5"/>
+<rect x="541" y="632" width="200" height="4" fill="#c94f1f"/>
+<text x="641.0" y="660" text-anchor="middle" font-size="15" font-weight="700" fill="#0b1524">Is it fair?</text>
+<text x="641.0" y="681" text-anchor="middle" font-size="11.8" fill="#5a6a7e">Ask the same questions for every</text>
+<text x="641.0" y="698" text-anchor="middle" font-size="11.8" fill="#5a6a7e">group. A second model marks the</text>
+<text x="641.0" y="715" text-anchor="middle" font-size="11.8" fill="#5a6a7e">answers. A thinner answer is a fail.</text>
+<rect x="563.0" y="731" width="91.0" height="16" rx="6" fill="#eef2f7"/>
+<text x="608.5" y="742.5" text-anchor="middle" font-size="9.6" font-weight="600" fill="#4a5a70">LLM-as-a-judge</text>
+<rect x="660.0" y="731" width="58.9" height="16" rx="6" fill="#eef2f7"/>
+<text x="689.5" y="742.5" text-anchor="middle" font-size="9.6" font-weight="600" fill="#4a5a70">DI ratio</text>
+<rect x="625.0" y="771" width="32" height="16" rx="8" fill="#c94f1f"/>
+<text x="641.0" y="783" text-anchor="middle" font-size="10.5" font-weight="700" fill="#fff">3.4</text>
+<line x1="546" y1="793" x2="736" y2="793" stroke="#d7dee8" stroke-width="1"/>
+<a href="task-3-4.html#s2"><text x="641.0" y="809" text-anchor="middle" font-size="11.2" font-weight="700" fill="#c94f1f">Notes 3.4 · Section 2 &#8594;</text></a>
+<line x1="508" y1="724" x2="523" y2="724" stroke="#5a6a7e" stroke-width="1.8" marker-end="url(#a)"/>
+<rect x="778" y="631" width="222" height="186" rx="12" fill="#ffffff" stroke="#d7dee8" stroke-width="1.5"/>
+<rect x="789" y="632" width="200" height="4" fill="#6b4c9a"/>
+<text x="889.0" y="660" text-anchor="middle" font-size="15" font-weight="700" fill="#0b1524">Watch for drift</text>
+<text x="889.0" y="681" text-anchor="middle" font-size="11.8" fill="#5a6a7e">Models get worse quietly. Watch them,</text>
+<text x="889.0" y="698" text-anchor="middle" font-size="11.8" fill="#5a6a7e">and let the alarm put the last good</text>
+<text x="889.0" y="715" text-anchor="middle" font-size="11.8" fill="#5a6a7e">version back on its own.</text>
+<rect x="816.4" y="731" width="85.7" height="16" rx="6" fill="#eef2f7"/>
+<text x="859.2" y="742.5" text-anchor="middle" font-size="9.6" font-weight="600" fill="#4a5a70">Model Monitor</text>
+<rect x="908.1" y="731" width="53.5" height="16" rx="6" fill="#eef2f7"/>
+<text x="934.9" y="742.5" text-anchor="middle" font-size="9.6" font-weight="600" fill="#4a5a70">Clarify</text>
+<rect x="851.5" y="751" width="74.9" height="16" rx="6" fill="#eef2f7"/>
+<text x="889.0" y="762.5" text-anchor="middle" font-size="9.6" font-weight="600" fill="#4a5a70">EventBridge</text>
+<rect x="873.0" y="771" width="32" height="16" rx="8" fill="#6b4c9a"/>
+<text x="889.0" y="783" text-anchor="middle" font-size="10.5" font-weight="700" fill="#fff">3.3</text>
+<line x1="794" y1="793" x2="984" y2="793" stroke="#d7dee8" stroke-width="1"/>
+<a href="task-3-3.html#s4"><text x="889.0" y="809" text-anchor="middle" font-size="11.2" font-weight="700" fill="#c94f1f">Notes 3.3 · Step 4 &#8594;</text></a>
+<line x1="756" y1="724" x2="771" y2="724" stroke="#5a6a7e" stroke-width="1.8" marker-end="url(#a)"/>
+<path d="M 1137 536 V 559 H 145 V 624" fill="none" stroke="#5a6a7e" stroke-width="1.8" marker-end="url(#a)"/>
+<path d="M 889 821 V 849 H 16 V 439 H 27" fill="none" stroke="#5a6a7e" stroke-width="1.7" stroke-dasharray="6 5" marker-end="url(#a)"/>
+<text x="875" y="841" text-anchor="end" font-size="12.5" fill="#5a6a7e" font-style="italic">what you find down here changes the checks up there</text>
+</g></svg>
+      </div>
+      <figcaption>Band 1 runs before the model is called. Band 2 runs on the answer, before anybody reads it. The bottom band never stops.<br>The <b>grey tags</b> are the concepts and services that box teaches. The <b>orange link</b> under them opens the exact section of the notes that explains it.</figcaption>
+    </figure>
+  </div>
+</section>
+
+<section style="padding-top:20px;">
+  <div class="wrap">
+    <h2 class="sh">What each task is actually about</h2>
+    <p class="sl">One line each, then the few things most worth remembering.</p>
+    
+    <div class="tcard tc31">
+      <div class="th"><span class="tnum" style="background:var(--t31)">3.1</span><h3>Input &amp; Output Safety</h3></div>
+      <p class="one">Stopping the bad thing going in, and the bad thing coming out.</p>
+      <ul><li><b>Cheapest check first.</b> WAF, then a Lambda doing pattern matching, then Comprehend, then Guardrails, then the model. Anything caught early is a model call you never pay for.</li><li><b>Every layer is blind to something.</b> WAF knows web attacks but cannot read plain English like &ldquo;ignore your previous rules&rdquo;. Guardrails cannot know your own business rules. That is why you need all of them.</li><li><b>Block it all, or just the bad bit.</b> Block mode when it is serious. Strip the bad part and keep the rest when it is minor.</li><li><b>Make the numbers impossible to invent.</b> Let the model write the SQL, check the SQL, then let the database do the sums. A figure that comes from the database cannot be made up.</li><li><b>Three answers, not one:</b> sure, send it. Half sure, send it with a warning. Not sure, a person looks first.</li></ul>
+      <div class="jump"><span>Jump into the notes:</span><a href="task-3-1.html#s1">1 &middot; Going in</a><a href="task-3-1.html#s2">2 &middot; Coming out</a><a href="task-3-1.html#s3">3 &middot; Is it true?</a><a href="task-3-1.html#s4">4 &middot; The four layers</a><a href="task-3-1.html#s5">5 &middot; Attacks</a></div>
+      <a class="go" href="task-3-1.html">Open the whole page &rarr;</a>
+    </div>
+    
+    <div class="tcard tc32">
+      <div class="th"><span class="tnum" style="background:var(--t32)">3.2</span><h3>Data Security &amp; Privacy Controls</h3></div>
+      <p class="one">Keeping the data inside, and keeping the person out of it.</p>
+      <ul><li><b>Two kinds of endpoint.</b> Interface endpoints get a network card and a security group. Gateway endpoints are a line in a route table, and only work for S3 and DynamoDB.</li><li><b>Deleting the name breaks the sentence.</b> Swap it for a stand-in instead, so the model can still tell that two mentions are the same person.</li><li><b>Two places to look for personal data.</b> Comprehend reads text as it arrives. Macie scans what is already sitting in S3.</li><li><b>If the data cannot move, move the model.</b> Outposts when the law says the data stays put, Local Zones for distance, Wavelength for phones.</li><li><b>Deleting is not enough.</b> You also have to be able to show when you deleted it, and how.</li></ul>
+      <div class="jump"><span>Jump into the notes:</span><a href="task-3-2.html#s1">Part 1 &middot; Private network</a><a href="task-3-2.html#s2">Part 2 &middot; Finding it</a><a href="task-3-2.html#s3">Part 3 &middot; Hiding it</a></div>
+      <a class="go" href="task-3-2.html">Open the whole page &rarr;</a>
+    </div>
+    
+    <div class="tcard tc33">
+      <div class="th"><span class="tnum" style="background:var(--t33)">3.3</span><h3>Governance &amp; Compliance</h3></div>
+      <p class="one">Being able to prove, a year later, how a model was built and who said yes.</p>
+      <ul><li><b>A model card is a birth certificate.</b> What it is for, what it was trained on, what it is bad at, and who signed it off.</li><li><b>Turn data events on.</b> CloudTrail records who called the API by default, but not who read the file. That second part is off until you switch it on &mdash; and it is the part auditors ask for.</li><li><b>Same model, same data, same answer.</b> That is what lets you show what the model said on a date two years ago.</li><li><b>The person who built it cannot approve it.</b> Step Functions checks the bias numbers and the paperwork, then asks somebody else to sign.</li><li><b>An SCP is a ceiling, not a key.</b> It never gives permission, only takes it away &mdash; and not even the root user of that account can get around it.</li></ul>
+      <div class="jump"><span>Jump into the notes:</span><a href="task-3-3.html#s1">Step 1 &middot; Paperwork</a><a href="task-3-3.html#s2">Step 2 &middot; Where data came from</a><a href="task-3-3.html#s3">Step 3 &middot; Who can do what</a><a href="task-3-3.html#s4">Step 4 &middot; Watching it</a></div>
+      <a class="go" href="task-3-3.html">Open the whole page &rarr;</a>
+    </div>
+    
+    <div class="tcard tc34">
+      <div class="th"><span class="tnum" style="background:var(--t34)">3.4</span><h3>Responsible AI</h3></div>
+      <p class="one">Showing your working, checking it is fair, and turning written rules into code.</p>
+      <ul><li><b>One setting opens the box.</b> Turn tracing on and you can see every step the agent took, every page it read, and how sure it was at each one.</li><li><b>Models sound confident when they are wrong.</b> Measure how sure they really are, and send the shaky ones to a person.</li><li><b>Right answer, thinner answer.</b> A model can be correct for everybody and still be unfair, if one group always gets the short version.</li><li><b>The judge has opinions too.</b> A second model marking the first brings its own bias. Use a strict marking scheme, several judges, and real people to check them.</li><li><b>Write the rule down, then point at the code that does it.</b> Policy, then a spec, then an automatic test, then the evidence an auditor can read.</li></ul>
+      <div class="jump"><span>Jump into the notes:</span><a href="task-3-4.html#s1">1 &middot; Showing the working</a><a href="task-3-4.html#s2">2 &middot; Being fair</a><a href="task-3-4.html#s3">3 &middot; Following the rules</a></div>
+      <a class="go" href="task-3-4.html">Open the whole page &rarr;</a>
+    </div>
+  </div>
+</section>
+
+<section style="padding-top:0;">
+  <div class="wrap">
+    <h2 class="sh">Why the same thing keeps coming up</h2>
+    <p class="sl">Some ideas show up in several tasks. That is not repetition &mdash; each task uses the same tool for a different job. Knowing which task owns the detail is half the battle in the exam.</p>
+    <dl class="ov">
+      <dt>Guardrails, three different jobs</dt>
+      <dd><a class="pill" style="background:var(--t31)" href="task-3-1.html#s1">3.1</a> catches rude or dangerous wording going in and coming out. <a class="pill" style="background:var(--t32)" href="task-3-2.html#s2">3.2</a> uses them to stop personal data leaking into the answer. <a class="pill" style="background:var(--t34)" href="task-3-4.html#s3">3.4</a> uses them to enforce rules the compliance team wrote down. Same service, three jobs.</dd>
+      <dt>Model cards, written twice</dt>
+      <dd><a class="pill" style="background:var(--t33)" href="task-3-3.html#s1">3.3</a> says what goes in one and who signs it. <a class="pill" style="background:var(--t34)" href="task-3-4.html#s3">3.4</a> adds the awkward part: what the model is bad at, and how it scores for each group separately.</dd>
+      <dt>Confidence scores</dt>
+      <dd><a class="pill" style="background:var(--t31)" href="task-3-1.html#s3">3.1</a> uses the score to decide whether a person needs to look. <a class="pill" style="background:var(--t34)" href="task-3-4.html#s1">3.4</a> asks the harder question &mdash; is the score honest? Something marked 90% sure should be right nine times out of ten.</dd>
+      <dt>Bias: the maths and the manners</dt>
+      <dd><a class="pill" style="background:var(--t33)" href="task-3-3.html#s3">3.3</a> gives you the maths (DPPL, DI, DCR) and when to run it. <a class="pill" style="background:var(--t34)" href="task-3-4.html#s2">3.4</a> gives you the human version: the same question for every group, and a second model marking the answers.</dd>
+      <dt>Nothing is trusted on its own</dt>
+      <dd><a class="pill" style="background:var(--t31)" href="task-3-1.html#s4">3.1</a> stacks safety checks. <a class="pill" style="background:var(--t32)" href="task-3-2.html#s1">3.2</a> stacks network walls. <a class="pill" style="background:var(--t33)" href="task-3-3.html#s3">3.3</a> stacks permissions &mdash; the SCP, then IAM, then the resource itself. <a class="pill" style="background:var(--t34)" href="task-3-4.html#s3">3.4</a> stacks guardrails before, during and after. Same shape every time.</dd>
+      <dt>Four logs, four different questions</dt>
+      <dd><a class="pill" style="background:var(--t31)" href="task-3-1.html#s4">3.1</a> logs what was blocked. <a class="pill" style="background:var(--t32)" href="task-3-2.html#s1">3.2</a> logs who touched the data. <a class="pill" style="background:var(--t33)" href="task-3-3.html#s2">3.3</a> logs how the model was built and who approved it. <a class="pill" style="background:var(--t34)" href="task-3-4.html#s3">3.4</a> logs why the answer came out the way it did.</dd>
+    </dl>
+  </div>
+</section>
+
+<section style="padding-top:0;">
+  <div class="wrap">
+    <p class="more"><b>Coming from the other maps?</b> <a href="domain-1.html">Domain 1</a> builds the system &mdash; documents in, answer out. <a href="domain-2.html">Domain 2</a> puts that system inside a company and keeps it running. Domain 3 is the part that keeps it out of trouble: what it is allowed to say, what it is allowed to see, and what you can show an auditor afterwards.</p>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <p>This is an independent, unofficial study resource and is not affiliated with, endorsed by, or sponsored by Amazon Web Services, Inc. AWS, Amazon Bedrock, and all related marks are trademarks of Amazon.com, Inc. or its affiliates.</p>
+    <p>Hosted on Amazon S3 + Amazon CloudFront. &middot; <a href="index.html">&larr; Back to Study Notes</a></p>
+  </div>
+</footer>
+
+</body>
+</html>
