@@ -76,6 +76,15 @@
 
   .chain{margin:4px 0 12px;padding:11px 14px;background:#f3f7fd;border:1px solid #dbe6f5;border-radius:9px;font-size:12.5px;font-weight:600;color:var(--navy-2);text-align:center;overflow-x:auto;}
   .cardeyebrow{margin:0 0 4px;font-size:10.5px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:#8b96a5;}
+  .fracwrap{text-align:center;margin:6px 0 14px;}
+  .frac{display:inline-grid;grid-template-columns:auto auto;align-items:center;column-gap:11px;
+        padding:12px 20px;background:#f3f7fd;border:1px solid #dbe6f5;border-radius:9px;}
+  .frac p{margin:0;line-height:1.3;}
+  .frac .fl{grid-column:1;grid-row:1 / span 2;font-size:15.5px;font-weight:700;color:var(--navy-2);}
+  .frac .fn{grid-column:2;grid-row:1;text-align:center;font-size:14.5px;font-style:italic;color:var(--navy-2);padding:0 8px 3px;}
+  .frac .fd{grid-column:2;grid-row:2;text-align:center;font-size:14.5px;font-style:italic;color:var(--navy-2);border-top:1.4px solid var(--navy-2);padding:3px 8px 0;}
+  .frac .fz{grid-column:1;grid-row:3;height:0;overflow:hidden;}
+
   .cardeyebrow{margin:0 0 4px;font-size:10.5px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:#8b96a5;}
 </style>
 </head>
@@ -221,10 +230,7 @@
         <p class="chain">DPPL=q−a</p>
         <p class="lead">DI (Disparate Impact):</p>
         <p class="txt">Measures the ratio of positive outcomes received by an un-favored group relative to a favored group.</p>
-        <pre class="art">DI=
-q
-a
-​</pre>
+        <div class="fracwrap"><div class="frac"><p class="fl">DI=</p><p class="fd">q</p><p class="fn">a</p><p class="fz">​</p></div></div>
         <p class="kv"><strong>Rule of Thumb:</strong> Values significantly below 0.8 indicate potential disparate impact/bias.</p>
         <p class="lead">DCR (Difference in Conditional Rejection):</p>
         <p class="txt">Measures the gap in rejection rates between demographic groups after conditioning on baseline qualification factors (e.g., comparing rejection rates for applicants with equal credit scores).</p>

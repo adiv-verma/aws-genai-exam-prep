@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Task 3.4 Notes | AIP-C01 Guide</title>
+<meta name="description" content="Domain 3, Task 3.4 study notes: Responsible AI">
+<style>
+  :root{
+    --ink:#0b1524; --ink-soft:#3a4a5e; --paper:#f7f8fa; --card:#ffffff; --line:#e3e7ee;
+    --accent:#e8622c; --accent-dark:#c94f1f; --navy:#0f2540; --navy-2:#16345c;
+    color-scheme: light;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{margin:0;background:var(--paper);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;line-height:1.6;}
+  a{color:var(--accent-dark);}
+  img{max-width:100%;}
+  .wrap{max-width:1080px;margin:0 auto;padding:0 24px;}
+
+  .nav{position:sticky;top:0;z-index:50;background:rgba(15,37,64,.96);backdrop-filter:blur(6px);border-bottom:1px solid rgba(255,255,255,.08);}
+  .nav .wrap{display:flex;align-items:center;justify-content:space-between;height:56px;}
+  .nav-brand{color:#fff;font-weight:700;font-size:14px;letter-spacing:.02em;text-decoration:none;}
+  .nav-brand span{color:var(--accent);}
+  .nav-links{display:flex;gap:22px;list-style:none;margin:0;padding:0;}
+  .nav-links a{color:#cdd8e6;text-decoration:none;font-size:13.5px;font-weight:500;}
+  .nav-links a:hover{color:#fff;}
+  @media (max-width:720px){
+    .nav .wrap{gap:12px;}
+    .nav-links{gap:16px;overflow-x:auto;scrollbar-width:none;-ms-overflow-style:none;
+      flex:1;justify-content:flex-end;}
+    .nav-links::-webkit-scrollbar{display:none;}
+    .nav-links a{white-space:nowrap;font-size:13px;}
+  }
+
+  header.hero{background:linear-gradient(180deg,var(--navy) 0%, var(--navy-2) 100%);color:#fff;padding:36px 0 28px;}
+  .eyebrow{display:inline-block;font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#ffd8c4;background:rgba(232,98,44,.18);border:1px solid rgba(232,98,44,.4);padding:5px 10px;border-radius:999px;margin-bottom:14px;}
+  h1{font-size:clamp(20px,3vw,27px);line-height:1.2;margin:0;font-weight:800;}
+
+  section{padding:36px 0;}
+
+  figure.arch{margin:0 0 24px;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px;}
+  figure.arch img{display:block;border-radius:8px;width:100%;height:auto;}
+  figure.arch figcaption{margin-top:10px;font-size:12.5px;color:var(--ink-soft);text-align:center;}
+
+  .note-card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:18px 22px 22px;margin-bottom:16px;}
+  .note-card h4{scroll-margin-top:78px;margin:0 0 14px;font-size:13px;font-weight:800;color:var(--navy-2);}
+  .note-card h4:target{color:var(--accent-dark);}
+  .note-card h4:target::after{content:" \2190";color:var(--accent);}
+
+  .lead{font-size:13.5px;font-weight:700;color:var(--ink);margin:18px 0 8px;}
+  .lead:first-of-type{margin-top:0;}
+  .lead.num{color:var(--navy-2);}
+  .txt{font-size:13px;color:var(--ink-soft);line-height:1.6;margin:0 0 8px;}
+  .kv{font-size:13px;color:var(--ink-soft);line-height:1.6;margin:0 0 8px;padding-left:14px;border-left:2px solid var(--line);}
+  .kv strong{color:var(--ink);font-weight:700;}
+
+  .codelabel{font-size:10.5px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:#8b96a5;margin:14px 0 6px;}
+  pre.code{margin:0 0 10px;padding:12px 14px;background:#0f2540;color:#dbe6f3;border-radius:9px;overflow-x:auto;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px;line-height:1.55;}
+
+  footer{padding:32px 0 48px;color:#8b96a5;font-size:12.5px;}
+  footer .wrap{border-top:1px solid var(--line);padding-top:22px;}
+  footer a{color:#6b7686;}
+  table.cmp{width:100%;border-collapse:collapse;margin:4px 0 12px;font-size:12.5px;display:block;overflow-x:auto;}
+  table.cmp th{text-align:left;padding:8px 10px;background:#0f2540;color:#fff;font-weight:700;font-size:11.5px;letter-spacing:.02em;border:1px solid #0f2540;}
+  table.cmp td{padding:8px 10px;border:1px solid var(--line);color:var(--ink-soft);vertical-align:top;}
+  table.cmp tbody tr:nth-child(even){background:#fafbfc;}
+  table.cmp td:first-child{color:var(--ink);font-weight:600;}
+
+  pre.art{margin:4px 0 12px;padding:14px 16px;background:#0f2540;color:#dbe6f3;border-radius:9px;overflow-x:auto;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:11.5px;line-height:1.45;white-space:pre;}
+
+  .step{display:flex;gap:11px;align-items:flex-start;margin:0 0 10px;}
+  .step .stepn{flex:none;width:22px;height:22px;border-radius:7px;background:var(--navy);color:#fff;font-size:11.5px;font-weight:700;display:flex;align-items:center;justify-content:center;margin-top:1px;}
+  .step .stept{margin:0;font-size:13.5px;font-weight:700;color:var(--ink);}
+  .step .steps{margin:0;font-size:11.5px;font-weight:600;letter-spacing:.03em;text-transform:uppercase;color:#8b96a5;}
+
+  .chain{margin:4px 0 12px;padding:11px 14px;background:#f3f7fd;border:1px solid #dbe6f5;border-radius:9px;font-size:12.5px;font-weight:600;color:var(--navy-2);text-align:center;overflow-x:auto;}
+  .cardeyebrow{margin:0 0 4px;font-size:10.5px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:#8b96a5;}
+  .fracwrap{text-align:center;margin:6px 0 14px;}
+  .frac{display:inline-grid;grid-template-columns:auto auto;align-items:center;column-gap:11px;
+        padding:12px 20px;background:#f3f7fd;border:1px solid #dbe6f5;border-radius:9px;}
+  .frac p{margin:0;line-height:1.3;}
+  .frac .fl{grid-column:1;grid-row:1 / span 2;font-size:15.5px;font-weight:700;color:var(--navy-2);}
+  .frac .fn{grid-column:2;grid-row:1;text-align:center;font-size:14.5px;font-style:italic;color:var(--navy-2);padding:0 8px 3px;}
+  .frac .fd{grid-column:2;grid-row:2;text-align:center;font-size:14.5px;font-style:italic;color:var(--navy-2);border-top:1.4px solid var(--navy-2);padding:3px 8px 0;}
+  .frac .fz{grid-column:1;grid-row:3;height:0;overflow:hidden;}
+
+  .cardeyebrow{margin:0 0 4px;font-size:10.5px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:#8b96a5;}
+  .cardeyebrow{margin:0 0 4px;font-size:10.5px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:#8b96a5;}
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="wrap">
+    <a class="nav-brand" href="../index.html">AIP-C01 <span>Guide</span></a>
+    <ul class="nav-links">
+      <li><a href="index.html">All Study Notes</a></li>
+      <li><a href="../tasks/index.html">Build Log</a></li>
+    </ul>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="wrap">
+    <span class="eyebrow">Domain 3 &middot; Task 3.4</span>
+    <h1>Domain 3, Task 3.4 &mdash; Responsible AI (Detailed Revision Notes)</h1>
+  </div>
+</header>
+
+<section>
+  <div class="wrap">
+
+    <figure class="arch">
+      <img src="../assets/task-3-4-architecture.svg" alt="Responsible AI for a healthcare assistant, drawn as one answer and the evidence behind it. Across the top runs the policy translation chain: organizational policy becomes a technical specification, which becomes an automated control or test, which produces audit evidence. Down the left is the inference path wrapped in three enforcement layers taken from the notes. Pre-processing applies Bedrock Guardrails, prompt sanitization, PII masking and custom blocklists. In-processing applies ReAct tracing, real-time reasoning monitoring and temperature or top-p controls. Post-processing applies contextual grounding checks, output content filters and response formatting rules. What comes back to the user is not just an answer: it carries the reasoning display, a confidence score and verifiable source citations. On the right, a panel lists what turning tracing on actually exposes - the execution steps and reasoning paths, the knowledge base retrievals with their relevance scores, the API and tool invocation logs, and the decision points with confidence metrics - and beneath it a second panel lists the three transparency metrics: citation frequency, reasoning step count and uncertainty acknowledgment. Along the bottom runs the offline fairness loop: a diverse evaluation dataset, response generation across cohorts, judge assessment by a second model on correctness, harmfulness and completeness, then statistical significance testing to separate real bias from noise, with token count monitoring in CloudWatch as a proxy metric. Everything collected feeds AWS Audit Manager and its GenAI Best Practices Framework, which is where the audit evidence at the end of the top chain comes from.">
+      <figcaption>Three enforcement layers around the answer, and two loops around the system: tracing proves how the answer was reached, and the fairness loop proves it holds up across groups.</figcaption>
+    </figure>
+
+    <div class="note-card">
+      <h4 id="s1">Section 1: Transparent AI Systems — Detailed Notes</h4>
+        <p class="txt">In safety-critical applications like healthcare, generative AI models cannot operate as "black boxes." Transparency ensures that both end-users (patients/clinicians) and system auditors can trace, understand, and evaluate how a model arrived at its response.</p>
+        <p class="lead num">1. Bedrock Agent Tracing (Internal Transparency)</p>
+        <p class="txt">When an Amazon Bedrock Agent executes a task, it operates within a Reason and Act (ReAct) loop. By default, these intermediate steps are hidden. Enabling tracing exposes the internal mechanics of the agent in real time.</p>
+        <p class="kv"><strong>Implementation:</strong> Enabled via the InvokeAgent API using the enableTrace=true parameter.</p>
+        <p class="lead">Exposed Artifacts:</p>
+        <p class="kv"><strong>Execution Steps &amp; Reasoning Paths:</strong> The exact step-by-step logic the agent follows to break down and solve a user request.</p>
+        <p class="kv"><strong>Knowledge Base Retrievals &amp; Relevance Scores:</strong> The exact chunks retrieved from the vector database, including vector similarity/relevance scores for each chunk.</p>
+        <p class="kv"><strong>API &amp; Tool Invocation Logs:</strong> Complete payloads of Lambda function calls, parameters sent, and raw API responses returned.</p>
+        <p class="kv"><strong>Decision Points &amp; Confidence Metrics:</strong> Intermediate confidence ratings for chosen paths at each step of the ReAct cycle.</p>
+        <p class="kv"><strong>Exam Relevance:</strong> Essential for developer debugging (understanding failure modes in agent logic) and governance auditing (proving the agent relied on authorized data sources).</p>
+        <p class="lead num">2. Reasoning Displays (User-Facing Transparency)</p>
+        <p class="txt">While earlier design practices (e.g., Task 1.6) suggest hiding internal reasoning chains to simplify user interfaces, Task 3.4 intentionally exposes them when transparency takes precedence over absolute simplicity.</p>
+        <p class="kv"><strong>Chain-of-Thought (CoT) Prompting:</strong> Prompts explicitly instruct the model to state its step-by-step reasoning before providing a conclusion.</p>
+        <p class="kv"><strong>Real-Time Streaming UI:</strong> Custom front-end components render intermediate reasoning tokens as they are generated in real time, allowing users to watch the reasoning process unfold.</p>
+        <p class="kv"><strong>Clinical Utility:</strong> In healthcare, seeing how a conclusion was reached builds user trust and allows clinicians to verify the logical validity of the advice.</p>
+        <p class="lead num">3. Confidence Metrics &amp; Uncertainty Quantification</p>
+        <p class="txt">Large Language Models (LLMs) tend to be over-confident—generating incorrect statements with high verbal certainty. Quantifying model uncertainty is vital for risk mitigation.</p>
+        <table class="cmp">
+          <thead><tr><th>Method</th><th>Technical Mechanism</th></tr></thead>
+          <tbody>
+            <tr><td>Token-Level Probability Analysis</td><td>Evaluates the log probabilities of output tokens. Low token probabilities across a generated phrase signal model hesitation or uncertainty.</td></tr>
+            <tr><td>Ensemble Methods</td><td>Queries multiple models or samples multiple completion paths (with non-zero temperature) for the same input. Low agreement across outputs indicates lower confidence.</td></tr>
+            <tr><td>Calibration &amp; Calibration Intervals</td><td>Aligns stated confidence scores with actual empirical accuracy (e.g., ensuring an answer marked as "90% confident" is statistically correct 90% of the time).</td></tr>
+          </tbody>
+        </table>
+        <p class="kv"><strong>AWS Architectural Integration:</strong> Confidence scores and uncertainty bounds are emitted as Amazon CloudWatch custom metrics, enabling automated alerts or routing low-confidence outputs to human reviewers.</p>
+        <p class="lead num">4. Source Attribution — Advanced RAG</p>
+        <p class="txt">Providing source links in basic Retrieval-Augmented Generation (RAG) is straightforward, but maintaining accurate citations across multi-step reasoning is complex.</p>
+        <p class="kv"><strong>Core Requirement:</strong> Explicit citation mechanisms that attach original source metadata to intermediate and final outputs.</p>
+        <p class="kv"><strong>Multi-Step Propagation:</strong> If a model retrieves clinical guidelines in Step 1, processes them in Step 2, and synthesizes medical advice in Step 3, the exact citation from Step 1 must persist through to Step 3.</p>
+        <p class="kv"><strong>Verifiable Anchors:</strong> Outputs must include direct, clickable, or audit-verifiable links back to the underlying authoritative documentation (e.g., specific clinical guidelines or PubMed research entries).</p>
+        <p class="lead num">5. Explainability Visualizations &amp; Transparency Metrics</p>
+        <p class="txt">Transparency must be both visually interpretable and quantitatively measurable.</p>
+        <p class="lead">Explainability Visualizations</p>
+        <p class="kv"><strong>Citation Networks:</strong> Graph representations showing how generated content fragments link back to specific vector database nodes and source documents.</p>
+        <p class="kv"><strong>Uncertainty Overlays:</strong> UI visual cues (such as color-coding text blocks) based on confidence scores to highlight uncertain assertions to the end user.</p>
+        <p class="kv"><strong>Alternative Reasoning Path Exploration:</strong> Displays alternative valid interpretations or candidate solutions considered by the model prior to final selection.</p>
+        <p class="lead">Transparency Metrics</p>
+        <table class="cmp">
+          <thead><tr><th>Metric</th><th>Significance</th></tr></thead>
+          <tbody>
+            <tr><td>Citation Frequency</td><td>Measures how consistently statements are grounded by citations to authoritative sources.</td></tr>
+            <tr><td>Reasoning Step Count</td><td>Quantifies the depth and granularity of the reasoning process exposed to the user or auditor.</td></tr>
+            <tr><td>Uncertainty Acknowledgment</td><td>Measures how frequently the model explicitly states missing information or lack of confidence (e.g., "I do not have sufficient medical data to answer this conclusively").</td></tr>
+          </tbody>
+        </table>
+    </div>
+
+    <div class="note-card">
+      <h4 id="s2">Section 2: Fairness Evaluations — Detailed Notes</h4>
+        <p class="txt">In generative AI applications, fairness evaluates whether a foundation model provides equitable quality, accuracy, and utility across all user segments without perpetuating systemic bias or discrimination.</p>
+        <p class="lead num">1. Demographic Dimensions of Bias</p>
+        <p class="txt">In domain-specific applications like healthcare, model bias manifests across multiple demographic vectors:</p>
+        <p class="kv"><strong>Age:</strong> Discrepancies in diagnostic quality between elderly and younger cohorts.</p>
+        <p class="kv"><strong>Gender and Gender Identity:</strong> Differential treatment based on male, female, or non-binary identifiers.</p>
+        <p class="kv"><strong>Ethnic and Cultural Background:</strong> Varied accuracy across diverse cultural contexts or regional healthcare profiles.</p>
+        <p class="kv"><strong>Socioeconomic Factors:</strong> Variations in recommendations based on income levels or coverage status.</p>
+        <p class="kv"><strong>Medical Literacy Levels (The Subtle Axis):</strong> If a model responds exclusively in hyper-dense clinical terminology, it creates a fairness failure for patients with low health literacy. An answer that is factually correct but incomprehensible to a specific user group lacks equitable utility.</p>
+        <p class="lead num">2. Core Mathematical &amp; Statistical Fairness Metrics</p>
+        <p class="txt">Evaluating bias requires applying explicit fairness criteria across model outputs:</p>
+        <table class="cmp">
+          <thead><tr><th>Metric</th><th>Technical Definition</th><th>Application / Limitation</th></tr></thead>
+          <tbody>
+            <tr><td>Demographic Parity</td><td>The probability of receiving a positive outcome is equal across all demographic groups (P(Ŷ=1∣A=a)=P(Ŷ=1∣A=b)).</td><td>Simplistic; forcing equal selection rates can introduce distortion if underlying base rates genuinely differ.</td></tr>
+            <tr><td>Equal Opportunity</td><td>The True Positive Rate (TPR) is equal across all demographic groups among qualified candidates (P(Ŷ=1∣Y=1,A=a)=P(Ŷ=1∣Y=1,A=b)).</td><td>Focuses on minimizing false negatives for qualified individuals.</td></tr>
+            <tr><td>Equalized Odds</td><td>Both True Positive Rate (TPR) and False Positive Rate (FPR) match across all groups.</td><td>The strictest parity constraint; enforces equal accuracy and error distribution.</td></tr>
+            <tr><td>Counterfactual Fairness</td><td>Modifying only the demographic attribute in the prompt yields an invariant response (Y<sub>A←a</sub>(U)=Y<sub>A←b</sub>(U)).</td><td>Most practical for GenAI: Directly isolates the causal impact of the demographic variable.</td></tr>
+          </tbody>
+        </table>
+        <p class="lead num">3. Group vs. Individual Fairness</p>
+        <p class="kv"><strong>Group Fairness:</strong> Aggregates performance metrics across demographic cohorts to measure macro-level parity (e.g., mean accuracy for age 65+ vs. age 18–30).</p>
+        <p class="kv"><strong>Individual Fairness:</strong> Asserts that similar individuals should receive similar model predictions regardless of protected class attributes.</p>
+        <p class="lead num">4. Automated Evaluation via LLM-as-a-Judge</p>
+        <p class="txt">Because human evaluation at scale is cost-prohibitive, secondary LLMs evaluate primary model responses against structured rubrics.</p>
+        <p class="lead">Evaluation Workflow &amp; Key Metrics</p>
+        <p class="kv"><strong>Diverse Evaluation Dataset:</strong> High-coverage prompt suites representing intersecting demographic dimensions.</p>
+        <p class="kv"><strong>Response Generation:</strong> Target LLM outputs generated across cohorts.</p>
+        <p class="kv"><strong>Judge Assessment:</strong> Secondary LLM grades outputs on three primary dimensions:</p>
+        <p class="kv"><strong>Correctness:</strong> Factual accuracy of the response.</p>
+        <p class="kv"><strong>Harmfulness:</strong> Presence of toxic, derogatory, or stereotyping language.</p>
+        <p class="kv"><strong>Completeness:</strong> The depth and comprehensiveness of the answer.</p>
+        <p class="kv"><strong>Crucial Exam Insight — Completeness Bias:</strong> A model exhibits bias if it produces factually correct answers for all groups but systematically provides shorter, less detailed answers to specific demographic cohorts.</p>
+        <p class="lead">Mitigating Judge Model Bias</p>
+        <p class="txt">An LLM judge carries its own inherent biases (e.g., penalizing plain-language responses as "lower quality"). Mitigation requires:</p>
+        <p class="kv"><strong>Explicit Scoring Rubrics:</strong> Fine-grained, deterministic prompt instructions for the judge.</p>
+        <p class="kv"><strong>Ensemble Judging:</strong> Aggregating scores across multiple distinct judge FMs.</p>
+        <p class="kv"><strong>Human Calibration:</strong> Aligning automated judge scores against domain-expert human annotations.</p>
+        <p class="lead num">5. Systematic Testing &amp; Continuous Fairness Monitoring</p>
+        <p class="kv"><strong>Statistical Significance Testing:</strong> Disambiguates true algorithmic bias from stochastic sampling noise.</p>
+        <p class="lead">Prompt Management &amp; Prompt Flows:</p>
+        <p class="kv"><strong>Prompt Management:</strong> Versioning prompt variations customized to mitigate bias for specific groups.</p>
+        <p class="kv"><strong>Prompt Flows:</strong> Dynamically routing test cases across demographic segments using visual DAG-based workflow builders.</p>
+        <p class="kv"><strong>Token Count Monitoring (Proxy Metric):</strong> Tracking token consumption per user segment in Amazon CloudWatch. Systematically lower average token output for a specific demographic indicates potential completeness bias.</p>
+    </div>
+
+    <div class="note-card">
+      <h4 id="s3">Section 3: Policy-Compliant AI Systems — Detailed Notes</h4>
+        <p class="txt">Policy compliance in generative AI involves converting high-level organizational rules, ethical mandates, and regulatory requirements (e.g., HIPAA, GDPR, NIST AI RMF) into deterministic, automated technical controls with full traceability.</p>
+        <p class="lead num">1. Policy Translation &amp; Traceability</p>
+        <p class="txt">The primary requirement for governance in Task 3.4 is establishing end-to-end traceability between human-readable policy requirements and machine-executable technical controls.</p>
+        <p class="chain">Organizational Policy ➔ Technical Specification ➔ Automated Control / Test ➔ Audit Evidence</p>
+        <p class="lead">Translation Example</p>
+        <p class="kv"><strong>High-Level Organizational Policy:</strong> "The AI healthcare assistant must not exhibit discriminatory bias against any demographic group."</p>
+        <p class="lead">Technical Implementation Translation:</p>
+        <p class="txt">Configure Counterfactual Fairness evaluation scripts in the deployment pipeline.</p>
+        <p class="txt">Set the Disparity Impact (DI) ratio tolerance threshold strictly between 0.8 and 1.25.</p>
+        <p class="txt">Emit metric evaluations to Amazon CloudWatch with an automated alarm that halts deployment if thresholds are breached.</p>
+        <p class="txt">Attach Amazon Bedrock Guardrails to filter biased language during inference.</p>
+        <p class="kv"><strong>Audit Traceability:</strong> During external compliance audits, system administrators must produce direct linkage logs showing that a specific Bedrock Guardrail or Lambda validator enforces a specific clause of the corporate policy.</p>
+        <p class="lead num">2. Advanced Guardrail Configuration &amp; Filtering</p>
+        <p class="txt">Guardrails act as the first line of defense to enforce policy compliance during model interaction.</p>
+        <p class="kv"><strong>Context-Aware Guardrails:</strong> Dynamically adjust filtering behavior based on the operational context, user role, or application state.</p>
+        <p class="kv"><strong>Multi-Stage Filtering Pipelines:</strong> Apply varied sensitivity thresholds across different execution stages (Prompt Input, RAG Retrieval, Intermediate Reasoning, and Output Generation).</p>
+        <p class="kv"><strong>Contextual Grounding Checks:</strong> Validate model outputs against retrieved context chunks in RAG pipelines to prevent hallucinations and unverified medical claims.</p>
+        <p class="lead">Two-Layer Guardrail Architecture:</p>
+        <p class="kv"><strong>Built-in FM Guardrails:</strong> Provider-level safety filters (e.g., native Amazon Bedrock Guardrails).</p>
+        <p class="kv"><strong>External LLM-based Guardrails:</strong> Specialized secondary LLM calls that validate compliance against complex, nuanced domain rules.</p>
+        <p class="kv"><strong>Safety vs. Utility Balancing:</strong> Overly aggressive guardrail filters can block legitimate medical discussions (e.g., blocking queries containing words like "bleeding" or "dosage"). Fine-tuning thresholds is required to maintain utility without sacrificing safety.</p>
+        <p class="lead num">3. Amazon Bedrock Model Cards</p>
+        <p class="txt">Model Cards provide standardized documentation regarding foundation model capabilities, limitations, and evaluation baselines from a Responsible AI perspective.</p>
+        <p class="lead">Core Contents:</p>
+        <p class="txt">Model limitations and non-intended use cases.</p>
+        <p class="txt">Known biases and explicit failure modes.</p>
+        <p class="txt">Disaggregated evaluation metrics reporting performance across individual demographic groups (ensuring aggregate high accuracy does not mask low performance in a protected cohort).</p>
+        <p class="kv"><strong>Automated CI/CD Updates:</strong> Integrated with continuous evaluation pipelines (Task 3.3) so that Model Cards update automatically as new benchmark data or fine-tuned versions are released.</p>
+        <p class="lead num">4. Automated Compliance Checking (AWS Lambda Rule Engines)</p>
+        <p class="txt">Custom validation logic evaluates prompt payloads and generated completions against dynamic business rules.</p>
+        <p class="kv"><strong>Real-time Evaluation:</strong> Lambda functions inspect inputs and outputs synchronously or asynchronously.</p>
+        <p class="kv"><strong>Contextual Rule Engines:</strong> Apply rule sets contingent on parameters like user authorization level, patient age, or jurisdiction.</p>
+        <p class="kv"><strong>Evidence Logging:</strong> Rule engines generate structured compliance logs containing explicit execution evidence rather than simple binary (Pass/Fail) flags.</p>
+        <p class="lead num">5. Multi-Layered Policy Enforcement &amp; Continuous Auditing</p>
+        <p class="txt">Applying a Defense-in-Depth architecture ensures policy compliance throughout the inference lifecycle:</p>
+        <table class="cmp">
+          <thead><tr><th>Layer</th><th>Technical Mechanism</th></tr></thead>
+          <tbody>
+            <tr><td>Pre-Processing</td><td>Bedrock Guardrails, prompt sanitization, PII masking, custom blocklists.</td></tr>
+            <tr><td>In-Processing</td><td>ReAct tracing, real-time reasoning monitoring, temperature/top-p controls.</td></tr>
+            <tr><td>Post-Processing</td><td>Contextual grounding checks, output content filters, response formatting rules.</td></tr>
+          </tbody>
+        </table>
+        <p class="lead">Monitoring &amp; Compliance Automation</p>
+        <p class="kv"><strong>CloudWatch Dashboards &amp; Drift Alarms:</strong> Monitor compliance metrics continuously over time to detect silent degradation or model drift across releases.</p>
+        <p class="lead">AWS Audit Manager + GenAI Best Practices Framework:</p>
+        <p class="kv"><strong>AWS Audit Manager:</strong> Automatically collects evidence logs and metrics against predefined controls, eliminating manual log gathering prior to audits.</p>
+        <p class="kv"><strong>GenAI Best Practices Framework:</strong> A purpose-built, pre-packaged control set within AWS Audit Manager designed specifically for generative AI governance.</p>
+        <p class="kv"><strong>Policy Configuration Versioning:</strong> Guardrail JSON definitions, prompt templates, and evaluation rubrics are version-controlled, code-reviewed, and deployed via Infrastructure-as-Code (IaC) pipelines.</p>
+    </div>
+
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <p>This is an independent, unofficial study resource and is not affiliated with, endorsed by, or sponsored by Amazon Web Services, Inc. AWS, Amazon Bedrock, and all related marks are trademarks of Amazon.com, Inc. or its affiliates.</p>
+    <p>Hosted on Amazon S3 + Amazon CloudFront. &middot; <a href="index.html">&larr; Back to Study Notes</a></p>
+  </div>
+</footer>
+
+</body>
+</html>
