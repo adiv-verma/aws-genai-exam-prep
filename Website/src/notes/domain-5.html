@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Domain 5 Map | AIP-C01 Guide</title>
+<meta name="description" content="One diagram of how both tasks in Domain 5 of the AWS Certified Generative AI Developer (AIP-C01) exam fit together, in plain English.">
+<style>
+  :root{
+    --ink:#0b1524; --ink-soft:#3a4a5e; --paper:#f7f8fa; --card:#ffffff; --line:#e3e7ee;
+    --accent:#e8622c; --accent-dark:#c94f1f; --navy:#0f2540; --navy-2:#16345c;
+    --t51:#1f4e79; --t52:#c94f1f;
+    color-scheme: light;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{margin:0;background:var(--paper);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;line-height:1.65;}
+  a{color:var(--accent-dark);}
+  code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;background:#eef1f6;padding:1px 5px;border-radius:4px;font-size:.92em;}
+  img,svg{max-width:100%;}
+  .wrap{max-width:1000px;margin:0 auto;padding:0 24px;}
+  .wrap-wide{max-width:1380px;margin:0 auto;padding:0 24px;}
+
+  .nav{position:sticky;top:0;z-index:50;background:rgba(15,37,64,.96);backdrop-filter:blur(6px);border-bottom:1px solid rgba(255,255,255,.08);}
+  .nav .wrap{display:flex;align-items:center;justify-content:space-between;height:56px;}
+  .nav-brand{color:#fff;font-weight:700;font-size:14px;letter-spacing:.02em;text-decoration:none;}
+  .nav-brand span{color:var(--accent);}
+  .nav-links{display:flex;gap:22px;list-style:none;margin:0;padding:0;}
+  .nav-links a{color:#cdd8e6;text-decoration:none;font-size:13.5px;font-weight:500;}
+  .nav-links a:hover{color:#fff;}
+  @media (max-width:720px){
+    .nav .wrap{gap:12px;}
+    .nav-links{gap:16px;overflow-x:auto;scrollbar-width:none;-ms-overflow-style:none;
+      flex:1;justify-content:flex-end;}
+    .nav-links::-webkit-scrollbar{display:none;}
+    .nav-links a{white-space:nowrap;font-size:13px;}
+  }
+
+  header.hero{background:linear-gradient(180deg,var(--navy) 0%, var(--navy-2) 100%);color:#fff;padding:36px 0 30px;}
+  .eyebrow{display:inline-block;font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#ffd8c4;background:rgba(232,98,44,.18);border:1px solid rgba(232,98,44,.4);padding:5px 10px;border-radius:999px;margin-bottom:14px;}
+  h1{font-size:clamp(23px,3.4vw,31px);line-height:1.15;margin:0;font-weight:800;}
+  header.hero p{font-size:15.5px;color:#c9d5e3;max-width:680px;margin:12px 0 0;}
+
+  section{padding:34px 0;}
+  h2.sh{font-size:20px;font-weight:800;margin:0 0 6px;}
+  p.sl{font-size:14.5px;color:var(--ink-soft);margin:0 0 22px;max-width:700px;}
+
+  figure.map{margin:0;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px;}
+  .scroller{overflow-x:auto;-webkit-overflow-scrolling:touch;}
+  .scroller svg{display:block;min-width:1150px;width:100%;height:auto;}
+  .scroller svg a text{cursor:pointer;}
+  .scroller svg a:hover text{text-decoration:underline;}
+  figure.map figcaption{margin-top:14px;font-size:13px;color:var(--ink-soft);text-align:center;}
+  .hint{display:none;font-size:12.5px;color:var(--ink-soft);margin:0 0 8px;font-style:italic;}
+  @media (max-width:1200px){ .hint{display:block;} }
+
+  .tcard{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:20px 22px;margin-bottom:14px;border-left:4px solid var(--line);}
+  .tcard .th{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:8px;}
+  .tnum{color:#fff;font-size:11.5px;font-weight:700;border-radius:8px;padding:3px 9px;}
+  .tcard h3{margin:0;font-size:16.5px;font-weight:800;}
+  .tcard .one{margin:0 0 12px;font-size:14.5px;color:var(--ink);}
+  .tcard ul{margin:0 0 14px;padding-left:19px;}
+  .tcard li{font-size:14px;color:var(--ink-soft);margin-bottom:6px;}
+  .tcard li b{color:var(--ink);font-weight:700;}
+  .jump{display:flex;flex-wrap:wrap;align-items:center;gap:7px;margin:0 0 14px;}
+  .jump span{font-size:12.5px;font-weight:700;color:var(--ink-soft);}
+  .jump a{font-size:12.5px;text-decoration:none;background:#f2f5f9;border:1px solid var(--line);border-radius:7px;padding:4px 10px;color:var(--ink-soft);font-weight:600;}
+  .jump a:hover{border-color:var(--accent);color:var(--accent-dark);}
+  .tcard a.go{font-size:13px;font-weight:700;text-decoration:none;border:1px solid var(--line);border-radius:8px;padding:7px 13px;display:inline-block;}
+  .tcard a.go:hover{border-color:var(--accent);}
+  .tc51{border-left-color:var(--t51);} .tc52{border-left-color:var(--t52);}
+
+  .ov{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:6px 22px;}
+  .ov dt{font-size:14.5px;font-weight:700;margin:16px 0 3px;}
+  .ov dd{margin:0 0 16px;font-size:14px;color:var(--ink-soft);}
+  .ov dd .pill{display:inline-block;color:#fff;font-size:10.5px;font-weight:700;border-radius:7px;padding:1px 7px;margin-right:2px;text-decoration:none;}
+
+  .more{background:#eef1f6;border:1px solid var(--line);border-radius:12px;padding:18px 22px;font-size:14px;color:var(--ink-soft);}
+  .more b{color:var(--ink);}
+
+  footer{padding:32px 0 48px;color:#8b96a5;font-size:12.5px;}
+  footer .wrap{border-top:1px solid var(--line);padding-top:22px;}
+  footer a{color:#6b7686;}
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="wrap">
+    <a class="nav-brand" href="../index.html">AIP-C01 <span>Guide</span></a>
+    <ul class="nav-links">
+      <li><a href="index.html">All Study Notes</a></li>
+      <li><a href="domain-3.html">Domain 3 Map</a></li>
+      <li><a href="domain-4.html">Domain 4 Map</a></li>
+      <li><a href="../tasks/index.html">Build Log</a></li>
+    </ul>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="wrap">
+    <span class="eyebrow">Domain 5 &middot; The Map</span>
+    <h1>Both Tasks, One Picture</h1>
+    <p>Domain 5 is the same question asked at two different moments. Before release: is this good enough to ship, and who decides? After release: it is behaving badly, so which part of the system is actually at fault? Each box says what it does, lists the concepts it teaches, and links straight to the section of the notes that covers it.</p>
+  </div>
+</header>
+
+<section style="padding-bottom:10px;">
+  <div class="wrap-wide">
+    <p class="hint">Scroll the diagram sideways if it does not fit.</p>
+    <figure class="map">
+      <div class="scroller">
+<svg viewBox="0 0 1282 662" role="img" aria-label="Domain 5 in two steps. Step one, before it ships, proving it is good enough, from Task 5.1: there is no single right answer, so grade relevance, accuracy, consistency and fluency separately, adding compliance and tone in a regulated domain; let a second, stronger model score the generator against a written rubric, never letting a model judge itself; benchmark model families side by side then roll the winner out slowly through A/B testing and canary rather than all at once; ask two audiences, because customers judge helpfulness but only domain experts in SageMaker Ground Truth catch a confident, fluent, entirely non-compliant answer; and let the quality gate decide, so a pipeline below threshold blocks its own release, with prompts, weights and evaluation data versioned together. Step two, when it breaks, finding out which part actually failed, from Task 5.2: answers cut off because nothing errors and the model silently drops the end of the context while sounding confident about the rest, fixed with semantic chunking and a Step Functions sliding window; the API keeps failing, where 400, 429 and 500 are three different bugs and forty percent of them never reached Bedrock at all, fixed with pre-call validation, a circuit breaker and backoff with jitter; different answers every time, where small wording changes swing the output and more instructions make it worse rather than better; slow or wrong recall, where a general embedding model does not know your domain and the language moves on without it, diagnosed through embedding drift detection and the choice between LSH, HNSW, IVF and PQ; and prompts rotting quietly, watched for by flagging templates that leak raw placeholders or models that discuss the prompt itself. A closing strip maps each symptom to its primary tool: incomplete responses to CloudWatch metrics, API failures to structured logging, slow latency to AWS X-Ray tracing, inconsistent answers to A/B testing and output diffing, irrelevant retrieval to embedding visualization, and faulty reasoning to chain-of-thought analysis. Each box lists the concepts it teaches and links to the matching section of the task notes." xmlns="http://www.w3.org/2000/svg">
+<defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#5a6a7e"/></marker></defs>
+<rect width="1282" height="662" fill="#f7f8fa"/>
+<g font-family="-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica,Arial,sans-serif">
+<rect x="34" y="16" width="470" height="27" rx="13.5" fill="#0f2540"/>
+<text x="49" y="34.5" font-size="12.5" font-weight="800" fill="#fff" letter-spacing=".04em">BEFORE IT SHIPS</text>
+<text x="193.0" y="34.5" font-size="12.5" font-weight="600" fill="#fff" opacity=".85">Prove it is good enough  ·  Task 5.1</text>
+<rect x="34" y="61" width="222" height="186" rx="12" fill="#ffffff" stroke="#d7dee8" stroke-width="1.5"/>
+<rect x="45" y="62" width="200" height="4" fill="#1f4e79"/>
+<text x="145.0" y="90" text-anchor="middle" font-size="15" font-weight="700" fill="#0b1524">Four scores, not one</text>
+<text x="145.0" y="111" text-anchor="middle" font-size="11.8" fill="#5a6a7e">There is no single right answer, so</text>
+<text x="145.0" y="128" text-anchor="middle" font-size="11.8" fill="#5a6a7e">grade relevance, accuracy,</text>
+<text x="145.0" y="145" text-anchor="middle" font-size="11.8" fill="#5a6a7e">consistency and fluency separately.</text>
+<rect x="46.3" y="161" width="116.3" height="16" rx="6" fill="#eef2f7"/>
+<text x="104.5" y="172.5" text-anchor="middle" font-size="9.6" font-weight="600" fill="#4a5a70">multi-dimensional</text>
+<rect x="168.7" y="161" width="75.0" height="16" rx="6" fill="#eef2f7"/>
+<text x="206.2" y="172.5" text-anchor="middle" font-size="9.6" font-weight="600" fill="#4a5a70">compliance</text>
+<rect x="125.2" y="181" width="39.6" height="16" rx="6" fill="#eef2f7"/>
+<text x="145.0" y="192.5" text-anchor="middle" font-size="9.6" font-weight="600" fill="#4a5a70">tone</text>
+<rect x="129.0" y="201" width="32" height="16" rx="8" fill="#1f4e79"/>
+<text x="145.0" y="213" text-anchor="middle" font-size="10.5" font-weight="700" fill="#fff">5.1</text>
+<line x1="50" y1="223" x2="240" y2="223" stroke="#d7dee8" stroke-width="1"/>
+<a href="task-5-1.html#s1"><text x="145.0" y="239" text-anchor="middle" font-size="11.2" font-weight="700" fill="#c94f1f">Notes 5.1 · Section 1 &#8594;</text></a>
+<line x1="260" y1="154" x2="275" y2="154" stroke="#5a6a7e" stroke-width="1.8" marker-end="url(#a)"/>
+<rect x="282" y="61" width="222" height="186" rx="12" fill="#ffffff" stroke="#d7dee8" stroke-width="1.5"/>
+<rect x="293" y="62" width="200" height="4" fill="#1f4e79"/>
+<text x="393.0" y="90" text-anchor="middle" font-size="15" font-weight="700" fill="#0b1524">Let a model mark it</text>
+<text x="393.0" y="111" text-anchor="middle" font-size="11.8" fill="#5a6a7e">A second, stronger model scores the</text>
+<text x="393.0" y="128" text-anchor="middle" font-size="11.8" fill="#5a6a7e">generator against a written rubric.</text>
+<text x="393.0" y="145" text-anchor="middle" font-size="11.8" fill="#5a6a7e">Never let a model judge itself.</text>
+<rect x="343.7" y="161" width="98.6" height="16" rx="6" fill="#eef2f7"/>
+<text x="393.0" y="172.5" text-anchor="middle" font-size="9.6" font-weight="600" fill="#4a5a70">LLM-as-a-judge</text>
+<rect x="320.9" y="181" width="98.6" height="16" rx="6" fill="#eef2f7"/>
+<text x="370.2" y="192.5" text-anchor="middle" font-size="9.6" font-weight="600" fill="#4a5a70">custom rubrics</text>
+<rect x="425.5" y="181" width="39.6" height="16" rx="6" fill="#eef2f7"/>
+<text x="445.3" y="192.5" text-anchor="middle" font-size="9.6" font-weight="600" fill="#4a5a70">BYOI</text>
+<rect x="377.0" y="201" width="32" height="16" rx="8" fill="#1f4e79"/>
+<text x="393.0" y="213" text-anchor="middle" font-size="10.5" font-weight="700" fill="#fff">5.1</text>
+<line x1="298" y1="223" x2="488" y2="223" stroke="#d7dee8" stroke-width="1"/>
+<a href="task-5-1.html#s1"><text x="393.0" y="239" text-anchor="middle" font-size="11.2" font-weight="700" fill="#c94f1f">Notes 5.1 · Section 1 &#8594;</text></a>
+<line x1="508" y1="154" x2="523" y2="154" stroke="#5a6a7e" stroke-width="1.8" marker-end="url(#a)"/>
+<rect x="530" y="61" width="222" height="186" rx="12" fill="#ffffff" stroke="#d7dee8" stroke-width="1.5"/>
+<rect x="541" y="62" width="200" height="4" fill="#1f4e79"/>
+<text x="641.0" y="90" text-anchor="middle" font-size="15" font-weight="700" fill="#0b1524">Benchmark, then roll</text>
+<text x="641.0" y="111" text-anchor="middle" font-size="11.8" fill="#5a6a7e">Compare model families side by side,</text>
+<text x="641.0" y="128" text-anchor="middle" font-size="11.8" fill="#5a6a7e">then move the winner out slowly</text>
+<text x="641.0" y="145" text-anchor="middle" font-size="11.8" fill="#5a6a7e">instead of all at once.</text>
+<rect x="571.9" y="161" width="80.9" height="16" rx="6" fill="#eef2f7"/>
+<text x="612.3" y="172.5" text-anchor="middle" font-size="9.6" font-weight="600" fill="#4a5a70">A/B testing</text>
+<rect x="658.8" y="161" width="51.4" height="16" rx="6" fill="#eef2f7"/>
+<text x="684.5" y="172.5" text-anchor="middle" font-size="9.6" font-weight="600" fill="#4a5a70">canary</text>
+<rect x="579.9" y="181" width="122.2" height="16" rx="6" fill="#eef2f7"/>
+<text x="641.0" y="192.5" text-anchor="middle" font-size="9.6" font-weight="600" fill="#4a5a70">latency-to-quality</text>
+<rect x="625.0" y="201" width="32" height="16" rx="8" fill="#1f4e79"/>
+<text x="641.0" y="213" text-anchor="middle" font-size="10.5" font-weight="700" fill="#fff">5.1</text>
+<line x1="546" y1="223" x2="736" y2="223" stroke="#d7dee8" stroke-width="1"/>
+<a href="task-5-1.html#s2"><text x="641.0" y="239" text-anchor="middle" font-size="11.2" font-weight="700" fill="#c94f1f">Notes 5.1 · Section 2 &#8594;</text></a>
+<line x1="756" y1="154" x2="771" y2="154" stroke="#5a6a7e" stroke-width="1.8" marker-end="url(#a)"/>
+<rect x="778" y="61" width="222" height="186" rx="12" fill="#ffffff" stroke="#d7dee8" stroke-width="1.5"/>
+<rect x="789" y="62" width="200" height="4" fill="#1f4e79"/>
+<text x="889.0" y="90" text-anchor="middle" font-size="15" font-weight="700" fill="#0b1524">Ask two audiences</text>
+<text x="889.0" y="111" text-anchor="middle" font-size="11.8" fill="#5a6a7e">Customers judge helpfulness. Only</text>
+<text x="889.0" y="128" text-anchor="middle" font-size="11.8" fill="#5a6a7e">experts catch a confident, fluent,</text>
+<text x="889.0" y="145" text-anchor="middle" font-size="11.8" fill="#5a6a7e">entirely non-compliant answer.</text>
+<rect x="814.0" y="161" width="86.8" height="16" rx="6" fill="#eef2f7"/>
+<text x="857.4" y="172.5" text-anchor="middle" font-size="9.6" font-weight="600" fill="#4a5a70">Ground Truth</text>
+<rect x="906.8" y="161" width="57.3" height="16" rx="6" fill="#eef2f7"/>
+<text x="935.4" y="172.5" text-anchor="middle" font-size="9.6" font-weight="600" fill="#4a5a70">Kinesis</text>
+<rect x="851.5" y="181" width="75.0" height="16" rx="6" fill="#eef2f7"/>
+<text x="889.0" y="192.5" text-anchor="middle" font-size="9.6" font-weight="600" fill="#4a5a70">Comprehend</text>
+<rect x="873.0" y="201" width="32" height="16" rx="8" fill="#1f4e79"/>
+<text x="889.0" y="213" text-anchor="middle" font-size="10.5" font-weight="700" fill="#fff">5.1</text>
+<line x1="794" y1="223" x2="984" y2="223" stroke="#d7dee8" stroke-width="1"/>
+<a href="task-5-1.html#s3"><text x="889.0" y="239" text-anchor="middle" font-size="11.2" font-weight="700" fill="#c94f1f">Notes 5.1 · Section 3 &#8594;</text></a>
+<line x1="1004" y1="154" x2="1019" y2="154" stroke="#5a6a7e" stroke-width="1.8" marker-end="url(#a)"/>
+<rect x="1026" y="61" width="222" height="186" rx="12" fill="#ffffff" stroke="#d7dee8" stroke-width="1.5"/>
+<rect x="1037" y="62" width="200" height="4" fill="#1f4e79"/>
+<text x="1137.0" y="90" text-anchor="middle" font-size="15" font-weight="700" fill="#0b1524">Let the gate decide</text>
+<text x="1137.0" y="111" text-anchor="middle" font-size="11.8" fill="#5a6a7e">Below threshold, the pipeline blocks</text>
+<text x="1137.0" y="128" text-anchor="middle" font-size="11.8" fill="#5a6a7e">the release on its own. And version</text>
+<text x="1137.0" y="145" text-anchor="middle" font-size="11.8" fill="#5a6a7e">prompts, weights and data together.</text>
+<rect x="1044.2" y="161" width="92.7" height="16" rx="6" fill="#eef2f7"/>
+<text x="1090.6" y="172.5" text-anchor="middle" font-size="9.6" font-weight="600" fill="#4a5a70">quality gates</text>
+<rect x="1143.0" y="161" width="86.8" height="16" rx="6" fill="#eef2f7"/>
+<text x="1186.4" y="172.5" text-anchor="middle" font-size="9.6" font-weight="600" fill="#4a5a70">CodePipeline</text>
+<rect x="1081.8" y="181" width="110.4" height="16" rx="6" fill="#eef2f7"/>
+<text x="1137.0" y="192.5" text-anchor="middle" font-size="9.6" font-weight="600" fill="#4a5a70">joint versioning</text>
+<rect x="1121.0" y="201" width="32" height="16" rx="8" fill="#1f4e79"/>
+<text x="1137.0" y="213" text-anchor="middle" font-size="10.5" font-weight="700" fill="#fff">5.1</text>
+<line x1="1042" y1="223" x2="1232" y2="223" stroke="#d7dee8" stroke-width="1"/>
+<a href="task-5-1.html#s4"><text x="1137.0" y="239" text-anchor="middle" font-size="11.2" font-weight="700" fill="#c94f1f">Notes 5.1 · Section 4 &#8594;</text></a>
+<rect x="34" y="275" width="560" height="27" rx="13.5" fill="#0f2540"/>
+<text x="49" y="293.5" font-size="12.5" font-weight="800" fill="#fff" letter-spacing=".04em">WHEN IT BREAKS</text>
+<text x="184.60000000000002" y="293.5" font-size="12.5" font-weight="600" fill="#fff" opacity=".85">Find out which part actually failed  ·  Task 5.2</text>
+<rect x="34" y="320" width="222" height="186" rx="12" fill="#ffffff" stroke="#d7dee8" stroke-width="1.5"/>
+<rect x="45" y="321" width="200" height="4" fill="#c94f1f"/>
+<text x="145.0" y="349" text-anchor="middle" font-size="15" font-weight="700" fill="#0b1524">Answers cut off</text>
+<text x="145.0" y="370" text-anchor="middle" font-size="11.8" fill="#5a6a7e">Nothing errors. The model silently</text>
+<text x="145.0" y="387" text-anchor="middle" font-size="11.8" fill="#5a6a7e">drops the end of the context and</text>
+<text x="145.0" y="404" text-anchor="middle" font-size="11.8" fill="#5a6a7e">sounds confident about the rest.</text>
+<rect x="52.2" y="420" width="75.0" height="16" rx="6" fill="#eef2f7"/>
+<text x="89.8" y="431.5" text-anchor="middle" font-size="9.6" font-weight="600" fill="#4a5a70">truncation</text>
+<rect x="133.2" y="420" width="104.5" height="16" rx="6" fill="#eef2f7"/>
+<text x="185.5" y="431.5" text-anchor="middle" font-size="9.6" font-weight="600" fill="#4a5a70">semantic chunks</text>
+<rect x="95.7" y="440" width="98.6" height="16" rx="6" fill="#eef2f7"/>
+<text x="145.0" y="451.5" text-anchor="middle" font-size="9.6" font-weight="600" fill="#4a5a70">sliding window</text>
+<rect x="129.0" y="460" width="32" height="16" rx="8" fill="#c94f1f"/>
+<text x="145.0" y="472" text-anchor="middle" font-size="10.5" font-weight="700" fill="#fff">5.2</text>
+<line x1="50" y1="482" x2="240" y2="482" stroke="#d7dee8" stroke-width="1"/>
+<a href="task-5-2.html#s1"><text x="145.0" y="498" text-anchor="middle" font-size="11.2" font-weight="700" fill="#c94f1f">Notes 5.2 · Section 1 &#8594;</text></a>
+<line x1="260" y1="413" x2="275" y2="413" stroke="#5a6a7e" stroke-width="1.8" marker-end="url(#a)"/>
+<rect x="282" y="320" width="222" height="186" rx="12" fill="#ffffff" stroke="#d7dee8" stroke-width="1.5"/>
+<rect x="293" y="321" width="200" height="4" fill="#c94f1f"/>
+<text x="393.0" y="349" text-anchor="middle" font-size="15" font-weight="700" fill="#0b1524">The API keeps failing</text>
+<text x="393.0" y="370" text-anchor="middle" font-size="11.8" fill="#5a6a7e">Classify first: 400, 429 and 500</text>
+<text x="393.0" y="387" text-anchor="middle" font-size="11.8" fill="#5a6a7e">are three different bugs. 40% of</text>
+<text x="393.0" y="404" text-anchor="middle" font-size="11.8" fill="#5a6a7e">these never reached Bedrock.</text>
+<rect x="300.2" y="420" width="80.9" height="16" rx="6" fill="#eef2f7"/>
+<text x="340.7" y="431.5" text-anchor="middle" font-size="9.6" font-weight="600" fill="#4a5a70">400/429/500</text>
+<rect x="387.1" y="420" width="98.6" height="16" rx="6" fill="#eef2f7"/>
+<text x="436.4" y="431.5" text-anchor="middle" font-size="9.6" font-weight="600" fill="#4a5a70">pre-call check</text>
+<rect x="340.8" y="440" width="104.5" height="16" rx="6" fill="#eef2f7"/>
+<text x="393.0" y="451.5" text-anchor="middle" font-size="9.6" font-weight="600" fill="#4a5a70">circuit breaker</text>
+<rect x="377.0" y="460" width="32" height="16" rx="8" fill="#c94f1f"/>
+<text x="393.0" y="472" text-anchor="middle" font-size="10.5" font-weight="700" fill="#fff">5.2</text>
+<line x1="298" y1="482" x2="488" y2="482" stroke="#d7dee8" stroke-width="1"/>
+<a href="task-5-2.html#s2"><text x="393.0" y="498" text-anchor="middle" font-size="11.2" font-weight="700" fill="#c94f1f">Notes 5.2 · Section 2 &#8594;</text></a>
+<line x1="508" y1="413" x2="523" y2="413" stroke="#5a6a7e" stroke-width="1.8" marker-end="url(#a)"/>
+<rect x="530" y="320" width="222" height="186" rx="12" fill="#ffffff" stroke="#d7dee8" stroke-width="1.5"/>
+<rect x="541" y="321" width="200" height="4" fill="#c94f1f"/>
+<text x="641.0" y="349" text-anchor="middle" font-size="15" font-weight="700" fill="#0b1524">Different every time</text>
+<text x="641.0" y="370" text-anchor="middle" font-size="11.8" fill="#5a6a7e">Small wording changes swing the</text>
+<text x="641.0" y="387" text-anchor="middle" font-size="11.8" fill="#5a6a7e">output. More instructions make it</text>
+<text x="641.0" y="404" text-anchor="middle" font-size="11.8" fill="#5a6a7e">worse, not better.</text>
+<rect x="577.0" y="420" width="128.1" height="16" rx="6" fill="#eef2f7"/>
+<text x="641.0" y="431.5" text-anchor="middle" font-size="9.6" font-weight="600" fill="#4a5a70">context sensitivity</text>
+<rect x="565.1" y="440" width="151.7" height="16" rx="6" fill="#eef2f7"/>
+<text x="641.0" y="451.5" text-anchor="middle" font-size="9.6" font-weight="600" fill="#4a5a70">instruction competition</text>
+<rect x="625.0" y="460" width="32" height="16" rx="8" fill="#c94f1f"/>
+<text x="641.0" y="472" text-anchor="middle" font-size="10.5" font-weight="700" fill="#fff">5.2</text>
+<line x1="546" y1="482" x2="736" y2="482" stroke="#d7dee8" stroke-width="1"/>
+<a href="task-5-2.html#s3"><text x="641.0" y="498" text-anchor="middle" font-size="11.2" font-weight="700" fill="#c94f1f">Notes 5.2 · Section 3 &#8594;</text></a>
+<line x1="756" y1="413" x2="771" y2="413" stroke="#5a6a7e" stroke-width="1.8" marker-end="url(#a)"/>
+<rect x="778" y="320" width="222" height="186" rx="12" fill="#ffffff" stroke="#d7dee8" stroke-width="1.5"/>
+<rect x="789" y="321" width="200" height="4" fill="#c94f1f"/>
+<text x="889.0" y="349" text-anchor="middle" font-size="15" font-weight="700" fill="#0b1524">Slow or wrong recall</text>
+<text x="889.0" y="370" text-anchor="middle" font-size="11.8" fill="#5a6a7e">A general embedding model does not</text>
+<text x="889.0" y="387" text-anchor="middle" font-size="11.8" fill="#5a6a7e">know your domain, and the language</text>
+<text x="889.0" y="404" text-anchor="middle" font-size="11.8" fill="#5a6a7e">moves on without it.</text>
+<rect x="796.2" y="420" width="104.5" height="16" rx="6" fill="#eef2f7"/>
+<text x="848.5" y="431.5" text-anchor="middle" font-size="9.6" font-weight="600" fill="#4a5a70">embedding drift</text>
+<rect x="906.8" y="420" width="75.0" height="16" rx="6" fill="#eef2f7"/>
+<text x="944.2" y="431.5" text-anchor="middle" font-size="9.6" font-weight="600" fill="#4a5a70">ANN choice</text>
+<rect x="842.6" y="440" width="92.7" height="16" rx="6" fill="#eef2f7"/>
+<text x="889.0" y="451.5" text-anchor="middle" font-size="9.6" font-weight="600" fill="#4a5a70">hybrid search</text>
+<rect x="873.0" y="460" width="32" height="16" rx="8" fill="#c94f1f"/>
+<text x="889.0" y="472" text-anchor="middle" font-size="10.5" font-weight="700" fill="#fff">5.2</text>
+<line x1="794" y1="482" x2="984" y2="482" stroke="#d7dee8" stroke-width="1"/>
+<a href="task-5-2.html#s4"><text x="889.0" y="498" text-anchor="middle" font-size="11.2" font-weight="700" fill="#c94f1f">Notes 5.2 · Section 4 &#8594;</text></a>
+<line x1="1004" y1="413" x2="1019" y2="413" stroke="#5a6a7e" stroke-width="1.8" marker-end="url(#a)"/>
+<rect x="1026" y="320" width="222" height="186" rx="12" fill="#ffffff" stroke="#d7dee8" stroke-width="1.5"/>
+<rect x="1037" y="321" width="200" height="4" fill="#c94f1f"/>
+<text x="1137.0" y="349" text-anchor="middle" font-size="15" font-weight="700" fill="#0b1524">Prompts rot quietly</text>
+<text x="1137.0" y="370" text-anchor="middle" font-size="11.8" fill="#5a6a7e">Watch for templates leaking raw</text>
+<text x="1137.0" y="387" text-anchor="middle" font-size="11.8" fill="#5a6a7e">{{placeholders}}, or the model</text>
+<text x="1137.0" y="404" text-anchor="middle" font-size="11.8" fill="#5a6a7e">discussing the prompt itself.</text>
+<rect x="1041.3" y="420" width="92.7" height="16" rx="6" fill="#eef2f7"/>
+<text x="1087.6" y="431.5" text-anchor="middle" font-size="9.6" font-weight="600" fill="#4a5a70">Logs Insights</text>
+<rect x="1140.0" y="420" width="92.7" height="16" rx="6" fill="#eef2f7"/>
+<text x="1186.3" y="431.5" text-anchor="middle" font-size="9.6" font-weight="600" fill="#4a5a70">schema checks</text>
+<rect x="1105.4" y="440" width="63.2" height="16" rx="6" fill="#eef2f7"/>
+<text x="1137.0" y="451.5" text-anchor="middle" font-size="9.6" font-weight="600" fill="#4a5a70">rollback</text>
+<rect x="1121.0" y="460" width="32" height="16" rx="8" fill="#c94f1f"/>
+<text x="1137.0" y="472" text-anchor="middle" font-size="10.5" font-weight="700" fill="#fff">5.2</text>
+<line x1="1042" y1="482" x2="1232" y2="482" stroke="#d7dee8" stroke-width="1"/>
+<a href="task-5-2.html#s5"><text x="1137.0" y="498" text-anchor="middle" font-size="11.2" font-weight="700" fill="#c94f1f">Notes 5.2 · Section 5 &#8594;</text></a>
+<text x="34" y="526" font-size="10.5" font-weight="700" fill="#8b96a5" letter-spacing=".07em">SYMPTOM &#8594; TOOL</text>
+<rect x="34" y="536" width="1214" height="104" rx="12" fill="#eef2f7" stroke="#d7dee8" stroke-width="1.5"/>
+<rect x="56.0" y="550" width="380.7" height="32" rx="8" fill="#ffffff" stroke="#d7dee8"/>
+<text x="68.0" y="563.5" font-size="11.4" font-weight="700" fill="#0b1524">Incomplete responses</text>
+<text x="68.0" y="576" font-size="10.3" fill="#5a6a7e">CloudWatch Metrics</text>
+<rect x="450.7" y="550" width="380.7" height="32" rx="8" fill="#ffffff" stroke="#d7dee8"/>
+<text x="462.7" y="563.5" font-size="11.4" font-weight="700" fill="#0b1524">API failures</text>
+<text x="462.7" y="576" font-size="10.3" fill="#5a6a7e">Structured logging</text>
+<rect x="845.3" y="550" width="380.7" height="32" rx="8" fill="#ffffff" stroke="#d7dee8"/>
+<text x="857.3" y="563.5" font-size="11.4" font-weight="700" fill="#0b1524">Slow latency</text>
+<text x="857.3" y="576" font-size="10.3" fill="#5a6a7e">AWS X-Ray tracing</text>
+<rect x="56.0" y="590" width="380.7" height="32" rx="8" fill="#ffffff" stroke="#d7dee8"/>
+<text x="68.0" y="603.5" font-size="11.4" font-weight="700" fill="#0b1524">Inconsistent answers</text>
+<text x="68.0" y="616" font-size="10.3" fill="#5a6a7e">A/B + output diffing</text>
+<rect x="450.7" y="590" width="380.7" height="32" rx="8" fill="#ffffff" stroke="#d7dee8"/>
+<text x="462.7" y="603.5" font-size="11.4" font-weight="700" fill="#0b1524">Irrelevant retrieval</text>
+<text x="462.7" y="616" font-size="10.3" fill="#5a6a7e">Embedding visualization</text>
+<rect x="845.3" y="590" width="380.7" height="32" rx="8" fill="#ffffff" stroke="#d7dee8"/>
+<text x="857.3" y="603.5" font-size="11.4" font-weight="700" fill="#0b1524">Faulty reasoning</text>
+<text x="857.3" y="616" font-size="10.3" fill="#5a6a7e">Chain-of-Thought analysis</text>
+</g>
+</svg>
+      </div>
+      <figcaption>Judging it before it ships, and diagnosing it after &mdash; closing with the symptom-to-tool table that is the most exam-shaped thing in the whole domain.</figcaption>
+    </figure>
+  </div>
+</section>
+
+<section style="padding-top:20px;">
+  <div class="wrap">
+    <h2 class="sh">What each task is actually about</h2>
+    <p class="sl">One line each, then the few things most worth remembering.</p>
+
+    <div class="tcard tc51">
+      <div class="th"><span class="tnum" style="background:var(--t51)">5.1</span><h3>Evaluation Systems</h3></div>
+      <p class="one">Deciding whether the thing is good enough, without a single right answer to check against.</p>
+      <ul><li><b>Traditional ML has one correct answer. GenAI does not.</b> So you stop measuring accuracy and start scoring several independent dimensions &mdash; relevance, factual accuracy, consistency, fluency.</li><li><b>The dimensions really are independent.</b> A response can be perfectly fluent and completely wrong, or strictly accurate and entirely off-topic.</li><li><b>A model can mark the homework, but never its own.</b> Self-preference bias is the reason the judge has to be a different model, and a written rubric is what stops the scores drifting.</li><li><b>Customers cannot catch what sounds authoritative.</b> Confident hallucinations and quiet compliance breaches need a domain expert in Ground Truth, not a thumbs-down widget.</li><li><b>Change the test set and the scores stop meaning anything.</b> v7 and v8 are only comparable if the evaluation dataset is versioned alongside the prompts and weights.</li><li><b>The gate is the point.</b> Automated thresholds block the release so nobody has to make that call under deadline pressure.</li><li><b>Split RAG in two before blaming anything.</b> If retrieval returns good context and the answer is still wrong, the generator is the problem &mdash; not the vector store.</li></ul>
+      <div class="jump"><span>Jump into the notes:</span><a href="task-5-1.html#s1">1 &middot; Frameworks</a><a href="task-5-1.html#s2">2 &middot; Systematic eval</a><a href="task-5-1.html#s3">3 &middot; User-centered</a><a href="task-5-1.html#s4">4 &middot; QA processes</a><a href="task-5-1.html#s5">5 &middot; RAG evaluation</a></div>
+      <a class="go" href="task-5-1.html">Open the whole page &rarr;</a>
+    </div>
+
+    <div class="tcard tc52">
+      <div class="th"><span class="tnum" style="background:var(--t52)">5.2</span><h3>Troubleshooting</h3></div>
+      <p class="one">Five symptoms in a live clinical assistant, and where the fault actually turned out to be.</p>
+      <ul><li><b>Truncation is silent.</b> Overflow the context window and nothing throws. The model drops the tail and writes a confident, incomplete answer &mdash; which in a medication list is the dangerous kind.</li><li><b>&ldquo;API failure&rdquo; is not a diagnosis.</b> 400, 429 and 500 are three unrelated bugs. Classify them in structured logs before changing a line of code.</li><li><b>Two of the five faults were not in the model.</b> X-Ray found the latency in the auth middleware, and 40% of the failures were malformed client payloads that never reached Bedrock &mdash; fixed by one pre-call Lambda.</li><li><b>More instructions make it worse.</b> Long, nested, conflicting prompts create instruction competition; the model starts dropping constraints.</li><li><b>Chain-of-thought as a debugger, not a feature.</b> Making the model show its reasoning is how you find the step where it went wrong.</li><li><b>There is no best ANN algorithm.</b> LSH, HNSW, IVF and PQ trade speed, recall and memory differently &mdash; benchmark them on your own data.</li><li><b>Domain fit beats dimensionality.</b> If the embeddings cluster badly, a bigger vector will not save you; the model simply does not know the vocabulary.</li></ul>
+      <div class="jump"><span>Jump into the notes:</span><a href="task-5-2.html#s1">1 &middot; Incomplete responses</a><a href="task-5-2.html#s2">2 &middot; API failures</a><a href="task-5-2.html#s3">3 &middot; Inconsistency</a><a href="task-5-2.html#s4">4 &middot; Retrieval</a><a href="task-5-2.html#s5">5 &middot; Prompt maintenance</a></div>
+      <a class="go" href="task-5-2.html">Open the whole page &rarr;</a>
+    </div>
+  </div>
+</section>
+
+<section style="padding-top:0;">
+  <div class="wrap">
+    <h2 class="sh">Why the same thing keeps coming up</h2>
+    <p class="sl">The two tasks are the same toolkit pointed in opposite directions &mdash; 5.1 uses it to decide, 5.2 uses it to diagnose. Knowing which task owns the detail is what the exam is testing.</p>
+    <dl class="ov">
+      <dt>The same tools, judging vs. diagnosing</dt>
+      <dd><a class="pill" style="background:var(--t51)" href="task-5-1.html#s2">5.1</a> runs A/B tests to pick a winner before release. <a class="pill" style="background:var(--t52)" href="task-5-2.html#s3">5.2</a> runs the same A/B machinery to find out why two near-identical prompts disagree in production.</dd>
+      <dt>Split retrieval from generation</dt>
+      <dd><a class="pill" style="background:var(--t51)" href="task-5-1.html#s5">5.1</a> builds Retrieve-Only and Retrieve-and-Generate as two separate evaluations. <a class="pill" style="background:var(--t52)" href="task-5-2.html#s4">5.2</a> is what that buys you: when literature comes back irrelevant, you already know whether to look at the embeddings or the generator.</dd>
+      <dt>Prompts are code</dt>
+      <dd><a class="pill" style="background:var(--t51)" href="task-5-1.html#s4">5.1</a> versions them with the weights and the test set so scores stay comparable. <a class="pill" style="background:var(--t52)" href="task-5-2.html#s3">5.2</a> adds the rollback trigger &mdash; v8 scores worse than v7, so traffic goes back to v7 automatically. <a class="pill" style="background:var(--t52)" href="task-5-2.html#s5">5.2</a> then watches for the slow rot: leaked placeholders, meta-discussion, conflicting constraints.</dd>
+      <dt>Chunking, yet again</dt>
+      <dd>Task 1.5 chunks for retrieval quality and Task 4.1 chunks for cost. <a class="pill" style="background:var(--t52)" href="task-5-2.html#s1">5.2</a> chunks to stop silent truncation, and <a class="pill" style="background:var(--t52)" href="task-5-2.html#s4">5.2</a> again to keep a research finding attached to the methodology that qualifies it. Same knob, four different reasons.</dd>
+      <dt>Experts in the loop, twice</dt>
+      <dd><a class="pill" style="background:var(--t51)" href="task-5-1.html#s3">5.1</a> uses SageMaker Ground Truth to establish authoritative ground truth. <a class="pill" style="background:var(--t52)" href="task-5-2.html#s3">5.2</a> feeds the same physicians' ratings and manual edits back into automated prompt refinement. Evaluation input, then optimisation input.</dd>
+      <dt>Look outside the model first</dt>
+      <dd><a class="pill" style="background:var(--t52)" href="task-5-2.html#s2">5.2</a> is blunt about it: the auth middleware caused the timeouts, and the client caused 40% of the errors. Before tuning a prompt or swapping a model, trace the request end to end.</dd>
+    </dl>
+  </div>
+</section>
+
+<section style="padding-top:0;">
+  <div class="wrap">
+    <p class="more"><b>Coming from the other maps?</b> <a href="domain-1.html">Domain 1</a> builds the system, <a href="domain-2.html">Domain 2</a> integrates it, <a href="domain-3.html">Domain 3</a> keeps it out of trouble and <a href="domain-4.html">Domain 4</a> runs it efficiently. Domain 5 is the one that asks whether any of it actually works &mdash; and gives you something to do on the morning it stops.</p>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <p>This is an independent, unofficial study resource and is not affiliated with, endorsed by, or sponsored by Amazon Web Services, Inc. AWS, Amazon Bedrock, and all related marks are trademarks of Amazon.com, Inc. or its affiliates.</p>
+    <p>Hosted on Amazon S3 + Amazon CloudFront. &middot; <a href="index.html">&larr; Back to Study Notes</a></p>
+  </div>
+</footer>
+
+</body>
+</html>

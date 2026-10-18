@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Task 5.2 Notes | AIP-C01 Guide</title>
+<meta name="description" content="Domain 5, Task 5.2 study notes: Troubleshooting">
+<style>
+  :root{
+    --ink:#0b1524; --ink-soft:#3a4a5e; --paper:#f7f8fa; --card:#ffffff; --line:#e3e7ee;
+    --accent:#e8622c; --accent-dark:#c94f1f; --navy:#0f2540; --navy-2:#16345c;
+    color-scheme: light;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{margin:0;background:var(--paper);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;line-height:1.6;}
+  a{color:var(--accent-dark);}
+  img{max-width:100%;}
+  .wrap{max-width:1080px;margin:0 auto;padding:0 24px;}
+
+  .nav{position:sticky;top:0;z-index:50;background:rgba(15,37,64,.96);backdrop-filter:blur(6px);border-bottom:1px solid rgba(255,255,255,.08);}
+  .nav .wrap{display:flex;align-items:center;justify-content:space-between;height:56px;}
+  .nav-brand{color:#fff;font-weight:700;font-size:14px;letter-spacing:.02em;text-decoration:none;}
+  .nav-brand span{color:var(--accent);}
+  .nav-links{display:flex;gap:22px;list-style:none;margin:0;padding:0;}
+  .nav-links a{color:#cdd8e6;text-decoration:none;font-size:13.5px;font-weight:500;}
+  .nav-links a:hover{color:#fff;}
+  @media (max-width:720px){
+    .nav .wrap{gap:12px;}
+    .nav-links{gap:16px;overflow-x:auto;scrollbar-width:none;-ms-overflow-style:none;
+      flex:1;justify-content:flex-end;}
+    .nav-links::-webkit-scrollbar{display:none;}
+    .nav-links a{white-space:nowrap;font-size:13px;}
+  }
+
+  header.hero{background:linear-gradient(180deg,var(--navy) 0%, var(--navy-2) 100%);color:#fff;padding:36px 0 28px;}
+  .eyebrow{display:inline-block;font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#ffd8c4;background:rgba(232,98,44,.18);border:1px solid rgba(232,98,44,.4);padding:5px 10px;border-radius:999px;margin-bottom:14px;}
+  h1{font-size:clamp(20px,3vw,27px);line-height:1.2;margin:0;font-weight:800;}
+
+  section{padding:36px 0;}
+
+  figure.arch{margin:0 0 24px;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px;}
+  figure.arch img{display:block;border-radius:8px;width:100%;height:auto;}
+  figure.arch figcaption{margin-top:10px;font-size:12.5px;color:var(--ink-soft);text-align:center;}
+
+  .note-card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:18px 22px 22px;margin-bottom:16px;}
+  .note-card h4{scroll-margin-top:78px;margin:0 0 14px;font-size:13px;font-weight:800;color:var(--navy-2);}
+  .note-card h4:target{color:var(--accent-dark);}
+  .note-card h4:target::after{content:" \2190";color:var(--accent);}
+
+  .lead{font-size:13.5px;font-weight:700;color:var(--ink);margin:18px 0 8px;}
+  .lead:first-of-type{margin-top:0;}
+  .lead.num{color:var(--navy-2);}
+  .txt{font-size:13px;color:var(--ink-soft);line-height:1.6;margin:0 0 8px;}
+  .kv{font-size:13px;color:var(--ink-soft);line-height:1.6;margin:0 0 8px;padding-left:14px;border-left:2px solid var(--line);}
+  .kv strong{color:var(--ink);font-weight:700;}
+
+  .codelabel{font-size:10.5px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:#8b96a5;margin:14px 0 6px;}
+  pre.code{margin:0 0 10px;padding:12px 14px;background:#0f2540;color:#dbe6f3;border-radius:9px;overflow-x:auto;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px;line-height:1.55;}
+
+  footer{padding:32px 0 48px;color:#8b96a5;font-size:12.5px;}
+  footer .wrap{border-top:1px solid var(--line);padding-top:22px;}
+  footer a{color:#6b7686;}
+  table.cmp{width:100%;border-collapse:collapse;margin:4px 0 12px;font-size:12.5px;display:block;overflow-x:auto;}
+  table.cmp th{text-align:left;padding:8px 10px;background:#0f2540;color:#fff;font-weight:700;font-size:11.5px;letter-spacing:.02em;border:1px solid #0f2540;}
+  table.cmp td{padding:8px 10px;border:1px solid var(--line);color:var(--ink-soft);vertical-align:top;}
+  table.cmp tbody tr:nth-child(even){background:#fafbfc;}
+  table.cmp td:first-child{color:var(--ink);font-weight:600;}
+
+  pre.art{margin:4px 0 12px;padding:14px 16px;background:#0f2540;color:#dbe6f3;border-radius:9px;overflow-x:auto;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:11.5px;line-height:1.45;white-space:pre;}
+
+  .step{display:flex;gap:11px;align-items:flex-start;margin:0 0 10px;}
+  .step .stepn{flex:none;width:22px;height:22px;border-radius:7px;background:var(--navy);color:#fff;font-size:11.5px;font-weight:700;display:flex;align-items:center;justify-content:center;margin-top:1px;}
+  .step .stept{margin:0;font-size:13.5px;font-weight:700;color:var(--ink);}
+  .step .steps{margin:0;font-size:11.5px;font-weight:600;letter-spacing:.03em;text-transform:uppercase;color:#8b96a5;}
+
+  .chain{margin:4px 0 12px;padding:11px 14px;background:#f3f7fd;border:1px solid #dbe6f5;border-radius:9px;font-size:12.5px;font-weight:600;color:var(--navy-2);text-align:center;overflow-x:auto;}
+  .cardeyebrow{margin:0 0 4px;font-size:10.5px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:#8b96a5;}
+  .fracwrap{text-align:center;margin:6px 0 14px;}
+  .frac{display:inline-grid;grid-template-columns:auto auto;align-items:center;column-gap:11px;
+        padding:12px 20px;background:#f3f7fd;border:1px solid #dbe6f5;border-radius:9px;}
+  .frac p{margin:0;line-height:1.3;}
+  .frac .fl{grid-column:1;grid-row:1 / span 2;font-size:15.5px;font-weight:700;color:var(--navy-2);}
+  .frac .fn{grid-column:2;grid-row:1;text-align:center;font-size:14.5px;font-style:italic;color:var(--navy-2);padding:0 8px 3px;}
+  .frac .fd{grid-column:2;grid-row:2;text-align:center;font-size:14.5px;font-style:italic;color:var(--navy-2);border-top:1.4px solid var(--navy-2);padding:3px 8px 0;}
+  .frac .fz{grid-column:1;grid-row:3;height:0;overflow:hidden;}
+
+  .cardeyebrow{margin:0 0 4px;font-size:10.5px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:#8b96a5;}
+  .cardeyebrow{margin:0 0 4px;font-size:10.5px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:#8b96a5;}
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="wrap">
+    <a class="nav-brand" href="../index.html">AIP-C01 <span>Guide</span></a>
+    <ul class="nav-links">
+      <li><a href="index.html">All Study Notes</a></li>
+      <li><a href="domain-5.html">Domain 5 Map</a></li>
+      <li><a href="../tasks/index.html">Build Log</a></li>
+    </ul>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="wrap">
+    <span class="eyebrow">Domain 5 &middot; Task 5.2</span>
+    <h1>Domain 5, Task 5.2 &mdash; Troubleshooting (Detailed Revision Notes)</h1>
+  </div>
+</header>
+
+<section>
+  <div class="wrap">
+
+    <figure class="arch">
+      <img src="../assets/task-5-2-architecture.jpg" alt="Task 5.2 troubleshooting architecture for a clinical decision-support assistant, drawn as three horizontal lanes fed by a physician user on the left, with a reported-outcomes panel top right listing 95 percent incomplete-response reduction, 99.9 percent API availability and 60 percent faster retrieval. Top lane, Content Handling: patient history records pass through semantic and structure-aware chunking on natural boundaries such as visit dates, then embeddings generation using Titan or Cohere via Bedrock, into an Amazon OpenSearch Serverless vector database; a parallel branch sends the records to a Step Functions sliding window that orchestrates sequential processing of large records and pushes structured prompts to Bedrock. Middle lane, FM Integration and Traceability: physician requests reach an application Lambda instrumented by CloudWatch Logs doing structured 429, 500 and 400 categorization and CloudWatch Metrics tracking token usage and truncation; the request then passes authentication middleware, annotated as the auth bottleneck that was found and fixed via AWS X-Ray, before reaching the Bedrock API. A pre-call request validation Lambda sits alongside, catching malformed requests and removing forty percent of errors. On the far right a Step Functions circuit breaker prioritises emergency queries and load-sheds routine lookups. Bottom lane, Prompt Engineering and Retrieval: the application calls Bedrock Prompt Management, which carries A/B testing for live comparison and version control for rollback; a query goes to hybrid search combining semantic and lexical matching, with AI-generated query expansion feeding it, then a vector lookup against the OpenSearch Serverless vector database. Bedrock Evaluations performs relevance scoring on the results. On the right, Amazon SageMaker drives embedding visualization for clustering analysis of the embedding model, and SageMaker Model Monitor performs drift detection against the vector database.">
+      <figcaption>Five symptoms, one system &mdash; and in two of the five cases the fault was not in the model at all, but in the auth middleware and the client's own malformed requests.</figcaption>
+    </figure>
+
+    <div class="note-card">
+      <h4 id="s1">Section 1: Content Handling &mdash; Incomplete Responses</h4>
+        <p class="lead num">1. Problem &amp; Root Cause Diagnosis</p>
+        <p class="txt">In the healthcare assistant scenario, complex queries regarding lengthy patient histories resulted in incomplete or cut-off outputs.</p>
+        <p class="kv"><strong>Primary Cause:</strong> Context Window Overflow leading to Silent Truncation.</p>
+        <p class="lead">Diagnostic Workflow:</p>
+        <p class="kv"><strong>CloudWatch Metrics Analysis:</strong> Custom dashboards were created per query type to track token usage patterns.</p>
+        <p class="kv"><strong>Limit Threshold:</strong> Analysis revealed that patient history queries were consistently hitting the model's 8,000-token context limit.</p>
+        <p class="kv"><strong>Token Distribution Tracking:</strong> Token usage was analyzed across document types, revealing that overflow was not random&mdash;it was tied to specific structured medical documents.</p>
+        <p class="kv"><strong>Silent Truncation Risk:</strong> The model does not throw an explicit runtime error when input exceeds limits. Instead, it drops excess trailing context silently and generates a confident-sounding but dangerously incomplete response.</p>
+        <p class="kv"><strong>CloudWatch Logs Deep-Dive:</strong> Log analytics pinpointed that critical cutoff patterns occurred predominantly within Medication Lists and Treatment Histories.</p>
+        <p class="lead num">2. Remediation &amp; Architectural Fixes</p>
+        <p class="lead">A. Transition to Dynamic / Semantic Chunking</p>
+        <p class="kv"><strong>Fixed-Size vs. Semantic:</strong> Replaced arbitrary character/token count chunking with structure-aware semantic chunking (aligned with Task 1.5 principles).</p>
+        <p class="txt"><strong>Natural Boundaries:</strong> Chunks were segmented along logical medical events:</p>
+        <p class="kv"><strong>&bull;</strong> Individual visit dates</p>
+        <p class="kv"><strong>&bull;</strong> Specific treatment episodes</p>
+        <p class="kv"><strong>Dynamic Adaptation:</strong> Chunk boundaries adapt dynamically to content complexity rather than rigid sizes, keeping interrelated clinical information intact within single chunks.</p>
+        <p class="lead">B. Prompt Restructuring &amp; Context Prioritization</p>
+        <p class="kv"><strong>Information Hierarchy:</strong> Restructured prompts to place the most recent and clinically significant information FIRST in the context payload.</p>
+        <p class="kv"><strong>Pagination:</strong> Implemented pagination patterns for extensive historical records.</p>
+        <p class="kv"><strong>Truncation Alerts:</strong> Configured proactive CloudWatch alerting on high-value field truncation instead of relying on human detection.</p>
+        <p class="lead">C. Sliding Window Strategy with Step Functions</p>
+        <p class="kv"><strong>AWS Step Functions Implementation:</strong> Executed a sliding window pattern to process extensive medical records sequentially in manageable segments.</p>
+        <p class="kv"><strong>Context Preservation:</strong> Ensured state and key clinical context were passed and maintained between adjacent processing chunks.</p>
+        <p class="lead">D. Optimization &amp; Automated Validation</p>
+        <p class="kv"><strong>Context Prioritization Algorithms:</strong> Dynamically trimmed non-critical prose while keeping high-priority clinical data inside the context window.</p>
+        <p class="kv"><strong>Specialized Preprocessing:</strong> Applied distinct preprocessing pipelines depending on document structure.</p>
+        <p class="kv"><strong>Visual Testing:</strong> Visualized token usage patterns and ran automated integration test suites across varying document types and lengths.</p>
+        <p class="chain">&#128202; Key Metric Outcome &mdash; a 95% reduction in incomplete responses on complex patient history requests.</p>
+    </div>
+
+    <div class="note-card">
+      <h4 id="s2">Section 2: FM Integration &mdash; API Failures</h4>
+        <p class="lead num">1. Problem &amp; Root Cause Diagnosis</p>
+        <p class="txt">During high-traffic periods&mdash;specifically morning rounds across participating hospitals&mdash;the application experienced widespread API failures, degrading service reliability.</p>
+        <p class="kv"><strong>Diagnostic Core Principle:</strong> A generic &ldquo;API failure&rdquo; message provides no actionable diagnostic value. Categorization is essential to distinguish between client-side errors (HTTP 400), rate limits (HTTP 429), and server-side timeouts (HTTP 500).</p>
+        <p class="lead">Diagnostic Workflow &amp; Findings:</p>
+        <p class="kv"><strong>Structured Logging in CloudWatch:</strong> Categorized logs by Type, Severity, and Frequency. This revealed a heavy spike in rate-limiting/throttling errors (429) during predictable peak operational hours (morning rounds).</p>
+        <p class="kv"><strong>AWS X-Ray End-to-End Tracing:</strong> Implemented distributed tracing across the entire execution path. Tracing pinpointed that severe latency and timeouts were not occurring at the foundation model endpoint, but within the Authentication Middleware, which was bottlenecking incoming requests.</p>
+        <p class="kv"><strong>Malformed Request Audit:</strong> Deep-dive log inspection showed that 40% of reported API failures were caused by invalid/malformed request payloads sent by the client application before even touching Bedrock.</p>
+        <p class="lead num">2. Remediation &amp; Architectural Fixes</p>
+        <p class="lead">A. Pre-Call Request Validation (AWS Lambda)</p>
+        <p class="kv"><strong>Pre-Flight Validation:</strong> Positioned a lightweight validation step (via AWS Lambda) upstream of the Amazon Bedrock API call to inspect payloads and schemas.</p>
+        <p class="kv"><strong>Immediate Error Drop:</strong> Malformed payloads are caught and rejected before making unnecessary downstream model invocations.</p>
+        <p class="kv"><strong>Impact:</strong> Reduced overall API error rates by 40% instantly.</p>
+        <p class="lead">B. Tracing &amp; Middleware Optimization</p>
+        <p class="kv"><strong>Authentication Bottleneck Resolution:</strong> Resolved the authorization service bottleneck identified by AWS X-Ray, preventing false-positive model timeouts.</p>
+        <p class="lead">C. Resilience &amp; Traffic Shaping (AWS Step Functions)</p>
+        <p class="kv"><strong>Circuit Breaker Pattern:</strong> Implemented circuit breaker states in AWS Step Functions to manage Bedrock service quotas gracefully.</p>
+        <p class="kv"><strong>Load Shedding:</strong> Programmed load-shedding mechanisms to deliberately queue or drop low-priority traffic during severe load spikes, preserving capacity for core functions.</p>
+        <p class="kv"><strong>Healthcare Prioritization:</strong> Emergency and urgent decision-support queries are fast-tracked, while routine literature lookups are delayed or rate-limited.</p>
+        <p class="lead">D. Supporting Reliability Best Practices</p>
+        <p class="kv"><strong>Retry Strategies:</strong> Implemented exponential backoff with jitter to smooth out 429 throttling spikes.</p>
+        <p class="kv"><strong>Targeted Error Handlers:</strong> Created distinct, specialized exception handlers tailored to specific API status codes.</p>
+        <p class="kv"><strong>Proactive Monitoring:</strong> Built custom CloudWatch dashboards and automated connectivity probes to alert on anomalous failure rates.</p>
+        <p class="chain">&#128202; Key Metric Outcome &mdash; 99.9% API availability, even during peak morning hospital usage hours.</p>
+    </div>
+
+    <div class="note-card">
+      <h4 id="s3">Section 3: Prompt Engineering &mdash; Inconsistent Responses</h4>
+        <p class="lead num">1. Problem Statement &amp; Root Cause Diagnosis</p>
+        <p class="txt">In a clinical decision-support environment, receiving varying or contradictory responses for nearly identical medical queries introduces unacceptable operational risk.</p>
+        <p class="kv"><strong>Primary Failure Mode:</strong> Context Sensitivity &mdash; a classic GenAI failure mode (identified in Task 4.3) where minor variations in prompt phrasing, context order, or formatting lead to wildly divergent model outputs.</p>
+        <p class="lead">The &ldquo;Prompt Complexity&rdquo; Paradox:</p>
+        <p class="kv"><strong>&bull;</strong> A counter-intuitive diagnostic finding: Adding more explicit instructions does NOT inherently yield better performance.</p>
+        <p class="kv"><strong>&bull;</strong> Overly lengthy, deeply nested, or conflicting system instructions create &ldquo;instruction competition.&rdquo; The model struggles to weigh competing directives, leading to hallucinations, omitted constraints, and output inconsistency.</p>
+        <p class="lead num">2. Remediation Architecture &amp; Diagnostic Tooling</p>
+        <p class="lead">A. Systematic Cross-Domain Prompt Testing (AWS Step Functions)</p>
+        <p class="kv"><strong>Domain Variability:</strong> A prompt optimized for General Internal Medicine often fails or produces ambiguous outputs when applied to Specialized Cardiology or Pediatrics.</p>
+        <p class="kv"><strong>Orchestration:</strong> Built automated evaluation state machines using AWS Step Functions to test prompt candidate variations systematically across diverse medical sub-specialties, patient demographics, and query complexity levels.</p>
+        <p class="lead">B. Prompt Management, A/B Testing, and Version Control</p>
+        <p class="kv"><strong>Amazon Bedrock Prompt Management:</strong> Integrated Bedrock's native prompt management capabilities to manage variables, track prompt variations, and separate system prompt code from application logic.</p>
+        <p class="kv"><strong>Live A/B Testing:</strong> Deployed side-by-side prompt variations in controlled testing environments to directly benchmark consistency, semantic similarity, and clinical accuracy under identical load conditions.</p>
+        <p class="txt"><strong>CI/CD Integration &amp; Rollback (Task 1.6 Alignment):</strong> Prompts are treated as code artifacts with semantic versioning. Automated performance degradation thresholds trigger instant rollbacks:</p>
+        <p class="chain">Prompt v6 (91% accuracy) &#10230; v7 (94%) &#10230; v8 (88%) &#10230; automatic rollback to v7</p>
+        <p class="lead">C. Chain-of-Thought (CoT) Diagnostic Logic Tracing</p>
+        <p class="kv"><strong>Diagnostic CoT (Task 4.3 Alignment):</strong> Instead of using Chain-of-Thought purely to boost output quality, CoT was leveraged as a diagnostic lens.</p>
+        <p class="txt">By forcing the model to explicitly output its intermediate clinical reasoning steps, the team identified exactly where the reasoning path broke down during inconsistent outputs:</p>
+        <p class="chain">Premise &rarr; Evidence Evaluation &rarr; Differential Diagnosis &rarr; Recommendation</p>
+        <p class="kv"><strong>Outcome:</strong> Directly improved diagnostic suggestion accuracy and eliminated logical leaps in complex treatment recommendations.</p>
+        <p class="lead">D. Prompt Refinement &amp; Optimization Frameworks</p>
+        <p class="kv"><strong>Prompt Complexity Metrics:</strong> Implemented static analysis checks on prompt templates to detect and alert on overly complex, nested, or redundant instructions before deployment.</p>
+        <p class="kv"><strong>Task-Specific Specialized Templates:</strong> Replaced &ldquo;one-size-fits-all&rdquo; general prompts with modular, single-purpose templates tailored to specific task types (e.g., drug interaction checking vs. discharge summary generation).</p>
+        <p class="kv"><strong>Feedback-Driven Optimization Loops:</strong> Fed anonymized physician feedback (ratings and manual edits) back into automated prompt refinement workflows to continuously hone template precision.</p>
+        <p class="chain">&#128202; Key Metric Outcome &mdash; high response consistency across identical/similar medical queries, significantly boosting provider trust in diagnostic support outputs.</p>
+    </div>
+
+    <div class="note-card">
+      <h4 id="s4">Section 4: Retrieval System &mdash; Slow or Irrelevant Results</h4>
+        <p class="lead num">1. Problem Statement &amp; Root Cause Diagnosis</p>
+        <p class="txt">In a high-stakes clinical decision-support system, retrieval failures manifest in two distinct, high-impact ways: returning irrelevant medical literature (low precision/recall) or exhibiting excessive latency (poor query performance).</p>
+        <p class="lead">Primary Diagnostics &amp; Root Causes:</p>
+        <p class="kv"><strong>Domain Misalignment in Vector Space:</strong> General-purpose embedding models often fail to capture domain-specific semantic proximity (e.g., treating distinct medical conditions or drug interactions as synonymous, or missing clinical jargon).</p>
+        <p class="kv"><strong>Embedding Drift:</strong> Medical research, drug naming conventions, and clinical guidelines evolve continuously. Over time, the embedding model's vector representations diverge from newly introduced literature terminology.</p>
+        <p class="kv"><strong>Fragmented Context Chunking:</strong> Arbitrary fixed-size chunking decoupled research findings from their underlying methodology and conclusions. Returning a research finding without its methodological constraints leads to misinterpretation and clinical errors.</p>
+        <p class="lead num">2. Remediation Architecture &amp; Diagnostic Tools</p>
+        <p class="lead">A. Embedding &amp; Relevance Diagnostics</p>
+        <p class="kv"><strong>Bedrock Evaluations:</strong> Implemented automated relevance scoring frameworks using Bedrock Evaluations to benchmark retrieved literature directly against physician search intent.</p>
+        <p class="kv"><strong>SageMaker Embedding Visualization:</strong> Projected high-dimensional vector embeddings into low-dimensional space using Amazon SageMaker to visually identify clustering anomalies, semantic overlap, and outlier points within specialized medical terminology.</p>
+        <p class="kv"><strong>Diagnostic Insight:</strong> Poor clustering in vector space proves the embedding model lacks domain comprehension&mdash;meaning model domain-fit matters significantly more than vector dimensionality.</p>
+        <p class="kv"><strong>SageMaker Model Monitor for Drift:</strong> Deployed drift detection monitoring to track divergence between active user queries/new documents and historical reference datasets as new medical literature is ingested.</p>
+        <p class="lead">B. Approximate Nearest Neighbor (ANN) Algorithm Selection</p>
+        <p class="txt">Vector index performance depends on selecting the right ANN algorithm tailored to dataset size, query throughput, and hardware constraints:</p>
+        <table class="cmp">
+          <thead><tr><th>Algorithm</th><th>Indexing Mechanism</th><th>Speed</th><th>Accuracy / Recall</th><th>Memory Footprint</th><th>Scalability &amp; Trade-offs</th></tr></thead>
+          <tbody>
+            <tr><td>LSH (Locality-Sensitive Hashing)</td><td>Hash buckets</td><td>Extremely Fast</td><td>Lower</td><td>Low</td><td>Fast lookup, but sacrifices retrieval precision for complex semantics.</td></tr>
+            <tr><td>HNSW (Hierarchical Navigable Small World)</td><td>Multi-layer Graph</td><td>Very Fast</td><td>High</td><td>Very High (Memory-Hungry)</td><td>Best overall accuracy-to-speed balance; demands significant RAM at scale.</td></tr>
+            <tr><td>IVF (Inverted File Index)</td><td>Inverted list / Clusters</td><td>Fast</td><td>Medium-High</td><td>Moderate</td><td>Partition-based search; highly scalable for massive vector spaces.</td></tr>
+            <tr><td>PQ (Product Quantization)</td><td>Vector Compression</td><td>Fast</td><td>Slight Loss</td><td>Extremely Low</td><td>Lossy compression technique; drastically reduces memory footprint.</td></tr>
+          </tbody>
+        </table>
+        <p class="kv"><strong>Key Architectural Takeaway:</strong> There is no single &ldquo;best&rdquo; ANN algorithm. System designers must benchmark multiple algorithms directly against their specific domain dataset and operational SLAs.</p>
+        <p class="lead">C. Specialized RAG Pipeline Logging &amp; Traceability</p>
+        <p class="txt">To isolate failure points across the pipeline, every processing stage must be logged with strict auditability:</p>
+        <p class="kv"><strong>Data Preparation &amp; Ingestion:</strong> Preprocessing validation checks, ingestion job latency, normalization logs (inconsistent normalization produces divergent embeddings).</p>
+        <p class="kv"><strong>Chunking Strategy Metrics:</strong> Logging strategy type (semantic vs. hierarchical), chunk size, overlap ratios, and total chunk counts per document.</p>
+        <p class="kv"><strong>Vector DB Health &amp; Index Diagnostics:</strong> Index corruption checks, query throughput, hardware utilization, and memory consumption.</p>
+        <p class="kv"><strong>Retrieval &amp; Evaluation Metrics:</strong> Logging context window size, retrieval latency, and automated evaluation metrics &mdash; Answer Similarity, Context Relevance, and Ground Truth Correctness.</p>
+        <p class="lead">D. Prompt &amp; Retrieval Optimization Techniques</p>
+        <p class="txt">When retrieval precision remains sub-optimal, pipeline adjustments can be applied upstream at the query level:</p>
+        <p class="kv"><strong>Hybrid Search Integration:</strong> Combined dense vector search (semantic similarity) with sparse keyword search (BM25 / lexical matching) to capture both exact medical terminology/codes (e.g., ICD-10) and broader semantic context.</p>
+        <p class="kv"><strong>AI-Driven Query Expansion:</strong> Leveraged foundation models to rewrite and expand raw physician queries with relevant synonyms, medical acronyms, and context before executing vector retrieval.</p>
+        <p class="txt"><strong>Structure-Aware Chunking:</strong> Enforced medical literature chunking rules that preserve the structural integrity of papers:</p>
+        <p class="chain">Document &#10230; [Methodology] + [Research Findings] + [Conclusions]</p>
+        <p class="chain">&#128202; Key Metric Outcome &mdash; 60% faster retrieval latency with significantly higher literature precision and clinical relevance.</p>
+    </div>
+
+    <div class="note-card">
+      <h4 id="s5">Section 5: Prompt Maintenance</h4>
+        <p class="lead num">1. Difference: Section 3 vs. Section 5</p>
+        <p class="kv"><strong>Section 3 (Reactive Fixes):</strong> Identifying and fixing broken prompt logic when accuracy degrades.</p>
+        <p class="kv"><strong>Section 5 (Proactive Maintenance):</strong> Establishing operational guardrails, continuous CI/CD pipelines, and template health checks to maintain long-term prompt hygiene.</p>
+        <p class="lead num">2. Diagnostic Indicators of &ldquo;Prompt Confusion&rdquo;</p>
+        <p class="txt">CloudWatch Logs Insights queries are engineered to flag specific model output anomalies:</p>
+        <p class="kv"><strong>Instruction Misinterpretation:</strong> The model treats an explicit system instruction as a user question.</p>
+        <p class="kv"><strong>Meta-Discussion:</strong> The model comments on or discusses the prompt template formatting rather than addressing clinical content.</p>
+        <p class="kv"><strong>Unsubstituted Placeholders:</strong> Unparsed template variables (e.g., {{variable_name}}) leakage directly into end-user outputs.</p>
+        <p class="kv"><strong>Instruction Conflict Logging:</strong> The model explicitly acknowledges mutually conflicting prompt constraints in its generated output.</p>
+        <p class="lead num">3. Technical Maintenance Architecture</p>
+        <p class="kv"><strong>Template Edge-Case Testing:</strong> Automated test suites evaluate empty parameters, oversized context injections, and unexpected input characters.</p>
+        <p class="kv"><strong>JSON Schema Enforcement:</strong> Schema validation guarantees structural integrity across both dynamic prompt templates and model responses.</p>
+        <p class="kv"><strong>Pipeline Tracing with AWS X-Ray:</strong> Tracing isolates template fetching, context assembly, and variable substitution overhead independently from foundation model inference latency.</p>
+        <p class="txt"><strong>Prompt Governance &amp; Version Control:</strong></p>
+        <p class="kv"><strong>&bull;</strong> Performance metrics are bound directly to semantic version numbers.</p>
+        <p class="kv"><strong>&bull;</strong> Automated rollback thresholds trigger during accuracy drops.</p>
+        <p class="kv"><strong>&bull;</strong> Continuous refinement cycles are fed directly by physician feedback loops and automated performance telemetry.</p>
+        <p class="lead num">&#128161; Troubleshooting Methodology Summary (Symptom &rarr; Tool)</p>
+        <table class="cmp">
+          <thead><tr><th>Symptom</th><th>Primary Diagnostic Focus</th><th>AWS / Analytical Tool</th></tr></thead>
+          <tbody>
+            <tr><td>Incomplete Responses</td><td>Token usage vs. context limits</td><td>CloudWatch Metrics &amp; Dashboards</td></tr>
+            <tr><td>API Failures</td><td>Error classification (400 / 429 / 500)</td><td>Structured Logging</td></tr>
+            <tr><td>Slow Latency</td><td>Execution bottlenecks across components</td><td>AWS X-Ray Distributed Tracing</td></tr>
+            <tr><td>Inconsistent Answers</td><td>Prompt phrasing &amp; version variance</td><td>A/B Testing &amp; Output Diffing</td></tr>
+            <tr><td>Irrelevant Retrieval</td><td>Vector space clustering &amp; chunk quality</td><td>SageMaker Embedding Visualization</td></tr>
+            <tr><td>Faulty Reasoning</td><td>Logical path breakdown</td><td>Chain-of-Thought (CoT) Analysis</td></tr>
+          </tbody>
+        </table>
+        <p class="lead num">&#127942; Key Lessons &amp; Final Case Outcomes</p>
+        <p class="kv"><strong>Lesson 1:</strong> Bottlenecks are frequently outside the model (e.g., Auth Middleware causing timeouts).</p>
+        <p class="kv"><strong>Lesson 2:</strong> Upward of 40% of API failures were caused upstream by client-side malformed requests, eliminated via simple pre-call validation (AWS Lambda).</p>
+        <p class="lead">Final Reported Metrics:</p>
+        <p class="kv"><strong>&bull;</strong> 95% reduction in incomplete responses on complex histories.</p>
+        <p class="kv"><strong>&bull;</strong> 99.9% API availability achieved during peak morning rounds.</p>
+        <p class="kv"><strong>&bull;</strong> 60% faster retrieval with high clinical precision.</p>
+    </div>
+
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <p>This is an independent, unofficial study resource and is not affiliated with, endorsed by, or sponsored by Amazon Web Services, Inc. AWS, Amazon Bedrock, and all related marks are trademarks of Amazon.com, Inc. or its affiliates.</p>
+    <p>Hosted on Amazon S3 + Amazon CloudFront. &middot; <a href="index.html">&larr; Back to Study Notes</a></p>
+  </div>
+</footer>
+
+</body>
+</html>
