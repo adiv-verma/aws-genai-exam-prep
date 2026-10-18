@@ -82,3 +82,22 @@ Real-time Monitoring & Alerting: Continuously tracks operational metrics and err
 Automated Remediation: Automated rollback procedures (utilizing Blue/Green deployments or fallback configurations) instantly revert traffic to the previous known-good model state upon metric threshold breaches.
 
 
+Section 5: RAG Evaluation
+1. Dual-Phase RAG Evaluation Framework
+To diagnose failures in Retrieval-Augmented Generation (RAG) pipelines, evaluation must isolate retrieval mechanics from text generation:
+Evaluation Type	Target Component	Diagnostic Objective
+Retrieve-Only	Knowledge Base / Vector Database	Evaluates whether the retrieval mechanism fetches the correct, relevant context chunks.
+Retrieve and Generate	End-to-End Pipeline	Evaluates the synthesized response based on both retrieved context and prompt alignment.
+Root Cause Isolation Principle: Decoupling prevents misattributing errors. If Retrieve-Only evaluation passes (relevant context is returned) but the end-to-end output is inaccurate, the failure resides in the generator LLM (e.g., hallucination, instruction drift), not the vector search engine.
+
+2. Retrieval Quality Metrics
+Relevance Scoring: Measures semantic similarity between retrieved chunks and the input query.
+Context Matching (Applicability): Assesses whether retrieved content actually applies to the specific operational or regulatory scenario.
+Example: A regulatory document might match query keywords perfectly but apply to a different account tier or jurisdiction.
+Retrieval Latency: Measures query execution time across vector indices and document stores to ensure strict SLA compliance.
+Citation Precision: Verifies that generated inline citations point accurately to the supporting source documents within retrieved context.
+Citation Coverage: Ensures every factual claim requiring attribution is backed by a valid context citation.
+3. Pipeline Component Optimization
+Ground Truth Benchmark Datasets: Test sets curated with golden standard query-context-answer triples.
+Vector Index Benchmarking: Evaluates embedding model performance, distance metric selection (e.g., cosine vs. dot product), and k-NN retrieval precision.
+Chunking Strategy Evaluation: Empirically tests chunking parameters (fixed-size, semantic, windowing) and overlap configurations to maximize retrieval accuracy while minimizing token overhead.

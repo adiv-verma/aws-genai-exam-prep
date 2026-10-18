@@ -1,0 +1,90 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1180 674" width="1180" height="674" role="img" aria-label="Task 5.1 evaluation architecture, drawn as three phases flowing downward. Development and testing phase: evaluation datasets and rubrics - edge cases, adversarial inputs and regulatory boundaries curated as golden query-context-answer triples and version-controlled in Amazon S3 - feed Amazon Bedrock Evaluations, which offers LLM-as-a-Judge where a second model such as Claude 3 Opus scores the generator and never judges itself, Bring Your Own Inference for models hosted on Bedrock, SageMaker, EC2 or on-premises, and custom multi-dimensional scoring across relevance, factual accuracy, compliance and tone in parallel. CI/CD quality gates phase: AWS CodePipeline runs daily continuous evaluation orchestrated by AWS Step Functions, with the regression suite run against a fixed benchmark dataset so scores stay comparable between runs; a quality gate asks whether compliance is at or above 99.8 percent and accuracy at or above threshold. On a fail the release is blocked, triggering rollback and alert with no human discretion at deploy time. On a pass the change moves through shadow deployment, where real traffic is served and the output discarded, then canary deploy on a small percentage of live traffic, then full production with progressive scale-up on green metrics. Production monitoring phase: full production feeds two parallel streams. RAG and agent monitoring separates retrieve-only from retrieve-and-generate to isolate the vector search from the generator before blaming either, and tracks chunking, vector database health, citation precision and coverage, and Bedrock agent tool and reasoning evaluation. User feedback ingestion uses Kinesis Data Streams for live interactions at scale, SageMaker Ground Truth for expert review - the only tier that catches confident hallucinations and compliance gaps - and Amazon Comprehend for sentiment on open-text feedback. Both streams converge on Amazon QuickSight, providing role-based dashboards and trend analytics for engineering and business stakeholders." font-family="-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica,Arial,sans-serif">
+<defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,1 L9,5 L0,9 z" fill="#8fa0b6"/></marker></defs>
+<style>.dtitle{font-size:14.5px;font-weight:800;letter-spacing:.03em;fill:#0f2540;}.phase{font-size:10.5px;font-weight:700;letter-spacing:.07em;fill:#8b96a5;text-transform:uppercase;}.lh{font-size:12.5px;font-weight:800;fill:#ffffff;}.ln{font-size:10px;font-weight:700;fill:#ffd8c4;letter-spacing:.05em;}.it{font-size:11.6px;fill:#2b3a4d;}.bh{font-size:11.5px;font-weight:800;fill:#0f2540;}.bs{font-size:10.3px;fill:#5a6a7e;}.ch{font-size:11px;font-weight:700;fill:#16345c;}.el{font-size:10px;font-weight:700;fill:#5c6b80;}</style>
+<rect width="1180" height="674" fill="#ffffff"/>
+<text x="24" y="32" class="dtitle">TASK 5.1: FROM A TEST SUITE TO A RELEASE DECISION, AND BACK AGAIN</text>
+<line x1="24" y1="44" x2="1156" y2="44" stroke="#e3e7ee" stroke-width="1.6"/>
+<text x="24" y="68" class="phase">Development &amp; testing phase</text>
+<rect x="24" y="78" width="300" height="98" rx="9" fill="#ffffff" stroke="#d7dde8"/>
+<text x="174.0" y="102" class="bh" text-anchor="middle">Evaluation Datasets &amp; Rubrics</text>
+<text x="174.0" y="119" class="bs" text-anchor="middle">Edge cases, adversarial inputs and</text>
+<text x="174.0" y="132" class="bs" text-anchor="middle">regulatory boundaries, curated as</text>
+<text x="174.0" y="145" class="bs" text-anchor="middle">golden query-context-answer triples.</text>
+<text x="174.0" y="158" class="bs" text-anchor="middle">Version-controlled in Amazon S3.</text>
+<line x1="324" y1="127" x2="360" y2="127" stroke="#8fa0b6" stroke-width="1.6" marker-end="url(#ah)"/>
+<rect x="364" y="78" width="792" height="98" rx="11" fill="#ffffff" stroke="#d7dde8"/>
+<path d="M375 78 h770 a11 11 0 0 1 11 11 v21 h-792 v-21 a11 11 0 0 1 11 -11 z" fill="#0f2540"/>
+<text x="380" y="99" class="lh">Amazon Bedrock Evaluations</text>
+<text x="1140" y="99" class="ln" text-anchor="end">FOUR NATIVE CAPABILITIES</text>
+<circle cx="374" cy="124" r="2.8" fill="#7f94b0"/>
+<text x="386" y="128" class="it">LLM-as-a-Judge — a second model (e.g. Claude 3 Opus) scores the generator; never let a model judge itself.</text>
+<circle cx="374" cy="143" r="2.8" fill="#7f94b0"/>
+<text x="386" y="147" class="it">Bring Your Own Inference — evaluate models hosted on Bedrock, SageMaker, EC2 or on-prem.</text>
+<circle cx="374" cy="162" r="2.8" fill="#7f94b0"/>
+<text x="386" y="166" class="it">Custom metrics and multi-dimensional scoring — Relevance · Factual Accuracy · Compliance · Tone, in parallel.</text>
+<text x="24" y="200" class="phase">CI/CD quality gates</text>
+<rect x="24" y="210" width="1132" height="86" rx="11" fill="#ffffff" stroke="#d7dde8"/>
+<path d="M35 210 h1110 a11 11 0 0 1 11 11 v21 h-1132 v-21 a11 11 0 0 1 11 -11 z" fill="#0f2540"/>
+<text x="40" y="231" class="lh">AWS CodePipeline</text>
+<text x="1140" y="231" class="ln" text-anchor="end">DAILY CONTINUOUS EVALUATION</text>
+<text x="40" y="264" class="bs">Orchestrated by AWS Step Functions — the regression suite runs against a fixed benchmark dataset, so scores stay comparable run to run.</text>
+<rect x="40" y="272" width="1100" height="16" rx="7" fill="#f3f7fd" stroke="#c6d8ef"/>
+<text x="590" y="283.5" class="ch" text-anchor="middle">Quality Gate — Compliance ≥ 99.8%  AND  Accuracy ≥ threshold ?</text>
+<line x1="590" y1="296" x2="590" y2="316" stroke="#8fa0b6" stroke-width="1.6"/>
+<line x1="174" y1="316" x2="590" y2="316" stroke="#8fa0b6" stroke-width="1.6"/>
+<text x="174" y="310" class="el" text-anchor="middle">NO · FAIL</text>
+<text x="484" y="310" class="el" text-anchor="middle">YES · PASS</text>
+<line x1="174" y1="316" x2="174" y2="330" stroke="#8fa0b6" stroke-width="1.6" marker-end="url(#ah)"/>
+<line x1="484" y1="316" x2="484" y2="330" stroke="#8fa0b6" stroke-width="1.6" marker-end="url(#ah)"/>
+<rect x="24" y="330" width="300" height="62" rx="9" fill="#fdf6f4" stroke="#ecd2c9"/>
+<text x="174.0" y="354" class="bh" text-anchor="middle" fill="#a8462a">Release Blocked</text>
+<text x="174.0" y="371" class="bs" text-anchor="middle">Pipeline halts; rollback and alert.</text>
+<text x="174.0" y="384" class="bs" text-anchor="middle">No human discretion at deploy time.</text>
+<rect x="364" y="330" width="240" height="62" rx="9" fill="#f7fbf8" stroke="#c7e2d1"/>
+<text x="484.0" y="354" class="bh" text-anchor="middle" fill="#2f6b4c">Shadow Deployment</text>
+<text x="484.0" y="371" class="bs" text-anchor="middle">Real traffic, output discarded.</text>
+<line x1="604" y1="361" x2="624" y2="361" stroke="#8fa0b6" stroke-width="1.6" marker-end="url(#ah)"/>
+<rect x="628" y="330" width="240" height="62" rx="9" fill="#f7fbf8" stroke="#c7e2d1"/>
+<text x="748.0" y="354" class="bh" text-anchor="middle" fill="#2f6b4c">Canary Deploy</text>
+<text x="748.0" y="371" class="bs" text-anchor="middle">A small % of live traffic first.</text>
+<line x1="868" y1="361" x2="888" y2="361" stroke="#8fa0b6" stroke-width="1.6" marker-end="url(#ah)"/>
+<rect x="892" y="330" width="264" height="62" rx="9" fill="#f7fbf8" stroke="#c7e2d1"/>
+<text x="1024.0" y="354" class="bh" text-anchor="middle" fill="#2f6b4c">Full Production</text>
+<text x="1024.0" y="371" class="bs" text-anchor="middle">Progressive scale-up on green metrics.</text>
+<line x1="1024" y1="392" x2="1024" y2="406" stroke="#8fa0b6" stroke-width="1.6"/>
+<line x1="301" y1="406" x2="1024" y2="406" stroke="#8fa0b6" stroke-width="1.6"/>
+<line x1="301" y1="406" x2="301" y2="434" stroke="#8fa0b6" stroke-width="1.6" marker-end="url(#ah)"/>
+<line x1="879" y1="406" x2="879" y2="434" stroke="#8fa0b6" stroke-width="1.6" marker-end="url(#ah)"/>
+<text x="24" y="424" class="phase">Production monitoring</text>
+<rect x="24" y="434" width="554" height="112" rx="11" fill="#ffffff" stroke="#d7dde8"/>
+<path d="M35 434 h532 a11 11 0 0 1 11 11 v21 h-554 v-21 a11 11 0 0 1 11 -11 z" fill="#0f2540"/>
+<text x="40" y="455" class="lh">RAG &amp; Agent Monitoring</text>
+<text x="562" y="455" class="ln" text-anchor="end">WHERE DID IT BREAK?</text>
+<circle cx="34" cy="478" r="2.8" fill="#7f94b0"/>
+<text x="46" y="482" class="it">Retrieve-Only vs Retrieve-and-Generate — isolate the</text>
+<text x="46" y="499" class="it">vector search from the generator before blaming either.</text>
+<circle cx="34" cy="512" r="2.8" fill="#7f94b0"/>
+<text x="46" y="516" class="it">Chunking, vector DB, citation precision and coverage.</text>
+<circle cx="34" cy="529" r="2.8" fill="#7f94b0"/>
+<text x="46" y="533" class="it">Bedrock Agent tool and reasoning evaluation.</text>
+<rect x="602" y="434" width="554" height="112" rx="11" fill="#ffffff" stroke="#d7dde8"/>
+<path d="M613 434 h532 a11 11 0 0 1 11 11 v21 h-554 v-21 a11 11 0 0 1 11 -11 z" fill="#0f2540"/>
+<text x="618" y="455" class="lh">User Feedback Ingestion</text>
+<text x="1140" y="455" class="ln" text-anchor="end">TWO AUDIENCES</text>
+<circle cx="612" cy="478" r="2.8" fill="#7f94b0"/>
+<text x="624" y="482" class="it">Kinesis Data Streams — live interactions at scale.</text>
+<circle cx="612" cy="495" r="2.8" fill="#7f94b0"/>
+<text x="624" y="499" class="it">SageMaker Ground Truth — expert review, the only tier</text>
+<text x="624" y="516" class="it">that catches confident hallucinations and compliance gaps.</text>
+<circle cx="612" cy="529" r="2.8" fill="#7f94b0"/>
+<text x="624" y="533" class="it">Amazon Comprehend — sentiment on open-text feedback.</text>
+<line x1="301" y1="546" x2="301" y2="560" stroke="#8fa0b6" stroke-width="1.6"/>
+<line x1="879" y1="546" x2="879" y2="560" stroke="#8fa0b6" stroke-width="1.6"/>
+<line x1="301" y1="560" x2="879" y2="560" stroke="#8fa0b6" stroke-width="1.6"/>
+<line x1="590" y1="560" x2="590" y2="578" stroke="#8fa0b6" stroke-width="1.6" marker-end="url(#ah)"/>
+<rect x="314" y="578" width="552" height="70" rx="11" fill="#ffffff" stroke="#d7dde8"/>
+<path d="M325 578 h530 a11 11 0 0 1 11 11 v21 h-552 v-21 a11 11 0 0 1 11 -11 z" fill="#0f2540"/>
+<text x="330" y="599" class="lh">Amazon QuickSight</text>
+<text x="850" y="599" class="ln" text-anchor="end">ROLE-BASED DASHBOARDS</text>
+<text x="590" y="628" class="bs" text-anchor="middle">Trend analytics for engineering and business stakeholders — what the scores are doing over time.</text>
+</svg>
