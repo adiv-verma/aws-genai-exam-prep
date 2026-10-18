@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>The Whole Map | AIP-C01 Guide</title>
-<meta name="description" content="One diagram of how all five domains of the AWS Certified Generative AI Developer (AIP-C01) exam join up as a single request, plus the concepts that cut across every domain.">
+<title>The Map | AIP-C01 Guide</title>
+<meta name="description" content="All 919 concepts from the AWS Certified Generative AI Developer (AIP-C01) study notes, laid out as one AI system being built end to end, each linked to the notes that cover it.">
 <style>
   :root{
     --ink:#0b1524; --ink-soft:#3a4a5e; --paper:#f7f8fa; --card:#ffffff; --line:#e3e7ee;
@@ -14,14 +14,13 @@
   }
   *{box-sizing:border-box;}
   html{scroll-behavior:smooth;}
-  body{margin:0;background:var(--paper);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;line-height:1.65;}
+  body{margin:0;background:var(--paper);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;line-height:1.6;}
   a{color:var(--accent-dark);}
-  code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;background:#eef1f6;padding:1px 5px;border-radius:4px;font-size:.92em;}
   img,svg{max-width:100%;}
-  .wrap{max-width:1000px;margin:0 auto;padding:0 24px;}
+  .wrap{max-width:1080px;margin:0 auto;padding:0 24px;}
   .wrap-wide{max-width:1380px;margin:0 auto;padding:0 24px;}
 
-  .nav{position:sticky;top:0;z-index:50;background:rgba(15,37,64,.96);backdrop-filter:blur(6px);border-bottom:1px solid rgba(255,255,255,.08);}
+  .nav{position:sticky;top:0;z-index:60;background:rgba(15,37,64,.96);backdrop-filter:blur(6px);border-bottom:1px solid rgba(255,255,255,.08);}
   .nav .wrap{display:flex;align-items:center;justify-content:space-between;height:56px;}
   .nav-brand{color:#fff;font-weight:700;font-size:14px;letter-spacing:.02em;text-decoration:none;}
   .nav-brand span{color:var(--accent);}
@@ -38,10 +37,10 @@
   header.hero{background:linear-gradient(180deg,var(--navy) 0%, var(--navy-2) 100%);color:#fff;padding:40px 0 32px;}
   .eyebrow{display:inline-block;font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#ffd8c4;background:rgba(232,98,44,.18);border:1px solid rgba(232,98,44,.4);padding:5px 10px;border-radius:999px;margin-bottom:14px;}
   h1{font-size:clamp(24px,3.6vw,34px);line-height:1.15;margin:0;font-weight:800;}
-  header.hero p{font-size:15.5px;color:#c9d5e3;max-width:720px;margin:12px 0 0;}
+  header.hero p{font-size:15.5px;color:#c9d5e3;max-width:740px;margin:12px 0 0;}
   header.hero p a{color:#ffd8c4;}
 
-  section{padding:34px 0;}
+  section{padding:32px 0;}
   h2.sh{font-size:20px;font-weight:800;margin:0 0 6px;}
   p.sl{font-size:14.5px;color:var(--ink-soft);margin:0 0 22px;max-width:760px;}
 
@@ -49,22 +48,53 @@
   footer .wrap{border-top:1px solid var(--line);padding-top:22px;}
   footer a{color:#6b7686;}
 
-  figure.map{margin:0;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px;}
-  .scroller{overflow-x:auto;-webkit-overflow-scrolling:touch;}
-  .scroller svg{display:block;min-width:1150px;width:100%;height:auto;}
-  .scroller svg a text{cursor:pointer;}
-  .scroller svg a:hover text{text-decoration:underline;}
-  figure.map figcaption{margin-top:14px;font-size:13px;color:var(--ink-soft);text-align:center;}
-  .hint{display:none;font-size:12.5px;color:var(--ink-soft);margin:0 0 8px;font-style:italic;}
-  @media (max-width:1200px){ .hint{display:block;} }
+  .bar{position:sticky;top:56px;z-index:50;background:rgba(247,248,250,.97);backdrop-filter:blur(6px);border-bottom:1px solid var(--line);padding:11px 0;}
+  .bar .wrap-wide{display:flex;flex-wrap:wrap;gap:9px;align-items:center;}
+  #q{flex:1;min-width:200px;font:inherit;font-size:14px;padding:9px 13px;border:1px solid var(--line);border-radius:9px;background:#fff;color:var(--ink);}
+  #q:focus{outline:2px solid rgba(232,98,44,.35);border-color:var(--accent);}
+  .chips{display:flex;gap:5px;flex-wrap:wrap;}
+  .chips button{font:inherit;font-size:12px;font-weight:700;padding:6px 11px;border-radius:999px;border:1px solid var(--line);background:#fff;color:var(--ink-soft);cursor:pointer;}
+  .chips button:hover{border-color:var(--accent);}
+  .chips button[aria-pressed="true"]{color:#fff;border-color:transparent;}
+  .chips button[data-d="1"][aria-pressed="true"]{background:var(--d1);}
+  .chips button[data-d="2"][aria-pressed="true"]{background:var(--d2);}
+  .chips button[data-d="3"][aria-pressed="true"]{background:var(--d3);}
+  .chips button[data-d="4"][aria-pressed="true"]{background:var(--d4);}
+  .chips button[data-d="5"][aria-pressed="true"]{background:var(--d5);}
+  #tally{font-size:12.5px;color:var(--ink-soft);font-weight:600;white-space:nowrap;}
 
-  .lad{display:grid;grid-template-columns:repeat(auto-fit,minmax(215px,1fr));gap:14px;}
-  .step{background:var(--card);border:1px solid var(--line);border-radius:13px;padding:18px 20px;}
-  .step .n{display:inline-block;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:11.5px;font-weight:700;color:#fff;background:var(--navy);border-radius:7px;padding:3px 9px;margin-bottom:9px;}
-  .step h3{margin:0 0 6px;font-size:15.5px;font-weight:800;}
-  .step p{margin:0 0 12px;font-size:13.5px;color:var(--ink-soft);}
-  .step a.go{font-size:13px;font-weight:700;text-decoration:none;border:1px solid var(--line);border-radius:8px;padding:7px 13px;display:inline-block;}
-  .step a.go:hover{border-color:var(--accent);}
+  figure.spine{margin:0;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 16px 10px;}
+  .scroller{overflow-x:auto;-webkit-overflow-scrolling:touch;}
+  .scroller svg{display:block;min-width:1180px;width:100%;height:auto;}
+  .scroller svg a rect{cursor:pointer;}
+  .scroller svg a:hover rect{stroke:var(--accent);}
+  figure.spine figcaption{margin-top:8px;font-size:12.5px;color:var(--ink-soft);text-align:center;}
+  .hint{display:none;font-size:12.5px;color:var(--ink-soft);margin:0 0 6px;font-style:italic;}
+  @media (max-width:1250px){ .hint{display:block;} }
+
+  .ph{scroll-margin-top:118px;padding:30px 0 6px;}
+  .phh{display:flex;align-items:flex-start;gap:13px;margin-bottom:4px;}
+  .phh .pn{flex:0 0 auto;width:34px;height:34px;border-radius:10px;color:#fff;font-size:15px;font-weight:800;display:flex;align-items:center;justify-content:center;}
+  .phh h2{margin:0;font-size:21px;font-weight:800;}
+  .phh .pc{font-size:11.5px;font-weight:700;color:var(--ink-soft);background:#eef1f6;border-radius:999px;padding:3px 9px;white-space:nowrap;margin-left:auto;}
+  .phd{font-size:14.5px;color:var(--ink-soft);margin:0 0 16px;padding-left:47px;max-width:780px;}
+
+  .stage{background:var(--card);border:1px solid var(--line);border-radius:13px;padding:16px 19px 17px;margin-bottom:11px;}
+  .stage h3{margin:0 0 3px;font-size:15.5px;font-weight:800;}
+  .stage .sb{margin:0 0 12px;font-size:13.5px;color:var(--ink-soft);}
+  .grid{display:flex;flex-wrap:wrap;gap:6px;}
+
+  a.cx{display:inline-flex;align-items:center;gap:6px;text-decoration:none;font-size:12.5px;
+       background:#f4f6fa;border:1px solid #e1e7ef;border-radius:7px;padding:4px 5px 4px 9px;color:var(--ink);transition:border-color .12s,background .12s;}
+  a.cx:hover{border-color:var(--accent);background:#fff;}
+  a.cx b{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:10px;font-weight:700;
+         color:#fff;border-radius:4px;padding:1px 4px;}
+  a.cx.hide,.stage.hide,.ph.hide{display:none;}
+  .b1{background:var(--d1);} .b2{background:var(--d2);} .b3{background:var(--d3);}
+  .b4{background:var(--d4);} .b5{background:var(--d5);}
+
+  .empty{display:none;background:var(--card);border:1px dashed var(--line);border-radius:13px;padding:26px;text-align:center;font-size:14px;color:var(--ink-soft);}
+  .empty.show{display:block;}
 </style>
 </head>
 <body>
@@ -74,214 +104,1465 @@
     <a class="nav-brand" href="../index.html">AIP-C01 <span>Guide</span></a>
     <ul class="nav-links">
       <li><a href="index.html">All Study Notes</a></li>
-      <li><a href="map.html">The Whole Map</a></li>
-      <li><a href="concepts.html">Concept Index</a></li>
+      <li><a href="map.html">The Map</a></li>
       <li><a href="../tasks/index.html">Build Log</a></li>
+      <li><a href="../quiz/index.html">Quiz</a></li>
     </ul>
   </div>
 </nav>
 
 <header class="hero">
   <div class="wrap">
-    <span class="eyebrow">The Whole Exam</span>
-    <h1>Five Domains, One Request</h1>
-    <p>The five domain maps each show one stage well, but nothing shows how they join up. This is the layer
-    above them: a single request being designed, built, guarded, run and proved &mdash; with the ideas that refuse
-    to sit inside any one domain pulled out underneath.</p>
+    <span class="eyebrow">The Whole Course, One Pipeline</span>
+    <h1>Everything, In The Order You Would Build It</h1>
+    <p>Every concept in all 20 sets of notes &mdash; 919 of them &mdash; laid out as one
+    generative-AI system being built end to end: framing the problem, getting the data, building the
+    memory, picking the model, assembling it, shipping it, serving a request, running it, and proving
+    it. Each item links to the exact section of the notes that covers it.</p>
   </div>
 </header>
 
-<section style="padding-bottom:12px;">
+<section style="padding:22px 0 4px;">
   <div class="wrap-wide">
     <p class="hint">Scroll the diagram sideways if it does not fit.</p>
-    <figure class="map">
+    <figure class="spine">
       <div class="scroller">
-<svg viewBox="0 0 1282 562" role="img" aria-label="The whole exam as one request's life, in two bands. The top band follows a single request through all five domains in order. Domain 1, thirty-one percent: design it &#8212; decide the shape, pick the model, prepare the data, choose where vectors live, tune retrieval, and govern the prompt. Domain 2, twenty-six percent: build it &#8212; agents that decide their own next step, where the model physically runs, integration with systems that cannot be rewritten, and calling the model like a production dependency. Domain 3, twenty percent: guard it &#8212; stop bad input going in and bad output coming out, keep the data private, and be able to prove a year later how the model was built and who approved it. Domain 4, twelve percent: run it &#8212; what it costs, how fast it feels, and how you would notice the answers getting worse. Domain 5, eleven percent: prove it &#8212; judge whether it is good enough without a single correct answer to check against, and work out which component actually failed once it is live. The bottom band shows the threads that run through all five domains rather than belonging to any one of them: token economics, which appears in every single task; confidence thresholds, where one number gates five different decisions; guardrails and layered defense; drift, which means five unrelated things; and Step Functions with CloudWatch, which appear almost everywhere doing a different job each time. Each thread links to the concept index." xmlns="http://www.w3.org/2000/svg">
-<defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#5a6a7e"/></marker></defs>
-<rect width="1282" height="562" fill="#f7f8fa"/>
+<svg viewBox="0 0 1282 150" role="img" aria-label="The whole course as one pipeline, nine phases left to right. Phase 1, Frame it: Decide what you are building, what  good  means, and whether to build at all. 40 concepts. Phase 2, Get the data: Source it, prove it is clean, make it machine-readable, strip the person out of it. 80 concepts. Phase 3, Build the memory: Cut it up, turn it into numbers, put the numbers somewhere you can search fast. 73 concepts. Phase 4, Pick the model: Shortlist, teach it your house style, and prove it is good enough before anyone sees it. 92 concepts. Phase 5, Assemble: The prompt, the retrieval, and whatever decides the next step. 117 concepts. Phase 6, Ship it: Where it physically runs, how it reaches your systems, and who is allowed to call it. 144 concepts. Phase 7, Serve a request: Check it, stream it, and keep standing when something downstream falls over. 131 concepts. Phase 8, Run it: What it costs, how fast it feels, and how you would notice it getting worse. 123 concepts. Phase 9, Prove it: Audit it later, catch it drifting, and find the fault when it breaks. 119 concepts." xmlns="http://www.w3.org/2000/svg">
+<defs><marker id="sa" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#8b96a5"/></marker></defs>
+<rect width="1282" height="150" fill="#f7f8fa"/>
 <g font-family="-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica,Arial,sans-serif">
-<rect x="34" y="16" width="700" height="27" rx="13.5" fill="#0f2540"/>
-<text x="49" y="34.5" font-size="12.5" font-weight="800" fill="#fff" letter-spacing=".04em">ONE REQUEST, FIVE DOMAINS</text>
-<text x="264.0" y="34.5" font-size="12.5" font-weight="600" fill="#fff" opacity=".85">In the order the work actually happens</text>
-<rect x="34.0" y="58" width="222" height="186" rx="12" fill="#ffffff" stroke="#d7dee8" stroke-width="1.5"/>
-<rect x="45.0" y="59" width="200" height="4" fill="#1f4e79"/>
-<text x="145.0" y="87" text-anchor="middle" font-size="15" font-weight="700" fill="#0b1524">Design it</text>
-<text x="145.0" y="108" text-anchor="middle" font-size="11.8" fill="#5a6a7e">Decide the shape, pick the model,</text>
-<text x="145.0" y="125" text-anchor="middle" font-size="11.8" fill="#5a6a7e">prepare the data, choose where</text>
-<text x="145.0" y="142" text-anchor="middle" font-size="11.8" fill="#5a6a7e">the vectors live, tune retrieval.</text>
-<rect x="96.5" y="158" width="57.3" height="16" rx="6" fill="#eef2f7"/>
-<text x="125.2" y="169.5" text-anchor="middle" font-size="9.6" font-weight="600" fill="#4a5a70">6 tasks</text>
-<rect x="159.8" y="158" width="33.7" height="16" rx="6" fill="#eef2f7"/>
-<text x="176.7" y="169.5" text-anchor="middle" font-size="9.6" font-weight="600" fill="#4a5a70">31%</text>
-<rect x="129.0" y="198" width="32" height="16" rx="8" fill="#1f4e79"/>
-<text x="145.0" y="210" text-anchor="middle" font-size="10.5" font-weight="700" fill="#fff">1</text>
-<line x1="50.0" y1="220" x2="240.0" y2="220" stroke="#d7dee8" stroke-width="1"/>
-<a href="domain-1.html"><text x="145.0" y="236" text-anchor="middle" font-size="11.2" font-weight="700" fill="#c94f1f">Domain 1 map &#8594;</text></a>
-<line x1="260.0" y1="151.0" x2="275.0" y2="151.0" stroke="#5a6a7e" stroke-width="1.8" marker-end="url(#a)"/>
-<rect x="282.0" y="58" width="222" height="186" rx="12" fill="#ffffff" stroke="#d7dee8" stroke-width="1.5"/>
-<rect x="293.0" y="59" width="200" height="4" fill="#6b4c9a"/>
-<text x="393.0" y="87" text-anchor="middle" font-size="15" font-weight="700" fill="#0b1524">Build it</text>
-<text x="393.0" y="108" text-anchor="middle" font-size="11.8" fill="#5a6a7e">Agents that choose their own next</text>
-<text x="393.0" y="125" text-anchor="middle" font-size="11.8" fill="#5a6a7e">step, where the model runs, and</text>
-<text x="393.0" y="142" text-anchor="middle" font-size="11.8" fill="#5a6a7e">calling it like a dependency.</text>
-<rect x="344.5" y="158" width="57.3" height="16" rx="6" fill="#eef2f7"/>
-<text x="373.1" y="169.5" text-anchor="middle" font-size="9.6" font-weight="600" fill="#4a5a70">5 tasks</text>
-<rect x="407.8" y="158" width="33.7" height="16" rx="6" fill="#eef2f7"/>
-<text x="424.7" y="169.5" text-anchor="middle" font-size="9.6" font-weight="600" fill="#4a5a70">26%</text>
-<rect x="377.0" y="198" width="32" height="16" rx="8" fill="#6b4c9a"/>
-<text x="393.0" y="210" text-anchor="middle" font-size="10.5" font-weight="700" fill="#fff">2</text>
-<line x1="298.0" y1="220" x2="488.0" y2="220" stroke="#d7dee8" stroke-width="1"/>
-<a href="domain-2.html"><text x="393.0" y="236" text-anchor="middle" font-size="11.2" font-weight="700" fill="#c94f1f">Domain 2 map &#8594;</text></a>
-<line x1="508.0" y1="151.0" x2="523.0" y2="151.0" stroke="#5a6a7e" stroke-width="1.8" marker-end="url(#a)"/>
-<rect x="530.0" y="58" width="222" height="186" rx="12" fill="#ffffff" stroke="#d7dee8" stroke-width="1.5"/>
-<rect x="541.0" y="59" width="200" height="4" fill="#1d6f68"/>
-<text x="641.0" y="87" text-anchor="middle" font-size="15" font-weight="700" fill="#0b1524">Guard it</text>
-<text x="641.0" y="108" text-anchor="middle" font-size="11.8" fill="#5a6a7e">Bad input out, bad output in, the</text>
-<text x="641.0" y="125" text-anchor="middle" font-size="11.8" fill="#5a6a7e">person out of the data &#8212; and a</text>
-<text x="641.0" y="142" text-anchor="middle" font-size="11.8" fill="#5a6a7e">record that survives an audit.</text>
-<rect x="592.5" y="158" width="57.3" height="16" rx="6" fill="#eef2f7"/>
-<text x="621.1" y="169.5" text-anchor="middle" font-size="9.6" font-weight="600" fill="#4a5a70">4 tasks</text>
-<rect x="655.8" y="158" width="33.7" height="16" rx="6" fill="#eef2f7"/>
-<text x="672.6" y="169.5" text-anchor="middle" font-size="9.6" font-weight="600" fill="#4a5a70">20%</text>
-<rect x="625.0" y="198" width="32" height="16" rx="8" fill="#1d6f68"/>
-<text x="641.0" y="210" text-anchor="middle" font-size="10.5" font-weight="700" fill="#fff">3</text>
-<line x1="546.0" y1="220" x2="736.0" y2="220" stroke="#d7dee8" stroke-width="1"/>
-<a href="domain-3.html"><text x="641.0" y="236" text-anchor="middle" font-size="11.2" font-weight="700" fill="#c94f1f">Domain 3 map &#8594;</text></a>
-<line x1="756.0" y1="151.0" x2="771.0" y2="151.0" stroke="#5a6a7e" stroke-width="1.8" marker-end="url(#a)"/>
-<rect x="778.0" y="58" width="222" height="186" rx="12" fill="#ffffff" stroke="#d7dee8" stroke-width="1.5"/>
-<rect x="789.0" y="59" width="200" height="4" fill="#c94f1f"/>
-<text x="889.0" y="87" text-anchor="middle" font-size="15" font-weight="700" fill="#0b1524">Run it</text>
-<text x="889.0" y="108" text-anchor="middle" font-size="11.8" fill="#5a6a7e">What it costs, how fast it feels,</text>
-<text x="889.0" y="125" text-anchor="middle" font-size="11.8" fill="#5a6a7e">and how you would notice the</text>
-<text x="889.0" y="142" text-anchor="middle" font-size="11.8" fill="#5a6a7e">answers quietly getting worse.</text>
-<rect x="840.5" y="158" width="57.3" height="16" rx="6" fill="#eef2f7"/>
-<text x="869.1" y="169.5" text-anchor="middle" font-size="9.6" font-weight="600" fill="#4a5a70">3 tasks</text>
-<rect x="903.8" y="158" width="33.7" height="16" rx="6" fill="#eef2f7"/>
-<text x="920.6" y="169.5" text-anchor="middle" font-size="9.6" font-weight="600" fill="#4a5a70">12%</text>
-<rect x="873.0" y="198" width="32" height="16" rx="8" fill="#c94f1f"/>
-<text x="889.0" y="210" text-anchor="middle" font-size="10.5" font-weight="700" fill="#fff">4</text>
-<line x1="794.0" y1="220" x2="984.0" y2="220" stroke="#d7dee8" stroke-width="1"/>
-<a href="domain-4.html"><text x="889.0" y="236" text-anchor="middle" font-size="11.2" font-weight="700" fill="#c94f1f">Domain 4 map &#8594;</text></a>
-<line x1="1004.0" y1="151.0" x2="1019.0" y2="151.0" stroke="#5a6a7e" stroke-width="1.8" marker-end="url(#a)"/>
-<rect x="1026.0" y="58" width="222" height="186" rx="12" fill="#ffffff" stroke="#d7dee8" stroke-width="1.5"/>
-<rect x="1037.0" y="59" width="200" height="4" fill="#a03453"/>
-<text x="1137.0" y="87" text-anchor="middle" font-size="15" font-weight="700" fill="#0b1524">Prove it</text>
-<text x="1137.0" y="108" text-anchor="middle" font-size="11.8" fill="#5a6a7e">Good enough to ship, with no</text>
-<text x="1137.0" y="125" text-anchor="middle" font-size="11.8" fill="#5a6a7e">single right answer to check</text>
-<text x="1137.0" y="142" text-anchor="middle" font-size="11.8" fill="#5a6a7e">against &#8212; then which part broke.</text>
-<rect x="1088.5" y="158" width="57.3" height="16" rx="6" fill="#eef2f7"/>
-<text x="1117.2" y="169.5" text-anchor="middle" font-size="9.6" font-weight="600" fill="#4a5a70">2 tasks</text>
-<rect x="1151.8" y="158" width="33.7" height="16" rx="6" fill="#eef2f7"/>
-<text x="1168.6" y="169.5" text-anchor="middle" font-size="9.6" font-weight="600" fill="#4a5a70">11%</text>
-<rect x="1121.0" y="198" width="32" height="16" rx="8" fill="#a03453"/>
-<text x="1137.0" y="210" text-anchor="middle" font-size="10.5" font-weight="700" fill="#fff">5</text>
-<line x1="1042.0" y1="220" x2="1232.0" y2="220" stroke="#d7dee8" stroke-width="1"/>
-<a href="domain-5.html"><text x="1137.0" y="236" text-anchor="middle" font-size="11.2" font-weight="700" fill="#c94f1f">Domain 5 map &#8594;</text></a>
-<rect x="34" y="282" width="700" height="27" rx="13.5" fill="#0f2540"/>
-<text x="49" y="300.5" font-size="12.5" font-weight="800" fill="#fff" letter-spacing=".04em">THE THREADS THROUGH ALL FIVE</text>
-<text x="289.8" y="300.5" font-size="12.5" font-weight="600" fill="#fff" opacity=".85">These belong to no single domain</text>
-<rect x="34.0" y="324" width="222" height="186" rx="12" fill="#ffffff" stroke="#d7dee8" stroke-width="1.5"/>
-<rect x="45.0" y="325" width="200" height="4" fill="#c94f1f"/>
-<text x="145.0" y="353" text-anchor="middle" font-size="15" font-weight="700" fill="#0b1524">Token economics</text>
-<text x="145.0" y="374" text-anchor="middle" font-size="11.8" fill="#5a6a7e">Billed twice, unevenly, and output</text>
-<text x="145.0" y="391" text-anchor="middle" font-size="11.8" fill="#5a6a7e">costs more. The only concept in</text>
-<text x="145.0" y="408" text-anchor="middle" font-size="11.8" fill="#5a6a7e">all 20 tasks without exception.</text>
-<rect x="116.3" y="424" width="57.3" height="16" rx="6" fill="#eef2f7"/>
-<text x="145.0" y="435.5" text-anchor="middle" font-size="9.6" font-weight="600" fill="#4a5a70">20 / 20</text>
-<rect x="129.0" y="464" width="32" height="16" rx="8" fill="#c94f1f"/>
-<text x="145.0" y="476" text-anchor="middle" font-size="10.5" font-weight="700" fill="#fff">all</text>
-<line x1="50.0" y1="486" x2="240.0" y2="486" stroke="#d7dee8" stroke-width="1"/>
-<a href="concepts.html#token-economics"><text x="145.0" y="502" text-anchor="middle" font-size="11.2" font-weight="700" fill="#c94f1f">Concept index &#8594;</text></a>
-<rect x="282.0" y="324" width="222" height="186" rx="12" fill="#ffffff" stroke="#d7dee8" stroke-width="1.5"/>
-<rect x="293.0" y="325" width="200" height="4" fill="#6b4c9a"/>
-<text x="393.0" y="353" text-anchor="middle" font-size="15" font-weight="700" fill="#0b1524">Confidence</text>
-<text x="393.0" y="374" text-anchor="middle" font-size="11.8" fill="#5a6a7e">0.7 to 0.9 gates a bigger model,</text>
-<text x="393.0" y="391" text-anchor="middle" font-size="11.8" fill="#5a6a7e">a human, a clarifying question,</text>
-<text x="393.0" y="408" text-anchor="middle" font-size="11.8" fill="#5a6a7e">a disclaimer &#8212; five tasks, five jobs.</text>
-<rect x="361.4" y="424" width="63.2" height="16" rx="6" fill="#eef2f7"/>
-<text x="393.0" y="435.5" text-anchor="middle" font-size="9.6" font-weight="600" fill="#4a5a70">15 tasks</text>
-<rect x="377.0" y="464" width="32" height="16" rx="8" fill="#6b4c9a"/>
-<text x="393.0" y="476" text-anchor="middle" font-size="10.5" font-weight="700" fill="#fff">all</text>
-<line x1="298.0" y1="486" x2="488.0" y2="486" stroke="#d7dee8" stroke-width="1"/>
-<a href="concepts.html#confidence-thresholds"><text x="393.0" y="502" text-anchor="middle" font-size="11.2" font-weight="700" fill="#c94f1f">Concept index &#8594;</text></a>
-<rect x="530.0" y="324" width="222" height="186" rx="12" fill="#ffffff" stroke="#d7dee8" stroke-width="1.5"/>
-<rect x="541.0" y="325" width="200" height="4" fill="#1d6f68"/>
-<text x="641.0" y="353" text-anchor="middle" font-size="15" font-weight="700" fill="#0b1524">Layered defense</text>
-<text x="641.0" y="374" text-anchor="middle" font-size="11.8" fill="#5a6a7e">Nothing is checked once. Cheapest</text>
-<text x="641.0" y="391" text-anchor="middle" font-size="11.8" fill="#5a6a7e">filter first, because the model is</text>
-<text x="641.0" y="408" text-anchor="middle" font-size="11.8" fill="#5a6a7e">the expensive part of the chain.</text>
-<rect x="609.4" y="424" width="63.2" height="16" rx="6" fill="#eef2f7"/>
-<text x="641.0" y="435.5" text-anchor="middle" font-size="9.6" font-weight="600" fill="#4a5a70">13 tasks</text>
-<rect x="625.0" y="464" width="32" height="16" rx="8" fill="#1d6f68"/>
-<text x="641.0" y="476" text-anchor="middle" font-size="10.5" font-weight="700" fill="#fff">all</text>
-<line x1="546.0" y1="486" x2="736.0" y2="486" stroke="#d7dee8" stroke-width="1"/>
-<a href="concepts.html#guardrails"><text x="641.0" y="502" text-anchor="middle" font-size="11.2" font-weight="700" fill="#c94f1f">Concept index &#8594;</text></a>
-<rect x="778.0" y="324" width="222" height="186" rx="12" fill="#ffffff" stroke="#d7dee8" stroke-width="1.5"/>
-<rect x="789.0" y="325" width="200" height="4" fill="#1d6f68"/>
-<text x="889.0" y="353" text-anchor="middle" font-size="15" font-weight="700" fill="#0b1524">Drift</text>
-<text x="889.0" y="374" text-anchor="middle" font-size="11.8" fill="#5a6a7e">Data, embedding, prompt, agent</text>
-<text x="889.0" y="391" text-anchor="middle" font-size="11.8" fill="#5a6a7e">and latency drift are five</text>
-<text x="889.0" y="408" text-anchor="middle" font-size="11.8" fill="#5a6a7e">unrelated things, one word.</text>
-<rect x="857.4" y="424" width="63.2" height="16" rx="6" fill="#eef2f7"/>
-<text x="889.0" y="435.5" text-anchor="middle" font-size="9.6" font-weight="600" fill="#4a5a70">11 tasks</text>
-<rect x="873.0" y="464" width="32" height="16" rx="8" fill="#1d6f68"/>
-<text x="889.0" y="476" text-anchor="middle" font-size="10.5" font-weight="700" fill="#fff">all</text>
-<line x1="794.0" y1="486" x2="984.0" y2="486" stroke="#d7dee8" stroke-width="1"/>
-<a href="concepts.html#drift-five-unrelated-things"><text x="889.0" y="502" text-anchor="middle" font-size="11.2" font-weight="700" fill="#c94f1f">Concept index &#8594;</text></a>
-<rect x="1026.0" y="324" width="222" height="186" rx="12" fill="#ffffff" stroke="#d7dee8" stroke-width="1.5"/>
-<rect x="1037.0" y="325" width="200" height="4" fill="#1f4e79"/>
-<text x="1137.0" y="353" text-anchor="middle" font-size="15" font-weight="700" fill="#0b1524">The two everywhere</text>
-<text x="1137.0" y="374" text-anchor="middle" font-size="11.8" fill="#5a6a7e">Step Functions in 14 tasks and</text>
-<text x="1137.0" y="391" text-anchor="middle" font-size="11.8" fill="#5a6a7e">CloudWatch in 16 &#8212; doing a</text>
-<text x="1137.0" y="408" text-anchor="middle" font-size="11.8" fill="#5a6a7e">different job in each of them.</text>
-<rect x="1096.5" y="424" width="80.9" height="16" rx="6" fill="#eef2f7"/>
-<text x="1137.0" y="435.5" text-anchor="middle" font-size="9.6" font-weight="600" fill="#4a5a70">14 &amp; 16</text>
-<rect x="1121.0" y="464" width="32" height="16" rx="8" fill="#1f4e79"/>
-<text x="1137.0" y="476" text-anchor="middle" font-size="10.5" font-weight="700" fill="#fff">all</text>
-<line x1="1042.0" y1="486" x2="1232.0" y2="486" stroke="#d7dee8" stroke-width="1"/>
-<a href="concepts.html#step-functions-twelve-unrelated-jobs"><text x="1137.0" y="502" text-anchor="middle" font-size="11.2" font-weight="700" fill="#c94f1f">Concept index &#8594;</text></a>
-<text x="641.0" y="536" text-anchor="middle" font-size="11.5" fill="#5a6a7e" font-style="italic">Read down for the shape of the exam; read across the bottom for the ideas that keep reappearing and will not sit still in one domain.</text>
+<text x="641.0" y="20" text-anchor="middle" font-size="11.5" font-weight="700" fill="#8b96a5" letter-spacing=".1em">START &#8594; FINISH</text>
+<a href="#pframe">
+<rect x="30.0" y="34" width="126" height="86" rx="11" fill="#ffffff" stroke="#d7dee8" stroke-width="1.5"/>
+<rect x="30.0" y="34" width="126" height="4" rx="2" fill="#1f4e79"/>
+<circle cx="93.0" cy="58" r="11" fill="#1f4e79"/>
+<text x="93.0" y="62" text-anchor="middle" font-size="12" font-weight="800" fill="#fff">1</text>
+<text x="93.0" y="82" text-anchor="middle" font-size="12.5" font-weight="700" fill="#0b1524">Frame it</text>
+<text x="93.0" y="110" text-anchor="middle" font-size="10.5" font-weight="600" fill="#8b96a5">40 concepts</text>
+</a>
+<line x1="158.0" y1="77" x2="164.0" y2="77" stroke="#8b96a5" stroke-width="1.6" marker-end="url(#sa)"/>
+<a href="#pdata">
+<rect x="167.0" y="34" width="126" height="86" rx="11" fill="#ffffff" stroke="#d7dee8" stroke-width="1.5"/>
+<rect x="167.0" y="34" width="126" height="4" rx="2" fill="#1f4e79"/>
+<circle cx="230.0" cy="58" r="11" fill="#1f4e79"/>
+<text x="230.0" y="62" text-anchor="middle" font-size="12" font-weight="800" fill="#fff">2</text>
+<text x="230.0" y="82" text-anchor="middle" font-size="12.5" font-weight="700" fill="#0b1524">Get the data</text>
+<text x="230.0" y="110" text-anchor="middle" font-size="10.5" font-weight="600" fill="#8b96a5">80 concepts</text>
+</a>
+<line x1="295.0" y1="77" x2="301.0" y2="77" stroke="#8b96a5" stroke-width="1.6" marker-end="url(#sa)"/>
+<a href="#pknowledge">
+<rect x="304.0" y="34" width="126" height="86" rx="11" fill="#ffffff" stroke="#d7dee8" stroke-width="1.5"/>
+<rect x="304.0" y="34" width="126" height="4" rx="2" fill="#1f4e79"/>
+<circle cx="367.0" cy="58" r="11" fill="#1f4e79"/>
+<text x="367.0" y="62" text-anchor="middle" font-size="12" font-weight="800" fill="#fff">3</text>
+<text x="367.0" y="82" text-anchor="middle" font-size="12.5" font-weight="700" fill="#0b1524">Build the</text>
+<text x="367.0" y="95" text-anchor="middle" font-size="12.5" font-weight="700" fill="#0b1524">memory</text>
+<text x="367.0" y="110" text-anchor="middle" font-size="10.5" font-weight="600" fill="#8b96a5">73 concepts</text>
+</a>
+<line x1="432.0" y1="77" x2="438.0" y2="77" stroke="#8b96a5" stroke-width="1.6" marker-end="url(#sa)"/>
+<a href="#pmodel">
+<rect x="441.0" y="34" width="126" height="86" rx="11" fill="#ffffff" stroke="#d7dee8" stroke-width="1.5"/>
+<rect x="441.0" y="34" width="126" height="4" rx="2" fill="#6b4c9a"/>
+<circle cx="504.0" cy="58" r="11" fill="#6b4c9a"/>
+<text x="504.0" y="62" text-anchor="middle" font-size="12" font-weight="800" fill="#fff">4</text>
+<text x="504.0" y="82" text-anchor="middle" font-size="12.5" font-weight="700" fill="#0b1524">Pick the model</text>
+<text x="504.0" y="110" text-anchor="middle" font-size="10.5" font-weight="600" fill="#8b96a5">92 concepts</text>
+</a>
+<line x1="569.0" y1="77" x2="575.0" y2="77" stroke="#8b96a5" stroke-width="1.6" marker-end="url(#sa)"/>
+<a href="#passemble">
+<rect x="578.0" y="34" width="126" height="86" rx="11" fill="#ffffff" stroke="#d7dee8" stroke-width="1.5"/>
+<rect x="578.0" y="34" width="126" height="4" rx="2" fill="#6b4c9a"/>
+<circle cx="641.0" cy="58" r="11" fill="#6b4c9a"/>
+<text x="641.0" y="62" text-anchor="middle" font-size="12" font-weight="800" fill="#fff">5</text>
+<text x="641.0" y="82" text-anchor="middle" font-size="12.5" font-weight="700" fill="#0b1524">Assemble</text>
+<text x="641.0" y="110" text-anchor="middle" font-size="10.5" font-weight="600" fill="#8b96a5">117 concepts</text>
+</a>
+<line x1="706.0" y1="77" x2="712.0" y2="77" stroke="#8b96a5" stroke-width="1.6" marker-end="url(#sa)"/>
+<a href="#pdeploy">
+<rect x="715.0" y="34" width="126" height="86" rx="11" fill="#ffffff" stroke="#d7dee8" stroke-width="1.5"/>
+<rect x="715.0" y="34" width="126" height="4" rx="2" fill="#6b4c9a"/>
+<circle cx="778.0" cy="58" r="11" fill="#6b4c9a"/>
+<text x="778.0" y="62" text-anchor="middle" font-size="12" font-weight="800" fill="#fff">6</text>
+<text x="778.0" y="82" text-anchor="middle" font-size="12.5" font-weight="700" fill="#0b1524">Ship it</text>
+<text x="778.0" y="110" text-anchor="middle" font-size="10.5" font-weight="600" fill="#8b96a5">144 concepts</text>
+</a>
+<line x1="843.0" y1="77" x2="849.0" y2="77" stroke="#8b96a5" stroke-width="1.6" marker-end="url(#sa)"/>
+<a href="#pserve">
+<rect x="852.0" y="34" width="126" height="86" rx="11" fill="#ffffff" stroke="#d7dee8" stroke-width="1.5"/>
+<rect x="852.0" y="34" width="126" height="4" rx="2" fill="#1d6f68"/>
+<circle cx="915.0" cy="58" r="11" fill="#1d6f68"/>
+<text x="915.0" y="62" text-anchor="middle" font-size="12" font-weight="800" fill="#fff">7</text>
+<text x="915.0" y="82" text-anchor="middle" font-size="12.5" font-weight="700" fill="#0b1524">Serve a request</text>
+<text x="915.0" y="110" text-anchor="middle" font-size="10.5" font-weight="600" fill="#8b96a5">131 concepts</text>
+</a>
+<line x1="980.0" y1="77" x2="986.0" y2="77" stroke="#8b96a5" stroke-width="1.6" marker-end="url(#sa)"/>
+<a href="#poperate">
+<rect x="989.0" y="34" width="126" height="86" rx="11" fill="#ffffff" stroke="#d7dee8" stroke-width="1.5"/>
+<rect x="989.0" y="34" width="126" height="4" rx="2" fill="#c94f1f"/>
+<circle cx="1052.0" cy="58" r="11" fill="#c94f1f"/>
+<text x="1052.0" y="62" text-anchor="middle" font-size="12" font-weight="800" fill="#fff">8</text>
+<text x="1052.0" y="82" text-anchor="middle" font-size="12.5" font-weight="700" fill="#0b1524">Run it</text>
+<text x="1052.0" y="110" text-anchor="middle" font-size="10.5" font-weight="600" fill="#8b96a5">123 concepts</text>
+</a>
+<line x1="1117.0" y1="77" x2="1123.0" y2="77" stroke="#8b96a5" stroke-width="1.6" marker-end="url(#sa)"/>
+<a href="#pgovern">
+<rect x="1126.0" y="34" width="126" height="86" rx="11" fill="#ffffff" stroke="#d7dee8" stroke-width="1.5"/>
+<rect x="1126.0" y="34" width="126" height="4" rx="2" fill="#a03453"/>
+<circle cx="1189.0" cy="58" r="11" fill="#a03453"/>
+<text x="1189.0" y="62" text-anchor="middle" font-size="12" font-weight="800" fill="#fff">9</text>
+<text x="1189.0" y="82" text-anchor="middle" font-size="12.5" font-weight="700" fill="#0b1524">Prove it</text>
+<text x="1189.0" y="110" text-anchor="middle" font-size="10.5" font-weight="600" fill="#8b96a5">119 concepts</text>
+</a>
 </g>
 </svg>
       </div>
-      <figcaption>Every box is a link. The top row opens that domain&rsquo;s own map; the bottom row opens the concept index at that thread.</figcaption>
+      <figcaption>Nine phases, in build order. Click any phase to jump to it.</figcaption>
     </figure>
   </div>
 </section>
 
-<section style="padding-top:14px;">
+<div class="bar">
+  <div class="wrap-wide">
+    <input id="q" type="search" placeholder="Search all 919 concepts &mdash; Clarify, HNSW, jitter, LoRA&hellip;" autocomplete="off">
+    <div class="chips" id="dchips">
+      <button data-d="1" aria-pressed="false">D1</button>
+      <button data-d="2" aria-pressed="false">D2</button>
+      <button data-d="3" aria-pressed="false">D3</button>
+      <button data-d="4" aria-pressed="false">D4</button>
+      <button data-d="5" aria-pressed="false">D5</button>
+      <button data-d="clear" aria-pressed="false">All</button>
+    </div>
+    <span id="tally">919 concepts</span>
+  </div>
+</div>
+
+
+<section class="ph" id="pframe">
   <div class="wrap">
-    <h2 class="sh">How to use the three levels</h2>
-    <p class="sl">The site is deliberately a pyramid. Each level answers a different question, and skipping
-    straight to the bottom is how revision turns into 3,000 lines of disconnected facts.</p>
-    <div class="lad">
-      <div class="step">
-        <span class="n">Level 1</span>
-        <h3>This page</h3>
-        <p>What shape is the exam, and roughly where does my weak area sit? Read once, come back when you feel lost.</p>
-        <a class="go" href="map.html">You are here</a>
+    <div class="phh"><span class="pn" style="background:#1f4e79">1</span><h2>Frame it</h2><span class="pc">40 concepts</span></div>
+    <p class="phd">Decide what you are building, what &ldquo;good&rdquo; means, and whether to build at all.</p>
+    <div class="stage" id="s-requirements-success-criteria">
+      <h3>Requirements &amp; success criteria</h3>
+      <p class="sb">Thresholds are set <i>before</i> testing, so nobody moves the goalposts once results are in.</p>
+      <div class="grid">
+        <a class="cx" data-d="1" data-t="define metrics first" href="task-1-2.html#s1">Define metrics first<b class="b1">1.2</b></a>
+        <a class="cx" data-d="1" data-t="hard quality thresholds" href="task-1-2.html#s1">Hard quality thresholds<b class="b1">1.2</b></a>
+        <a class="cx" data-d="1" data-t="phi detection   99%" href="task-1-2.html#s1">PHI detection &gt; 99%<b class="b1">1.2</b></a>
+        <a class="cx" data-d="1" data-t="json validity   95%" href="task-1-2.html#s1">JSON validity &gt; 95%<b class="b1">1.2</b></a>
+        <a class="cx" data-d="1" data-t="p95 latency target" href="task-1-2.html#s1">p95 latency target<b class="b1">1.2</b></a>
+        <a class="cx" data-d="1" data-t="cost per document" href="task-1-2.html#s1">Cost per document<b class="b1">1.2</b></a>
+        <a class="cx" data-d="1" data-t="post-hoc bias (avoiding it)" href="task-1-2.html#s1">Post-hoc bias (avoiding it)<b class="b1">1.2</b></a>
+        <a class="cx" data-d="4" data-t="minimum acceptable quality bar" href="task-4-1.html#s2">Minimum acceptable quality bar<b class="b4">4.1</b></a>
+        <a class="cx" data-d="5" data-t="business kpi alignment" href="task-5-1.html#s2">Business KPI alignment<b class="b5">5.1</b></a>
+        <a class="cx" data-d="2" data-t="baseline before release" href="task-2-5.html#s3">Baseline before release<b class="b2">2.5</b></a>
+        <a class="cx" data-d="2" data-t="statistical significance testing" href="task-2-5.html#s3">Statistical significance testing<b class="b2">2.5</b></a>
+        <a class="cx" data-d="4" data-t="technical vs business metrics" href="task-4-3.html#s1">Technical vs business metrics<b class="b4">4.3</b></a>
+        <a class="cx" data-d="4" data-t="csat" href="task-4-3.html#s1">CSAT<b class="b4">4.3</b></a>
+        <a class="cx" data-d="4" data-t="escalation rate" href="task-4-3.html#s1">Escalation rate<b class="b4">4.3</b></a>
+        <a class="cx" data-d="4" data-t="revenue impact" href="task-4-3.html#s1">Revenue impact<b class="b4">4.3</b></a>
       </div>
-      <div class="step">
-        <span class="n">Level 2</span>
-        <h3>The five domain maps</h3>
-        <p>How do the tasks inside one domain fit together, and what is each one actually about? One picture per domain.</p>
-        <a class="go" href="index.html">Pick a domain &rarr;</a>
+    </div>
+    <div class="stage" id="s-build-vs-buy">
+      <h3>Build vs buy</h3>
+      <p class="sb">Managed product, managed APIs, or your own GPUs &mdash; the first fork in the road.</p>
+      <div class="grid">
+        <a class="cx" data-d="1" data-t="amazon q business" href="task-1-1.html#s7">Amazon Q Business<b class="b1">1.1</b></a>
+        <a class="cx" data-d="2" data-t="amazon q developer" href="task-2-5.html#s4">Amazon Q Developer<b class="b2">2.5</b></a>
+        <a class="cx" data-d="1" data-t="amazon bedrock" href="task-1-1.html#s7">Amazon Bedrock<b class="b1">1.1</b></a>
+        <a class="cx" data-d="1" data-t="sagemaker jumpstart" href="task-1-1.html#s7">SageMaker JumpStart<b class="b1">1.1</b></a>
+        <a class="cx" data-d="1" data-t="sagemaker training" href="task-1-1.html#s7">SageMaker Training<b class="b1">1.1</b></a>
+        <a class="cx" data-d="2" data-t="bedrock data automation" href="task-2-5.html#s3">Bedrock Data Automation<b class="b2">2.5</b></a>
+        <a class="cx" data-d="2" data-t="custom rag vs managed" href="task-2-5.html#s3">Custom RAG vs managed<b class="b2">2.5</b></a>
+        <a class="cx" data-d="2" data-t="q business refresh schedules" href="task-2-5.html#s3">Q Business refresh schedules<b class="b2">2.5</b></a>
+        <a class="cx" data-d="2" data-t="custom document parsers" href="task-2-5.html#s3">Custom document parsers<b class="b2">2.5</b></a>
+        <a class="cx" data-d="2" data-t="developer knowledge base" href="task-2-5.html#s4">Developer knowledge base<b class="b2">2.5</b></a>
+        <a class="cx" data-d="2" data-t="q developer code review" href="task-2-5.html#s4">Q Developer code review<b class="b2">2.5</b></a>
+        <a class="cx" data-d="2" data-t="automated refactoring" href="task-2-5.html#s4">Automated refactoring<b class="b2">2.5</b></a>
+        <a class="cx" data-d="2" data-t="ai-assisted test generation" href="task-2-5.html#s4">AI-assisted test generation<b class="b2">2.5</b></a>
       </div>
-      <div class="step">
-        <span class="n">Level 3</span>
-        <h3>The 20 task pages</h3>
-        <p>The notes themselves, verbatim, with the architecture diagram for that task. Where the detail actually lives.</p>
-        <a class="go" href="index.html">All study notes &rarr;</a>
-      </div>
-      <div class="step">
-        <span class="n">Sideways</span>
-        <h3>The concept index</h3>
-        <p>Cuts across all three. One entry per recurring idea, naming the task that owns it and what every other task adds.</p>
-        <a class="go" href="concepts.html">Concept index &rarr;</a>
+    </div>
+    <div class="stage" id="s-overall-architecture-shape">
+      <h3>Overall architecture shape</h3>
+      <p class="sb">The reference architecture every later stage hangs off.</p>
+      <div class="grid">
+        <a class="cx" data-d="1" data-t="entry   auth layer" href="task-1-1.html#s1">Entry &amp; auth layer<b class="b1">1.1</b></a>
+        <a class="cx" data-d="1" data-t="aws global accelerator" href="task-1-1.html#s1">AWS Global Accelerator<b class="b1">1.1</b></a>
+        <a class="cx" data-d="1" data-t="static anycast ips" href="task-1-1.html#s1">Static anycast IPs<b class="b1">1.1</b></a>
+        <a class="cx" data-d="1" data-t="aws appsync" href="task-1-1.html#s1">AWS AppSync<b class="b1">1.1</b></a>
+        <a class="cx" data-d="1" data-t="graphql subscriptions" href="task-1-1.html#s1">GraphQL subscriptions<b class="b1">1.1</b></a>
+        <a class="cx" data-d="1" data-t="amazon cognito" href="task-1-1.html#s1">Amazon Cognito<b class="b1">1.1</b></a>
+        <a class="cx" data-d="1" data-t="jwt verification" href="task-1-1.html#s1">JWT verification<b class="b1">1.1</b></a>
+        <a class="cx" data-d="1" data-t="async mutation pattern" href="task-1-1.html#s1">Async mutation pattern<b class="b1">1.1</b></a>
+        <a class="cx" data-d="1" data-t="session revocation" href="task-1-1.html#s1">Session revocation<b class="b1">1.1</b></a>
+        <a class="cx" data-d="1" data-t="core rag pipeline" href="task-1-1.html#s2">Core RAG pipeline<b class="b1">1.1</b></a>
+        <a class="cx" data-d="1" data-t="multilingual embeddings" href="task-1-1.html#s2">Multilingual embeddings<b class="b1">1.1</b></a>
+        <a class="cx" data-d="1" data-t="cross-lingual vector space" href="task-1-1.html#s2">Cross-lingual vector space<b class="b1">1.1</b></a>
       </div>
     </div>
   </div>
 </section>
+
+<section class="ph" id="pdata">
+  <div class="wrap">
+    <div class="phh"><span class="pn" style="background:#1f4e79">2</span><h2>Get the data</h2><span class="pc">80 concepts</span></div>
+    <p class="phd">Source it, prove it is clean, make it machine-readable, strip the person out of it.</p>
+    <div class="stage" id="s-source-catalogue-licence">
+      <h3>Source, catalogue &amp; licence</h3>
+      <p class="sb">Where the data came from, whether you are legally allowed to use it that way, and how reliable it is.</p>
+      <div class="grid">
+        <a class="cx" data-d="3" data-t="aws glue data catalog" href="task-3-3.html#s2">AWS Glue Data Catalog<b class="b3">3.3</b></a>
+        <a class="cx" data-d="3" data-t="glue crawlers" href="task-3-3.html#s2">Glue Crawlers<b class="b3">3.3</b></a>
+        <a class="cx" data-d="3" data-t="custom classifiers" href="task-3-3.html#s2">Custom classifiers<b class="b3">3.3</b></a>
+        <a class="cx" data-d="3" data-t="gettables / getdatabases" href="task-3-3.html#s2">GetTables / GetDatabases<b class="b3">3.3</b></a>
+        <a class="cx" data-d="3" data-t="licensing rights management" href="task-3-3.html#s2">Licensing rights management<b class="b3">3.3</b></a>
+        <a class="cx" data-d="3" data-t="pre-train vs fine-tune vs rag rights" href="task-3-3.html#s2">Pre-train vs fine-tune vs RAG rights<b class="b3">3.3</b></a>
+        <a class="cx" data-d="3" data-t="provider tagging" href="task-3-3.html#s2">Provider tagging<b class="b3">3.3</b></a>
+        <a class="cx" data-d="3" data-t="jurisdiction tagging" href="task-3-3.html#s2">Jurisdiction tagging<b class="b3">3.3</b></a>
+        <a class="cx" data-d="3" data-t="data reliability scoring" href="task-3-3.html#s2">Data reliability scoring<b class="b3">3.3</b></a>
+        <a class="cx" data-d="2" data-t="aws glue etl" href="task-2-3.html#s2">AWS Glue ETL<b class="b2">2.3</b></a>
+        <a class="cx" data-d="2" data-t="glue job bookmarks" href="task-2-3.html#s2">Glue Job Bookmarks<b class="b2">2.3</b></a>
+        <a class="cx" data-d="2" data-t="amazon appflow" href="task-2-3.html#s2">Amazon AppFlow<b class="b2">2.3</b></a>
+        <a class="cx" data-d="2" data-t="saas connectors" href="task-2-3.html#s2">SaaS connectors<b class="b2">2.3</b></a>
+        <a class="cx" data-d="2" data-t="bidirectional flows" href="task-2-3.html#s2">Bidirectional flows<b class="b2">2.3</b></a>
+        <a class="cx" data-d="1" data-t="multimodal sources" href="task-1-3.html#s1">Multimodal sources<b class="b1">1.3</b></a>
+        <a class="cx" data-d="1" data-t="raw data s3 bucket" href="task-1-3.html#s1">Raw data S3 bucket<b class="b1">1.3</b></a>
+      </div>
+    </div>
+    <div class="stage" id="s-validate-before-it-costs-you">
+      <h3>Validate before it costs you</h3>
+      <p class="sb">Four tools that each catch what the others miss. An LLM will answer confidently from corrupt input.</p>
+      <div class="grid">
+        <a class="cx" data-d="1" data-t="aws glue data quality" href="task-1-3.html#s2">AWS Glue Data Quality<b class="b1">1.3</b></a>
+        <a class="cx" data-d="1" data-t="dqdl rules" href="task-1-3.html#s2">DQDL rules<b class="b1">1.3</b></a>
+        <a class="cx" data-d="1" data-t="known unknowns" href="task-1-3.html#s2">Known unknowns<b class="b1">1.3</b></a>
+        <a class="cx" data-d="1" data-t="sagemaker data wrangler" href="task-1-3.html#s2">SageMaker Data Wrangler<b class="b1">1.3</b></a>
+        <a class="cx" data-d="1" data-t="unknown unknowns" href="task-1-3.html#s2">Unknown unknowns<b class="b1">1.3</b></a>
+        <a class="cx" data-d="1" data-t="custom lambda validation" href="task-1-3.html#s2">Custom Lambda validation<b class="b1">1.3</b></a>
+        <a class="cx" data-d="1" data-t="cross-modal integrity" href="task-1-3.html#s2">Cross-modal integrity<b class="b1">1.3</b></a>
+        <a class="cx" data-d="1" data-t="cloudwatch quality trend" href="task-1-3.html#s2">CloudWatch quality trend<b class="b1">1.3</b></a>
+        <a class="cx" data-d="1" data-t="pass-rate drift 94 87%" href="task-1-3.html#s2">Pass-rate drift 94&rarr;87%<b class="b1">1.3</b></a>
+        <a class="cx" data-d="1" data-t="human review queue" href="task-1-3.html#s2">Human review queue<b class="b1">1.3</b></a>
+        <a class="cx" data-d="1" data-t="never silently discard" href="task-1-3.html#s2">Never silently discard<b class="b1">1.3</b></a>
+        <a class="cx" data-d="1" data-t="garbage in, confident garbage out" href="task-1-3.html#s2">Garbage in, confident garbage out<b class="b1">1.3</b></a>
+        <a class="cx" data-d="4" data-t="data quality before indexing" href="task-4-3.html#s5">Data quality before indexing<b class="b4">4.3</b></a>
+      </div>
+    </div>
+    <div class="stage" id="s-process-fuse-multimodal-input">
+      <h3>Process &amp; fuse multimodal input</h3>
+      <p class="sb">Text, images and audio handled in parallel, then bound together so contradictions surface.</p>
+      <div class="grid">
+        <a class="cx" data-d="1" data-t="aws step functions orchestration" href="task-1-3.html#s3">AWS Step Functions orchestration<b class="b1">1.3</b></a>
+        <a class="cx" data-d="1" data-t="lambda 15-min limit" href="task-1-3.html#s3">Lambda 15-min limit<b class="b1">1.3</b></a>
+        <a class="cx" data-d="1" data-t="parallel branches" href="task-1-3.html#s3">Parallel branches<b class="b1">1.3</b></a>
+        <a class="cx" data-d="1" data-t="amazon comprehend" href="task-1-3.html#s3">Amazon Comprehend<b class="b1">1.3</b></a>
+        <a class="cx" data-d="1" data-t="entity   sentiment extraction" href="task-1-3.html#s3">Entity &amp; sentiment extraction<b class="b1">1.3</b></a>
+        <a class="cx" data-d="1" data-t="amazon rekognition" href="task-1-3.html#s3">Amazon Rekognition<b class="b1">1.3</b></a>
+        <a class="cx" data-d="1" data-t="amazon transcribe" href="task-1-3.html#s3">Amazon Transcribe<b class="b1">1.3</b></a>
+        <a class="cx" data-d="1" data-t="call analytics" href="task-1-3.html#s3">Call Analytics<b class="b1">1.3</b></a>
+        <a class="cx" data-d="1" data-t="speaker diarization" href="task-1-3.html#s3">Speaker diarization<b class="b1">1.3</b></a>
+        <a class="cx" data-d="1" data-t="sagemaker processing" href="task-1-3.html#s3">SageMaker Processing<b class="b1">1.3</b></a>
+        <a class="cx" data-d="2" data-t="aws textract" href="task-2-5.html#s3">AWS Textract<b class="b2">2.5</b></a>
+        <a class="cx" data-d="1" data-t="data fusion" href="task-1-3.html#s3">Data fusion<b class="b1">1.3</b></a>
+        <a class="cx" data-d="1" data-t="contradiction detection" href="task-1-3.html#s3">Contradiction detection<b class="b1">1.3</b></a>
+        <a class="cx" data-d="1" data-t="fraud signal from fusion" href="task-1-3.html#s3">Fraud signal from fusion<b class="b1">1.3</b></a>
+        <a class="cx" data-d="2" data-t="bedrock data automation" href="task-2-5.html#s3">Bedrock Data Automation<b class="b2">2.5</b></a>
+        <a class="cx" data-d="2" data-t="validation checkpoints" href="task-2-5.html#s3">Validation checkpoints<b class="b2">2.5</b></a>
+      </div>
+    </div>
+    <div class="stage" id="s-enrich-standardise">
+      <h3>Enrich &amp; standardise</h3>
+      <p class="sb">Cheap cleanup before an expensive model reads it.</p>
+      <div class="grid">
+        <a class="cx" data-d="1" data-t="text reformatting" href="task-1-3.html#s5">Text reformatting<b class="b1">1.3</b></a>
+        <a class="cx" data-d="1" data-t="small-llm cleanup" href="task-1-3.html#s5">Small-LLM cleanup<b class="b1">1.3</b></a>
+        <a class="cx" data-d="1" data-t="boilerplate stripping" href="task-1-3.html#s5">Boilerplate stripping<b class="b1">1.3</b></a>
+        <a class="cx" data-d="1" data-t="entity standardisation" href="task-1-3.html#s5">Entity standardisation<b class="b1">1.3</b></a>
+        <a class="cx" data-d="1" data-t="iso date normalisation" href="task-1-3.html#s5">ISO date normalisation<b class="b1">1.3</b></a>
+        <a class="cx" data-d="1" data-t="content enrichment via rag" href="task-1-3.html#s5">Content enrichment via RAG<b class="b1">1.3</b></a>
+        <a class="cx" data-d="1" data-t="external benchmark injection" href="task-1-3.html#s5">External benchmark injection<b class="b1">1.3</b></a>
+        <a class="cx" data-d="1" data-t="accuracy 89%   97%" href="task-1-3.html#s5">Accuracy 89% &rarr; 97%<b class="b1">1.3</b></a>
+        <a class="cx" data-d="1" data-t="dynamic prompt construction" href="task-1-3.html#s4">Dynamic prompt construction<b class="b1">1.3</b></a>
+        <a class="cx" data-d="1" data-t="claim-type templates" href="task-1-3.html#s4">Claim-type templates<b class="b1">1.3</b></a>
+      </div>
+    </div>
+    <div class="stage" id="s-strip-the-person-out-of-it">
+      <h3>Strip the person out of it</h3>
+      <p class="sb">Detection in two places, four ways to mask, and the failure mode of over-doing it.</p>
+      <div class="grid">
+        <a class="cx" data-d="3" data-t="amazon comprehend pii" href="task-3-2.html#s2">Amazon Comprehend PII<b class="b3">3.2</b></a>
+        <a class="cx" data-d="3" data-t="comprehend medical (phi)" href="task-3-2.html#s2">Comprehend Medical (PHI)<b class="b3">3.2</b></a>
+        <a class="cx" data-d="3" data-t="25+ pii entity types" href="task-3-2.html#s2">25+ PII entity types<b class="b3">3.2</b></a>
+        <a class="cx" data-d="3" data-t="amazon macie" href="task-3-2.html#s2">Amazon Macie<b class="b3">3.2</b></a>
+        <a class="cx" data-d="3" data-t="pii at rest in s3" href="task-3-2.html#s2">PII at rest in S3<b class="b3">3.2</b></a>
+        <a class="cx" data-d="3" data-t="custom data identifiers" href="task-3-2.html#s2">Custom data identifiers<b class="b3">3.2</b></a>
+        <a class="cx" data-d="3" data-t="redaction" href="task-3-2.html#s3">Redaction<b class="b3">3.2</b></a>
+        <a class="cx" data-d="3" data-t="tokenization" href="task-3-2.html#s3">Tokenization<b class="b3">3.2</b></a>
+        <a class="cx" data-d="3" data-t="pseudonymization" href="task-3-2.html#s3">Pseudonymization<b class="b3">3.2</b></a>
+        <a class="cx" data-d="3" data-t="format-preserving encryption" href="task-3-2.html#s3">Format-preserving encryption<b class="b3">3.2</b></a>
+        <a class="cx" data-d="3" data-t="secure token mapping table" href="task-3-2.html#s3">Secure token mapping table<b class="b3">3.2</b></a>
+        <a class="cx" data-d="3" data-t="generalization" href="task-3-2.html#s3">Generalization<b class="b3">3.2</b></a>
+        <a class="cx" data-d="3" data-t="perturbation" href="task-3-2.html#s3">Perturbation<b class="b3">3.2</b></a>
+        <a class="cx" data-d="3" data-t="synthetic data generation" href="task-3-2.html#s3">Synthetic data generation<b class="b3">3.2</b></a>
+        <a class="cx" data-d="3" data-t="differential privacy" href="task-3-2.html#s3">Differential privacy<b class="b3">3.2</b></a>
+        <a class="cx" data-d="3" data-t="privacy budget ( )" href="task-3-2.html#s3">Privacy budget (&epsilon;)<b class="b3">3.2</b></a>
+        <a class="cx" data-d="3" data-t="k-anonymity" href="task-3-2.html#s3">k-anonymity<b class="b3">3.2</b></a>
+        <a class="cx" data-d="3" data-t="quasi-identifiers" href="task-3-2.html#s3">Quasi-identifiers<b class="b3">3.2</b></a>
+        <a class="cx" data-d="3" data-t="data quality control step" href="task-3-2.html#s3">Data quality control step<b class="b3">3.2</b></a>
+        <a class="cx" data-d="3" data-t="over-anonymisation failure" href="task-3-2.html#s3">Over-anonymisation failure<b class="b3">3.2</b></a>
+        <a class="cx" data-d="1" data-t="de-identify before training" href="task-1-2.html#s2">De-identify before training<b class="b1">1.2</b></a>
+        <a class="cx" data-d="1" data-t="hipaa / baa compliance" href="task-1-2.html#s2">HIPAA / BAA compliance<b class="b1">1.2</b></a>
+        <a class="cx" data-d="1" data-t="redact before embedding" href="task-1-5.html#s5">Redact before embedding<b class="b1">1.5</b></a>
+        <a class="cx" data-d="3" data-t="token-level redaction" href="task-3-3.html#s4">Token-level redaction<b class="b3">3.3</b></a>
+        <a class="cx" data-d="3" data-t="regex + ner redaction" href="task-3-3.html#s4">Regex + NER redaction<b class="b3">3.3</b></a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="ph" id="pknowledge">
+  <div class="wrap">
+    <div class="phh"><span class="pn" style="background:#1f4e79">3</span><h2>Build the memory</h2><span class="pc">73 concepts</span></div>
+    <p class="phd">Cut it up, turn it into numbers, put the numbers somewhere you can search fast.</p>
+    <div class="stage" id="s-cut-the-documents-up">
+      <h3>Cut the documents up</h3>
+      <p class="sb">Chunking decides what retrieval can ever find. Chosen per document type, never uniformly.</p>
+      <div class="grid">
+        <a class="cx" data-d="1" data-t="fixed-size chunking" href="task-1-5.html#s3">Fixed-size chunking<b class="b1">1.5</b></a>
+        <a class="cx" data-d="1" data-t="structure-aware chunking" href="task-1-5.html#s3">Structure-aware chunking<b class="b1">1.5</b></a>
+        <a class="cx" data-d="1" data-t="hierarchical parent child" href="task-1-5.html#s3">Hierarchical parent&ndash;child<b class="b1">1.5</b></a>
+        <a class="cx" data-d="1" data-t="semantic chunking" href="task-1-5.html#s3">Semantic chunking<b class="b1">1.5</b></a>
+        <a class="cx" data-d="1" data-t="no chunking (whole file)" href="task-1-5.html#s3">No chunking (whole file)<b class="b1">1.5</b></a>
+        <a class="cx" data-d="1" data-t="lambda custom chunking" href="task-1-5.html#s3">Lambda custom chunking<b class="b1">1.5</b></a>
+        <a class="cx" data-d="1" data-t="~300-token default" href="task-1-5.html#s3">~300-token default<b class="b1">1.5</b></a>
+        <a class="cx" data-d="1" data-t="~10% boundary overlap" href="task-1-5.html#s3">~10% boundary overlap<b class="b1">1.5</b></a>
+        <a class="cx" data-d="1" data-t="per-document-type rule" href="task-1-5.html#s3">Per-document-type rule<b class="b1">1.5</b></a>
+        <a class="cx" data-d="1" data-t="metadata at chunk time" href="task-1-5.html#s3">Metadata at chunk time<b class="b1">1.5</b></a>
+        <a class="cx" data-d="4" data-t="chunking for cost" href="task-4-1.html#s1">Chunking for cost<b class="b4">4.1</b></a>
+        <a class="cx" data-d="5" data-t="chunking as a bug" href="task-5-2.html#s4">Chunking as a bug<b class="b5">5.2</b></a>
+        <a class="cx" data-d="2" data-t="request chunking" href="task-2-5.html#s1">Request chunking<b class="b2">2.5</b></a>
+        <a class="cx" data-d="2" data-t="recursive summarization" href="task-2-5.html#s1">Recursive summarization<b class="b2">2.5</b></a>
+        <a class="cx" data-d="5" data-t="sliding window" href="task-5-2.html#s1">Sliding window<b class="b5">5.2</b></a>
+        <a class="cx" data-d="5" data-t="pagination of long records" href="task-5-2.html#s1">Pagination of long records<b class="b5">5.2</b></a>
+      </div>
+    </div>
+    <div class="stage" id="s-turn-text-into-numbers">
+      <h3>Turn text into numbers</h3>
+      <p class="sb">Same model at ingest and query, or the whole vector space shifts under you.</p>
+      <div class="grid">
+        <a class="cx" data-d="1" data-t="amazon titan text embeddings" href="task-1-5.html#s4">Amazon Titan Text Embeddings<b class="b1">1.5</b></a>
+        <a class="cx" data-d="1" data-t="1,536 dimensions" href="task-1-5.html#s4">1,536 dimensions<b class="b1">1.5</b></a>
+        <a class="cx" data-d="1" data-t="1024 / 512 / 256 options" href="task-1-5.html#s4">1024 / 512 / 256 options<b class="b1">1.5</b></a>
+        <a class="cx" data-d="1" data-t="dense embeddings" href="task-1-5.html#s4">Dense embeddings<b class="b1">1.5</b></a>
+        <a class="cx" data-d="1" data-t="sparse embeddings" href="task-1-5.html#s4">Sparse embeddings<b class="b1">1.5</b></a>
+        <a class="cx" data-d="1" data-t="binary embeddings (~32 )" href="task-1-5.html#s4">Binary embeddings (~32&times;)<b class="b1">1.5</b></a>
+        <a class="cx" data-d="1" data-t="fp16 quantization" href="task-1-5.html#s4">FP16 quantization<b class="b1">1.5</b></a>
+        <a class="cx" data-d="1" data-t="dimensionality trade-off" href="task-1-5.html#s4">Dimensionality trade-off<b class="b1">1.5</b></a>
+        <a class="cx" data-d="1" data-t="domain vocabulary mismatch" href="task-1-5.html#s4">Domain vocabulary mismatch<b class="b1">1.5</b></a>
+        <a class="cx" data-d="1" data-t="model consistency rule" href="task-1-5.html#s4">Model consistency rule<b class="b1">1.5</b></a>
+        <a class="cx" data-d="5" data-t="embedding drift" href="task-5-2.html#s4">Embedding drift<b class="b5">5.2</b></a>
+        <a class="cx" data-d="5" data-t="embedding visualization" href="task-5-2.html#s4">Embedding visualization<b class="b5">5.2</b></a>
+        <a class="cx" data-d="5" data-t="domain fit   dimensionality" href="task-5-2.html#s4">Domain fit &gt; dimensionality<b class="b5">5.2</b></a>
+        <a class="cx" data-d="2" data-t="embedding cache" href="task-2-2.html#s3">Embedding cache<b class="b2">2.2</b></a>
+      </div>
+    </div>
+    <div class="stage" id="s-store-and-index-the-vectors">
+      <h3>Store and index the vectors</h3>
+      <p class="sb">Where they live, how they are partitioned, and who is allowed to match against them.</p>
+      <div class="grid">
+        <a class="cx" data-d="1" data-t="1.4 is where, 1.5 is how well" href="task-1-5.html#s2">1.4 is where, 1.5 is how well<b class="b1">1.5</b></a>
+        <a class="cx" data-d="1" data-t="bedrock knowledge bases" href="task-1-4.html#s1">Bedrock Knowledge Bases<b class="b1">1.4</b></a>
+        <a class="cx" data-d="1" data-t="opensearch serverless" href="task-1-1.html#s3">OpenSearch Serverless<b class="b1">1.1</b></a>
+        <a class="cx" data-d="1" data-t="opensearch neural plugin" href="task-1-4.html#s1">OpenSearch neural plugin<b class="b1">1.4</b></a>
+        <a class="cx" data-d="1" data-t="saas connector rule" href="task-1-1.html#s3">SaaS connector rule<b class="b1">1.1</b></a>
+        <a class="cx" data-d="1" data-t="amazon s3 vectors" href="task-1-1.html#s3">Amazon S3 Vectors<b class="b1">1.1</b></a>
+        <a class="cx" data-d="1" data-t="aurora postgresql pgvector" href="task-1-1.html#s3">Aurora PostgreSQL pgvector<b class="b1">1.1</b></a>
+        <a class="cx" data-d="1" data-t="amazon neptune analytics" href="task-1-1.html#s3">Amazon Neptune Analytics<b class="b1">1.1</b></a>
+        <a class="cx" data-d="1" data-t="graphrag" href="task-1-1.html#s3">GraphRAG<b class="b1">1.1</b></a>
+        <a class="cx" data-d="1" data-t="amazon dynamodb" href="task-1-4.html#s1">Amazon DynamoDB<b class="b1">1.4</b></a>
+        <a class="cx" data-d="1" data-t="rds metadata pre-filter" href="task-1-4.html#s1">RDS metadata pre-filter<b class="b1">1.4</b></a>
+        <a class="cx" data-d="1" data-t="pinecone / faiss" href="task-1-4.html#s1">Pinecone / Faiss<b class="b1">1.4</b></a>
+        <a class="cx" data-d="1" data-t="s3 raw file retrieval" href="task-1-4.html#s1">S3 raw file retrieval<b class="b1">1.4</b></a>
+        <a class="cx" data-d="1" data-t="index sharding" href="task-1-4.html#s3">Index sharding<b class="b1">1.4</b></a>
+        <a class="cx" data-d="1" data-t="parallel fan-out" href="task-1-4.html#s3">Parallel fan-out<b class="b1">1.4</b></a>
+        <a class="cx" data-d="1" data-t="query cache" href="task-1-4.html#s3">Query cache<b class="b1">1.4</b></a>
+        <a class="cx" data-d="1" data-t="unified router" href="task-1-4.html#s4">Unified router<b class="b1">1.4</b></a>
+        <a class="cx" data-d="1" data-t="fine-grained access control" href="task-1-4.html#s4">Fine-grained access control<b class="b1">1.4</b></a>
+        <a class="cx" data-d="1" data-t="silo / pool / bridge" href="task-1-5.html#s5">Silo / pool / bridge<b class="b1">1.5</b></a>
+        <a class="cx" data-d="1" data-t="tenant filter in query layer" href="task-1-5.html#s5">Tenant filter in query layer<b class="b1">1.5</b></a>
+        <a class="cx" data-d="1" data-t="cross-tenant leak risk" href="task-1-5.html#s5">Cross-tenant leak risk<b class="b1">1.5</b></a>
+      </div>
+    </div>
+    <div class="stage" id="s-choose-and-tune-the-ann-index">
+      <h3>Choose and tune the ANN index</h3>
+      <p class="sb">No best algorithm &mdash; benchmark against your own corpus and SLA.</p>
+      <div class="grid">
+        <a class="cx" data-d="5" data-t="hnsw" href="task-5-2.html#s4">HNSW<b class="b5">5.2</b></a>
+        <a class="cx" data-d="5" data-t="ivf" href="task-5-2.html#s4">IVF<b class="b5">5.2</b></a>
+        <a class="cx" data-d="5" data-t="lsh" href="task-5-2.html#s4">LSH<b class="b5">5.2</b></a>
+        <a class="cx" data-d="5" data-t="product quantization" href="task-5-2.html#s4">Product Quantization<b class="b5">5.2</b></a>
+        <a class="cx" data-d="4" data-t="voronoi clusters" href="task-4-2.html#t2">Voronoi clusters<b class="b4">4.2</b></a>
+        <a class="cx" data-d="4" data-t="m (graph degree)" href="task-4-2.html#t2">m (graph degree)<b class="b4">4.2</b></a>
+        <a class="cx" data-d="4" data-t="ef_construction" href="task-4-2.html#t2">ef_construction<b class="b4">4.2</b></a>
+        <a class="cx" data-d="4" data-t="ef_search" href="task-4-2.html#t2">ef_search<b class="b4">4.2</b></a>
+        <a class="cx" data-d="4" data-t="recall vs memory" href="task-4-2.html#t2">Recall vs memory<b class="b4">4.2</b></a>
+        <a class="cx" data-d="4" data-t="hierarchical indices" href="task-4-2.html#t2">Hierarchical indices<b class="b4">4.2</b></a>
+        <a class="cx" data-d="4" data-t="coarse-to-fine routing" href="task-4-2.html#t2">Coarse-to-fine routing<b class="b4">4.2</b></a>
+        <a class="cx" data-d="1" data-t="k-nn search" href="task-1-4.html#s1">k-NN search<b class="b1">1.4</b></a>
+        <a class="cx" data-d="5" data-t="cosine vs dot product" href="task-5-1.html#s5">Cosine vs dot product<b class="b5">5.1</b></a>
+      </div>
+    </div>
+    <div class="stage" id="s-tag-it-so-you-can-filter-it">
+      <h3>Tag it so you can filter it</h3>
+      <p class="sb">Vector similarity alone returns results that are legally dead or in the wrong jurisdiction.</p>
+      <div class="grid">
+        <a class="cx" data-d="1" data-t="taxonomies" href="task-1-4.html#s2">Taxonomies<b class="b1">1.4</b></a>
+        <a class="cx" data-d="1" data-t="structured attributes" href="task-1-4.html#s2">Structured attributes<b class="b1">1.4</b></a>
+        <a class="cx" data-d="1" data-t="ai-powered metadata tagging" href="task-1-4.html#s2">AI-powered metadata tagging<b class="b1">1.4</b></a>
+        <a class="cx" data-d="1" data-t="cross-reference graphs" href="task-1-4.html#s2">Cross-reference graphs<b class="b1">1.4</b></a>
+        <a class="cx" data-d="1" data-t="overturned-case blocking" href="task-1-4.html#s2">Overturned-case blocking<b class="b1">1.4</b></a>
+        <a class="cx" data-d="1" data-t="precedential value" href="task-1-5.html#s6">Precedential value<b class="b1">1.5</b></a>
+        <a class="cx" data-d="1" data-t="jurisdiction-aware filtering" href="task-1-5.html#s6">Jurisdiction-aware filtering<b class="b1">1.5</b></a>
+        <a class="cx" data-d="1" data-t="citation network analysis" href="task-1-5.html#s6">Citation network analysis<b class="b1">1.5</b></a>
+        <a class="cx" data-d="2" data-t="q business metadata extraction" href="task-2-5.html#s3">Q Business metadata extraction<b class="b2">2.5</b></a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="ph" id="pmodel">
+  <div class="wrap">
+    <div class="phh"><span class="pn" style="background:#6b4c9a">4</span><h2>Pick the model</h2><span class="pc">92 concepts</span></div>
+    <p class="phd">Shortlist, teach it your house style, and prove it is good enough before anyone sees it.</p>
+    <div class="stage" id="s-shortlist-the-candidates">
+      <h3>Shortlist the candidates</h3>
+      <p class="sb">Hard capability filters first, so you never benchmark a model that cannot do the job at all.</p>
+      <div class="grid">
+        <a class="cx" data-d="1" data-t="capability filtering" href="task-1-2.html#s1">Capability filtering<b class="b1">1.2</b></a>
+        <a class="cx" data-d="1" data-t="multimodal support" href="task-1-2.html#s1">Multimodal support<b class="b1">1.2</b></a>
+        <a class="cx" data-d="1" data-t="context window (100k+)" href="task-1-2.html#s1">Context window (100k+)<b class="b1">1.2</b></a>
+        <a class="cx" data-d="1" data-t="token overflow risk" href="task-1-2.html#s1">Token overflow risk<b class="b1">1.2</b></a>
+        <a class="cx" data-d="5" data-t="model families compared" href="task-5-1.html#s2">Model families compared<b class="b5">5.1</b></a>
+        <a class="cx" data-d="5" data-t="multi-model benchmarking" href="task-5-1.html#s2">Multi-model benchmarking<b class="b5">5.1</b></a>
+        <a class="cx" data-d="5" data-t="cost-performance analysis" href="task-5-1.html#s2">Cost-performance analysis<b class="b5">5.1</b></a>
+        <a class="cx" data-d="5" data-t="latency-to-quality ratio" href="task-5-1.html#s2">Latency-to-quality ratio<b class="b5">5.1</b></a>
+        <a class="cx" data-d="4" data-t="price-to-performance" href="task-4-1.html#s2">Price-to-performance<b class="b4">4.1</b></a>
+        <a class="cx" data-d="4" data-t="cost per accuracy point" href="task-4-1.html#s2">Cost per accuracy point<b class="b4">4.1</b></a>
+        <a class="cx" data-d="4" data-t="bedrock model evaluation" href="task-4-1.html#s2">Bedrock Model Evaluation<b class="b4">4.1</b></a>
+        <a class="cx" data-d="4" data-t="latency-optimized models" href="task-4-2.html#t1">Latency-optimized models<b class="b4">4.2</b></a>
+        <a class="cx" data-d="1" data-t="anthropic claude / llama / titan" href="task-1-1.html#s7">Anthropic Claude / Llama / Titan<b class="b1">1.1</b></a>
+        <a class="cx" data-d="1" data-t="amazon nova" href="task-1-6.html#s2">Amazon Nova<b class="b1">1.6</b></a>
+      </div>
+    </div>
+    <div class="stage" id="s-teach-it-your-house-style">
+      <h3>Teach it your house style</h3>
+      <p class="sb">Fine-tuning bakes behaviour in; prompting pays for it on every single call.</p>
+      <div class="grid">
+        <a class="cx" data-d="1" data-t="few-shot prompting" href="task-1-2.html#s2">Few-shot prompting<b class="b1">1.2</b></a>
+        <a class="cx" data-d="1" data-t="instruction drift" href="task-1-2.html#s2">Instruction drift<b class="b1">1.2</b></a>
+        <a class="cx" data-d="1" data-t="fine-tuning" href="task-1-2.html#s2">Fine-tuning<b class="b1">1.2</b></a>
+        <a class="cx" data-d="1" data-t="jsonl training pairs" href="task-1-2.html#s2">JSONL training pairs<b class="b1">1.2</b></a>
+        <a class="cx" data-d="1" data-t="100 300 curated pairs" href="task-1-2.html#s2">100&ndash;300 curated pairs<b class="b1">1.2</b></a>
+        <a class="cx" data-d="1" data-t="reference responses" href="task-1-2.html#s2">Reference responses<b class="b1">1.2</b></a>
+        <a class="cx" data-d="1" data-t="lora" href="task-1-2.html#s3">LoRA<b class="b1">1.2</b></a>
+        <a class="cx" data-d="1" data-t="frozen base weights" href="task-1-2.html#s3">Frozen base weights<b class="b1">1.2</b></a>
+        <a class="cx" data-d="1" data-t="trainable adapter  1%" href="task-1-2.html#s3">Trainable adapter &lt;1%<b class="b1">1.2</b></a>
+        <a class="cx" data-d="2" data-t="adapter swapping" href="task-2-2.html#s4">Adapter swapping<b class="b2">2.2</b></a>
+        <a class="cx" data-d="1" data-t="rlhf" href="task-1-1.html#s7">RLHF<b class="b1">1.1</b></a>
+        <a class="cx" data-d="2" data-t="bedrock custom model import" href="task-2-2.html#s2">Bedrock Custom Model Import<b class="b2">2.2</b></a>
+        <a class="cx" data-d="2" data-t="serverless custom model" href="task-2-2.html#s2">Serverless custom model<b class="b2">2.2</b></a>
+        <a class="cx" data-d="1" data-t="domain-adapted embeddings" href="task-1-5.html#s4">Domain-adapted embeddings<b class="b1">1.5</b></a>
+        <a class="cx" data-d="1" data-t="retraining loops" href="task-1-2.html#s5">Retraining loops<b class="b1">1.2</b></a>
+        <a class="cx" data-d="1" data-t="adapter v2, v3" href="task-1-2.html#s5">Adapter v2, v3<b class="b1">1.2</b></a>
+      </div>
+    </div>
+    <div class="stage" id="s-prove-it-before-anyone-sees-it">
+      <h3>Prove it before anyone sees it</h3>
+      <p class="sb">Three tiers, because automated metrics cannot read meaning and humans cannot read 50,000 documents.</p>
+      <div class="grid">
+        <a class="cx" data-d="1" data-t="tier 1: automatic evaluation" href="task-1-2.html#s4">Tier 1: automatic evaluation<b class="b1">1.2</b></a>
+        <a class="cx" data-d="1" data-t="schema validators" href="task-1-2.html#s4">Schema validators<b class="b1">1.2</b></a>
+        <a class="cx" data-d="1" data-t="bleu (precision)" href="task-1-2.html#s6">BLEU (precision)<b class="b1">1.2</b></a>
+        <a class="cx" data-d="1" data-t="rouge (recall)" href="task-1-2.html#s6">ROUGE (recall)<b class="b1">1.2</b></a>
+        <a class="cx" data-d="1" data-t="n-gram overlap" href="task-1-2.html#s6">n-gram overlap<b class="b1">1.2</b></a>
+        <a class="cx" data-d="1" data-t="negation blindness" href="task-1-2.html#s6">Negation blindness<b class="b1">1.2</b></a>
+        <a class="cx" data-d="1" data-t="tier 2: llm-as-a-judge" href="task-1-2.html#s4">Tier 2: LLM-as-a-judge<b class="b1">1.2</b></a>
+        <a class="cx" data-d="1" data-t="grading rubric" href="task-1-2.html#s4">Grading rubric<b class="b1">1.2</b></a>
+        <a class="cx" data-d="1" data-t="tier 3: human sign-off" href="task-1-2.html#s4">Tier 3: human sign-off<b class="b1">1.2</b></a>
+        <a class="cx" data-d="1" data-t="latency/cost are not evaluation" href="task-1-2.html#s4">Latency/cost are NOT evaluation<b class="b1">1.2</b></a>
+        <a class="cx" data-d="5" data-t="four quality dimensions" href="task-5-1.html#s1">Four quality dimensions<b class="b5">5.1</b></a>
+        <a class="cx" data-d="5" data-t="relevance" href="task-5-1.html#s1">Relevance<b class="b5">5.1</b></a>
+        <a class="cx" data-d="5" data-t="factual accuracy" href="task-5-1.html#s1">Factual accuracy<b class="b5">5.1</b></a>
+        <a class="cx" data-d="5" data-t="consistency" href="task-5-1.html#s1">Consistency<b class="b5">5.1</b></a>
+        <a class="cx" data-d="5" data-t="fluency" href="task-5-1.html#s1">Fluency<b class="b5">5.1</b></a>
+        <a class="cx" data-d="5" data-t="domain dimensions" href="task-5-1.html#s1">Domain dimensions<b class="b5">5.1</b></a>
+        <a class="cx" data-d="5" data-t="never self-judge" href="task-5-1.html#s1">Never self-judge<b class="b5">5.1</b></a>
+        <a class="cx" data-d="5" data-t="evaluator model" href="task-5-1.html#s1">Evaluator model<b class="b5">5.1</b></a>
+        <a class="cx" data-d="5" data-t="custom rubrics" href="task-5-1.html#s1">Custom rubrics<b class="b5">5.1</b></a>
+        <a class="cx" data-d="5" data-t="bring your own inference" href="task-5-1.html#s1">Bring Your Own Inference<b class="b5">5.1</b></a>
+        <a class="cx" data-d="5" data-t="weighted aggregation" href="task-5-1.html#s1">Weighted aggregation<b class="b5">5.1</b></a>
+        <a class="cx" data-d="5" data-t="dataset diversity" href="task-5-1.html#s1">Dataset diversity<b class="b5">5.1</b></a>
+        <a class="cx" data-d="5" data-t="retrieve-only evaluation" href="task-5-1.html#s5">Retrieve-only evaluation<b class="b5">5.1</b></a>
+        <a class="cx" data-d="5" data-t="retrieve-and-generate" href="task-5-1.html#s5">Retrieve-and-generate<b class="b5">5.1</b></a>
+        <a class="cx" data-d="5" data-t="root-cause isolation" href="task-5-1.html#s5">Root-cause isolation<b class="b5">5.1</b></a>
+        <a class="cx" data-d="5" data-t="citation precision" href="task-5-1.html#s5">Citation precision<b class="b5">5.1</b></a>
+        <a class="cx" data-d="5" data-t="citation coverage" href="task-5-1.html#s5">Citation coverage<b class="b5">5.1</b></a>
+        <a class="cx" data-d="5" data-t="ground-truth triples" href="task-5-1.html#s5">Ground-truth triples<b class="b5">5.1</b></a>
+        <a class="cx" data-d="5" data-t="bedrock evaluations" href="task-5-2.html#s4">Bedrock Evaluations<b class="b5">5.2</b></a>
+      </div>
+    </div>
+    <div class="stage" id="s-attack-it-on-purpose">
+      <h3>Attack it on purpose</h3>
+      <p class="sb">Red teaming, slice analysis and the failure modes that only show at 50,000 documents a day.</p>
+      <div class="grid">
+        <a class="cx" data-d="1" data-t="red teaming" href="task-1-2.html#s5">Red teaming<b class="b1">1.2</b></a>
+        <a class="cx" data-d="1" data-t="adversarial inputs" href="task-1-2.html#s5">Adversarial inputs<b class="b1">1.2</b></a>
+        <a class="cx" data-d="1" data-t="negated-statement trap" href="task-1-2.html#s5">Negated-statement trap<b class="b1">1.2</b></a>
+        <a class="cx" data-d="1" data-t="slice analysis" href="task-1-2.html#s5">Slice analysis<b class="b1">1.2</b></a>
+        <a class="cx" data-d="1" data-t="ocr failure analysis" href="task-1-2.html#s5">OCR failure analysis<b class="b1">1.2</b></a>
+        <a class="cx" data-d="1" data-t="json parsing crashes" href="task-1-2.html#s5">JSON parsing crashes<b class="b1">1.2</b></a>
+        <a class="cx" data-d="1" data-t="clinical hallucinations" href="task-1-2.html#s5">Clinical hallucinations<b class="b1">1.2</b></a>
+        <a class="cx" data-d="1" data-t="internal confidence drops" href="task-1-2.html#s5">Internal confidence drops<b class="b1">1.2</b></a>
+        <a class="cx" data-d="3" data-t="attack pattern generator" href="task-3-1.html#s5">Attack pattern generator<b class="b3">3.1</b></a>
+        <a class="cx" data-d="3" data-t="automated testing engine" href="task-3-1.html#s5">Automated testing engine<b class="b3">3.1</b></a>
+        <a class="cx" data-d="3" data-t="vulnerability analyzer" href="task-3-1.html#s5">Vulnerability analyzer<b class="b3">3.1</b></a>
+        <a class="cx" data-d="3" data-t="sagemaker safety classifiers" href="task-3-1.html#s5">SageMaker Safety Classifiers<b class="b3">3.1</b></a>
+        <a class="cx" data-d="1" data-t="edge-case testing" href="task-1-6.html#s5">Edge-case testing<b class="b1">1.6</b></a>
+        <a class="cx" data-d="1" data-t="boundary conditions" href="task-1-6.html#s5">Boundary conditions<b class="b1">1.6</b></a>
+      </div>
+    </div>
+    <div class="stage" id="s-check-it-is-fair">
+      <h3>Check it is fair</h3>
+      <p class="sb">Bias is measured, not asserted &mdash; and aggregate accuracy hides a failing cohort.</p>
+      <div class="grid">
+        <a class="cx" data-d="3" data-t="sagemaker clarify" href="task-3-3.html#s3">SageMaker Clarify<b class="b3">3.3</b></a>
+        <a class="cx" data-d="3" data-t="dppl" href="task-3-3.html#s3">DPPL<b class="b3">3.3</b></a>
+        <a class="cx" data-d="3" data-t="disparate impact (di)" href="task-3-3.html#s3">Disparate Impact (DI)<b class="b3">3.3</b></a>
+        <a class="cx" data-d="3" data-t="di   0.8 red flag" href="task-3-3.html#s3">DI &lt; 0.8 red flag<b class="b3">3.3</b></a>
+        <a class="cx" data-d="3" data-t="dcr" href="task-3-3.html#s3">DCR<b class="b3">3.3</b></a>
+        <a class="cx" data-d="3" data-t="pre-training bias" href="task-3-3.html#s3">Pre-training bias<b class="b3">3.3</b></a>
+        <a class="cx" data-d="3" data-t="post-training bias" href="task-3-3.html#s3">Post-training bias<b class="b3">3.3</b></a>
+        <a class="cx" data-d="3" data-t="demographic parity" href="task-3-4.html#s2">Demographic parity<b class="b3">3.4</b></a>
+        <a class="cx" data-d="3" data-t="equal opportunity" href="task-3-4.html#s2">Equal opportunity<b class="b3">3.4</b></a>
+        <a class="cx" data-d="3" data-t="equalized odds" href="task-3-4.html#s2">Equalized odds<b class="b3">3.4</b></a>
+        <a class="cx" data-d="3" data-t="counterfactual fairness" href="task-3-4.html#s2">Counterfactual fairness<b class="b3">3.4</b></a>
+        <a class="cx" data-d="3" data-t="group vs individual fairness" href="task-3-4.html#s2">Group vs individual fairness<b class="b3">3.4</b></a>
+        <a class="cx" data-d="3" data-t="completeness bias" href="task-3-4.html#s2">Completeness bias<b class="b3">3.4</b></a>
+        <a class="cx" data-d="3" data-t="medical literacy axis" href="task-3-4.html#s2">Medical literacy axis<b class="b3">3.4</b></a>
+        <a class="cx" data-d="3" data-t="judge model bias" href="task-3-4.html#s2">Judge model bias<b class="b3">3.4</b></a>
+        <a class="cx" data-d="3" data-t="ensemble judging" href="task-3-4.html#s2">Ensemble judging<b class="b3">3.4</b></a>
+        <a class="cx" data-d="3" data-t="human calibration" href="task-3-4.html#s2">Human calibration<b class="b3">3.4</b></a>
+        <a class="cx" data-d="3" data-t="disaggregated metrics" href="task-3-4.html#s3">Disaggregated metrics<b class="b3">3.4</b></a>
+        <a class="cx" data-d="3" data-t="token count as bias proxy" href="task-3-4.html#s2">Token count as bias proxy<b class="b3">3.4</b></a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="ph" id="passemble">
+  <div class="wrap">
+    <div class="phh"><span class="pn" style="background:#6b4c9a">5</span><h2>Assemble</h2><span class="pc">117 concepts</span></div>
+    <p class="phd">The prompt, the retrieval, and whatever decides the next step.</p>
+    <div class="stage" id="s-write-and-govern-the-prompt">
+      <h3>Write and govern the prompt</h3>
+      <p class="sb">A prompt is production code: reviewed, versioned, tested and provable after the fact.</p>
+      <div class="grid">
+        <a class="cx" data-d="1" data-t="prompt as a code artifact" href="task-1-6.html#s1">Prompt as a code artifact<b class="b1">1.6</b></a>
+        <a class="cx" data-d="1" data-t="three-layer control architecture" href="task-1-6.html#s1">Three-layer control architecture<b class="b1">1.6</b></a>
+        <a class="cx" data-d="1" data-t="system prompt" href="task-1-6.html#s2">System prompt<b class="b1">1.6</b></a>
+        <a class="cx" data-d="1" data-t="persona" href="task-1-6.html#s2">Persona<b class="b1">1.6</b></a>
+        <a class="cx" data-d="1" data-t="constraints over instructions" href="task-1-6.html#s2">Constraints over instructions<b class="b1">1.6</b></a>
+        <a class="cx" data-d="1" data-t="escalation rules" href="task-1-6.html#s2">Escalation rules<b class="b1">1.6</b></a>
+        <a class="cx" data-d="1" data-t="parameterized templates" href="task-1-6.html#s4">Parameterized templates<b class="b1">1.6</b></a>
+        <a class="cx" data-d="1" data-t="runtime injection" href="task-1-6.html#s4">Runtime injection<b class="b1">1.6</b></a>
+        <a class="cx" data-d="1" data-t="prompt drift" href="task-1-6.html#s4">Prompt drift<b class="b1">1.6</b></a>
+        <a class="cx" data-d="1" data-t="bedrock prompt management" href="task-1-6.html#s4">Bedrock Prompt Management<b class="b1">1.6</b></a>
+        <a class="cx" data-d="1" data-t="version pointers (v7/v8)" href="task-1-6.html#s4">Version pointers (v7/v8)<b class="b1">1.6</b></a>
+        <a class="cx" data-d="1" data-t="zero-code rollback" href="task-1-6.html#s4">Zero-code rollback<b class="b1">1.6</b></a>
+        <a class="cx" data-d="1" data-t="three-tier approval gate" href="task-1-6.html#s4">Three-tier approval gate<b class="b1">1.6</b></a>
+        <a class="cx" data-d="1" data-t="separation of duties" href="task-1-6.html#s4">Separation of duties<b class="b1">1.6</b></a>
+        <a class="cx" data-d="2" data-t="prompt registry" href="task-2-5.html#s6">Prompt registry<b class="b2">2.5</b></a>
+        <a class="cx" data-d="5" data-t="prompt complexity metrics" href="task-5-2.html#s5">Prompt complexity metrics<b class="b5">5.2</b></a>
+        <a class="cx" data-d="5" data-t="instruction competition" href="task-5-2.html#s3">Instruction competition<b class="b5">5.2</b></a>
+        <a class="cx" data-d="5" data-t="task-specific templates" href="task-5-2.html#s3">Task-specific templates<b class="b5">5.2</b></a>
+        <a class="cx" data-d="5" data-t="unsubstituted placeholders" href="task-5-2.html#s5">Unsubstituted placeholders<b class="b5">5.2</b></a>
+        <a class="cx" data-d="5" data-t="meta-discussion signal" href="task-5-2.html#s5">Meta-discussion signal<b class="b5">5.2</b></a>
+        <a class="cx" data-d="1" data-t="reusable prompt components" href="task-1-6.html#s7">Reusable prompt components<b class="b1">1.6</b></a>
+      </div>
+    </div>
+    <div class="stage" id="s-shape-the-output">
+      <h3>Shape the output</h3>
+      <p class="sb">Text instructions ask. Schema enforces.</p>
+      <div class="grid">
+        <a class="cx" data-d="1" data-t="json schema templates" href="task-1-6.html#s2">JSON Schema templates<b class="b1">1.6</b></a>
+        <a class="cx" data-d="1" data-t="required disclaimer field" href="task-1-6.html#s2">Required disclaimer field<b class="b1">1.6</b></a>
+        <a class="cx" data-d="1" data-t="structural enforcement" href="task-1-6.html#s2">Structural enforcement<b class="b1">1.6</b></a>
+        <a class="cx" data-d="1" data-t="output format specification" href="task-1-6.html#s6">Output format specification<b class="b1">1.6</b></a>
+        <a class="cx" data-d="1" data-t="structured inputs" href="task-1-6.html#s6">Structured inputs<b class="b1">1.6</b></a>
+        <a class="cx" data-d="1" data-t="chain-of-thought" href="task-1-6.html#s6">Chain-of-Thought<b class="b1">1.6</b></a>
+        <a class="cx" data-d="1" data-t="why cot works" href="task-1-6.html#s6">Why CoT works<b class="b1">1.6</b></a>
+        <a class="cx" data-d="1" data-t="cot auditability" href="task-1-6.html#s6">CoT auditability<b class="b1">1.6</b></a>
+        <a class="cx" data-d="2" data-t="workflow-based cot" href="task-2-1.html#s2">Workflow-based CoT<b class="b2">2.1</b></a>
+        <a class="cx" data-d="5" data-t="cot as diagnostic" href="task-5-2.html#s3">CoT as diagnostic<b class="b5">5.2</b></a>
+        <a class="cx" data-d="3" data-t="reasoning displays" href="task-3-4.html#s1">Reasoning displays<b class="b3">3.4</b></a>
+        <a class="cx" data-d="4" data-t="temperature" href="task-4-2.html#t4">Temperature<b class="b4">4.2</b></a>
+        <a class="cx" data-d="4" data-t="top-k" href="task-4-2.html#t4">Top-K<b class="b4">4.2</b></a>
+        <a class="cx" data-d="4" data-t="top-p (nucleus)" href="task-4-2.html#t4">Top-P (nucleus)<b class="b4">4.2</b></a>
+        <a class="cx" data-d="1" data-t="never tune both" href="task-1-3.html#s4">Never tune both<b class="b1">1.3</b></a>
+        <a class="cx" data-d="1" data-t="max tokens" href="task-1-3.html#s4">Max tokens<b class="b1">1.3</b></a>
+        <a class="cx" data-d="1" data-t="determinism 0.0 0.2" href="task-1-3.html#s4">Determinism 0.0&ndash;0.2<b class="b1">1.3</b></a>
+      </div>
+    </div>
+    <div class="stage" id="s-retrieve-the-right-pieces">
+      <h3>Retrieve the right pieces</h3>
+      <p class="sb">Query handling, hybrid search and a reranker &mdash; then citations so a human can check it.</p>
+      <div class="grid">
+        <a class="cx" data-d="1" data-t="query expansion (+23% recall)" href="task-1-5.html#s7">Query expansion (+23% recall)<b class="b1">1.5</b></a>
+        <a class="cx" data-d="1" data-t="query decomposition" href="task-1-5.html#s7">Query decomposition<b class="b1">1.5</b></a>
+        <a class="cx" data-d="1" data-t="parallel sub-queries" href="task-1-5.html#s7">Parallel sub-queries<b class="b1">1.5</b></a>
+        <a class="cx" data-d="4" data-t="query normalisation" href="task-4-2.html#t2">Query normalisation<b class="b4">4.2</b></a>
+        <a class="cx" data-d="4" data-t="spelling correction" href="task-4-2.html#t2">Spelling correction<b class="b4">4.2</b></a>
+        <a class="cx" data-d="1" data-t="hybrid search" href="task-1-5.html#s6">Hybrid search<b class="b1">1.5</b></a>
+        <a class="cx" data-d="1" data-t="bm25 sparse search" href="task-1-5.html#s6">BM25 sparse search<b class="b1">1.5</b></a>
+        <a class="cx" data-d="1" data-t="overridesearchtype=hybrid" href="task-1-5.html#s6">OverrideSearchType=HYBRID<b class="b1">1.5</b></a>
+        <a class="cx" data-d="1" data-t="two-stage retrieval" href="task-1-5.html#s6">Two-stage retrieval<b class="b1">1.5</b></a>
+        <a class="cx" data-d="1" data-t="cohere / amazon rerank" href="task-1-5.html#s6">Cohere / Amazon Rerank<b class="b1">1.5</b></a>
+        <a class="cx" data-d="1" data-t="cross-attention scoring" href="task-1-5.html#s6">Cross-attention scoring<b class="b1">1.5</b></a>
+        <a class="cx" data-d="4" data-t="custom reranking weights" href="task-4-2.html#t2">Custom reranking weights<b class="b4">4.2</b></a>
+        <a class="cx" data-d="4" data-t="recency   authority boosts" href="task-4-2.html#t2">Recency &amp; authority boosts<b class="b4">4.2</b></a>
+        <a class="cx" data-d="2" data-t="dynamic rag (k=3 vs k=20)" href="task-2-5.html#s5">Dynamic RAG (k=3 vs k=20)<b class="b2">2.5</b></a>
+        <a class="cx" data-d="1" data-t="event-driven indexing" href="task-1-5.html#s7">Event-driven indexing<b class="b1">1.5</b></a>
+        <a class="cx" data-d="1" data-t="eventbridge pipes" href="task-1-5.html#s7">EventBridge Pipes<b class="b1">1.5</b></a>
+        <a class="cx" data-d="1" data-t="mandatory citations" href="task-1-5.html#s8">Mandatory citations<b class="b1">1.5</b></a>
+        <a class="cx" data-d="1" data-t="chunk source mapping" href="task-1-5.html#s8">Chunk&rarr;source mapping<b class="b1">1.5</b></a>
+        <a class="cx" data-d="3" data-t="source attribution" href="task-3-4.html#s1">Source attribution<b class="b3">3.4</b></a>
+        <a class="cx" data-d="3" data-t="multi-step citation propagation" href="task-3-4.html#s1">Multi-step citation propagation<b class="b3">3.4</b></a>
+        <a class="cx" data-d="3" data-t="citation networks" href="task-3-4.html#s1">Citation networks<b class="b3">3.4</b></a>
+        <a class="cx" data-d="4" data-t="vector result caching" href="task-4-2.html#t2">Vector result caching<b class="b4">4.2</b></a>
+      </div>
+    </div>
+    <div class="stage" id="s-decide-the-next-step">
+      <h3>Decide the next step</h3>
+      <p class="sb">Deterministic graph or autonomous agent &mdash; a compliance decision more than a technical one.</p>
+      <div class="grid">
+        <a class="cx" data-d="1" data-t="bedrock flows (node-based)" href="task-1-1.html#s6">Bedrock Flows (node-based)<b class="b1">1.1</b></a>
+        <a class="cx" data-d="1" data-t="agents are non-deterministic" href="task-1-1.html#s6">Agents are non-deterministic<b class="b1">1.1</b></a>
+        <a class="cx" data-d="1" data-t="bedrock prompt flows" href="task-1-6.html#s7">Bedrock Prompt Flows<b class="b1">1.6</b></a>
+        <a class="cx" data-d="1" data-t="deterministic dag" href="task-1-6.html#s7">Deterministic DAG<b class="b1">1.6</b></a>
+        <a class="cx" data-d="1" data-t="condition / iterator nodes" href="task-1-6.html#s7">Condition / Iterator nodes<b class="b1">1.6</b></a>
+        <a class="cx" data-d="1" data-t="pre/post-processing nodes" href="task-1-6.html#s7">Pre/post-processing nodes<b class="b1">1.6</b></a>
+        <a class="cx" data-d="2" data-t="bedrock agents" href="task-2-1.html#s1">Bedrock Agents<b class="b2">2.1</b></a>
+        <a class="cx" data-d="2" data-t="react loop" href="task-2-1.html#s1">ReAct loop<b class="b2">2.1</b></a>
+        <a class="cx" data-d="2" data-t="action groups" href="task-2-1.html#s1">Action groups<b class="b2">2.1</b></a>
+        <a class="cx" data-d="1" data-t="flows vs agents matrix" href="task-1-6.html#s7">Flows vs Agents matrix<b class="b1">1.6</b></a>
+        <a class="cx" data-d="2" data-t="step functions react" href="task-2-1.html#s2">Step Functions ReAct<b class="b2">2.1</b></a>
+        <a class="cx" data-d="2" data-t="macro-deterministic" href="task-2-1.html#s2">Macro-deterministic<b class="b2">2.1</b></a>
+        <a class="cx" data-d="2" data-t="problem decomposition" href="task-2-1.html#s2">Problem decomposition<b class="b2">2.1</b></a>
+        <a class="cx" data-d="2" data-t="reasoning validation" href="task-2-1.html#s3">Reasoning validation<b class="b2">2.1</b></a>
+        <a class="cx" data-d="2" data-t="consistency check" href="task-2-1.html#s3">Consistency check<b class="b2">2.1</b></a>
+        <a class="cx" data-d="2" data-t="evaluator / judge llm" href="task-2-1.html#s3">Evaluator / judge LLM<b class="b2">2.1</b></a>
+        <a class="cx" data-d="2" data-t="flows for non-technical users" href="task-2-5.html#s2">Flows for non-technical users<b class="b2">2.5</b></a>
+        <a class="cx" data-d="1" data-t="clarification loops" href="task-1-6.html#s3">Clarification loops<b class="b1">1.6</b></a>
+        <a class="cx" data-d="1" data-t="intent classification" href="task-1-6.html#s3">Intent classification<b class="b1">1.6</b></a>
+        <a class="cx" data-d="1" data-t="comprehend custom classifier" href="task-1-6.html#s3">Comprehend custom classifier<b class="b1">1.6</b></a>
+      </div>
+    </div>
+    <div class="stage" id="s-give-it-memory-and-tools">
+      <h3>Give it memory and tools</h3>
+      <p class="sb">Models are stateless. Everything that feels like memory is infrastructure you built.</p>
+      <div class="grid">
+        <a class="cx" data-d="1" data-t="stateless models" href="task-1-6.html#s3">Stateless models<b class="b1">1.6</b></a>
+        <a class="cx" data-d="1" data-t="dynamodb session state" href="task-1-6.html#s3">DynamoDB session state<b class="b1">1.6</b></a>
+        <a class="cx" data-d="1" data-t="ttl as retention policy" href="task-1-6.html#s3">TTL as retention policy<b class="b1">1.6</b></a>
+        <a class="cx" data-d="1" data-t="gdpr right to be forgotten" href="task-1-6.html#s3">GDPR right to be forgotten<b class="b1">1.6</b></a>
+        <a class="cx" data-d="1" data-t="hybrid sliding window" href="task-1-3.html#s4">Hybrid sliding window<b class="b1">1.3</b></a>
+        <a class="cx" data-d="2" data-t="operational memory" href="task-2-1.html#s1">Operational memory<b class="b2">2.1</b></a>
+        <a class="cx" data-d="2" data-t="tactical memory" href="task-2-1.html#s1">Tactical memory<b class="b2">2.1</b></a>
+        <a class="cx" data-d="2" data-t="strategic memory" href="task-2-1.html#s1">Strategic memory<b class="b2">2.1</b></a>
+        <a class="cx" data-d="2" data-t="amazon elasticache" href="task-2-1.html#s1">Amazon ElastiCache<b class="b2">2.1</b></a>
+        <a class="cx" data-d="2" data-t="prompt chaining" href="task-2-5.html#s5">Prompt chaining<b class="b2">2.5</b></a>
+        <a class="cx" data-d="2" data-t="compression / summarization" href="task-2-5.html#s5">Compression / summarization<b class="b2">2.5</b></a>
+        <a class="cx" data-d="2" data-t="key-information extraction" href="task-2-5.html#s5">Key-information extraction<b class="b2">2.5</b></a>
+        <a class="cx" data-d="2" data-t="openapi schemas" href="task-2-1.html#s7">OpenAPI schemas<b class="b2">2.1</b></a>
+        <a class="cx" data-d="2" data-t="tool descriptions matter" href="task-2-1.html#s7">Tool descriptions matter<b class="b2">2.1</b></a>
+        <a class="cx" data-d="2" data-t="parameter validation" href="task-2-1.html#s7">Parameter validation<b class="b2">2.1</b></a>
+        <a class="cx" data-d="2" data-t="model-readable errors" href="task-2-1.html#s7">Model-readable errors<b class="b2">2.1</b></a>
+        <a class="cx" data-d="2" data-t="retryable / fixable / fatal" href="task-2-1.html#s7">Retryable / fixable / fatal<b class="b2">2.1</b></a>
+        <a class="cx" data-d="2" data-t="model context protocol" href="task-2-1.html#s8">Model Context Protocol<b class="b2">2.1</b></a>
+        <a class="cx" data-d="2" data-t="mcp vs action groups" href="task-2-1.html#s8">MCP vs action groups<b class="b2">2.1</b></a>
+        <a class="cx" data-d="2" data-t="tool discovery" href="task-2-1.html#s8">Tool discovery<b class="b2">2.1</b></a>
+        <a class="cx" data-d="2" data-t="lambda vs ecs hosting" href="task-2-1.html#s8">Lambda vs ECS hosting<b class="b2">2.1</b></a>
+        <a class="cx" data-d="1" data-t="function calling" href="task-1-5.html#s8">Function calling<b class="b1">1.5</b></a>
+      </div>
+    </div>
+    <div class="stage" id="s-more-than-one-agent">
+      <h3>More than one agent</h3>
+      <p class="sb">Specialists, a supervisor, and validation at every handoff.</p>
+      <div class="grid">
+        <a class="cx" data-d="2" data-t="single vs multi-agent" href="task-2-1.html#s1">Single vs multi-agent<b class="b2">2.1</b></a>
+        <a class="cx" data-d="2" data-t="aws strands agents" href="task-2-1.html#s1">AWS Strands Agents<b class="b2">2.1</b></a>
+        <a class="cx" data-d="2" data-t="aws agent squad" href="task-2-1.html#s1">AWS Agent Squad<b class="b2">2.1</b></a>
+        <a class="cx" data-d="2" data-t="task delegation" href="task-2-1.html#s1">Task delegation<b class="b2">2.1</b></a>
+        <a class="cx" data-d="2" data-t="agent squad supervision" href="task-2-5.html#s5">Agent Squad supervision<b class="b2">2.5</b></a>
+        <a class="cx" data-d="2" data-t="inter-agent handoff validation" href="task-2-5.html#s5">Inter-agent handoff validation<b class="b2">2.5</b></a>
+        <a class="cx" data-d="2" data-t="multi-agent drift" href="task-2-5.html#s5">Multi-agent drift<b class="b2">2.5</b></a>
+        <a class="cx" data-d="2" data-t="semantic consistency" href="task-2-5.html#s5">Semantic consistency<b class="b2">2.5</b></a>
+        <a class="cx" data-d="2" data-t="task-based routing" href="task-2-1.html#s5">Task-based routing<b class="b2">2.1</b></a>
+        <a class="cx" data-d="2" data-t="dynamic model selection" href="task-2-1.html#s5">Dynamic model selection<b class="b2">2.1</b></a>
+        <a class="cx" data-d="2" data-t="ensembles" href="task-2-1.html#s5">Ensembles<b class="b2">2.1</b></a>
+        <a class="cx" data-d="2" data-t="majority voting" href="task-2-1.html#s5">Majority voting<b class="b2">2.1</b></a>
+        <a class="cx" data-d="2" data-t="weighted averaging" href="task-2-1.html#s5">Weighted averaging<b class="b2">2.1</b></a>
+        <a class="cx" data-d="2" data-t="ranked fusion" href="task-2-4.html#s4">Ranked fusion<b class="b2">2.4</b></a>
+        <a class="cx" data-d="2" data-t="disagreement as escalation" href="task-2-1.html#s5">Disagreement as escalation<b class="b2">2.1</b></a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="ph" id="pdeploy">
+  <div class="wrap">
+    <div class="phh"><span class="pn" style="background:#6b4c9a">6</span><h2>Ship it</h2><span class="pc">144 concepts</span></div>
+    <p class="phd">Where it physically runs, how it reaches your systems, and who is allowed to call it.</p>
+    <div class="stage" id="s-where-the-model-physically-runs">
+      <h3>Where the model physically runs</h3>
+      <p class="sb">LLM deployment breaks every habit from traditional ML.</p>
+      <div class="grid">
+        <a class="cx" data-d="2" data-t="traditional ml vs llm" href="task-2-2.html#s1">Traditional ML vs LLM<b class="b2">2.2</b></a>
+        <a class="cx" data-d="2" data-t="100 500 gb artifacts" href="task-2-2.html#s1">100&ndash;500 GB artifacts<b class="b2">2.2</b></a>
+        <a class="cx" data-d="2" data-t="the timeout trap (20 40 min)" href="task-2-2.html#s1">The timeout trap (20&ndash;40 min)<b class="b2">2.2</b></a>
+        <a class="cx" data-d="2" data-t="60-minute health check" href="task-2-2.html#s1">60-minute health check<b class="b2">2.2</b></a>
+        <a class="cx" data-d="2" data-t="model sharding" href="task-2-2.html#s1">Model sharding<b class="b2">2.2</b></a>
+        <a class="cx" data-d="2" data-t="deepspeed / triton / fastertransformer" href="task-2-2.html#s1">DeepSpeed / Triton / FasterTransformer<b class="b2">2.2</b></a>
+        <a class="cx" data-d="2" data-t="ultraservers" href="task-2-2.html#s1">UltraServers<b class="b2">2.2</b></a>
+        <a class="cx" data-d="2" data-t="lazy loading" href="task-2-2.html#s1">Lazy loading<b class="b2">2.2</b></a>
+        <a class="cx" data-d="2" data-t="quantization fp32 int4" href="task-2-2.html#s1">Quantization FP32&rarr;INT4<b class="b2">2.2</b></a>
+        <a class="cx" data-d="2" data-t="continuous batching" href="task-2-2.html#s1">Continuous batching<b class="b2">2.2</b></a>
+        <a class="cx" data-d="2" data-t="bedrock on-demand" href="task-2-2.html#s2">Bedrock On-Demand<b class="b2">2.2</b></a>
+        <a class="cx" data-d="2" data-t="bedrock provisioned throughput" href="task-2-2.html#s2">Bedrock Provisioned Throughput<b class="b2">2.2</b></a>
+        <a class="cx" data-d="2" data-t="model units (mu)" href="task-2-2.html#s2">Model Units (MU)<b class="b2">2.2</b></a>
+        <a class="cx" data-d="2" data-t="tps sizing formula" href="task-2-2.html#s2">TPS sizing formula<b class="b2">2.2</b></a>
+        <a class="cx" data-d="2" data-t="sagemaker real-time" href="task-2-2.html#s2">SageMaker Real-Time<b class="b2">2.2</b></a>
+        <a class="cx" data-d="2" data-t="sagemaker serverless" href="task-2-2.html#s2">SageMaker Serverless<b class="b2">2.2</b></a>
+        <a class="cx" data-d="2" data-t="sagemaker asynchronous" href="task-2-2.html#s2">SageMaker Asynchronous<b class="b2">2.2</b></a>
+        <a class="cx" data-d="2" data-t="batch transform" href="task-2-2.html#s2">Batch Transform<b class="b2">2.2</b></a>
+        <a class="cx" data-d="2" data-t="lambda invokes, never hosts" href="task-2-2.html#s2">Lambda invokes, never hosts<b class="b2">2.2</b></a>
+        <a class="cx" data-d="2" data-t="multi-model endpoints" href="task-2-2.html#s4">Multi-Model Endpoints<b class="b2">2.2</b></a>
+        <a class="cx" data-d="2" data-t="why mmes fail for llms" href="task-2-2.html#s4">Why MMEs fail for LLMs<b class="b2">2.2</b></a>
+        <a class="cx" data-d="2" data-t="inference components" href="task-2-2.html#s4">Inference Components<b class="b2">2.2</b></a>
+        <a class="cx" data-d="2" data-t="dynamic lora adapters" href="task-2-2.html#s4">Dynamic LoRA adapters<b class="b2">2.2</b></a>
+      </div>
+    </div>
+    <div class="stage" id="s-wire-it-into-the-enterprise">
+      <h3>Wire it into the enterprise</h3>
+      <p class="sb">Legacy systems that cannot be rewritten, and one governed way in.</p>
+      <div class="grid">
+        <a class="cx" data-d="1" data-t="eventbridge putevents" href="task-1-1.html#s5">EventBridge PutEvents<b class="b1">1.1</b></a>
+        <a class="cx" data-d="1" data-t="fire-and-forget routing" href="task-1-1.html#s5">Fire-and-forget routing<b class="b1">1.1</b></a>
+        <a class="cx" data-d="1" data-t="sqs as shock absorber" href="task-1-1.html#s5">SQS as shock absorber<b class="b1">1.1</b></a>
+        <a class="cx" data-d="1" data-t="compliance review queue" href="task-1-1.html#s5">Compliance review queue<b class="b1">1.1</b></a>
+        <a class="cx" data-d="2" data-t="api gateway mapping templates" href="task-2-3.html#s2">API Gateway mapping templates<b class="b2">2.3</b></a>
+        <a class="cx" data-d="2" data-t="soap / xml translation" href="task-2-3.html#s2">SOAP / XML translation<b class="b2">2.3</b></a>
+        <a class="cx" data-d="2" data-t="regional vs edge-optimized" href="task-2-3.html#s2">Regional vs edge-optimized<b class="b2">2.3</b></a>
+        <a class="cx" data-d="2" data-t="custom domain mappings" href="task-2-3.html#s2">Custom domain mappings<b class="b2">2.3</b></a>
+        <a class="cx" data-d="2" data-t="lambda protocol adapters" href="task-2-3.html#s2">Lambda protocol adapters<b class="b2">2.3</b></a>
+        <a class="cx" data-d="2" data-t="ebcdic to utf-8" href="task-2-3.html#s2">EBCDIC to UTF-8<b class="b2">2.3</b></a>
+        <a class="cx" data-d="2" data-t="reserved concurrency" href="task-2-3.html#s2">Reserved concurrency<b class="b2">2.3</b></a>
+        <a class="cx" data-d="2" data-t="provisioned concurrency" href="task-2-3.html#s2">Provisioned concurrency<b class="b2">2.3</b></a>
+        <a class="cx" data-d="2" data-t="amazon eventbridge" href="task-2-3.html#s2">Amazon EventBridge<b class="b2">2.3</b></a>
+        <a class="cx" data-d="2" data-t="event pattern matching" href="task-2-3.html#s2">Event pattern matching<b class="b2">2.3</b></a>
+        <a class="cx" data-d="2" data-t="dead-letter queues" href="task-2-3.html#s2">Dead-letter queues<b class="b2">2.3</b></a>
+        <a class="cx" data-d="2" data-t="input transformers" href="task-2-3.html#s3">Input transformers<b class="b2">2.3</b></a>
+        <a class="cx" data-d="2" data-t="step functions parallel state" href="task-2-3.html#s2">Step Functions Parallel state<b class="b2">2.3</b></a>
+        <a class="cx" data-d="2" data-t="map state" href="task-2-3.html#s2">Map state<b class="b2">2.3</b></a>
+        <a class="cx" data-d="2" data-t="amazon mq (jms/amqp)" href="task-2-3.html#s2">Amazon MQ (JMS/AMQP)<b class="b2">2.3</b></a>
+        <a class="cx" data-d="2" data-t="sqs fifo" href="task-2-3.html#s3">SQS FIFO<b class="b2">2.3</b></a>
+        <a class="cx" data-d="2" data-t="message group ids" href="task-2-3.html#s3">Message Group IDs<b class="b2">2.3</b></a>
+        <a class="cx" data-d="2" data-t="idempotency" href="task-2-3.html#s3">Idempotency<b class="b2">2.3</b></a>
+        <a class="cx" data-d="2" data-t="at-least-once webhooks" href="task-2-3.html#s3">At-least-once webhooks<b class="b2">2.3</b></a>
+        <a class="cx" data-d="2" data-t="appsync vtl resolvers" href="task-2-3.html#s3">AppSync VTL resolvers<b class="b2">2.3</b></a>
+        <a class="cx" data-d="2" data-t="amplify datastore" href="task-2-3.html#s3">Amplify DataStore<b class="b2">2.3</b></a>
+        <a class="cx" data-d="2" data-t="offline-first clients" href="task-2-3.html#s3">Offline-first clients<b class="b2">2.3</b></a>
+        <a class="cx" data-d="2" data-t="conflict resolution" href="task-2-3.html#s3">Conflict resolution<b class="b2">2.3</b></a>
+        <a class="cx" data-d="2" data-t="client libraries   sdks" href="task-2-3.html#s3">Client libraries &amp; SDKs<b class="b2">2.3</b></a>
+        <a class="cx" data-d="2" data-t="usage plans   api keys" href="task-2-3.html#s3">Usage plans &amp; API keys<b class="b2">2.3</b></a>
+        <a class="cx" data-d="2" data-t="crm field enrichment" href="task-2-5.html#s3">CRM field enrichment<b class="b2">2.5</b></a>
+        <a class="cx" data-d="2" data-t="enhance, don't replace" href="task-2-5.html#s3">Enhance, don't replace<b class="b2">2.5</b></a>
+        <a class="cx" data-d="2" data-t="bidirectional sync" href="task-2-5.html#s3">Bidirectional sync<b class="b2">2.5</b></a>
+        <a class="cx" data-d="2" data-t="hybrid orchestration" href="task-2-5.html#s5">Hybrid orchestration<b class="b2">2.5</b></a>
+        <a class="cx" data-d="2" data-t="declarative vs reactive" href="task-2-5.html#s5">Declarative vs reactive<b class="b2">2.5</b></a>
+      </div>
+    </div>
+    <div class="stage" id="s-one-governed-front-door">
+      <h3>One governed front door</h3>
+      <p class="sb">Without it: untrackable spend, inconsistent guardrails, no audit trail, and a rewrite per team on every model swap.</p>
+      <div class="grid">
+        <a class="cx" data-d="2" data-t="the genai gateway" href="task-2-3.html#s8">The GenAI Gateway<b class="b2">2.3</b></a>
+        <a class="cx" data-d="2" data-t="centralised access control" href="task-2-3.html#s8">Centralised access control<b class="b2">2.3</b></a>
+        <a class="cx" data-d="2" data-t="per-team rate limiting" href="task-2-3.html#s8">Per-team rate limiting<b class="b2">2.3</b></a>
+        <a class="cx" data-d="2" data-t="cost tracking   chargeback" href="task-2-3.html#s8">Cost tracking &amp; chargeback<b class="b2">2.3</b></a>
+        <a class="cx" data-d="2" data-t="centralised guardrails" href="task-2-3.html#s8">Centralised guardrails<b class="b2">2.3</b></a>
+        <a class="cx" data-d="2" data-t="model routing   fallback" href="task-2-3.html#s8">Model routing &amp; fallback<b class="b2">2.3</b></a>
+        <a class="cx" data-d="2" data-t="multi-level caching" href="task-2-3.html#s3">Multi-level caching<b class="b2">2.3</b></a>
+        <a class="cx" data-d="2" data-t="cache invalidation" href="task-2-3.html#s3">Cache invalidation<b class="b2">2.3</b></a>
+        <a class="cx" data-d="2" data-t="write-through caching" href="task-2-3.html#s3">Write-through caching<b class="b2">2.3</b></a>
+        <a class="cx" data-d="2" data-t="abstraction layer" href="task-2-3.html#s8">Abstraction layer<b class="b2">2.3</b></a>
+        <a class="cx" data-d="2" data-t="audit logging" href="task-2-3.html#s8">Audit logging<b class="b2">2.3</b></a>
+      </div>
+    </div>
+    <div class="stage" id="s-lock-down-who-can-call-it">
+      <h3>Lock down who can call it</h3>
+      <p class="sb">Identity, policy, keys and network &mdash; evaluated in that order on every request.</p>
+      <div class="grid">
+        <a class="cx" data-d="3" data-t="iam least privilege" href="task-3-2.html#s1">IAM least privilege<b class="b3">3.2</b></a>
+        <a class="cx" data-d="3" data-t="restrict by model" href="task-3-2.html#s1">Restrict by model<b class="b3">3.2</b></a>
+        <a class="cx" data-d="3" data-t="restrict by feature" href="task-3-2.html#s1">Restrict by feature<b class="b3">3.2</b></a>
+        <a class="cx" data-d="3" data-t="restrict by operation" href="task-3-2.html#s1">Restrict by operation<b class="b3">3.2</b></a>
+        <a class="cx" data-d="3" data-t="rbac" href="task-3-2.html#s1">RBAC<b class="b3">3.2</b></a>
+        <a class="cx" data-d="3" data-t="abac" href="task-3-2.html#s1">ABAC<b class="b3">3.2</b></a>
+        <a class="cx" data-d="3" data-t="condition keys" href="task-3-2.html#s1">Condition keys<b class="b3">3.2</b></a>
+        <a class="cx" data-d="3" data-t="aws:sourcevpce" href="task-3-2.html#s1">aws:sourceVpce<b class="b3">3.2</b></a>
+        <a class="cx" data-d="3" data-t="resource-based policies" href="task-3-2.html#s1">Resource-based policies<b class="b3">3.2</b></a>
+        <a class="cx" data-d="3" data-t="aws lake formation" href="task-3-2.html#s1">AWS Lake Formation<b class="b3">3.2</b></a>
+        <a class="cx" data-d="3" data-t="column / row / cell-level" href="task-3-2.html#s1">Column / row / cell-level<b class="b3">3.2</b></a>
+        <a class="cx" data-d="3" data-t="data catalogs" href="task-3-2.html#s1">Data catalogs<b class="b3">3.2</b></a>
+        <a class="cx" data-d="2" data-t="iam identity center" href="task-2-3.html#s4">IAM Identity Center<b class="b2">2.3</b></a>
+        <a class="cx" data-d="2" data-t="identity federation" href="task-2-3.html#s4">Identity federation<b class="b2">2.3</b></a>
+        <a class="cx" data-d="2" data-t="cognito pre-token lambda" href="task-2-3.html#s4">Cognito pre-token Lambda<b class="b2">2.3</b></a>
+        <a class="cx" data-d="2" data-t="jwt claim injection" href="task-2-3.html#s4">JWT claim injection<b class="b2">2.3</b></a>
+        <a class="cx" data-d="2" data-t="permission boundaries" href="task-2-3.html#s4">Permission boundaries<b class="b2">2.3</b></a>
+        <a class="cx" data-d="2" data-t="verified permissions" href="task-2-3.html#s4">Verified Permissions<b class="b2">2.3</b></a>
+        <a class="cx" data-d="2" data-t="cedar policy language" href="task-2-3.html#s4">Cedar policy language<b class="b2">2.3</b></a>
+        <a class="cx" data-d="2" data-t="aws kms" href="task-2-3.html#s4">AWS KMS<b class="b2">2.3</b></a>
+        <a class="cx" data-d="2" data-t="multi-region keys" href="task-2-3.html#s4">Multi-region keys<b class="b2">2.3</b></a>
+        <a class="cx" data-d="2" data-t="kms grants" href="task-2-3.html#s4">KMS grants<b class="b2">2.3</b></a>
+        <a class="cx" data-d="3" data-t="key rotation" href="task-3-2.html#s2">Key rotation<b class="b3">3.2</b></a>
+        <a class="cx" data-d="2" data-t="aws ram" href="task-2-3.html#s4">AWS RAM<b class="b2">2.3</b></a>
+        <a class="cx" data-d="3" data-t="service control policies" href="task-3-3.html#s3">Service Control Policies<b class="b3">3.3</b></a>
+        <a class="cx" data-d="3" data-t="scps never grant" href="task-3-3.html#s3">SCPs never grant<b class="b3">3.3</b></a>
+        <a class="cx" data-d="3" data-t="tag-based access control" href="task-3-3.html#s1">Tag-based access control<b class="b3">3.3</b></a>
+        <a class="cx" data-d="2" data-t="layered request lifecycle" href="task-2-3.html#s5">Layered request lifecycle<b class="b2">2.3</b></a>
+      </div>
+    </div>
+    <div class="stage" id="s-keep-the-traffic-private">
+      <h3>Keep the traffic private</h3>
+      <p class="sb">Bedrock is a public service by default.</p>
+      <div class="grid">
+        <a class="cx" data-d="3" data-t="aws privatelink" href="task-3-2.html#s1">AWS PrivateLink<b class="b3">3.2</b></a>
+        <a class="cx" data-d="3" data-t="interface endpoints" href="task-3-2.html#s1">Interface endpoints<b class="b3">3.2</b></a>
+        <a class="cx" data-d="3" data-t="gateway endpoints (s3/ddb)" href="task-3-2.html#s1">Gateway endpoints (S3/DDB)<b class="b3">3.2</b></a>
+        <a class="cx" data-d="3" data-t="eni with private ip" href="task-3-2.html#s1">ENI with private IP<b class="b3">3.2</b></a>
+        <a class="cx" data-d="3" data-t="security groups" href="task-3-2.html#s1">Security groups<b class="b3">3.2</b></a>
+        <a class="cx" data-d="3" data-t="network acls" href="task-3-2.html#s1">Network ACLs<b class="b3">3.2</b></a>
+        <a class="cx" data-d="3" data-t="private subnets" href="task-3-2.html#s1">Private subnets<b class="b3">3.2</b></a>
+        <a class="cx" data-d="3" data-t="egress filtering" href="task-3-2.html#s1">Egress filtering<b class="b3">3.2</b></a>
+        <a class="cx" data-d="2" data-t="endpoint policies" href="task-2-3.html#s4">Endpoint policies<b class="b2">2.3</b></a>
+        <a class="cx" data-d="2" data-t="aws waf" href="task-2-3.html#s4">AWS WAF<b class="b2">2.3</b></a>
+        <a class="cx" data-d="2" data-t="rate-based rules" href="task-2-3.html#s4">Rate-based rules<b class="b2">2.3</b></a>
+        <a class="cx" data-d="2" data-t="transit gateway" href="task-2-3.html#s6">Transit Gateway<b class="b2">2.3</b></a>
+        <a class="cx" data-d="2" data-t="black-hole routes" href="task-2-3.html#s6">Black-hole routes<b class="b2">2.3</b></a>
+        <a class="cx" data-d="2" data-t="network firewall" href="task-2-3.html#s6">Network Firewall<b class="b2">2.3</b></a>
+        <a class="cx" data-d="2" data-t="domain filtering" href="task-2-3.html#s6">Domain filtering<b class="b2">2.3</b></a>
+        <a class="cx" data-d="2" data-t="aws direct connect" href="task-2-3.html#s6">AWS Direct Connect<b class="b2">2.3</b></a>
+        <a class="cx" data-d="2" data-t="bgp routing policies" href="task-2-3.html#s6">BGP routing policies<b class="b2">2.3</b></a>
+        <a class="cx" data-d="2" data-t="aws outposts" href="task-2-3.html#s6">AWS Outposts<b class="b2">2.3</b></a>
+        <a class="cx" data-d="2" data-t="aws local zones" href="task-2-3.html#s6">AWS Local Zones<b class="b2">2.3</b></a>
+        <a class="cx" data-d="2" data-t="aws wavelength" href="task-2-3.html#s6">AWS Wavelength<b class="b2">2.3</b></a>
+        <a class="cx" data-d="2" data-t="move the model to the data" href="task-2-3.html#s6">Move the model to the data<b class="b2">2.3</b></a>
+        <a class="cx" data-d="2" data-t="aws control tower" href="task-2-3.html#s6">AWS Control Tower<b class="b2">2.3</b></a>
+        <a class="cx" data-d="2" data-t="data residency enforcement" href="task-2-3.html#s6">Data residency enforcement<b class="b2">2.3</b></a>
+        <a class="cx" data-d="2" data-t="filtering / anonymization / tokenization" href="task-2-3.html#s6">Filtering / anonymization / tokenization<b class="b2">2.3</b></a>
+        <a class="cx" data-d="2" data-t="route 53 failover" href="task-2-4.html#s3">Route 53 failover<b class="b2">2.4</b></a>
+        <a class="cx" data-d="2" data-t="active-active / active-passive" href="task-2-4.html#s3">Active-active / active-passive<b class="b2">2.4</b></a>
+      </div>
+    </div>
+    <div class="stage" id="s-ship-changes-safely">
+      <h3>Ship changes safely</h3>
+      <p class="sb">A GenAI pipeline tests behaviour, not just code.</p>
+      <div class="grid">
+        <a class="cx" data-d="2" data-t="aws codepipeline" href="task-2-3.html#s7">AWS CodePipeline<b class="b2">2.3</b></a>
+        <a class="cx" data-d="2" data-t="model evaluation stage" href="task-2-3.html#s7">Model evaluation stage<b class="b2">2.3</b></a>
+        <a class="cx" data-d="2" data-t="security scanning stage" href="task-2-3.html#s7">Security scanning stage<b class="b2">2.3</b></a>
+        <a class="cx" data-d="2" data-t="approval gate" href="task-2-3.html#s7">Approval gate<b class="b2">2.3</b></a>
+        <a class="cx" data-d="2" data-t="aws codebuild" href="task-2-3.html#s7">AWS CodeBuild<b class="b2">2.3</b></a>
+        <a class="cx" data-d="2" data-t="artifact caching" href="task-2-3.html#s7">Artifact caching<b class="b2">2.3</b></a>
+        <a class="cx" data-d="2" data-t="aws codedeploy" href="task-2-3.html#s7">AWS CodeDeploy<b class="b2">2.3</b></a>
+        <a class="cx" data-d="2" data-t="healthy host thresholds" href="task-2-3.html#s7">Healthy host thresholds<b class="b2">2.3</b></a>
+        <a class="cx" data-d="2" data-t="automatic rollback" href="task-2-3.html#s7">Automatic rollback<b class="b2">2.3</b></a>
+        <a class="cx" data-d="2" data-t="aws service catalog" href="task-2-3.html#s7">AWS Service Catalog<b class="b2">2.3</b></a>
+        <a class="cx" data-d="2" data-t="cloudformation custom resources" href="task-2-3.html#s7">CloudFormation custom resources<b class="b2">2.3</b></a>
+        <a class="cx" data-d="4" data-t="infrastructure as code" href="task-4-1.html#s3">Infrastructure as Code<b class="b4">4.1</b></a>
+        <a class="cx" data-d="5" data-t="quality gates in ci/cd" href="task-5-1.html#s4">Quality gates in CI/CD<b class="b5">5.1</b></a>
+        <a class="cx" data-d="5" data-t="release blocked" href="task-5-1.html#s4">RELEASE BLOCKED<b class="b5">5.1</b></a>
+        <a class="cx" data-d="5" data-t="joint artifact versioning" href="task-5-1.html#s4">Joint artifact versioning<b class="b5">5.1</b></a>
+        <a class="cx" data-d="5" data-t="a/b testing" href="task-5-1.html#s2">A/B testing<b class="b5">5.1</b></a>
+        <a class="cx" data-d="5" data-t="canary testing" href="task-5-1.html#s2">Canary testing<b class="b5">5.1</b></a>
+        <a class="cx" data-d="3" data-t="blue/green deployment" href="task-3-3.html#s4">Blue/green deployment<b class="b3">3.3</b></a>
+        <a class="cx" data-d="4" data-t="cloudwatch evidently" href="task-4-2.html#t1">CloudWatch Evidently<b class="b4">4.2</b></a>
+        <a class="cx" data-d="4" data-t="aws appconfig" href="task-4-2.html#t1">AWS AppConfig<b class="b4">4.2</b></a>
+        <a class="cx" data-d="2" data-t="parameter store" href="task-2-4.html#s4">Parameter Store<b class="b2">2.4</b></a>
+        <a class="cx" data-d="2" data-t="feature flags" href="task-2-4.html#s4">Feature flags<b class="b2">2.4</b></a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="ph" id="pserve">
+  <div class="wrap">
+    <div class="phh"><span class="pn" style="background:#1d6f68">7</span><h2>Serve a request</h2><span class="pc">131 concepts</span></div>
+    <p class="phd">Check it, stream it, and keep standing when something downstream falls over.</p>
+    <div class="stage" id="s-check-the-request-going-in">
+      <h3>Check the request going in</h3>
+      <p class="sb">Cheapest filter first, because the model is the expensive part of the chain.</p>
+      <div class="grid">
+        <a class="cx" data-d="3" data-t="defense in depth" href="task-3-1.html#s4">Defense in depth<b class="b3">3.1</b></a>
+        <a class="cx" data-d="3" data-t="cost-ordered controls" href="task-3-1.html#s4">Cost-ordered controls<b class="b3">3.1</b></a>
+        <a class="cx" data-d="2" data-t="api gateway request validators" href="task-2-4.html#s1">API Gateway request validators<b class="b2">2.4</b></a>
+        <a class="cx" data-d="3" data-t="lambda authorizers" href="task-3-1.html#s1">Lambda authorizers<b class="b3">3.1</b></a>
+        <a class="cx" data-d="3" data-t="lambda input sanitization" href="task-3-1.html#s1">Lambda input sanitization<b class="b3">3.1</b></a>
+        <a class="cx" data-d="3" data-t="sqli / xss blocking" href="task-3-1.html#s1">SQLi / XSS blocking<b class="b3">3.1</b></a>
+        <a class="cx" data-d="3" data-t="comprehend risk analysis" href="task-3-1.html#s1">Comprehend risk analysis<b class="b3">3.1</b></a>
+        <a class="cx" data-d="3" data-t="risk-based branching" href="task-3-1.html#s1">Risk-based branching<b class="b3">3.1</b></a>
+        <a class="cx" data-d="3" data-t="bedrock guardrails (input)" href="task-3-1.html#s1">Bedrock Guardrails (input)<b class="b3">3.1</b></a>
+        <a class="cx" data-d="3" data-t="prompt injection prevention" href="task-3-1.html#s1">Prompt injection prevention<b class="b3">3.1</b></a>
+        <a class="cx" data-d="3" data-t="tiered moderation by role" href="task-3-1.html#s1">Tiered moderation by role<b class="b3">3.1</b></a>
+        <a class="cx" data-d="3" data-t="throttling as security" href="task-3-1.html#s4">Throttling as security<b class="b3">3.1</b></a>
+        <a class="cx" data-d="3" data-t="layer blind spots" href="task-3-1.html#s4">Layer blind spots<b class="b3">3.1</b></a>
+        <a class="cx" data-d="3" data-t="per-layer violation tracking" href="task-3-1.html#s4">Per-layer violation tracking<b class="b3">3.1</b></a>
+      </div>
+    </div>
+    <div class="stage" id="s-know-what-you-are-being-attacked-with">
+      <h3>Know what you are being attacked with</h3>
+      <p class="sb">Injection overrides instructions. Jailbreak bypasses filters. Indirect injection is the dangerous one.</p>
+      <div class="grid">
+        <a class="cx" data-d="3" data-t="prompt injection" href="task-3-1.html#s5">Prompt injection<b class="b3">3.1</b></a>
+        <a class="cx" data-d="3" data-t="jailbreak" href="task-3-1.html#s5">Jailbreak<b class="b3">3.1</b></a>
+        <a class="cx" data-d="3" data-t="direct injection" href="task-3-1.html#s5">Direct injection<b class="b3">3.1</b></a>
+        <a class="cx" data-d="3" data-t="indirect injection via rag" href="task-3-1.html#s5">Indirect injection via RAG<b class="b3">3.1</b></a>
+        <a class="cx" data-d="3" data-t="role-play attacks" href="task-3-1.html#s5">Role-play attacks<b class="b3">3.1</b></a>
+        <a class="cx" data-d="3" data-t="base64 / rot13 encoding" href="task-3-1.html#s5">Base64 / ROT13 encoding<b class="b3">3.1</b></a>
+        <a class="cx" data-d="3" data-t="multi-turn probing" href="task-3-1.html#s5">Multi-turn probing<b class="b3">3.1</b></a>
+        <a class="cx" data-d="3" data-t="social engineering classifiers" href="task-3-1.html#s5">Social engineering classifiers<b class="b3">3.1</b></a>
+        <a class="cx" data-d="3" data-t="structural isolation" href="task-3-1.html#s5">Structural isolation<b class="b3">3.1</b></a>
+        <a class="cx" data-d="3" data-t="pattern matching heuristics" href="task-3-1.html#s5">Pattern matching heuristics<b class="b3">3.1</b></a>
+        <a class="cx" data-d="3" data-t="threat intelligence feeds" href="task-3-1.html#s5">Threat intelligence feeds<b class="b3">3.1</b></a>
+        <a class="cx" data-d="3" data-t="cloudwatch anomaly patterns" href="task-3-1.html#s5">CloudWatch anomaly patterns<b class="b3">3.1</b></a>
+        <a class="cx" data-d="3" data-t="misuse anomaly detection" href="task-3-3.html#s4">Misuse anomaly detection<b class="b3">3.3</b></a>
+        <a class="cx" data-d="4" data-t="denial-of-wallet" href="task-4-3.html#s2">Denial-of-wallet<b class="b4">4.3</b></a>
+      </div>
+    </div>
+    <div class="stage" id="s-check-the-answer-coming-out">
+      <h3>Check the answer coming out</h3>
+      <p class="sb">Grounding reduces hallucination. It does not eliminate it.</p>
+      <div class="grid">
+        <a class="cx" data-d="1" data-t="guardrails outside the inference path" href="task-1-1.html#s4">Guardrails outside the inference path<b class="b1">1.1</b></a>
+        <a class="cx" data-d="1" data-t="pii masking (1.1)" href="task-1-1.html#s4">PII masking (1.1)<b class="b1">1.1</b></a>
+        <a class="cx" data-d="1" data-t="contextual grounding (1.1)" href="task-1-1.html#s4">Contextual grounding (1.1)<b class="b1">1.1</b></a>
+        <a class="cx" data-d="3" data-t="guardrails block mode" href="task-3-1.html#s2">Guardrails block mode<b class="b3">3.1</b></a>
+        <a class="cx" data-d="3" data-t="filtered alternative mode" href="task-3-1.html#s2">Filtered alternative mode<b class="b3">3.1</b></a>
+        <a class="cx" data-d="3" data-t="content filter severity" href="task-3-1.html#s2">Content filter severity<b class="b3">3.1</b></a>
+        <a class="cx" data-d="3" data-t="low is strictest" href="task-3-1.html#s2">LOW is strictest<b class="b3">3.1</b></a>
+        <a class="cx" data-d="1" data-t="denied topics" href="task-1-6.html#s2">Denied topics<b class="b1">1.6</b></a>
+        <a class="cx" data-d="1" data-t="word filters" href="task-1-6.html#s2">Word filters<b class="b1">1.6</b></a>
+        <a class="cx" data-d="1" data-t="pii masking" href="task-1-6.html#s2">PII masking<b class="b1">1.6</b></a>
+        <a class="cx" data-d="1" data-t="contextual grounding checks" href="task-1-6.html#s2">Contextual grounding checks<b class="b1">1.6</b></a>
+        <a class="cx" data-d="1" data-t="guardrails across models" href="task-1-6.html#s2">Guardrails across models<b class="b1">1.6</b></a>
+        <a class="cx" data-d="3" data-t="context-aware guardrails" href="task-3-4.html#s3">Context-aware guardrails<b class="b3">3.4</b></a>
+        <a class="cx" data-d="3" data-t="multi-stage filtering" href="task-3-4.html#s3">Multi-stage filtering<b class="b3">3.4</b></a>
+        <a class="cx" data-d="3" data-t="two-layer guardrails" href="task-3-4.html#s3">Two-layer guardrails<b class="b3">3.4</b></a>
+        <a class="cx" data-d="3" data-t="safety vs utility" href="task-3-4.html#s3">Safety vs utility<b class="b3">3.4</b></a>
+        <a class="cx" data-d="3" data-t="knowledge base grounding" href="task-3-1.html#s3">Knowledge Base grounding<b class="b3">3.1</b></a>
+        <a class="cx" data-d="3" data-t="semantic similarity verification" href="task-3-1.html#s3">Semantic similarity verification<b class="b3">3.1</b></a>
+        <a class="cx" data-d="3" data-t="confidence scoring" href="task-3-1.html#s3">Confidence scoring<b class="b3">3.1</b></a>
+        <a class="cx" data-d="3" data-t="json schema value bounds" href="task-3-1.html#s3">JSON Schema value bounds<b class="b3">3.1</b></a>
+        <a class="cx" data-d="3" data-t="lambda correction" href="task-3-1.html#s3">Lambda correction<b class="b3">3.1</b></a>
+        <a class="cx" data-d="3" data-t="post-processing lambda" href="task-3-1.html#s2">Post-processing Lambda<b class="b3">3.1</b></a>
+        <a class="cx" data-d="3" data-t="exact masking rules" href="task-3-1.html#s2">Exact masking rules<b class="b3">3.1</b></a>
+        <a class="cx" data-d="3" data-t="luhn check" href="task-3-1.html#s2">Luhn check<b class="b3">3.1</b></a>
+        <a class="cx" data-d="3" data-t="text-to-sql" href="task-3-1.html#s2">Text-to-SQL<b class="b3">3.1</b></a>
+        <a class="cx" data-d="3" data-t="select-only validation" href="task-3-1.html#s2">SELECT-only validation<b class="b3">3.1</b></a>
+        <a class="cx" data-d="3" data-t="api gateway response filtering" href="task-3-1.html#s2">API Gateway response filtering<b class="b3">3.1</b></a>
+        <a class="cx" data-d="2" data-t="content filtering middleware" href="task-2-5.html#s1">Content filtering middleware<b class="b2">2.5</b></a>
+        <a class="cx" data-d="3" data-t="lambda rule engines" href="task-3-4.html#s3">Lambda rule engines<b class="b3">3.4</b></a>
+      </div>
+    </div>
+    <div class="stage" id="s-decide-who-signs-it-off">
+      <h3>Decide who signs it off</h3>
+      <p class="sb">One confidence number gating five different things.</p>
+      <div class="grid">
+        <a class="cx" data-d="2" data-t="confidence   0.9 automated" href="task-2-1.html#s6">Confidence &gt; 0.9 automated<b class="b2">2.1</b></a>
+        <a class="cx" data-d="2" data-t="0.7 0.9 async review" href="task-2-1.html#s6">0.7&ndash;0.9 async review<b class="b2">2.1</b></a>
+        <a class="cx" data-d="2" data-t="  0.7 sync approval" href="task-2-1.html#s6">&lt; 0.7 sync approval<b class="b2">2.1</b></a>
+        <a class="cx" data-d="2" data-t="step functions wait tokens" href="task-2-1.html#s6">Step Functions wait tokens<b class="b2">2.1</b></a>
+        <a class="cx" data-d="2" data-t="24-hour timeout" href="task-2-1.html#s6">24-hour timeout<b class="b2">2.1</b></a>
+        <a class="cx" data-d="2" data-t="feedback in dynamodb" href="task-2-1.html#s6">Feedback in DynamoDB<b class="b2">2.1</b></a>
+        <a class="cx" data-d="2" data-t="gsis by decision type" href="task-2-1.html#s6">GSIs by decision type<b class="b2">2.1</b></a>
+        <a class="cx" data-d="2" data-t="80 90% critical threshold" href="task-2-5.html#s3">80&ndash;90% critical threshold<b class="b2">2.5</b></a>
+        <a class="cx" data-d="2" data-t="ai vs human-verified ui" href="task-2-5.html#s3">AI vs human-verified UI<b class="b2">2.5</b></a>
+        <a class="cx" data-d="3" data-t="token-level probability" href="task-3-4.html#s1">Token-level probability<b class="b3">3.4</b></a>
+        <a class="cx" data-d="3" data-t="ensemble uncertainty" href="task-3-4.html#s1">Ensemble uncertainty<b class="b3">3.4</b></a>
+        <a class="cx" data-d="3" data-t="calibration intervals" href="task-3-4.html#s1">Calibration intervals<b class="b3">3.4</b></a>
+        <a class="cx" data-d="3" data-t="uncertainty overlays" href="task-3-4.html#s1">Uncertainty overlays<b class="b3">3.4</b></a>
+        <a class="cx" data-d="1" data-t="agent feedback loops" href="task-1-6.html#s6">Agent feedback loops<b class="b1">1.6</b></a>
+        <a class="cx" data-d="1" data-t="human edits as ground truth" href="task-1-6.html#s6">Human edits as ground truth<b class="b1">1.6</b></a>
+      </div>
+    </div>
+    <div class="stage" id="s-stream-it-back">
+      <h3>Stream it back</h3>
+      <p class="sb">The job still takes 8 seconds. The user sees the first token in half a second.</p>
+      <div class="grid">
+        <a class="cx" data-d="4" data-t="actual vs perceived latency" href="task-4-2.html#t1">Actual vs perceived latency<b class="b4">4.2</b></a>
+        <a class="cx" data-d="4" data-t="time-to-first-token" href="task-4-2.html#t1">Time-to-first-token<b class="b4">4.2</b></a>
+        <a class="cx" data-d="4" data-t="response streaming" href="task-4-2.html#t1">Response streaming<b class="b4">4.2</b></a>
+        <a class="cx" data-d="2" data-t="server-sent events" href="task-2-4.html#s2">Server-Sent Events<b class="b2">2.4</b></a>
+        <a class="cx" data-d="2" data-t="websockets" href="task-2-4.html#s2">WebSockets<b class="b2">2.4</b></a>
+        <a class="cx" data-d="2" data-t="last-event-id resume" href="task-2-4.html#s2">Last-Event-ID resume<b class="b2">2.4</b></a>
+        <a class="cx" data-d="2" data-t="chunked transfer encoding" href="task-2-4.html#s2">Chunked transfer encoding<b class="b2">2.4</b></a>
+        <a class="cx" data-d="2" data-t="client-side buffering" href="task-2-4.html#s2">Client-side buffering<b class="b2">2.4</b></a>
+        <a class="cx" data-d="2" data-t="semantic boundary flush" href="task-2-4.html#s2">Semantic boundary flush<b class="b2">2.4</b></a>
+        <a class="cx" data-d="2" data-t="ping/pong heartbeats" href="task-2-4.html#s2">Ping/pong heartbeats<b class="b2">2.4</b></a>
+        <a class="cx" data-d="2" data-t="mobile network switching" href="task-2-4.html#s2">Mobile network switching<b class="b2">2.4</b></a>
+        <a class="cx" data-d="2" data-t="ui debouncing" href="task-2-4.html#s2">UI debouncing<b class="b2">2.4</b></a>
+        <a class="cx" data-d="2" data-t="progressive rendering" href="task-2-5.html#s2">Progressive rendering<b class="b2">2.5</b></a>
+        <a class="cx" data-d="2" data-t="text/event-stream" href="task-2-5.html#s1">text/event-stream<b class="b2">2.5</b></a>
+        <a class="cx" data-d="2" data-t="amplify ui" href="task-2-5.html#s2">Amplify UI<b class="b2">2.5</b></a>
+        <a class="cx" data-d="2" data-t="skeleton screens" href="task-2-5.html#s2">Skeleton screens<b class="b2">2.5</b></a>
+        <a class="cx" data-d="2" data-t="progressive enhancement" href="task-2-5.html#s2">Progressive enhancement<b class="b2">2.5</b></a>
+        <a class="cx" data-d="2" data-t="aria live regions" href="task-2-5.html#s2">ARIA live regions<b class="b2">2.5</b></a>
+        <a class="cx" data-d="2" data-t="screen reader accessibility" href="task-2-5.html#s2">Screen reader accessibility<b class="b2">2.5</b></a>
+        <a class="cx" data-d="2" data-t="keyboard navigation" href="task-2-5.html#s2">Keyboard navigation<b class="b2">2.5</b></a>
+        <a class="cx" data-d="2" data-t="similarity-based client cache" href="task-2-5.html#s2">Similarity-based client cache<b class="b2">2.5</b></a>
+        <a class="cx" data-d="2" data-t="streaming error recovery" href="task-2-4.html#s2">Streaming error recovery<b class="b2">2.4</b></a>
+        <a class="cx" data-d="2" data-t="multimodal input handling" href="task-2-5.html#s2">Multimodal input handling<b class="b2">2.5</b></a>
+        <a class="cx" data-d="2" data-t="transparency   trust cues" href="task-2-5.html#s2">Transparency &amp; trust cues<b class="b2">2.5</b></a>
+      </div>
+    </div>
+    <div class="stage" id="s-survive-a-bad-day">
+      <h3>Survive a bad day</h3>
+      <p class="sb">Classify, back off, trip, degrade, shed &mdash; in that order.</p>
+      <div class="grid">
+        <a class="cx" data-d="2" data-t="retriable vs non-retriable" href="task-2-4.html#s1">Retriable vs non-retriable<b class="b2">2.4</b></a>
+        <a class="cx" data-d="2" data-t="429 / 5xx / 4xx" href="task-2-5.html#s1">429 / 5xx / 4xx<b class="b2">2.5</b></a>
+        <a class="cx" data-d="2" data-t="exponential backoff" href="task-2-4.html#s1">Exponential backoff<b class="b2">2.4</b></a>
+        <a class="cx" data-d="2" data-t="jitter" href="task-2-4.html#s1">Jitter<b class="b2">2.4</b></a>
+        <a class="cx" data-d="2" data-t="thundering herd" href="task-2-3.html#s3">Thundering herd<b class="b2">2.3</b></a>
+        <a class="cx" data-d="2" data-t="max attempts   cap" href="task-2-4.html#s3">Max attempts &amp; cap<b class="b2">2.4</b></a>
+        <a class="cx" data-d="2" data-t="circuit breaker" href="task-2-4.html#s3">Circuit breaker<b class="b2">2.4</b></a>
+        <a class="cx" data-d="2" data-t="half-open state" href="task-2-4.html#s3">Half-open state<b class="b2">2.4</b></a>
+        <a class="cx" data-d="2" data-t="fallback degradation path" href="task-2-4.html#s3">Fallback degradation path<b class="b2">2.4</b></a>
+        <a class="cx" data-d="2" data-t="rule-based fallback" href="task-2-4.html#s3">Rule-based fallback<b class="b2">2.4</b></a>
+        <a class="cx" data-d="5" data-t="load shedding" href="task-5-2.html#s2">Load shedding<b class="b5">5.2</b></a>
+        <a class="cx" data-d="2" data-t="priority queuing" href="task-2-4.html#s3">Priority queuing<b class="b2">2.4</b></a>
+        <a class="cx" data-d="2" data-t="multi-level timeouts" href="task-2-5.html#s1">Multi-level timeouts<b class="b2">2.5</b></a>
+        <a class="cx" data-d="2" data-t="timeout alignment rule" href="task-2-5.html#s1">Timeout alignment rule<b class="b2">2.5</b></a>
+        <a class="cx" data-d="2" data-t="timeouts by job weight" href="task-2-4.html#s1">Timeouts by job weight<b class="b2">2.4</b></a>
+        <a class="cx" data-d="2" data-t="connection pooling" href="task-2-4.html#s1">Connection pooling<b class="b2">2.4</b></a>
+        <a class="cx" data-d="2" data-t="sqs visibility timeout" href="task-2-4.html#s1">SQS visibility timeout<b class="b2">2.4</b></a>
+        <a class="cx" data-d="2" data-t="multi-level throttling" href="task-2-4.html#s3">Multi-level throttling<b class="b2">2.4</b></a>
+        <a class="cx" data-d="2" data-t="route-level limits" href="task-2-4.html#s3">Route-level limits<b class="b2">2.4</b></a>
+        <a class="cx" data-d="2" data-t="burst capacity" href="task-2-4.html#s1">Burst capacity<b class="b2">2.4</b></a>
+        <a class="cx" data-d="2" data-t="health checks   failover" href="task-2-4.html#s3">Health checks &amp; failover<b class="b2">2.4</b></a>
+        <a class="cx" data-d="2" data-t="sync vs async workflows" href="task-2-4.html#s1">Sync vs async workflows<b class="b2">2.4</b></a>
+        <a class="cx" data-d="2" data-t="http 202 + task id" href="task-2-4.html#s1">HTTP 202 + task ID<b class="b2">2.4</b></a>
+      </div>
+    </div>
+    <div class="stage" id="s-route-to-the-right-model">
+      <h3>Route to the right model</h3>
+      <p class="sb">Static config, content, live metrics, or a cheap attempt first.</p>
+      <div class="grid">
+        <a class="cx" data-d="2" data-t="static configuration routing" href="task-2-4.html#s4">Static configuration routing<b class="b2">2.4</b></a>
+        <a class="cx" data-d="2" data-t="content-based routing" href="task-2-4.html#s4">Content-based routing<b class="b2">2.4</b></a>
+        <a class="cx" data-d="2" data-t="step functions choice states" href="task-2-4.html#s4">Step Functions Choice states<b class="b2">2.4</b></a>
+        <a class="cx" data-d="2" data-t="metric-based routing" href="task-2-4.html#s4">Metric-based routing<b class="b2">2.4</b></a>
+        <a class="cx" data-d="2" data-t="amazon timestream" href="task-2-4.html#s4">Amazon Timestream<b class="b2">2.4</b></a>
+        <a class="cx" data-d="2" data-t="mapping template routing" href="task-2-4.html#s4">Mapping template routing<b class="b2">2.4</b></a>
+        <a class="cx" data-d="4" data-t="model cascading" href="task-4-1.html#s2">Model cascading<b class="b4">4.1</b></a>
+        <a class="cx" data-d="4" data-t="tiered routing" href="task-4-1.html#s2">Tiered routing<b class="b4">4.1</b></a>
+        <a class="cx" data-d="4" data-t="query analyzer" href="task-4-1.html#s2">Query analyzer<b class="b4">4.1</b></a>
+        <a class="cx" data-d="2" data-t="metadata preservation" href="task-2-4.html#s4">Metadata preservation<b class="b2">2.4</b></a>
+        <a class="cx" data-d="4" data-t="cost-driven fallback" href="task-4-1.html#s2">Cost-driven fallback<b class="b4">4.1</b></a>
+        <a class="cx" data-d="2" data-t="a/b traffic split" href="task-2-4.html#s4">A/B traffic split<b class="b2">2.4</b></a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="ph" id="poperate">
+  <div class="wrap">
+    <div class="phh"><span class="pn" style="background:#c94f1f">8</span><h2>Run it</h2><span class="pc">123 concepts</span></div>
+    <p class="phd">What it costs, how fast it feels, and how you would notice it getting worse.</p>
+    <div class="stage" id="s-stop-paying-for-tokens-you-do-not-need">
+      <h3>Stop paying for tokens you do not need</h3>
+      <p class="sb">Billed twice and unevenly &mdash; output costs more than input.</p>
+      <div class="grid">
+        <a class="cx" data-d="4" data-t="input vs output pricing" href="task-4-1.html#s1">Input vs output pricing<b class="b4">4.1</b></a>
+        <a class="cx" data-d="4" data-t="pre-call token counting" href="task-4-1.html#s1">Pre-call token counting<b class="b4">4.1</b></a>
+        <a class="cx" data-d="4" data-t="context window validation" href="task-4-1.html#s1">Context window validation<b class="b4">4.1</b></a>
+        <a class="cx" data-d="4" data-t="inputtokencount metric" href="task-4-1.html#s1">InputTokenCount metric<b class="b4">4.1</b></a>
+        <a class="cx" data-d="4" data-t="strategic summarization" href="task-4-1.html#s1">Strategic summarization<b class="b4">4.1</b></a>
+        <a class="cx" data-d="4" data-t="summarize once, reuse many" href="task-4-1.html#s1">Summarize once, reuse many<b class="b4">4.1</b></a>
+        <a class="cx" data-d="4" data-t="recursive summarization" href="task-4-1.html#s1">Recursive summarization<b class="b4">4.1</b></a>
+        <a class="cx" data-d="4" data-t="lost in the middle" href="task-4-1.html#s1">Lost in the middle<b class="b4">4.1</b></a>
+        <a class="cx" data-d="4" data-t="prompt compression" href="task-4-1.html#s1">Prompt compression<b class="b4">4.1</b></a>
+        <a class="cx" data-d="4" data-t="response size control" href="task-4-1.html#s1">Response size control<b class="b4">4.1</b></a>
+        <a class="cx" data-d="4" data-t="context pruning" href="task-4-1.html#s1">Context pruning<b class="b4">4.1</b></a>
+        <a class="cx" data-d="4" data-t="similarity-score cutoff" href="task-4-1.html#s1">Similarity-score cutoff<b class="b4">4.1</b></a>
+        <a class="cx" data-d="2" data-t="token windowing" href="task-2-5.html#s1">Token windowing<b class="b2">2.5</b></a>
+        <a class="cx" data-d="4" data-t="cost allocation tags" href="task-4-1.html#s2">Cost allocation tags<b class="b4">4.1</b></a>
+        <a class="cx" data-d="4" data-t="aws cost explorer" href="task-4-1.html#s2">AWS Cost Explorer<b class="b4">4.1</b></a>
+        <a class="cx" data-d="4" data-t="aws budgets" href="task-4-3.html#s2">AWS Budgets<b class="b4">4.3</b></a>
+      </div>
+    </div>
+    <div class="stage" id="s-skip-the-call-entirely">
+      <h3>Skip the call entirely</h3>
+      <p class="sb">The cheapest inference is the one that never happens.</p>
+      <div class="grid">
+        <a class="cx" data-d="4" data-t="semantic caching" href="task-4-1.html#s4">Semantic caching<b class="b4">4.1</b></a>
+        <a class="cx" data-d="4" data-t="85 95% similarity band" href="task-4-1.html#s4">85&ndash;95% similarity band<b class="b4">4.1</b></a>
+        <a class="cx" data-d="4" data-t="threshold tuning" href="task-4-1.html#s4">Threshold tuning<b class="b4">4.1</b></a>
+        <a class="cx" data-d="4" data-t="result fingerprinting" href="task-4-1.html#s4">Result fingerprinting<b class="b4">4.1</b></a>
+        <a class="cx" data-d="4" data-t="deterministic hashing" href="task-4-1.html#s4">Deterministic hashing<b class="b4">4.1</b></a>
+        <a class="cx" data-d="4" data-t="prompt caching (~90% off)" href="task-4-1.html#s4">Prompt caching (~90% off)<b class="b4">4.1</b></a>
+        <a class="cx" data-d="4" data-t="static prefix first" href="task-4-1.html#s4">Static prefix first<b class="b4">4.1</b></a>
+        <a class="cx" data-d="4" data-t="l1 in-memory cache" href="task-4-1.html#s4">L1 in-memory cache<b class="b4">4.1</b></a>
+        <a class="cx" data-d="4" data-t="l2 elasticache / redis" href="task-4-1.html#s4">L2 ElastiCache / Redis<b class="b4">4.1</b></a>
+        <a class="cx" data-d="4" data-t="l3 cloudfront edge" href="task-4-1.html#s4">L3 CloudFront edge<b class="b4">4.1</b></a>
+        <a class="cx" data-d="4" data-t="ttl trade-off" href="task-4-1.html#s4">TTL trade-off<b class="b4">4.1</b></a>
+        <a class="cx" data-d="4" data-t="hit rate   5% warning" href="task-4-1.html#s4">Hit rate &lt; 5% warning<b class="b4">4.1</b></a>
+        <a class="cx" data-d="2" data-t="response caching" href="task-2-2.html#s3">Response caching<b class="b2">2.2</b></a>
+        <a class="cx" data-d="4" data-t="pre-computation" href="task-4-2.html#t1">Pre-computation<b class="b4">4.2</b></a>
+        <a class="cx" data-d="4" data-t="3000 ms   10 ms" href="task-4-2.html#t1">3000 ms &rarr; 10 ms<b class="b4">4.2</b></a>
+      </div>
+    </div>
+    <div class="stage" id="s-buy-capacity-properly">
+      <h3>Buy capacity properly</h3>
+      <p class="sb">Break-even, not instinct.</p>
+      <div class="grid">
+        <a class="cx" data-d="4" data-t="on-demand vs provisioned" href="task-4-1.html#s3">On-demand vs provisioned<b class="b4">4.1</b></a>
+        <a class="cx" data-d="4" data-t="break-even analysis" href="task-4-1.html#s3">Break-even analysis<b class="b4">4.1</b></a>
+        <a class="cx" data-d="4" data-t="pmu under-utilisation" href="task-4-1.html#s3">PMU under-utilisation<b class="b4">4.1</b></a>
+        <a class="cx" data-d="4" data-t="pmu over-utilisation" href="task-4-1.html#s3">PMU over-utilisation<b class="b4">4.1</b></a>
+        <a class="cx" data-d="4" data-t="bedrock batch inference (~50%)" href="task-4-1.html#s2">Bedrock Batch Inference (~50%)<b class="b4">4.1</b></a>
+        <a class="cx" data-d="4" data-t="request batching" href="task-4-1.html#s3">Request batching<b class="b4">4.1</b></a>
+        <a class="cx" data-d="4" data-t="batch vs request batching" href="task-4-1.html#s3">Batch vs request batching<b class="b4">4.1</b></a>
+        <a class="cx" data-d="4" data-t="reserved concurrency" href="task-4-1.html#s3">Reserved concurrency<b class="b4">4.1</b></a>
+        <a class="cx" data-d="4" data-t="provisioned concurrency" href="task-4-1.html#s3">Provisioned concurrency<b class="b4">4.1</b></a>
+        <a class="cx" data-d="4" data-t="sqs cost smoothing" href="task-4-1.html#s3">SQS cost smoothing<b class="b4">4.1</b></a>
+        <a class="cx" data-d="4" data-t="provision for average" href="task-4-1.html#s3">Provision for average<b class="b4">4.1</b></a>
+        <a class="cx" data-d="4" data-t="latency/cost/throughput triangle" href="task-4-1.html#s3">Latency/cost/throughput triangle<b class="b4">4.1</b></a>
+        <a class="cx" data-d="4" data-t="automated load testing" href="task-4-1.html#s3">Automated load testing<b class="b4">4.1</b></a>
+        <a class="cx" data-d="4" data-t="gpu utilisation   20%" href="task-4-1.html#s3">GPU utilisation &lt; 20%<b class="b4">4.1</b></a>
+        <a class="cx" data-d="2" data-t="oversized-instance rule" href="task-2-2.html#s5">Oversized-instance rule<b class="b2">2.2</b></a>
+        <a class="cx" data-d="2" data-t="cache hit-rate rule" href="task-2-2.html#s5">Cache hit-rate rule<b class="b2">2.2</b></a>
+        <a class="cx" data-d="2" data-t="artifact encryption at rest" href="task-2-2.html#s5">Artifact encryption at rest<b class="b2">2.2</b></a>
+        <a class="cx" data-d="4" data-t="sagemaker inference recommender" href="task-4-2.html#t5">SageMaker Inference Recommender<b class="b4">4.2</b></a>
+        <a class="cx" data-d="4" data-t="cross-region inference profiles" href="task-4-2.html#t5">Cross-region inference profiles<b class="b4">4.2</b></a>
+        <a class="cx" data-d="4" data-t="amazon ec2 inferentia" href="task-4-2.html#t5">Amazon EC2 Inferentia<b class="b4">4.2</b></a>
+        <a class="cx" data-d="4" data-t="aws trainium" href="task-4-2.html#t5">AWS Trainium<b class="b4">4.2</b></a>
+        <a class="cx" data-d="4" data-t="predictive scaling" href="task-4-2.html#t5">Predictive scaling<b class="b4">4.2</b></a>
+        <a class="cx" data-d="4" data-t="idle period detection" href="task-4-2.html#t5">Idle period detection<b class="b4">4.2</b></a>
+        <a class="cx" data-d="4" data-t="tpm / rpm quotas" href="task-4-2.html#t5">TPM / RPM quotas<b class="b4">4.2</b></a>
+      </div>
+    </div>
+    <div class="stage" id="s-make-it-fast-and-make-it-feel-fast">
+      <h3>Make it fast, and make it feel fast</h3>
+      <p class="sb">Two different problems with two different fixes.</p>
+      <div class="grid">
+        <a class="cx" data-d="4" data-t="parallelization" href="task-4-2.html#t1">Parallelization<b class="b4">4.2</b></a>
+        <a class="cx" data-d="4" data-t="independent-steps prerequisite" href="task-4-2.html#t1">Independent-steps prerequisite<b class="b4">4.2</b></a>
+        <a class="cx" data-d="4" data-t="throughput vs latency" href="task-4-2.html#t3">Throughput vs latency<b class="b4">4.2</b></a>
+        <a class="cx" data-d="4" data-t="token reduction for speed" href="task-4-2.html#t3">Token reduction for speed<b class="b4">4.2</b></a>
+        <a class="cx" data-d="4" data-t="sqs micro-batching" href="task-4-2.html#t3">SQS micro-batching<b class="b4">4.2</b></a>
+        <a class="cx" data-d="4" data-t="maxconcurrency" href="task-4-2.html#t3">MaxConcurrency<b class="b4">4.2</b></a>
+        <a class="cx" data-d="4" data-t="token-bucket control" href="task-4-2.html#t3">Token-bucket control<b class="b4">4.2</b></a>
+        <a class="cx" data-d="4" data-t="request prioritisation" href="task-4-2.html#t3">Request prioritisation<b class="b4">4.2</b></a>
+        <a class="cx" data-d="4" data-t="dual priority queues" href="task-4-2.html#t3">Dual priority queues<b class="b4">4.2</b></a>
+        <a class="cx" data-d="4" data-t="amazon cloudfront edge" href="task-4-2.html#t6">Amazon CloudFront edge<b class="b4">4.2</b></a>
+        <a class="cx" data-d="4" data-t="intelligent routing" href="task-4-2.html#t6">Intelligent routing<b class="b4">4.2</b></a>
+        <a class="cx" data-d="4" data-t="continuous optimization loop" href="task-4-2.html#t6">Continuous optimization loop<b class="b4">4.2</b></a>
+        <a class="cx" data-d="4" data-t="capacity planning" href="task-4-2.html#t5">Capacity planning<b class="b4">4.2</b></a>
+      </div>
+    </div>
+    <div class="stage" id="s-watch-the-right-things">
+      <h3>Watch the right things</h3>
+      <p class="sb">Every dashboard can be green while the model lies.</p>
+      <div class="grid">
+        <a class="cx" data-d="1" data-t="x-ray end-to-end tracing" href="task-1-1.html#s8">X-Ray end-to-end tracing<b class="b1">1.1</b></a>
+        <a class="cx" data-d="1" data-t="invocation logs to s3" href="task-1-1.html#s8">Invocation logs to S3<b class="b1">1.1</b></a>
+        <a class="cx" data-d="1" data-t="automated + human evaluation" href="task-1-1.html#s8">Automated + human evaluation<b class="b1">1.1</b></a>
+        <a class="cx" data-d="4" data-t="cloudwatch unified observability" href="task-4-3.html#s1">CloudWatch unified observability<b class="b4">4.3</b></a>
+        <a class="cx" data-d="4" data-t="out-of-the-box genai views" href="task-4-3.html#s1">Out-of-the-box GenAI views<b class="b4">4.3</b></a>
+        <a class="cx" data-d="4" data-t="end-to-end prompt tracing" href="task-4-3.html#s1">End-to-end prompt tracing<b class="b4">4.3</b></a>
+        <a class="cx" data-d="4" data-t="component blame attribution" href="task-4-3.html#s1">Component blame attribution<b class="b4">4.3</b></a>
+        <a class="cx" data-d="4" data-t="strands / langchain / langgraph" href="task-4-3.html#s1">Strands / LangChain / LangGraph<b class="b4">4.3</b></a>
+        <a class="cx" data-d="2" data-t="aws x-ray" href="task-2-4.html#s3">AWS X-Ray<b class="b2">2.4</b></a>
+        <a class="cx" data-d="2" data-t="subsegments" href="task-2-4.html#s3">Subsegments<b class="b2">2.4</b></a>
+        <a class="cx" data-d="2" data-t="annotations" href="task-2-4.html#s3">Annotations<b class="b2">2.4</b></a>
+        <a class="cx" data-d="2" data-t="p50 / p90 / p99" href="task-2-4.html#s3">p50 / p90 / p99<b class="b2">2.4</b></a>
+        <a class="cx" data-d="2" data-t="x-ray sampling rules" href="task-2-3.html#s7">X-Ray sampling rules<b class="b2">2.3</b></a>
+        <a class="cx" data-d="4" data-t="prompt-shape profiling" href="task-4-2.html#t6">Prompt-shape profiling<b class="b4">4.2</b></a>
+        <a class="cx" data-d="4" data-t="token usage metering" href="task-4-3.html#s2">Token usage metering<b class="b4">4.3</b></a>
+        <a class="cx" data-d="4" data-t="10  token spike" href="task-4-3.html#s2">10&times; token spike<b class="b4">4.3</b></a>
+        <a class="cx" data-d="4" data-t="context leakage" href="task-4-3.html#s2">Context leakage<b class="b4">4.3</b></a>
+        <a class="cx" data-d="4" data-t="bedrock model invocation logs" href="task-4-3.html#s2">Bedrock Model Invocation Logs<b class="b4">4.3</b></a>
+        <a class="cx" data-d="4" data-t="off by default" href="task-4-3.html#s2">OFF by default<b class="b4">4.3</b></a>
+        <a class="cx" data-d="4" data-t="logging privacy trade-off" href="task-4-3.html#s2">Logging privacy trade-off<b class="b4">4.3</b></a>
+        <a class="cx" data-d="4" data-t="custom hallucination metrics" href="task-4-3.html#s2">Custom hallucination metrics<b class="b4">4.3</b></a>
+        <a class="cx" data-d="4" data-t="golden dataset alarms" href="task-4-3.html#s2">Golden dataset alarms<b class="b4">4.3</b></a>
+        <a class="cx" data-d="4" data-t="cloudwatch anomaly detection" href="task-4-3.html#s2">CloudWatch Anomaly Detection<b class="b4">4.3</b></a>
+        <a class="cx" data-d="4" data-t="seasonality awareness" href="task-4-3.html#s2">Seasonality awareness<b class="b4">4.3</b></a>
+        <a class="cx" data-d="2" data-t="composite alarms" href="task-2-3.html#s7">Composite alarms<b class="b2">2.3</b></a>
+        <a class="cx" data-d="2" data-t="cloudwatch logs insights" href="task-2-5.html#s6">CloudWatch Logs Insights<b class="b2">2.5</b></a>
+        <a class="cx" data-d="4" data-t="cloudwatch rum" href="task-4-3.html#s3">CloudWatch RUM<b class="b4">4.3</b></a>
+        <a class="cx" data-d="4" data-t="server vs client reality" href="task-4-3.html#s3">Server vs client reality<b class="b4">4.3</b></a>
+        <a class="cx" data-d="4" data-t="correlation ids" href="task-4-3.html#s3">Correlation IDs<b class="b4">4.3</b></a>
+        <a class="cx" data-d="4" data-t="http 200 is not success" href="task-4-3.html#s3">HTTP 200 is not success<b class="b4">4.3</b></a>
+        <a class="cx" data-d="4" data-t="amazon quicksight" href="task-4-3.html#s3">Amazon QuickSight<b class="b4">4.3</b></a>
+        <a class="cx" data-d="4" data-t="dashboards by audience" href="task-4-3.html#s3">Dashboards by audience<b class="b4">4.3</b></a>
+        <a class="cx" data-d="2" data-t="synthetic monitoring vs rum" href="task-2-5.html#s6">Synthetic monitoring vs RUM<b class="b2">2.5</b></a>
+        <a class="cx" data-d="2" data-t="attention visualisation" href="task-2-5.html#s6">Attention visualisation<b class="b2">2.5</b></a>
+        <a class="cx" data-d="1" data-t="amazon sns alerting" href="task-1-2.html#s5">Amazon SNS alerting<b class="b1">1.2</b></a>
+      </div>
+    </div>
+    <div class="stage" id="s-watch-the-agents-and-the-vectors">
+      <h3>Watch the agents and the vectors</h3>
+      <p class="sb">Two things nothing else monitors for you.</p>
+      <div class="grid">
+        <a class="cx" data-d="4" data-t="tool success vs effectiveness" href="task-4-3.html#s4">Tool success vs effectiveness<b class="b4">4.3</b></a>
+        <a class="cx" data-d="4" data-t="200 ok, empty body" href="task-4-3.html#s4">200 OK, empty body<b class="b4">4.3</b></a>
+        <a class="cx" data-d="4" data-t="bad tool description signal" href="task-4-3.html#s4">Bad tool description signal<b class="b4">4.3</b></a>
+        <a class="cx" data-d="4" data-t="bedrock agentcore tab" href="task-4-3.html#s4">Bedrock AgentCore tab<b class="b4">4.3</b></a>
+        <a class="cx" data-d="4" data-t="loop detection" href="task-4-3.html#s4">Loop detection<b class="b4">4.3</b></a>
+        <a class="cx" data-d="4" data-t="multi-agent handoff latency" href="task-4-3.html#s4">Multi-agent handoff latency<b class="b4">4.3</b></a>
+        <a class="cx" data-d="4" data-t="opensearch monitoring" href="task-4-3.html#s5">OpenSearch monitoring<b class="b4">4.3</b></a>
+        <a class="cx" data-d="4" data-t="query latency / qps" href="task-4-3.html#s5">Query latency / QPS<b class="b4">4.3</b></a>
+        <a class="cx" data-d="4" data-t="index fragmentation" href="task-4-3.html#s5">Index fragmentation<b class="b4">4.3</b></a>
+        <a class="cx" data-d="4" data-t="automated index optimization" href="task-4-3.html#s5">Automated index optimization<b class="b4">4.3</b></a>
+        <a class="cx" data-d="4" data-t="eventbridge scheduled rules" href="task-4-3.html#s5">EventBridge scheduled rules<b class="b4">4.3</b></a>
+        <a class="cx" data-d="4" data-t="query latency drift" href="task-4-3.html#s5">Query latency drift<b class="b4">4.3</b></a>
+        <a class="cx" data-d="4" data-t="snapshot restore" href="task-4-3.html#s5">Snapshot restore<b class="b4">4.3</b></a>
+        <a class="cx" data-d="4" data-t="re-embedding worst case" href="task-4-3.html#s5">Re-embedding worst case<b class="b4">4.3</b></a>
+        <a class="cx" data-d="2" data-t="rate limiting agent tools" href="task-2-5.html#s5">Rate limiting agent tools<b class="b2">2.5</b></a>
+        <a class="cx" data-d="2" data-t="iam is the boundary" href="task-2-1.html#s4">IAM is the boundary<b class="b2">2.1</b></a>
+        <a class="cx" data-d="2" data-t="agent input validation" href="task-2-1.html#s4">Agent input validation<b class="b2">2.1</b></a>
+        <a class="cx" data-d="2" data-t="stopping conditions" href="task-2-1.html#s4">Stopping conditions<b class="b2">2.1</b></a>
+        <a class="cx" data-d="2" data-t="max iterations" href="task-2-1.html#s4">Max iterations<b class="b2">2.1</b></a>
+        <a class="cx" data-d="2" data-t="graceful degradation" href="task-2-1.html#s4">Graceful degradation<b class="b2">2.1</b></a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="ph" id="pgovern">
+  <div class="wrap">
+    <div class="phh"><span class="pn" style="background:#a03453">9</span><h2>Prove it</h2><span class="pc">119 concepts</span></div>
+    <p class="phd">Audit it later, catch it drifting, and find the fault when it breaks.</p>
+    <div class="stage" id="s-be-able-to-prove-it-later">
+      <h3>Be able to prove it later</h3>
+      <p class="sb">Metadata, API trails and payload logs &mdash; three different jobs.</p>
+      <div class="grid">
+        <a class="cx" data-d="3" data-t="sagemaker model cards" href="task-3-3.html#s1">SageMaker Model Cards<b class="b3">3.3</b></a>
+        <a class="cx" data-d="3" data-t="birth certificate   report card" href="task-3-3.html#s1">Birth certificate &amp; report card<b class="b3">3.3</b></a>
+        <a class="cx" data-d="3" data-t="intended   unsupported uses" href="task-3-3.html#s1">Intended &amp; unsupported uses<b class="b3">3.3</b></a>
+        <a class="cx" data-d="3" data-t="sec / finra fields" href="task-3-3.html#s1">SEC / FINRA fields<b class="b3">3.3</b></a>
+        <a class="cx" data-d="3" data-t="create/update/export_model_card" href="task-3-3.html#s1">create/update/export_model_card<b class="b3">3.3</b></a>
+        <a class="cx" data-d="3" data-t="programmatic generation in ci/cd" href="task-3-3.html#s1">Programmatic generation in CI/CD<b class="b3">3.3</b></a>
+        <a class="cx" data-d="3" data-t="bedrock model cards" href="task-3-4.html#s3">Bedrock Model Cards<b class="b3">3.4</b></a>
+        <a class="cx" data-d="1" data-t="aws cloudtrail" href="task-1-6.html#s4">AWS CloudTrail<b class="b1">1.6</b></a>
+        <a class="cx" data-d="3" data-t="management events" href="task-3-3.html#s2">Management events<b class="b3">3.3</b></a>
+        <a class="cx" data-d="3" data-t="data events off by default" href="task-3-3.html#s2">Data events OFF by default<b class="b3">3.3</b></a>
+        <a class="cx" data-d="3" data-t="multi-region trails" href="task-3-3.html#s2">Multi-region trails<b class="b3">3.3</b></a>
+        <a class="cx" data-d="3" data-t="amazon athena reporting" href="task-3-3.html#s2">Amazon Athena reporting<b class="b3">3.3</b></a>
+        <a class="cx" data-d="1" data-t="cloudwatch logs payloads" href="task-1-6.html#s4">CloudWatch Logs payloads<b class="b1">1.6</b></a>
+        <a class="cx" data-d="1" data-t="7-year retention" href="task-1-6.html#s4">7-year retention<b class="b1">1.6</b></a>
+        <a class="cx" data-d="3" data-t="decision logging" href="task-3-3.html#s1">Decision logging<b class="b3">3.3</b></a>
+        <a class="cx" data-d="3" data-t="alternative recommendations" href="task-3-3.html#s1">Alternative recommendations<b class="b3">3.3</b></a>
+        <a class="cx" data-d="3" data-t="structured json logging" href="task-3-3.html#s1">Structured JSON logging<b class="b3">3.3</b></a>
+        <a class="cx" data-d="3" data-t="metric filters" href="task-3-3.html#s1">Metric filters<b class="b3">3.3</b></a>
+        <a class="cx" data-d="3" data-t="amazon guardduty" href="task-3-2.html#s1">Amazon GuardDuty<b class="b3">3.2</b></a>
+        <a class="cx" data-d="3" data-t="aws security hub" href="task-3-2.html#s1">AWS Security Hub<b class="b3">3.2</b></a>
+        <a class="cx" data-d="3" data-t="automated remediation" href="task-3-2.html#s1">Automated remediation<b class="b3">3.2</b></a>
+        <a class="cx" data-d="3" data-t="log retention 3 7 years" href="task-3-2.html#s1">Log retention 3&ndash;7 years<b class="b3">3.2</b></a>
+        <a class="cx" data-d="3" data-t="s3 lifecycle as compliance" href="task-3-2.html#s2">S3 lifecycle as compliance<b class="b3">3.2</b></a>
+        <a class="cx" data-d="3" data-t="deletion audit trails" href="task-3-2.html#s2">Deletion audit trails<b class="b3">3.2</b></a>
+      </div>
+    </div>
+    <div class="stage" id="s-show-how-it-was-built">
+      <h3>Show how it was built</h3>
+      <p class="sb">Same model version + same data version = same output.</p>
+      <div class="grid">
+        <a class="cx" data-d="3" data-t="ml lineage tracking" href="task-3-3.html#s2">ML Lineage Tracking<b class="b3">3.3</b></a>
+        <a class="cx" data-d="3" data-t="artifacts" href="task-3-3.html#s2">Artifacts<b class="b3">3.3</b></a>
+        <a class="cx" data-d="3" data-t="actions" href="task-3-3.html#s2">Actions<b class="b3">3.3</b></a>
+        <a class="cx" data-d="3" data-t="contexts" href="task-3-3.html#s2">Contexts<b class="b3">3.3</b></a>
+        <a class="cx" data-d="3" data-t="associations (dag)" href="task-3-3.html#s2">Associations (DAG)<b class="b3">3.3</b></a>
+        <a class="cx" data-d="3" data-t="custom entity linking" href="task-3-3.html#s2">Custom entity linking<b class="b3">3.3</b></a>
+        <a class="cx" data-d="3" data-t="glue data lineage" href="task-3-3.html#s2">Glue data lineage<b class="b3">3.3</b></a>
+        <a class="cx" data-d="3" data-t="dynamicframe" href="task-3-3.html#s2">DynamicFrame<b class="b3">3.3</b></a>
+        <a class="cx" data-d="3" data-t="cross-account addassociation" href="task-3-3.html#s2">Cross-account AddAssociation<b class="b3">3.3</b></a>
+        <a class="cx" data-d="3" data-t="s3 versioning" href="task-3-3.html#s2">S3 versioning<b class="b3">3.3</b></a>
+        <a class="cx" data-d="3" data-t="feature store time travel" href="task-3-3.html#s2">Feature Store time travel<b class="b3">3.3</b></a>
+        <a class="cx" data-d="3" data-t="reproducibility guarantee" href="task-3-3.html#s2">Reproducibility guarantee<b class="b3">3.3</b></a>
+        <a class="cx" data-d="3" data-t="attribution auditing" href="task-3-3.html#s2">Attribution auditing<b class="b3">3.3</b></a>
+        <a class="cx" data-d="3" data-t="completeness audits" href="task-3-3.html#s2">Completeness audits<b class="b3">3.3</b></a>
+        <a class="cx" data-d="3" data-t="metadata tagging framework" href="task-3-3.html#s1">Metadata tagging framework<b class="b3">3.3</b></a>
+        <a class="cx" data-d="3" data-t="tagresource api" href="task-3-3.html#s1">TagResource API<b class="b3">3.3</b></a>
+      </div>
+    </div>
+    <div class="stage" id="s-turn-written-policy-into-code">
+      <h3>Turn written policy into code</h3>
+      <p class="sb">A regulator wants the line of code that enforces the clause.</p>
+      <div class="grid">
+        <a class="cx" data-d="3" data-t="policy translation chain" href="task-3-4.html#s3">Policy translation chain<b class="b3">3.4</b></a>
+        <a class="cx" data-d="3" data-t="audit traceability" href="task-3-4.html#s3">Audit traceability<b class="b3">3.4</b></a>
+        <a class="cx" data-d="3" data-t="di tolerance 0.8 1.25" href="task-3-4.html#s3">DI tolerance 0.8&ndash;1.25<b class="b3">3.4</b></a>
+        <a class="cx" data-d="3" data-t="aws audit manager" href="task-3-4.html#s3">AWS Audit Manager<b class="b3">3.4</b></a>
+        <a class="cx" data-d="3" data-t="genai best practices framework" href="task-3-4.html#s3">GenAI Best Practices Framework<b class="b3">3.4</b></a>
+        <a class="cx" data-d="3" data-t="policy config versioning" href="task-3-4.html#s3">Policy config versioning<b class="b3">3.4</b></a>
+        <a class="cx" data-d="3" data-t="automated approval workflows" href="task-3-3.html#s3">Automated approval workflows<b class="b3">3.3</b></a>
+        <a class="cx" data-d="3" data-t="bias metrics gate" href="task-3-3.html#s3">Bias metrics gate<b class="b3">3.3</b></a>
+        <a class="cx" data-d="3" data-t="model card completeness gate" href="task-3-3.html#s3">Model card completeness gate<b class="b3">3.3</b></a>
+        <a class="cx" data-d="3" data-t="builder cannot approve" href="task-3-3.html#s3">Builder cannot approve<b class="b3">3.3</b></a>
+        <a class="cx" data-d="3" data-t="sagemaker model dashboard" href="task-3-3.html#s3">SageMaker Model Dashboard<b class="b3">3.3</b></a>
+        <a class="cx" data-d="3" data-t="quantitative governance metrics" href="task-3-3.html#s3">Quantitative governance metrics<b class="b3">3.3</b></a>
+        <a class="cx" data-d="3" data-t="compliance reporting pipeline" href="task-3-3.html#s4">Compliance reporting pipeline<b class="b3">3.3</b></a>
+        <a class="cx" data-d="3" data-t="quicksight compliance dashboards" href="task-3-3.html#s4">QuickSight compliance dashboards<b class="b3">3.3</b></a>
+        <a class="cx" data-d="3" data-t="bedrock agent tracing" href="task-3-4.html#s1">Bedrock agent tracing<b class="b3">3.4</b></a>
+        <a class="cx" data-d="3" data-t="enabletrace=true" href="task-3-4.html#s1">enableTrace=true<b class="b3">3.4</b></a>
+        <a class="cx" data-d="3" data-t="retrieval relevance scores" href="task-3-4.html#s1">Retrieval relevance scores<b class="b3">3.4</b></a>
+        <a class="cx" data-d="3" data-t="transparency metrics" href="task-3-4.html#s1">Transparency metrics<b class="b3">3.4</b></a>
+        <a class="cx" data-d="3" data-t="citation frequency" href="task-3-4.html#s1">Citation frequency<b class="b3">3.4</b></a>
+        <a class="cx" data-d="3" data-t="uncertainty acknowledgment" href="task-3-4.html#s1">Uncertainty acknowledgment<b class="b3">3.4</b></a>
+      </div>
+    </div>
+    <div class="stage" id="s-catch-it-drifting">
+      <h3>Catch it drifting</h3>
+      <p class="sb">Passing once is not passing forever &mdash; and &ldquo;drift&rdquo; means five unrelated things.</p>
+      <div class="grid">
+        <a class="cx" data-d="3" data-t="sagemaker model monitor" href="task-3-3.html#s4">SageMaker Model Monitor<b class="b3">3.3</b></a>
+        <a class="cx" data-d="3" data-t="baseline constraints" href="task-3-3.html#s4">Baseline constraints<b class="b3">3.3</b></a>
+        <a class="cx" data-d="3" data-t="data quality drift" href="task-3-3.html#s4">Data quality drift<b class="b3">3.3</b></a>
+        <a class="cx" data-d="3" data-t="model quality drift" href="task-3-3.html#s4">Model quality drift<b class="b3">3.3</b></a>
+        <a class="cx" data-d="3" data-t="bias drift" href="task-3-3.html#s4">Bias drift<b class="b3">3.3</b></a>
+        <a class="cx" data-d="3" data-t="feature attribution drift" href="task-3-3.html#s4">Feature attribution drift<b class="b3">3.3</b></a>
+        <a class="cx" data-d="3" data-t="jensen-shannon divergence" href="task-3-3.html#s4">Jensen-Shannon divergence<b class="b3">3.3</b></a>
+        <a class="cx" data-d="3" data-t="threshold calibration" href="task-3-3.html#s4">Threshold calibration<b class="b3">3.3</b></a>
+        <a class="cx" data-d="1" data-t="data drift (1.2)" href="task-1-2.html#s5">Data drift (1.2)<b class="b1">1.2</b></a>
+        <a class="cx" data-d="1" data-t="prompt drift (1.6)" href="task-1-6.html#s4">Prompt drift (1.6)<b class="b1">1.6</b></a>
+        <a class="cx" data-d="5" data-t="embedding drift (5.2)" href="task-5-2.html#s4">Embedding drift (5.2)<b class="b5">5.2</b></a>
+        <a class="cx" data-d="4" data-t="latency drift (4.3)" href="task-4-3.html#s5">Latency drift (4.3)<b class="b4">4.3</b></a>
+        <a class="cx" data-d="3" data-t="automated remediation loop" href="task-3-3.html#s4">Automated remediation loop<b class="b3">3.3</b></a>
+        <a class="cx" data-d="3" data-t="eventbridge rule   rollback" href="task-3-3.html#s4">EventBridge rule &rarr; rollback<b class="b3">3.3</b></a>
+        <a class="cx" data-d="3" data-t="traffic shift to known-good" href="task-3-3.html#s4">Traffic shift to known-good<b class="b3">3.3</b></a>
+        <a class="cx" data-d="5" data-t="continuous evaluation" href="task-5-1.html#s4">Continuous evaluation<b class="b5">5.1</b></a>
+        <a class="cx" data-d="5" data-t="scheduled daily runs" href="task-5-1.html#s4">Scheduled daily runs<b class="b5">5.1</b></a>
+        <a class="cx" data-d="5" data-t="regression benchmarking" href="task-5-1.html#s4">Regression benchmarking<b class="b5">5.1</b></a>
+        <a class="cx" data-d="1" data-t="golden dataset" href="task-1-6.html#s5">Golden dataset<b class="b1">1.6</b></a>
+        <a class="cx" data-d="1" data-t="prompt regression testing" href="task-1-6.html#s5">Prompt regression testing<b class="b1">1.6</b></a>
+        <a class="cx" data-d="1" data-t="v7 vs v8 blocking" href="task-1-6.html#s5">v7 vs v8 blocking<b class="b1">1.6</b></a>
+        <a class="cx" data-d="5" data-t="metric comparability rule" href="task-5-1.html#s4">Metric comparability rule<b class="b5">5.1</b></a>
+        <a class="cx" data-d="5" data-t="post-deployment rollback" href="task-5-1.html#s4">Post-deployment rollback<b class="b5">5.1</b></a>
+        <a class="cx" data-d="1" data-t="real-time output validation" href="task-1-6.html#s5">Real-time output validation<b class="b1">1.6</b></a>
+        <a class="cx" data-d="1" data-t="human escalation rate" href="task-1-6.html#s5">Human escalation rate<b class="b1">1.6</b></a>
+      </div>
+    </div>
+    <div class="stage" id="s-ask-the-people-who-use-it">
+      <h3>Ask the people who use it</h3>
+      <p class="sb">Customers judge helpfulness. Only experts catch a confident, fluent, non-compliant answer.</p>
+      <div class="grid">
+        <a class="cx" data-d="5" data-t="dual-audience feedback" href="task-5-1.html#s3">Dual-audience feedback<b class="b5">5.1</b></a>
+        <a class="cx" data-d="5" data-t="end-customer widgets" href="task-5-1.html#s3">End-customer widgets<b class="b5">5.1</b></a>
+        <a class="cx" data-d="5" data-t="sagemaker ground truth" href="task-5-1.html#s3">SageMaker Ground Truth<b class="b5">5.1</b></a>
+        <a class="cx" data-d="5" data-t="expert annotation" href="task-5-1.html#s3">Expert annotation<b class="b5">5.1</b></a>
+        <a class="cx" data-d="5" data-t="confident hallucination risk" href="task-5-1.html#s3">Confident hallucination risk<b class="b5">5.1</b></a>
+        <a class="cx" data-d="5" data-t="amazon kinesis data streams" href="task-5-1.html#s3">Amazon Kinesis Data Streams<b class="b5">5.1</b></a>
+        <a class="cx" data-d="5" data-t="separated rating scales" href="task-5-1.html#s3">Separated rating scales<b class="b5">5.1</b></a>
+        <a class="cx" data-d="5" data-t="comprehend sentiment on feedback" href="task-5-1.html#s3">Comprehend sentiment on feedback<b class="b5">5.1</b></a>
+        <a class="cx" data-d="5" data-t="abandonment nodes" href="task-5-1.html#s3">Abandonment nodes<b class="b5">5.1</b></a>
+        <a class="cx" data-d="5" data-t="repetitive query loops" href="task-5-1.html#s3">Repetitive query loops<b class="b5">5.1</b></a>
+        <a class="cx" data-d="5" data-t="human escalation triggers" href="task-5-1.html#s3">Human escalation triggers<b class="b5">5.1</b></a>
+        <a class="cx" data-d="5" data-t="feedback-driven optimization" href="task-5-2.html#s3">Feedback-driven optimization<b class="b5">5.2</b></a>
+      </div>
+    </div>
+    <div class="stage" id="s-find-the-fault-when-it-breaks">
+      <h3>Find the fault when it breaks</h3>
+      <p class="sb">Five symptoms, and where the fault actually turned out to be.</p>
+      <div class="grid">
+        <a class="cx" data-d="5" data-t="silent truncation" href="task-5-2.html#s1">Silent truncation<b class="b5">5.2</b></a>
+        <a class="cx" data-d="5" data-t="context window overflow" href="task-5-2.html#s1">Context window overflow<b class="b5">5.2</b></a>
+        <a class="cx" data-d="5" data-t="8,000-token wall" href="task-5-2.html#s1">8,000-token wall<b class="b5">5.2</b></a>
+        <a class="cx" data-d="5" data-t="truncation alerting" href="task-5-2.html#s1">Truncation alerting<b class="b5">5.2</b></a>
+        <a class="cx" data-d="5" data-t="context prioritisation" href="task-5-2.html#s1">Context prioritisation<b class="b5">5.2</b></a>
+        <a class="cx" data-d="5" data-t="error classification" href="task-5-2.html#s2">Error classification<b class="b5">5.2</b></a>
+        <a class="cx" data-d="5" data-t="40% malformed payloads" href="task-5-2.html#s2">40% malformed payloads<b class="b5">5.2</b></a>
+        <a class="cx" data-d="5" data-t="pre-call validation" href="task-5-2.html#s2">Pre-call validation<b class="b5">5.2</b></a>
+        <a class="cx" data-d="5" data-t="auth middleware bottleneck" href="task-5-2.html#s2">Auth middleware bottleneck<b class="b5">5.2</b></a>
+        <a class="cx" data-d="5" data-t="context sensitivity" href="task-5-2.html#s3">Context sensitivity<b class="b5">5.2</b></a>
+        <a class="cx" data-d="5" data-t="prompt complexity paradox" href="task-5-2.html#s3">Prompt complexity paradox<b class="b5">5.2</b></a>
+        <a class="cx" data-d="5" data-t="cross-domain prompt testing" href="task-5-2.html#s3">Cross-domain prompt testing<b class="b5">5.2</b></a>
+        <a class="cx" data-d="5" data-t="output diffing" href="task-5-2.html#s5">Output diffing<b class="b5">5.2</b></a>
+        <a class="cx" data-d="5" data-t="rag pipeline logging" href="task-5-2.html#s4">RAG pipeline logging<b class="b5">5.2</b></a>
+        <a class="cx" data-d="5" data-t="chunking strategy metrics" href="task-5-2.html#s4">Chunking strategy metrics<b class="b5">5.2</b></a>
+        <a class="cx" data-d="5" data-t="index corruption checks" href="task-5-2.html#s4">Index corruption checks<b class="b5">5.2</b></a>
+        <a class="cx" data-d="5" data-t="answer similarity" href="task-5-2.html#s4">Answer similarity<b class="b5">5.2</b></a>
+        <a class="cx" data-d="5" data-t="context relevance" href="task-5-2.html#s4">Context relevance<b class="b5">5.2</b></a>
+        <a class="cx" data-d="5" data-t="symptom   tool table" href="task-5-2.html#s5">Symptom &rarr; tool table<b class="b5">5.2</b></a>
+        <a class="cx" data-d="2" data-t="retrieval logs decide blame" href="task-2-5.html#s6">Retrieval logs decide blame<b class="b2">2.5</b></a>
+        <a class="cx" data-d="5" data-t="template edge-case testing" href="task-5-2.html#s5">Template edge-case testing<b class="b5">5.2</b></a>
+        <a class="cx" data-d="2" data-t="comprehensive logging pipeline" href="task-2-5.html#s6">Comprehensive logging pipeline<b class="b2">2.5</b></a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section style="padding-top:6px;">
+  <div class="wrap">
+    <div class="empty" id="empty">Nothing matches that. Try a shorter word, or <a href="#" id="reset">show everything</a>.</div>
+  </div>
+</section>
+
+<script>
+(function(){
+  var q=document.getElementById('q'),
+      cx=[].slice.call(document.querySelectorAll('a.cx')),
+      stages=[].slice.call(document.querySelectorAll('.stage')),
+      phases=[].slice.call(document.querySelectorAll('.ph')),
+      chips=[].slice.call(document.querySelectorAll('#dchips button')),
+      tally=document.getElementById('tally'),
+      empty=document.getElementById('empty'),
+      dom=null;
+
+  function apply(){
+    var term=q.value.trim().toLowerCase(), shown=0;
+    cx.forEach(function(a){
+      var ok=(!term||a.getAttribute('data-t').indexOf(term)!==-1)&&
+             (!dom||a.getAttribute('data-d')===dom);
+      if(ok){a.classList.remove('hide');shown++;}else{a.classList.add('hide');}
+    });
+    stages.forEach(function(s){
+      s.classList.toggle('hide', !s.querySelectorAll('a.cx:not(.hide)').length);
+    });
+    phases.forEach(function(p){
+      p.classList.toggle('hide', !p.querySelectorAll('.stage:not(.hide)').length);
+    });
+    tally.textContent=shown+(shown===1?' concept':' concepts');
+    empty.classList.toggle('show',shown===0);
+  }
+  q.addEventListener('input',apply);
+  chips.forEach(function(b){
+    b.addEventListener('click',function(){
+      var d=b.getAttribute('data-d');
+      dom=(d==='clear'||dom===d)?null:d;
+      chips.forEach(function(x){x.setAttribute('aria-pressed',String(x.getAttribute('data-d')===dom));});
+      apply();
+    });
+  });
+  document.getElementById('reset').addEventListener('click',function(e){
+    e.preventDefault();q.value='';dom=null;
+    chips.forEach(function(x){x.setAttribute('aria-pressed','false');});
+    apply();
+  });
+  apply();
+})();
+</script>
 
 <footer>
   <div class="wrap">
