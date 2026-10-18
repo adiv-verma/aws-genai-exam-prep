@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Task 4.2 Notes | AIP-C01 Guide</title>
+<meta name="description" content="Domain 4, Task 4.2 study notes: Performance Optimization">
+<style>
+  :root{
+    --ink:#0b1524; --ink-soft:#3a4a5e; --paper:#f7f8fa; --card:#ffffff; --line:#e3e7ee;
+    --accent:#e8622c; --accent-dark:#c94f1f; --navy:#0f2540; --navy-2:#16345c;
+    color-scheme: light;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{margin:0;background:var(--paper);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;line-height:1.6;}
+  a{color:var(--accent-dark);}
+  img{max-width:100%;}
+  .wrap{max-width:1080px;margin:0 auto;padding:0 24px;}
+
+  .nav{position:sticky;top:0;z-index:50;background:rgba(15,37,64,.96);backdrop-filter:blur(6px);border-bottom:1px solid rgba(255,255,255,.08);}
+  .nav .wrap{display:flex;align-items:center;justify-content:space-between;height:56px;}
+  .nav-brand{color:#fff;font-weight:700;font-size:14px;letter-spacing:.02em;text-decoration:none;}
+  .nav-brand span{color:var(--accent);}
+  .nav-links{display:flex;gap:22px;list-style:none;margin:0;padding:0;}
+  .nav-links a{color:#cdd8e6;text-decoration:none;font-size:13.5px;font-weight:500;}
+  .nav-links a:hover{color:#fff;}
+  @media (max-width:720px){
+    .nav .wrap{gap:12px;}
+    .nav-links{gap:16px;overflow-x:auto;scrollbar-width:none;-ms-overflow-style:none;
+      flex:1;justify-content:flex-end;}
+    .nav-links::-webkit-scrollbar{display:none;}
+    .nav-links a{white-space:nowrap;font-size:13px;}
+  }
+
+  header.hero{background:linear-gradient(180deg,var(--navy) 0%, var(--navy-2) 100%);color:#fff;padding:36px 0 28px;}
+  .eyebrow{display:inline-block;font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#ffd8c4;background:rgba(232,98,44,.18);border:1px solid rgba(232,98,44,.4);padding:5px 10px;border-radius:999px;margin-bottom:14px;}
+  h1{font-size:clamp(20px,3vw,27px);line-height:1.2;margin:0;font-weight:800;}
+
+  section{padding:36px 0;}
+
+  figure.arch{margin:0 0 24px;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px;}
+  figure.arch img{display:block;border-radius:8px;width:100%;height:auto;}
+  figure.arch figcaption{margin-top:10px;font-size:12.5px;color:var(--ink-soft);text-align:center;}
+
+  .note-card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:18px 22px 22px;margin-bottom:16px;}
+  .note-card h4{scroll-margin-top:78px;margin:0 0 14px;font-size:13px;font-weight:800;color:var(--navy-2);}
+  .note-card h4:target{color:var(--accent-dark);}
+  .note-card h4:target::after{content:" \2190";color:var(--accent);}
+
+  .lead{font-size:13.5px;font-weight:700;color:var(--ink);margin:18px 0 8px;}
+  .lead:first-of-type{margin-top:0;}
+  .lead.num{color:var(--navy-2);}
+  .txt{font-size:13px;color:var(--ink-soft);line-height:1.6;margin:0 0 8px;}
+  .kv{font-size:13px;color:var(--ink-soft);line-height:1.6;margin:0 0 8px;padding-left:14px;border-left:2px solid var(--line);}
+  .kv strong{color:var(--ink);font-weight:700;}
+
+  .codelabel{font-size:10.5px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:#8b96a5;margin:14px 0 6px;}
+  pre.code{margin:0 0 10px;padding:12px 14px;background:#0f2540;color:#dbe6f3;border-radius:9px;overflow-x:auto;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px;line-height:1.55;}
+
+  footer{padding:32px 0 48px;color:#8b96a5;font-size:12.5px;}
+  footer .wrap{border-top:1px solid var(--line);padding-top:22px;}
+  footer a{color:#6b7686;}
+  table.cmp{width:100%;border-collapse:collapse;margin:4px 0 12px;font-size:12.5px;display:block;overflow-x:auto;}
+  table.cmp th{text-align:left;padding:8px 10px;background:#0f2540;color:#fff;font-weight:700;font-size:11.5px;letter-spacing:.02em;border:1px solid #0f2540;}
+  table.cmp td{padding:8px 10px;border:1px solid var(--line);color:var(--ink-soft);vertical-align:top;}
+  table.cmp tbody tr:nth-child(even){background:#fafbfc;}
+  table.cmp td:first-child{color:var(--ink);font-weight:600;}
+
+  pre.art{margin:4px 0 12px;padding:14px 16px;background:#0f2540;color:#dbe6f3;border-radius:9px;overflow-x:auto;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:11.5px;line-height:1.45;white-space:pre;}
+
+  .step{display:flex;gap:11px;align-items:flex-start;margin:0 0 10px;}
+  .step .stepn{flex:none;width:22px;height:22px;border-radius:7px;background:var(--navy);color:#fff;font-size:11.5px;font-weight:700;display:flex;align-items:center;justify-content:center;margin-top:1px;}
+  .step .stept{margin:0;font-size:13.5px;font-weight:700;color:var(--ink);}
+  .step .steps{margin:0;font-size:11.5px;font-weight:600;letter-spacing:.03em;text-transform:uppercase;color:#8b96a5;}
+
+  .chain{margin:4px 0 12px;padding:11px 14px;background:#f3f7fd;border:1px solid #dbe6f5;border-radius:9px;font-size:12.5px;font-weight:600;color:var(--navy-2);text-align:center;overflow-x:auto;}
+  .cardeyebrow{margin:0 0 4px;font-size:10.5px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:#8b96a5;}
+  .fracwrap{text-align:center;margin:6px 0 14px;}
+  .frac{display:inline-grid;grid-template-columns:auto auto;align-items:center;column-gap:11px;
+        padding:12px 20px;background:#f3f7fd;border:1px solid #dbe6f5;border-radius:9px;}
+  .frac p{margin:0;line-height:1.3;}
+  .frac .fl{grid-column:1;grid-row:1 / span 2;font-size:15.5px;font-weight:700;color:var(--navy-2);}
+  .frac .fn{grid-column:2;grid-row:1;text-align:center;font-size:14.5px;font-style:italic;color:var(--navy-2);padding:0 8px 3px;}
+  .frac .fd{grid-column:2;grid-row:2;text-align:center;font-size:14.5px;font-style:italic;color:var(--navy-2);border-top:1.4px solid var(--navy-2);padding:3px 8px 0;}
+  .frac .fz{grid-column:1;grid-row:3;height:0;overflow:hidden;}
+
+  .cardeyebrow{margin:0 0 4px;font-size:10.5px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:#8b96a5;}
+  .cardeyebrow{margin:0 0 4px;font-size:10.5px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:#8b96a5;}
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="wrap">
+    <a class="nav-brand" href="../index.html">AIP-C01 <span>Guide</span></a>
+    <ul class="nav-links">
+      <li><a href="index.html">All Study Notes</a></li>
+      <li><a href="../tasks/index.html">Build Log</a></li>
+    </ul>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="wrap">
+    <span class="eyebrow">Domain 4 &middot; Task 4.2</span>
+    <h1>Domain 4, Task 4.2 &mdash; Performance Optimisation (Detailed Revision Notes)</h1>
+  </div>
+</header>
+
+<section>
+  <div class="wrap">
+
+    <figure class="arch">
+      <img src="../assets/task-4-2-architecture.svg" alt="Task 4.2 performance optimization architecture, drawn as six panels plus a closing loop. Panel 1, Pre-computation and Caching, for low actual latency: a user client calls API Gateway which calls AWS Lambda, and Lambda fans out to Amazon ElastiCache at sub-millisecond, Amazon DynamoDB at single-digit milliseconds, and - only on a cache miss - a Bedrock foundation model call at roughly three thousand milliseconds; a dashed pre-population Lambda underneath asynchronously pre-computes the predictable queries such as FAQs and daily reports. Panel 2, Response Streaming, for low perceived latency: the user client sends a stream request to an application backend which calls Amazon Bedrock with InvokeStream, and a dashed return path carries Server-Sent Events back to the backend and tokens on to the client; two cards state the effect - actual latency unchanged at about eight seconds end to end, time-to-first-token cut from eight thousand milliseconds to roughly five hundred. Panel 3, Parallelization with Step Functions: API Gateway starts an AWS Step Functions workflow whose Parallel or Map state holds three concurrent Bedrock calls, A, B and C; cards note that three sequential two-second tasks drop from six seconds to two, but only if the calls are non-dependent, and that MaxConcurrency of ten caps in-flight calls to avoid HTTP 429 throttling. Panel 4, RAG and Retrieval Optimization: a user query passes through a preprocessing Lambda doing spellcheck, normalisation and expansion, then into a vector database on Amazon OpenSearch; a hybrid search card combines vector semantic match with BM25 keyword search before scoring, a dashed index-internals box contrasts HNSW for speed and recall against IVF for memory efficiency, and a custom reranking Lambda applies Final Score equals relevance times w1 plus recency times w2 plus authority times w3. Panel 5, Efficient Resource Allocation: a load balancer or SQS routes to an EC2 Auto Scaling group fronting a SageMaker endpoint on Inferentia; Amazon CloudWatch tracks token length, utilisation and idle periods and feeds predictive scaling back into the group, because GPUs boot too slowly to scale reactively; separate cards cover Provisioned Throughput as dedicated Bedrock capacity beyond on-demand quotas, and SageMaker Inference Recommender load-testing instance types to size the fleet on evidence. Panel 6, Monitoring and A/B Testing: the GenAI application ships metrics and logs to Amazon CloudWatch and on to dashboards for an admin, while CloudWatch Evidently runs A/B variant control on live production traffic with statistical hypothesis testing across model variants, prompts and parameters; a final card gives the exam split - AppConfig for feature flags and progressive rollout, Evidently for quantitative experimentation. Across the bottom runs the continuous optimization loop: capacity planning, then monitoring, then GenAI-optimized autoscaling, then resource optimization, with a dashed feedback arrow returning runtime telemetry to capacity planning.">
+      <figcaption>The six places latency and throughput are won &mdash; and the loop that keeps winning them. Panels 1&ndash;6 redraw architecture_diagram.md; the closing band is the continuous optimization loop from Topic 6.</figcaption>
+    </figure>
+
+    <div class="note-card">
+      <h4 id="t1">Topic 1: Responsive AI Systems &mdash; Detailed Notes</h4>
+        <p class="lead num">1. Conceptual Framework: Actual vs. Perceived Latency</p>
+        <p class="txt">In generative AI architectures, latency must be analyzed through two distinct lenses:</p>
+        <p class="kv"><strong>Actual Latency (System Performance):</strong> The exact total execution time required for the system to process an incoming payload, invoke the foundation model, receive complete generated tokens, and deliver the final response back to the client.</p>
+        <p class="kv"><strong>Perceived Latency (User Experience):</strong> The subjective duration of time a user feels they are waiting before seeing meaningful progress or interaction from the application.</p>
+        <pre class="art">+-------------------------------------------------------------------------------+
+| WITHOUT STREAMING (High Perceived Latency)                                    |
+| [Request Sent] ------ 8 Seconds Spinner / Loading Bar -------&gt; [Full Answer]  |
++-------------------------------------------------------------------------------+
+
++-------------------------------------------------------------------------------+
+| WITH STREAMING (Low Perceived Latency)                                        |
+| [Request Sent] -&gt; [0.5s First Token] -&gt; [Tokens Stream Continuously...] (8s)  |
++-------------------------------------------------------------------------------+</pre>
+        <p class="lead num">2. Pre-computation and Caching Architectures</p>
+        <p class="txt">To eliminate unnecessary foundation model calls for static or predictable prompts, pre-computation shifts processing upstream.</p>
+        <pre class="art">User Request
+     |
+     v
+[ API Gateway ]
+     |
+     v
+[ AWS Lambda ] ---&gt; Check Cache / Store ---&gt; [ DynamoDB / ElastiCache ] ---&gt; Return ~10ms
+     |                                              |
+     | (If Cache Miss)                              | (If Cache Hit)
+     v                                              v
+[ Amazon Bedrock FM Call ] (~3000ms) --------&gt; Return Data</pre>
+        <p class="lead">Workflow:</p>
+        <p class="kv"><strong>1.</strong> Identify highly predictable queries (e.g., standard FAQs, product summaries, daily aggregate reports).</p>
+        <p class="kv"><strong>2.</strong> Pre-calculate outputs asynchronously using AWS Lambda.</p>
+        <p class="kv"><strong>3.</strong> Store results in a fast lookup store (Amazon DynamoDB or Amazon ElastiCache).</p>
+        <p class="kv"><strong>4.</strong> Incoming application requests execute direct key-value lookups instead of model invocations.</p>
+        <p class="lead">Latency Differential:</p>
+        <p class="kv"><strong>Model Invocation:</strong> &#8764;3,000 ms</p>
+        <p class="kv"><strong>Key-Value Store Lookup:</strong> &#8764;10 ms</p>
+        <p class="lead">Storage Comparison Matrix</p>
+        <table class="cmp">
+          <thead><tr><th>Storage Service</th><th>Target Latency</th><th>Characteristics &amp; Primary Use Cases</th></tr></thead>
+          <tbody>
+            <tr><td>Amazon DynamoDB</td><td>Single-digit millisecond (&lt;10 ms)</td><td>Persistent storage for larger datasets, structured metadata, persistent responses. Requires appropriate Read Capacity Units (RCUs) / Auto Scaling to avoid throttling.</td></tr>
+            <tr><td>Amazon ElastiCache (Redis OSS / Valkey)</td><td>Sub-millisecond (&lt;1 ms)</td><td>In-memory key-value caching for extremely hot, frequently accessed model responses, query embeddings, and active user session states.</td></tr>
+          </tbody>
+        </table>
+        <p class="lead num">3. Latency-Optimized Bedrock Models</p>
+        <p class="kv"><strong>Mechanism:</strong> Amazon Bedrock provides optimized variants of specific Foundation Models tuned specifically for speed.</p>
+        <p class="kv"><strong>Trade-off:</strong> Directly trades off a small margin of generation accuracy/reasoning capability for significantly faster token generation rates.</p>
+        <p class="kv"><strong>Target Workloads:</strong> Time-critical or SLA-bound applications (e.g., live interactive voice assistants, clinical triage assistants, real-time chat support) where minimal latency is mandatory and slight quality concessions are acceptable.</p>
+        <p class="lead num">4. Response Streaming (Perceived Latency Lever)</p>
+        <p class="kv"><strong>Mechanism:</strong> Utilizes HTTP chunked transfer encoding / Server-Sent Events (SSE) or WebSockets to stream tokens incrementally back to the client interface as they are generated by the model.</p>
+        <p class="lead">Impact Profile:</p>
+        <p class="kv"><strong>Actual Latency:</strong> Unchanged (e.g., total execution time remains 8 seconds).</p>
+        <p class="kv"><strong>Time-to-First-Token (TTFT):</strong> Reduced drastically from 8,000 ms to &#8776;500 ms.</p>
+        <p class="kv"><strong>Exam Rule:</strong> Streaming is the most cost-effective architectural pattern to drastically lower perceived latency without altering infrastructure scale or changing underlying model choices.</p>
+        <p class="lead num">5. Parallelization via AWS Step Functions</p>
+        <p class="txt">When an architectural workflow requires multiple independent model invocations or tool calls, sequential processing creates additive latency bottlenecks.</p>
+        <pre class="art">Sequential Execution:
+[ Task A (2s) ] ---&gt; [ Task B (2s) ] ---&gt; [ Task C (2s) ] = Total 6 Seconds
+
+Parallel Execution (Step Functions Parallel State):
++---&gt; [ Task A (2s) ] ---+
+|                        |
++---&gt; [ Task B (2s) ] ---+ ---&gt; Total 2 Seconds
+|                        |
++---&gt; [ Task C (2s) ] ---+</pre>
+        <p class="kv"><strong>Prerequisite:</strong> Operations must be strictly non-dependent (i.e., Task B does not require Task A's output payload as input context).</p>
+        <p class="lead num">6. Systematic Benchmarking &amp; Production Experimentation</p>
+        <p class="txt">To validate latency reduction strategies without impacting production performance, AWS provides specific measurement and deployment tools:</p>
+        <p class="kv"><strong>Amazon CloudWatch:</strong> Used for collecting operational performance metrics, tracking model latency distributions (p50, p90, p99), logging invocation errors, and observing API throttles.</p>
+        <p class="kv"><strong>CloudWatch Evidently:</strong> Built specifically for feature flagging and A/B testing/experimentation. Allows statistical hypothesis testing to compare model variants, latency optimizations, and prompt designs in live production traffic with statistical significance.</p>
+        <p class="lead">Exam Key Distinction:</p>
+        <p class="kv"><strong>AWS AppConfig:</strong> Best used for feature flag deployments, configuration management, and progressive rollout schedules.</p>
+        <p class="kv"><strong>CloudWatch Evidently:</strong> Best used for quantitative experimentation, A/B testing, and statistical comparison of performance/latency metrics across user segments.</p>
+    </div>
+
+    <div class="note-card">
+      <h4 id="t2">Topic 2: Retrieval Performance &mdash; Detailed Notes</h4>
+        <p class="lead num">1. Vector Index Algorithms: HNSW vs. IVF</p>
+        <p class="txt">Vector search performance directly influences Retrieval-Augmented Generation (RAG) system latency and accuracy. Choosing the correct vector indexing algorithm involves balancing latency, memory footprint, recall accuracy, and index build time.</p>
+        <pre class="art">HNSW (Graph-Based Structure):
+
+Layer 2 (Coarse Nodes)   :  [ A ] -----------------------&gt; [ B ]
+                              |                              |
+Layer 1 (Medium Nodes)   :  [ A ] --------&gt; [ C ] --------&gt; [ B ]
+                              |              |               |
+Layer 0 (Dense Fine Nodes): [ A ]-&gt;[ D ]-&gt;[ C ]-&gt;[ E ]----&gt;[ B ]
+(Descends through layers to rapidly pinpoint nearest neighbors)
+
+IVF (Cluster-Based Structure):
+
+Dataset Vectors ---&gt; Partition into Voronoi Clusters (Centroids)
+Query Execution ---&gt; Find Nearest Centroids ---&gt; Search strictly within those clusters</pre>
+        <p class="lead">Algorithm Comparison Matrix</p>
+        <table class="cmp">
+          <thead><tr><th>Feature / Metric</th><th>HNSW (Hierarchical Navigable Small World)</th><th>IVF (Inverted File Index)</th></tr></thead>
+          <tbody>
+            <tr><td>Structure Type</td><td>Multi-layer proximity graph</td><td>Cluster-based partitioning (Voronoi cells)</td></tr>
+            <tr><td>Search Speed</td><td>Extremely fast (sub-millisecond lookups)</td><td>Fast, proportional to the number of clusters searched</td></tr>
+            <tr><td>Recall / Accuracy</td><td>Very high recall</td><td>Slightly lower recall compared to HNSW</td></tr>
+            <tr><td>Memory Consumption</td><td>High (RAM-intensive) due to edge graph storage</td><td>Low to moderate (memory efficient)</td></tr>
+            <tr><td>Index Build Speed</td><td>Slower to construct</td><td>Faster index creation</td></tr>
+            <tr><td>Optimal Use Case</td><td>When high speed + maximum recall are mandatory and sufficient RAM is allocated.</td><td>Extremely large datasets where memory constraints exist.</td></tr>
+          </tbody>
+        </table>
+        <p class="lead num">2. HNSW Tuning Parameters</p>
+        <p class="txt">Optimizing HNSW requires fine-tuning parameters that govern index build behavior versus runtime search speed.</p>
+        <p class="chain">Build Phase Parameters (m, ef_construction) &#10230; Affects Index Construction Time &amp; RAM</p>
+        <p class="chain">Query Phase Parameter (ef_search) &#10230; Affects Runtime Search Latency &amp; Recall</p>
+        <table class="cmp">
+          <thead><tr><th>Parameter</th><th>Execution Phase</th><th>Effect of Increasing Parameter Value</th></tr></thead>
+          <tbody>
+            <tr><td>m</td><td>Build</td><td>Controls maximum outgoing connections per graph node. Increasing m improves recall but significantly increases memory usage and slows index creation.</td></tr>
+            <tr><td>ef_construction</td><td>Build</td><td>Controls size of the dynamic candidate list evaluated during index construction. Increasing it improves index quality/recall, but slows index build time. Has zero impact on query search speed.</td></tr>
+            <tr><td>ef_search</td><td>Query / Runtime</td><td>Controls candidate list evaluated during vector lookup. Increasing it improves recall accuracy, but increases search latency (slower query processing).</td></tr>
+          </tbody>
+        </table>
+        <p class="lead num">3. Hierarchical Indices and Query Preprocessing</p>
+        <p class="kv"><strong>Hierarchical Vector Indices:</strong> Utilizes a coarse-to-fine routing strategy. Top-level vector indices route queries to high-level domain categories, while lower-level indices perform precise similarity matching within specific sub-domains.</p>
+        <p class="txt"><strong>Query Preprocessing Pipeline (AWS Lambda):</strong> Executing query transformation upstream of the vector database prevents expensive vector misses and reduces retry loops:</p>
+        <p class="kv"><strong>Normalization:</strong> Standardizing text formatting, casing, and removing stop-words.</p>
+        <p class="kv"><strong>Query Expansion / Decomposition:</strong> Expanding acronyms or breaking multi-part complex prompts into smaller sub-queries using Bedrock models.</p>
+        <p class="kv"><strong>Spelling &amp; Syntax Correction:</strong> Resolving typos prior to embedding generation to avoid bad vector projections.</p>
+        <p class="lead num">4. Hybrid Search and Custom Reranking Functions</p>
+        <p class="txt">Vector similarity alone (e.g., Cosine Distance or Dot Product) is often insufficient for enterprise retrieval, as an exact semantic match may point to stale or low-authority documents.</p>
+        <pre class="art">Incoming Vector Query
+         |
+         +--------------------&gt; Hybrid Search &lt;--------------------+
+         |                                                         |
+         v                                                         v
+[ Vector Semantic Match ]                                 [ BM25 Keyword Search ]
+         |                                                         |
+         +--------------------&gt; Custom Reranker &lt;------------------+
+                                     |
+                                     v
+                 Final Score Calculation Equation Applied</pre>
+        <p class="lead">Custom Reranking Formula</p>
+        <p class="txt">Reranking applies weighted domain logic at the index level:</p>
+        <p class="chain">Final Score = (Relevance &times; w<sub>1</sub>) + (Recency &times; w<sub>2</sub>) + (Authority &times; w<sub>3</sub>)</p>
+        <p class="txt">Where w<sub>1</sub>, w<sub>2</sub>, w<sub>3</sub> represent tunable weights balancing semantic relevance, document freshness (recency), and domain trust metrics (authority).</p>
+        <p class="lead">Caching Vector Results</p>
+        <p class="txt">To minimize vector engine load and lower retrieval latency for popular searches, frequently requested query vector embeddings and corresponding top-K payload matches are cached in Amazon ElastiCache.</p>
+    </div>
+
+    <div class="note-card">
+      <h4 id="t3">Topic 3: Throughput Optimisation &mdash; Detailed Notes</h4>
+        <p class="lead num">1. Throughput vs. Latency Trade-offs</p>
+        <p class="txt">In production Generative AI deployments, throughput and latency often exist in direct tension:</p>
+        <p class="kv"><strong>Latency:</strong> The elapsed time required to process a single discrete request from invocation to completion (time/request).</p>
+        <p class="kv"><strong>Throughput:</strong> The total volume of transactions or tokens the architecture processes within a given timeframe (requests/second or tokens/second).</p>
+        <p class="kv"><strong>Core Trade-off:</strong> Strategies that maximize total system throughput&mdash;such as batching multiple prompts together&mdash;frequently increase individual per-request latency. Conversely, optimizing purely for single-request speed often leads to resource under-utilization and lower throughput capacity.</p>
+        <p class="lead num">2. Token Processing and Workload Batching</p>
+        <p class="kv"><strong>Token Efficiency:</strong> In Task 4.1, token reduction was driven by cost containment. In Task 4.2, token minimization directly enhances performance: shorter prompt inputs and bounded completion outputs execute faster, freeing system concurrency capacity to serve more total requests.</p>
+        <p class="kv"><strong>Batch Inference Architecture:</strong> For non-interactive, asynchronous workloads (e.g., nightly document summarization, offline embeddings processing), synchronous model calls are replaced with batch inference.</p>
+        <p class="kv"><strong>Decoupling with Amazon SQS:</strong> High-volume ingress traffic is routed through Amazon Simple Queue Service (SQS) buffers to smooth out peak load spikes and form micro-batches before hitting foundation model endpoints.</p>
+        <pre class="art">High Ingress Traffic
+         |
+         v
+  [ Amazon SQS ]  &lt;--- Queues and buffers spikes during peak traffic
+         |
+         v (Controlled Consumption)
+  [ AWS Lambda / ECS Worker ]
+         |
+         v (Batch Invocations)
+[ Amazon Bedrock / SageMaker ]</pre>
+        <p class="lead num">3. Concurrent Invocation Control &amp; Throttling Mitigation</p>
+        <p class="txt">Uncontrolled, unlimited parallel calls to foundation model APIs trigger HTTP 429 (Too Many Requests) throttling exceptions, leading to exponential backoff retries and severe overall performance degradation.</p>
+        <pre class="art">UNCONTROLLED PARALLELISM:
+[ 100 Parallel Calls ] ---&gt; [ Model Endpoint ] ---&gt; HTTP 429 Throttling Error ---&gt; System Latency Spikes
+
+CONTROLLED CONCURRENCY (Step Functions Map State):
+[ 100 Requests ] ---&gt; [ Step Functions Map State ]
+                             |
+                             +---&gt; MaxConcurrency: 10
+                             |
+                             v
+                     [ 10 Calls Executing ]  (90 Requests Waiting Safely in Queue)</pre>
+        <p class="kv"><strong>Step Functions MaxConcurrency:</strong> When orchestrating parallel model processing using AWS Step Functions Map state, MaxConcurrency caps the maximum active parallel executions (e.g., MaxConcurrency: 10). Remaining executions wait safely in state queue buffers rather than failing due to endpoint throttling.</p>
+        <p class="kv"><strong>Resilience Patterns:</strong> Combines rate limiting, token-bucket controls, and exponential backoff with jitter to maintain continuous throughput at maximum quota capacity without breaching service limits.</p>
+        <p class="lead num">4. Request Prioritisation &amp; Priority Queuing</p>
+        <p class="txt">During high-demand peak traffic, critical business transactions must not be blocked by low-priority asynchronous tasks.</p>
+        <pre class="art">Ingress Payload
+       |
+       v
+[ API Gateway / Application Router ]
+       |
+       +---&gt; High-Priority Message Attribute ---&gt; [ SQS Priority Queue ] ---&gt; Fast-Track Processing
+       |
+       +---&gt; Low-Priority Message Attribute  ---&gt; [ SQS Standard Queue ] ---&gt; Batched / Throttled</pre>
+        <p class="kv"><strong>Implementation Pattern:</strong> Dual SQS queues or SQS Message Attributes are configured to establish emergency/high-priority pathways.</p>
+        <p class="txt">Worker processes drain high-priority queues first, ensuring strict SLAs for critical user-facing requests while lower-priority workloads wait for available throughput capacity.</p>
+    </div>
+
+    <div class="note-card">
+      <h4 id="t4">Topic 4: FM Parameter Tuning &mdash; Detailed Notes</h4>
+        <p class="lead num">1. Foundation Model (FM) Hyperparameters</p>
+        <p class="txt">Foundation model parameters control generation behavior, output variability, token selection constraints, and overall token generation dynamics.</p>
+        <table class="cmp">
+          <thead><tr><th>Parameter</th><th>Control Scope</th><th>Operational Impact</th></tr></thead>
+          <tbody>
+            <tr><td>Temperature</td><td>Randomness (0 to 1)</td><td>0 produces deterministic, highly repeatable outputs. 1 produces highly creative, diverse, and unpredictable token generations.</td></tr>
+            <tr><td>Top-K</td><td>Fixed Token Count</td><td>Restricts token selection to the top K most probable candidates (e.g., K=50 always considers 50 candidates regardless of probability distribution confidence).</td></tr>
+            <tr><td>Top-P</td><td>Nucleus Sampling Probability Mass</td><td>Dynamically samples from the smallest set of tokens whose cumulative probability exceeds threshold p (e.g., p=0.9).</td></tr>
+          </tbody>
+        </table>
+        <p class="lead num">2. Top-K vs. Top-P Mechanics</p>
+        <p class="kv"><strong>Top-K (Fixed):</strong> Maintains a rigid count limit. If the model is extremely certain or highly uncertain, it strictly limits choices to K tokens.</p>
+        <p class="txt"><strong>Top-P (Adaptive):</strong> Adjusts dynamically based on model confidence:</p>
+        <p class="kv"><strong>High Confidence:</strong> The model requires only a few tokens to reach 90% cumulative probability &rarr; fewer candidate choices.</p>
+        <p class="kv"><strong>Low Confidence:</strong> The model spreads probability across many plausible tokens to reach 90% &rarr; wider candidate pool.</p>
+        <p class="kv"><strong>Exam Golden Rule:</strong> Tune either temperature or top-p, but never both simultaneously, as they interact to skew the probability distribution in unpredictable ways.</p>
+        <p class="lead num">3. Tuning Workflow</p>
+        <p class="chain">Systematic configuration testing &#10230; Evaluation via Model Evaluation frameworks &#10230; Production A/B testing via CloudWatch Evidently &#10230; Optimum parameter adoption</p>
+        <p class="txt">Specialized use-case prompt templates may require distinct, isolated parameter profiles.</p>
+    </div>
+
+    <div class="note-card">
+      <h4 id="t5">Topic 5: Efficient Resource Allocation &mdash; Detailed Notes</h4>
+        <p class="lead num">1. Why GenAI Workloads Differ from Traditional Applications</p>
+        <p class="txt">Generative AI applications present unique infrastructure challenges that break conventional FinOps patterns:</p>
+        <p class="kv"><strong>&bull;</strong> Significant compute (GPU/ASIC) and memory requirements.</p>
+        <p class="kv"><strong>&bull;</strong> Highly variable inference latency under peak demand.</p>
+        <p class="kv"><strong>&bull;</strong> Strict throughput and quota limits tied to provider tokens-per-minute (TPM) and requests-per-minute (RPM).</p>
+        <p class="lead num">2. SageMaker Inference Recommender &amp; Provisioned Throughput</p>
+        <p class="kv"><strong>SageMaker Inference Recommender:</strong> An automated tool that executes systematic load tests across diverse instance configurations to recommend the optimal instance type, balancing cost-effectiveness and performance across real-time and serverless deployment options. It replaces guesswork with empirical data.</p>
+        <p class="kv"><strong>Provisioned Throughput:</strong> Dedicated, reserved infrastructure providing stable, guaranteed throughput capacity exceeding standard on-demand quotas. Cross-region inference profiles can be used to distribute high demand across multiple AWS regions.</p>
+        <p class="lead num">3. GenAI-Specific Utilization Monitoring</p>
+        <p class="txt">Traditional application monitoring focuses primarily on CPU and memory utilization. GenAI monitoring requires tracking domain-specific metrics:</p>
+        <p class="kv"><strong>Token Length Monitoring:</strong> Tracking input prompt lengths and output completion token counts, as token volume is the primary driver of infrastructure utilization and latency.</p>
+        <p class="kv"><strong>Idle Period Detection:</strong> Identifying periods of low activity to scale down or suspend expensive endpoints.</p>
+        <p class="kv"><strong>SageMaker Model Monitor:</strong> Continuously monitors deployed model endpoints for data drift and output quality degradation.</p>
+        <p class="lead num">4. Autoscaling &amp; Predictive Scaling Architectures</p>
+        <p class="kv"><strong>Predictive Scaling:</strong> Anticipates traffic spikes using historical usage data and scheduled events (e.g., financial market open and close times). Reactive scaling is insufficient for GenAI workloads because spinning up GPU instances takes time, causing requests to time out before capacity arrives.</p>
+        <p class="kv"><strong>Request Queuing:</strong> Placing an architectural buffer (such as Amazon SQS) between the client application and the model endpoint prevents request denial under strict throughput constraints.</p>
+        <pre class="art">Incoming GenAI Traffic Spikes
+             |
+             v
+[ Application Load Balancer ]
+             |
+             v
+    [ Amazon SQS Queue ]  &lt;--- Buffers sudden traffic surges safely
+             |
+             v
+[ SageMaker Auto-Scaling Endpoints ] (Backed by Predictive Scaling &amp; EC2 Inferentia)</pre>
+        <p class="lead num">5. Hardware Acceleration</p>
+        <p class="kv"><strong>Amazon EC2 Inferentia:</strong> Purpose-built AWS silicon chips optimized specifically for deep learning inference workloads. They offer significantly higher cost-efficiency and lower latency than general-purpose GPUs for model serving. (Note: AWS Trainium is the dedicated counterpart designed for model training).</p>
+    </div>
+
+    <div class="note-card">
+      <h4 id="t6">Topic 6: System Performance Optimisation &mdash; Detailed Notes</h4>
+        <p class="lead num">1. API Profiling with AWS X-Ray</p>
+        <p class="kv"><strong>Mechanism:</strong> AWS X-Ray traces incoming API requests through the entire microservices architecture down to foundation model invocations.</p>
+        <p class="kv"><strong>Focus Area:</strong> Building on Task 2.4's subsegments and annotations, X-Ray in Task 4.2 is used specifically to profile prompt-completion patterns&mdash;identifying which prompt shapes, token lengths, or tool-calling sequences introduce latency bottlenecks.</p>
+        <p class="lead num">2. Log Analysis &amp; Insights</p>
+        <p class="kv"><strong>Amazon CloudWatch Insights:</strong> Used to query and analyze massive volumes of application logs and API call patterns.</p>
+        <p class="kv"><strong>Objective:</strong> Uncover systemic inefficiencies, recurring throttling patterns, or sub-optimal payload structures across distributed inference pipelines.</p>
+        <p class="lead num">3. Edge Caching and Intelligent Routing</p>
+        <p class="txt">To minimize global latency and route requests efficiently across distributed client bases:</p>
+        <p class="kv"><strong>Amazon CloudFront:</strong> Deployed at edge locations to cache static or semi-static model outputs, reducing origin round-trips for repetitive global queries.</p>
+        <p class="kv"><strong>Amazon API Gateway:</strong> Provides efficient request routing, rate limiting, and payload validation before requests reach backend orchestration services.</p>
+        <p class="kv"><strong>CloudWatch Dashboards:</strong> Real-time operational dashboards tracking latency percentiles (p50, p90, p99), error rates, and throughput metrics.</p>
+        <p class="lead num">4. The Continuous Optimization Loop</p>
+        <p class="txt">Optimizing Generative AI workloads is not a one-time setup; it is a closed-loop operational cycle:</p>
+        <pre class="art">                  +--------------------------------------+
+                  |          Capacity Planning           |
+                  | (Inference Recommender / Provisioned)|
+                  +--------------------------------------+
+                                    |
+                                    v
+                  +--------------------------------------+
+                  |              Monitoring              |
+                  |  (CloudWatch / SageMaker Model Mon)  |
+                  +--------------------------------------+
+                                    |
+                                    v
+                  +--------------------------------------+
+                  |     GenAI-Optimized Autoscaling      |
+                  |   (Event-driven scaling &amp; queuing)   |
+                  +--------------------------------------+
+                                    |
+                                    v
+                  +--------------------------------------+
+                  |        Resource Optimization         |
+                  |    (Quota management / Inferentia)   |
+                  +--------------------------------------+
+                                    |
+          +-------------------------+
+          | (Feedback Loop Back)
+          v
+     Capacity Planning</pre>
+        <p class="kv"><strong>Capacity Planning:</strong> Establishes initial baseline infrastructure using Inference Recommender and Provisioned Throughput.</p>
+        <p class="kv"><strong>Monitoring:</strong> Continuously tracks performance via CloudWatch metrics and SageMaker Model Monitor.</p>
+        <p class="kv"><strong>Autoscaling:</strong> Triggers event-driven scaling and request queuing based on observed metrics.</p>
+        <p class="kv"><strong>Resource Optimization:</strong> Manages service quotas and hardware allocations (e.g., EC2 Inferentia).</p>
+        <p class="kv"><strong>Feedback Loop:</strong> Feeds runtime telemetry back into capacity planning to continuously refine architecture configurations.</p>
+        <p class="txt"><em>(Note: Service limits and feature availability frequently evolve. Always verify specific numerical quotas and feature sets against current AWS documentation before taking the exam.)</em></p>
+    </div>
+
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <p>This is an independent, unofficial study resource and is not affiliated with, endorsed by, or sponsored by Amazon Web Services, Inc. AWS, Amazon Bedrock, and all related marks are trademarks of Amazon.com, Inc. or its affiliates.</p>
+    <p>Hosted on Amazon S3 + Amazon CloudFront. &middot; <a href="index.html">&larr; Back to Study Notes</a></p>
+  </div>
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,178 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1180 852" width="1180" height="852" role="img" font-family="-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica,Arial,sans-serif">
+<defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,1 L9,5 L0,9 z" fill="#8fa0b6"/></marker></defs>
+<style>.dtitle{font-size:14.5px;font-weight:800;letter-spacing:.03em;fill:#0f2540;}.phase{font-size:10.5px;font-weight:700;letter-spacing:.07em;fill:#8b96a5;text-transform:uppercase;}.lh{font-size:12.5px;font-weight:800;fill:#ffffff;}.ln{font-size:10px;font-weight:700;fill:#ffd8c4;letter-spacing:.05em;}.bh{font-size:11.5px;font-weight:800;fill:#0f2540;}.bn{font-size:11px;font-weight:700;fill:#0b1524;}.bs{font-size:10.3px;fill:#5a6a7e;}.ch{font-size:11px;font-weight:700;fill:#16345c;}.el{font-size:10px;font-weight:700;fill:#5c6b80;}.leg{font-size:10px;fill:#9aa5b4;}</style>
+<rect width="1180" height="852" fill="#ffffff"/>
+<text x="24" y="32" class="dtitle">TASK 4.2: WHERE THE TIME GOES, AND THE SIX PLACES YOU TAKE IT BACK</text>
+<line x1="24" y1="44" x2="1156" y2="44" stroke="#e3e7ee"/>
+<rect x="24" y="78" width="560" height="184" rx="11" fill="#ffffff" stroke="#d7dde8"/>
+<path d="M35 78 h538 a11 11 0 0 1 11 11 v21 h-560 v-21 a11 11 0 0 1 11 -11 z" fill="#0f2540"/>
+<text x="40" y="99" class="lh">1 · Pre-computation &amp; Caching</text>
+<text x="568" y="99" class="ln" text-anchor="end">LOW ACTUAL LATENCY</text>
+<rect x="40" y="118" width="92" height="26" rx="8" fill="#f3f7fd" stroke="#c6d8ef"/>
+<text x="86.0" y="135.0" class="ch" text-anchor="middle">User Client</text>
+<line x1="132" y1="131" x2="168" y2="131" stroke="#8fa0b6" stroke-width="1.6" marker-end="url(#ah)"/>
+<text x="150" y="126" class="el" text-anchor="middle"></text>
+<rect x="172" y="118" width="100" height="26" rx="8" fill="#f3f7fd" stroke="#c6d8ef"/>
+<text x="222.0" y="135.0" class="ch" text-anchor="middle">API Gateway</text>
+<line x1="272" y1="131" x2="308" y2="131" stroke="#8fa0b6" stroke-width="1.6" marker-end="url(#ah)"/>
+<rect x="312" y="118" width="100" height="26" rx="8" fill="#f3f7fd" stroke="#c6d8ef"/>
+<text x="362.0" y="135.0" class="ch" text-anchor="middle">AWS Lambda</text>
+<text x="424" y="128" class="bs">Key-value lookup replaces</text>
+<text x="424" y="140" class="bs">the model call entirely.</text>
+<line x1="362" y1="144" x2="362" y2="152" stroke="#8fa0b6" stroke-width="1.6"/>
+<line x1="126" y1="152" x2="486" y2="152" stroke="#8fa0b6" stroke-width="1.6"/>
+<line x1="126" y1="152" x2="126" y2="158" stroke="#8fa0b6" stroke-width="1.6" marker-end="url(#ah)"/>
+<line x1="308" y1="152" x2="308" y2="158" stroke="#8fa0b6" stroke-width="1.6" marker-end="url(#ah)"/>
+<line x1="486" y1="152" x2="486" y2="158" stroke="#8fa0b6" stroke-width="1.6" marker-end="url(#ah)"/>
+<rect x="40" y="158" width="172" height="46" rx="9" fill="#f7fbf8" stroke="#c7e2d1"/>
+<text x="54" y="178" class="bn" fill="#2f6b4c">Amazon ElastiCache</text>
+<text x="54" y="194" class="bs">sub-millisecond (&lt; 1 ms)</text>
+<rect x="222" y="158" width="172" height="46" rx="9" fill="#f7fbf8" stroke="#c7e2d1"/>
+<text x="236" y="178" class="bn" fill="#2f6b4c">Amazon DynamoDB</text>
+<text x="236" y="194" class="bs">single-digit ms (&lt; 10 ms)</text>
+<rect x="404" y="158" width="164" height="46" rx="9" fill="#fdfaf8" stroke="#e8d9cf"/>
+<text x="418" y="178" class="bn" fill="#8a5a2b">Bedrock FM call</text>
+<text x="418" y="194" class="bs">on cache miss — ~3,000 ms</text>
+<rect x="40" y="214" width="528" height="28" rx="8" fill="#fafbfc" stroke="#cfd8e4" stroke-dasharray="5 4"/>
+<text x="54" y="232" class="bs">Pre-population Lambda — asynchronously pre-computes predictable queries (FAQs, daily reports)</text>
+<line x1="126" y1="214" x2="126" y2="206" stroke="#8fa0b6" stroke-width="1.6" marker-end="url(#ah)"/>
+<line x1="308" y1="214" x2="308" y2="206" stroke="#8fa0b6" stroke-width="1.6" marker-end="url(#ah)"/>
+<rect x="596" y="78" width="560" height="184" rx="11" fill="#ffffff" stroke="#d7dde8"/>
+<path d="M607 78 h538 a11 11 0 0 1 11 11 v21 h-560 v-21 a11 11 0 0 1 11 -11 z" fill="#0f2540"/>
+<text x="612" y="99" class="lh">2 · Response Streaming</text>
+<text x="1140" y="99" class="ln" text-anchor="end">LOW PERCEIVED LATENCY</text>
+<rect x="612" y="118" width="80" height="26" rx="8" fill="#f3f7fd" stroke="#c6d8ef"/>
+<text x="652.0" y="135.0" class="ch" text-anchor="middle">User Client</text>
+<line x1="696" y1="131" x2="774" y2="131" stroke="#8fa0b6" stroke-width="1.6" marker-end="url(#ah)"/>
+<text x="735" y="126" class="el" text-anchor="middle">stream request</text>
+<rect x="778" y="118" width="140" height="26" rx="8" fill="#f3f7fd" stroke="#c6d8ef"/>
+<text x="848.0" y="135.0" class="ch" text-anchor="middle">Application Backend</text>
+<line x1="922" y1="131" x2="994" y2="131" stroke="#8fa0b6" stroke-width="1.6" marker-end="url(#ah)"/>
+<text x="958" y="126" class="el" text-anchor="middle">InvokeStream</text>
+<rect x="998" y="118" width="128" height="26" rx="8" fill="#f3f7fd" stroke="#c6d8ef"/>
+<text x="1062.0" y="135.0" class="ch" text-anchor="middle">Amazon Bedrock</text>
+<path d="M1062 144 V164 H652 V148" fill="none" stroke="#8fa0b6" stroke-width="1.6" stroke-dasharray="5 4" marker-end="url(#ah)"/>
+<text x="996" y="178" class="el" text-anchor="middle">Server-Sent Events (SSE)</text>
+<text x="766" y="178" class="el" text-anchor="middle">tokens stream to the client</text>
+<rect x="612" y="188" width="256" height="54" rx="9" fill="#ffffff" stroke="#d7dde8"/>
+<text x="626" y="208" class="bn">Actual latency</text>
+<text x="626" y="224" class="bs">unchanged — still ~8 s end to end</text>
+<rect x="884" y="188" width="256" height="54" rx="9" fill="#f7fbf8" stroke="#c7e2d1"/>
+<text x="898" y="208" class="bn" fill="#2f6b4c">Time-to-first-token</text>
+<text x="898" y="224" class="bs">8,000 ms → ≈ 500 ms</text>
+<rect x="24" y="284" width="560" height="226" rx="11" fill="#ffffff" stroke="#d7dde8"/>
+<path d="M35 284 h538 a11 11 0 0 1 11 11 v21 h-560 v-21 a11 11 0 0 1 11 -11 z" fill="#0f2540"/>
+<text x="40" y="305" class="lh">3 · Parallelization — Step Functions</text>
+<text x="568" y="305" class="ln" text-anchor="end">SEQUENTIAL → PARALLEL</text>
+<rect x="40" y="324" width="100" height="26" rx="8" fill="#f3f7fd" stroke="#c6d8ef"/>
+<text x="90.0" y="341.0" class="ch" text-anchor="middle">API Gateway</text>
+<line x1="144" y1="337" x2="222" y2="337" stroke="#8fa0b6" stroke-width="1.6" marker-end="url(#ah)"/>
+<text x="183" y="332" class="el" text-anchor="middle">workflow start</text>
+<rect x="226" y="324" width="146" height="26" rx="8" fill="#f3f7fd" stroke="#c6d8ef"/>
+<text x="299.0" y="341.0" class="ch" text-anchor="middle">AWS Step Functions</text>
+<line x1="299" y1="350" x2="299" y2="362" stroke="#8fa0b6" stroke-width="1.6"/>
+<rect x="40" y="362" width="528" height="74" rx="10" fill="#fafbfc" stroke="#cfd8e4" stroke-dasharray="5 4"/>
+<text x="52" y="378" class="bh">Parallel State / Map State</text>
+<rect x="52" y="388" width="160" height="30" rx="8" fill="#f3f7fd" stroke="#c6d8ef"/>
+<text x="132.0" y="407.0" class="ch" text-anchor="middle">Bedrock Call A</text>
+<rect x="220" y="388" width="160" height="30" rx="8" fill="#f3f7fd" stroke="#c6d8ef"/>
+<text x="300.0" y="407.0" class="ch" text-anchor="middle">Bedrock Call B</text>
+<rect x="388" y="388" width="160" height="30" rx="8" fill="#f3f7fd" stroke="#c6d8ef"/>
+<text x="468.0" y="407.0" class="ch" text-anchor="middle">Bedrock Call C</text>
+<rect x="40" y="448" width="256" height="46" rx="9" fill="#f7fbf8" stroke="#c7e2d1"/>
+<text x="54" y="468" class="bn" fill="#2f6b4c">Sequential 6 s → parallel 2 s</text>
+<text x="54" y="484" class="bs">only if the calls are non-dependent</text>
+<rect x="312" y="448" width="256" height="46" rx="9" fill="#fdfaf8" stroke="#e8d9cf"/>
+<text x="326" y="468" class="bn" fill="#8a5a2b">MaxConcurrency: 10</text>
+<text x="326" y="484" class="bs">caps in-flight calls — avoids HTTP 429</text>
+<rect x="596" y="284" width="560" height="226" rx="11" fill="#ffffff" stroke="#d7dde8"/>
+<path d="M607 284 h538 a11 11 0 0 1 11 11 v21 h-560 v-21 a11 11 0 0 1 11 -11 z" fill="#0f2540"/>
+<text x="612" y="305" class="lh">4 · RAG &amp; Retrieval Optimization</text>
+<text x="1140" y="305" class="ln" text-anchor="end">HYBRID SEARCH + RERANK</text>
+<rect x="612" y="324" width="92" height="30" rx="8" fill="#f3f7fd" stroke="#c6d8ef"/>
+<text x="658.0" y="343.0" class="ch" text-anchor="middle">User Query</text>
+<line x1="704" y1="339" x2="744" y2="339" stroke="#8fa0b6" stroke-width="1.6" marker-end="url(#ah)"/>
+<rect x="748" y="324" width="160" height="30" rx="8" fill="#f3f7fd" stroke="#c6d8ef"/>
+<text x="828.0" y="343.0" class="ch" text-anchor="middle">Lambda Preprocessing</text>
+<line x1="908" y1="339" x2="948" y2="339" stroke="#8fa0b6" stroke-width="1.6" marker-end="url(#ah)"/>
+<rect x="952" y="324" width="188" height="30" rx="8" fill="#f3f7fd" stroke="#c6d8ef"/>
+<text x="1046.0" y="338.0" class="ch" text-anchor="middle">Vector DB</text>
+<text x="1046.0" y="350.0" class="bs" text-anchor="middle">Amazon OpenSearch</text>
+<text x="828" y="368" class="bs" text-anchor="middle">spellcheck · normalise · expand</text>
+<rect x="612" y="376" width="324" height="62" rx="9" fill="#ffffff" stroke="#d7dde8"/>
+<text x="626" y="396" class="bn">Hybrid Search</text>
+<text x="626" y="412" class="bs">vector semantic match + BM25 keyword,</text>
+<text x="626" y="425" class="bs">merged before scoring</text>
+<rect x="952" y="376" width="188" height="62" rx="9" fill="#fafbfc" stroke="#cfd8e4" stroke-dasharray="5 4"/>
+<text x="964" y="394" class="bh">Index internals</text>
+<text x="964" y="411" class="bs">HNSW · speed + recall</text>
+<text x="964" y="426" class="bs">IVF · memory-efficient</text>
+<rect x="612" y="448" width="528" height="46" rx="9" fill="#f7fbf8" stroke="#c7e2d1"/>
+<text x="626" y="468" class="bn" fill="#2f6b4c">Lambda Custom Reranking</text>
+<text x="626" y="484" class="bs">Final Score = (Relevance × w₁) + (Recency × w₂) + (Authority × w₃)</text>
+<rect x="24" y="532" width="560" height="208" rx="11" fill="#ffffff" stroke="#d7dde8"/>
+<path d="M35 532 h538 a11 11 0 0 1 11 11 v21 h-560 v-21 a11 11 0 0 1 11 -11 z" fill="#0f2540"/>
+<text x="40" y="553" class="lh">5 · Efficient Resource Allocation</text>
+<text x="568" y="553" class="ln" text-anchor="end">SCALE BEFORE THE SPIKE</text>
+<rect x="40" y="572" width="150" height="26" rx="8" fill="#f3f7fd" stroke="#c6d8ef"/>
+<text x="115.0" y="589.0" class="ch" text-anchor="middle">Load Balancer / SQS</text>
+<line x1="190" y1="585" x2="230" y2="585" stroke="#8fa0b6" stroke-width="1.6" marker-end="url(#ah)"/>
+<rect x="234" y="572" width="170" height="26" rx="8" fill="#f3f7fd" stroke="#c6d8ef"/>
+<text x="319.0" y="589.0" class="ch" text-anchor="middle">EC2 Auto Scaling Group</text>
+<line x1="404" y1="585" x2="444" y2="585" stroke="#8fa0b6" stroke-width="1.6" marker-end="url(#ah)"/>
+<rect x="448" y="572" width="120" height="30" rx="8" fill="#f3f7fd" stroke="#c6d8ef"/>
+<text x="508.0" y="586.0" class="ch" text-anchor="middle">SageMaker</text>
+<text x="508.0" y="598.0" class="bs" text-anchor="middle">Endpoint / Inferentia</text>
+<rect x="40" y="618" width="324" height="56" rx="9" fill="#ffffff" stroke="#d7dde8"/>
+<text x="54" y="638" class="bn">Amazon CloudWatch</text>
+<text x="54" y="654" class="bs">token length &amp; utilisation, idle-period detection;</text>
+<text x="54" y="667" class="bs">predictive scaling input — GPUs boot too slowly to react</text>
+<line x1="319" y1="618" x2="319" y2="602" stroke="#8fa0b6" stroke-width="1.6" stroke-dasharray="5 4" marker-end="url(#ah)"/>
+<rect x="376" y="618" width="192" height="56" rx="9" fill="#f3f7fd" stroke="#c6d8ef"/>
+<text x="390" y="638" class="bn" fill="#16345c">Provisioned Throughput</text>
+<text x="390" y="654" class="bs">dedicated Bedrock capacity</text>
+<text x="390" y="667" class="bs">beyond on-demand quotas</text>
+<rect x="40" y="682" width="528" height="44" rx="9" fill="#f7fbf8" stroke="#c7e2d1"/>
+<text x="54" y="702" class="bn" fill="#2f6b4c">SageMaker Inference Recommender</text>
+<text x="54" y="718" class="bs">load-tests instance types to size the fleet on evidence, not guesswork</text>
+<rect x="596" y="532" width="560" height="208" rx="11" fill="#ffffff" stroke="#d7dde8"/>
+<path d="M607 532 h538 a11 11 0 0 1 11 11 v21 h-560 v-21 a11 11 0 0 1 11 -11 z" fill="#0f2540"/>
+<text x="612" y="553" class="lh">6 · Monitoring &amp; A/B Testing</text>
+<text x="1140" y="553" class="ln" text-anchor="end">PROVE THE OPTIMIZATION</text>
+<rect x="612" y="572" width="136" height="26" rx="8" fill="#f3f7fd" stroke="#c6d8ef"/>
+<text x="680.0" y="589.0" class="ch" text-anchor="middle">GenAI Application</text>
+<line x1="752" y1="585" x2="826" y2="585" stroke="#8fa0b6" stroke-width="1.6" marker-end="url(#ah)"/>
+<text x="789" y="580" class="el" text-anchor="middle">metrics / logs</text>
+<rect x="830" y="572" width="146" height="26" rx="8" fill="#f3f7fd" stroke="#c6d8ef"/>
+<text x="903.0" y="589.0" class="ch" text-anchor="middle">Amazon CloudWatch</text>
+<line x1="980" y1="585" x2="1048" y2="585" stroke="#8fa0b6" stroke-width="1.6" marker-end="url(#ah)"/>
+<text x="1014" y="580" class="el" text-anchor="middle">dashboards</text>
+<rect x="1052" y="572" width="74" height="26" rx="8" fill="#f3f7fd" stroke="#c6d8ef"/>
+<text x="1089.0" y="589.0" class="ch" text-anchor="middle">Admin</text>
+<rect x="612" y="618" width="528" height="56" rx="9" fill="#ffffff" stroke="#d7dde8"/>
+<text x="626" y="638" class="bn">CloudWatch Evidently</text>
+<text x="626" y="654" class="bs">A/B variant control on live production traffic — statistical</text>
+<text x="626" y="667" class="bs">hypothesis testing across model variants, prompts and parameters</text>
+<rect x="612" y="682" width="528" height="44" rx="9" fill="#fdfaf8" stroke="#e8d9cf"/>
+<text x="626" y="702" class="bn" fill="#8a5a2b">Exam split</text>
+<text x="626" y="718" class="bs">AppConfig = feature flags &amp; progressive rollout · Evidently = quantitative experimentation</text>
+<text x="24" y="752" class="phase">The continuous optimization loop</text>
+<rect x="24" y="762" width="1132" height="62" rx="11" fill="#f3f7fd" stroke="#c6d8ef"/>
+<rect x="40.0" y="774" width="252.0" height="38" rx="9" fill="#ffffff" stroke="#c6d8ef"/>
+<text x="166.0" y="790" class="bn" text-anchor="middle">Capacity Planning</text>
+<text x="166.0" y="803" class="bs" text-anchor="middle">Inference Recommender / Provisioned</text>
+<line x1="296.0" y1="793" x2="320.0" y2="793" stroke="#8fa0b6" stroke-width="1.6" marker-end="url(#ah)"/>
+<rect x="324.0" y="774" width="252.0" height="38" rx="9" fill="#ffffff" stroke="#c6d8ef"/>
+<text x="450.0" y="790" class="bn" text-anchor="middle">Monitoring</text>
+<text x="450.0" y="803" class="bs" text-anchor="middle">CloudWatch / SageMaker Model Monitor</text>
+<line x1="580.0" y1="793" x2="604.0" y2="793" stroke="#8fa0b6" stroke-width="1.6" marker-end="url(#ah)"/>
+<rect x="608.0" y="774" width="252.0" height="38" rx="9" fill="#ffffff" stroke="#c6d8ef"/>
+<text x="734.0" y="790" class="bn" text-anchor="middle">GenAI-Optimized Autoscaling</text>
+<text x="734.0" y="803" class="bs" text-anchor="middle">event-driven scaling &amp; queuing</text>
+<line x1="864.0" y1="793" x2="888.0" y2="793" stroke="#8fa0b6" stroke-width="1.6" marker-end="url(#ah)"/>
+<rect x="892.0" y="774" width="252.0" height="38" rx="9" fill="#ffffff" stroke="#c6d8ef"/>
+<text x="1018.0" y="790" class="bn" text-anchor="middle">Resource Optimization</text>
+<text x="1018.0" y="803" class="bs" text-anchor="middle">quota management / Inferentia</text>
+<path d="M1018.0 812 V818 H166.0 V814" fill="none" stroke="#8fa0b6" stroke-width="1.6" stroke-dasharray="5 4" marker-end="url(#ah)"/>
+<text x="1156" y="836" class="leg" text-anchor="end">Feedback loop — runtime telemetry refines the next round of capacity planning.</text>
+</svg>
