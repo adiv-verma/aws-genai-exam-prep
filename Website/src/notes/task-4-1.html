@@ -245,6 +245,113 @@
         <p class="kv"><strong>Cost-driven Fallbacks:</strong> During peak traffic or service degradation, fall back to lower-tier, cheaper models to maintain throughput without exceeding budget caps.</p>
     </div>
 
+    <div class="note-card">
+      <h4 id="s3">Section 3: High-Performance FM Systems</h4>
+        <p class="txt">Optimizing generative AI workloads requires balancing infrastructure throughput, operational concurrency, and overall system cost.</p>
+        <p class="lead num">1. Disambiguating &ldquo;Batching&rdquo;</p>
+        <p class="txt">The exam frequently contrasts two distinct implementations of batching:</p>
+        <table class="cmp">
+          <thead><tr><th>Type</th><th>Level</th><th>Nature</th><th>Primary Benefit</th></tr></thead>
+          <tbody>
+            <tr><td>Batch Inference</td><td>Bedrock Service Level</td><td>Offline scheduled jobs processing stored data.</td><td><strong>Cost Feature:</strong> ~50% price reduction over On-Demand pricing.</td></tr>
+            <tr><td>Request Batching</td><td>Runtime Execution Level</td><td>Grouping concurrent real-time inference requests on the GPU.</td><td><strong>Throughput Feature:</strong> Maximizes compute utilization and requests per second (RPS).</td></tr>
+          </tbody>
+        </table>
+        <p class="lead num">2. Capacity Planning &amp; Load Optimization</p>
+        <p class="txt">Because token consumption and response latency vary unpredictably per request, traditional static sizing models often fail.</p>
+        <p class="kv"><strong>Automated Load Testing:</strong> Deploy AWS Lambda load-testing scripts to determine exact throughput limits under stress.</p>
+        <p class="kv"><strong>Infrastructure as Code (IaC):</strong> Encode right-sized capacity configurations in AWS CloudFormation for consistent, repeatable deployments.</p>
+        <p class="lead">CloudWatch Resource Metrics:</p>
+        <p class="kv"><strong>GPU Utilization &lt; 20%:</strong> Indicates oversized compute instances (wasted spend).</p>
+        <p class="kv"><strong>Provisioned Model Units (PMUs) Under-Utilized:</strong> Unnecessary fixed commitment costs.</p>
+        <p class="kv"><strong>PMUs Over-Utilized:</strong> Causes API throttling (429 Too Many Requests).</p>
+        <p class="lead num">3. Concurrency Controls in AWS Lambda</p>
+        <p class="txt">When connecting AWS Lambda functions to Bedrock endpoints, set explicit concurrency limits:</p>
+        <pre class="art">                    ┌─────────────────────────┐
+                    │ Lambda Account Capacity │
+                    └────────────┬────────────┘
+                                 │
+           ┌─────────────────────┴─────────────────────┐
+           ▼                                           ▼
+┌─────────────────────────┐                 ┌─────────────────────────┐
+│   Reserved Concurrency  │                 │ Provisioned Concurrency │
+├─────────────────────────┤                 ├─────────────────────────┤
+│ • Acts as a ceiling.    │                 │ • Pre-warms instances.  │
+│ • Prevents runaways.    │                 │ • Eliminates cold starts│
+│ • Protects downstream   │                 │ • Billed continuously,  │
+│   Bedrock rate limits.  │                 │   even when idle.       │
+└─────────────────────────┘                 └─────────────────────────┘</pre>
+        <p class="lead num">4. Provisioned Throughput Break-Even Analysis</p>
+        <p class="txt">Bedrock offers two primary purchasing models for Foundation Models:</p>
+        <p class="chain">Select Provisioned Throughput ONLY when: Total On-Demand Token Cost &gt; Fixed Model Unit Commitment</p>
+        <p class="kv"><strong>On-Demand:</strong> Pay per token. Ideal for variable, unpredictable, or lower-volume traffic.</p>
+        <p class="kv"><strong>Provisioned Throughput (PMUs):</strong> Fixed cost commitment for guaranteed model capacity. If actual utilization drops below the break-even point, you pay for idle, unutilized capacity.</p>
+        <p class="lead num">5. Queue-Based Architecture for Cost Optimization</p>
+        <p class="txt">Integrating Amazon SQS queues decouples incoming user demand from backend processing capacity.</p>
+        <pre class="art">Without Queue: Provision for PEAK capacity  ---&gt; [ Huge Compute Idle Time ] ---&gt; High Cost
+With SQS Queue: Provision for AVERAGE load  ---&gt; [ Peaks Queue Up &amp; Drain ] ---&gt; Low Cost</pre>
+        <p class="kv"><strong>Cost Benefit:</strong> System capacity can be sized for average load rather than peak demand, drastically lowering infrastructure overhead.</p>
+        <p class="kv"><strong>Trade-off:</strong> Introduces request processing latency during traffic bursts.</p>
+        <p class="lead num">6. The Three-Way Architectural Trade-Off</p>
+        <p class="txt">You cannot optimize for Latency, Cost, and Throughput simultaneously. Architectures must prioritize two parameters based on business requirements:</p>
+        <pre class="art">                                [ LATENCY ]
+                                    /\
+                                   /  \
+                                  /    \
+                                 /      \
+                                /   VS   \
+                               /          \
+                              /____________\
+                      [ COST ]              [ THROUGHPUT ]</pre>
+        <p class="kv"><strong>Low Latency + High Throughput:</strong> Requires Provisioned Capacity &rarr; High Cost</p>
+        <p class="kv"><strong>Low Cost + High Throughput:</strong> Requires SQS Queueing + Batching &rarr; Higher Latency</p>
+        <p class="kv"><strong>Low Latency + Low Cost:</strong> Requires Small/Tiered Models + Strict Rate Limits &rarr; Lower Throughput</p>
+    </div>
+
+    <div class="note-card">
+      <h4 id="s4">Section 4: Intelligent Caching Systems</h4>
+        <p class="txt">The most direct way to eliminate GenAI inference costs is to avoid invoking the foundation model altogether. Serving responses directly from a cache reduces model invocation costs to near zero while drastically improving latency.</p>
+        <p class="lead num">1. Semantic Caching</p>
+        <p class="txt">Standard exact-match caching fails in conversational AI because users express the exact same intent using different phrasing.</p>
+        <pre class="art">"what is my balance?"          ──────┐
+"tell me my balance"           ──────┼───► [ Vector Embedding ] ──► [ OpenSearch Vector Search ]
+"how much money in my account?" ──────┘                                       │
+                                                                  Similarity Score &gt;= 85-95%?
+                                                                 /                          \
+                                                            [ YES ]                        [ NO ]
+                                                               │                              │
+                                                    Return Cached Response             Invoke Bedrock LLM
+                                                    (Zero Model Spend)                 &amp; Cache Result</pre>
+        <p class="lead">Similarity Threshold Tuning</p>
+        <p class="kv"><strong>Too Low (~70% Threshold):</strong> High false-positive rate. Returns incorrect or irrelevant cached answers to questions that were not actually asked.</p>
+        <p class="kv"><strong>Too High (~99% Threshold):</strong> Behaves like exact-match caching, missing minor rephrasings and drastically lowering cache hit rates.</p>
+        <p class="kv"><strong>Optimal Range (85&ndash;95% Threshold):</strong> The sweet spot for maximizing savings while maintaining semantic precision.</p>
+        <p class="kv"><strong>Exam Note:</strong> Generating an embedding vector incurs a negligible cost compared to a full LLM inference call.</p>
+        <p class="lead num">2. Result Fingerprinting &amp; Deterministic Hashing</p>
+        <p class="txt">Fingerprinting normalizes input text before hashing to catch simple formatting variations without the need for embedding generation.</p>
+        <p class="chain">Lowercase conversion &rarr; Trailing whitespace removal &rarr; Punctuation stripping &rarr; Deterministic Hashing</p>
+        <p class="kv"><strong>Cost Comparison:</strong> Cheaper than semantic caching because it bypasses vector store operations and embedding calls.</p>
+        <p class="kv"><strong>Deterministic Hashing Rule:</strong> In distributed environments, hashing logic must be strictly deterministic (free of timestamps, node IDs, or random seeds) to ensure identical hash keys across all instances.</p>
+        <p class="lead num">3. Prompt Caching</p>
+        <p class="txt">Prompt Caching avoids re-processing repetitive text inside prompt templates (e.g., long system instructions, compliance guidelines, or few-shot examples).</p>
+        <pre class="art">[ Static System Prompt ] [ Few-Shot Examples ] [ Retrieved Context ] [ Dynamic User Query ]
+└────────────────────────────────────────────┘                       └──────────────────┘
+            CACHED PREFIX (~90% Discount)                                Full Token Billing</pre>
+        <p class="lead">Critical Ordering Requirement</p>
+        <p class="txt">Bedrock prompt caching evaluates token sequences strictly from left to right (prefix-based). The static content must sit at the absolute beginning of the prompt.</p>
+        <p class="kv"><strong>CORRECT:</strong> [Static System Prompt] + [Few-Shot Examples] + [User Query]</p>
+        <p class="kv"><strong>INCORRECT:</strong> [User Query] + [Static System Prompt] + [Few-Shot Examples]</p>
+        <p class="lead num">4. Edge Caching &amp; Tiered Caching Architecture</p>
+        <p class="kv"><strong>Amazon CloudFront:</strong> Caches static or shared generated content at edge locations geographically close to users (e.g., static FAQ responses). Ineffective for personalized, user-specific dynamic data.</p>
+        <p class="lead">Tiered Caching Hierarchy:</p>
+        <p class="kv"><strong>L1 In-Memory Cache:</strong> Fast execution in application/Lambda memory space.</p>
+        <p class="kv"><strong>L2 Distributed Cache (Amazon ElastiCache / Redis):</strong> Shared across stateless container microservices.</p>
+        <p class="kv"><strong>L3 Edge Cache (Amazon CloudFront):</strong> Geographical caching closest to the user.</p>
+        <p class="lead num">5. Cache Monitoring &amp; Invalidation</p>
+        <p class="kv"><strong>TTL Trade-off:</strong> Short TTLs ensure data freshness at the expense of lower cache hit rates; long TTLs maximize cost savings but increase stale-data risks.</p>
+        <p class="kv"><strong>CloudWatch Hit Rate Metrics:</strong> Monitor cache performance via CloudWatch. A cache hit rate below 5% indicates that the financial cost of cache lookup and storage overhead outweighs the savings from model call reductions.</p>
+    </div>
+
   </div>
 </section>
 
