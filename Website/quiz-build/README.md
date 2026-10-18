@@ -10,7 +10,9 @@ from the S3 object, or from this repo.
 
 | File | Committed? | What it is |
 |---|---|---|
-| `bank.json` | **No — gitignored** | The quiz bank in plaintext: 132 questions, answers, explanations, task references. The editable source of truth. |
+| `bank.json` | **No — gitignored** | The quiz bank in plaintext: 136 questions, answers, explanations, topic references. The editable source of truth. |
+| `sections.json` | Yes | Every notes page's anchors (`s1`, `t1`, …) mapped to its section heading. Safe to commit — no question content. |
+| `topics.json` | Yes | Per-question topic mapping: which task + section each question is tied to, and the one-line tie shown in the UI. |
 | `encrypt.py` | Yes | Encrypts `bank.json` into `../src/quiz/bank.enc.js`. |
 | `../src/quiz/index.html` | Yes | The quiz app (gate, set picker, runner, results). |
 | `../src/quiz/bank.enc.js` | Yes | The encrypted bank. Safe to publish. |
@@ -48,7 +50,9 @@ Edit `bank.json`, then re-encrypt with the command above. Shape of one question:
   "expSrc": "notes",
   "refs": [{ "task": "4.1", "name": "Cost Optimisation", "domain": 4,
              "domainName": "Operational Efficiency",
-             "url": "../notes/task-4-1.html" }],
+             "sec": "s1", "secName": "Token Efficiency Systems",
+             "url": "../notes/task-4-1.html#s1" }],
+  "tie": "One sentence connecting this question to that section, in the notes' own terms.",
   "partial": false
 }
 ```
@@ -56,8 +60,14 @@ Edit `bank.json`, then re-encrypt with the command above. Shape of one question:
 - `answers` with more than one letter makes it multi-select; keep `multi` in sync.
 - `expSrc`: `"pdf"` (explanation shipped with the question) or `"notes"`
   (written for this quiz). It only controls the provenance line in the UI.
+- `refs[].sec` is the anchor on that notes page and `secName` its heading; the
+  URL is `task-<d>-<t>.html#<sec>` so the link lands on the section, not the top
+  of the page. `sections.json` is the list of valid anchors — regenerate it if
+  you restructure a notes page, or the deep links will silently scroll nowhere.
 - `refs[].url` must be `null` for a task that has no notes page yet — the UI
   then shows a "Notes not written yet" badge instead of a dead link.
+- `tie` is the sentence shown above the links, phrased in the vocabulary of the
+  notes themselves so the question and the study material use the same words.
 - Sets are the `sets` array; each set's `questions` is just a list, so moving a
   question between sets is a cut and paste.
 

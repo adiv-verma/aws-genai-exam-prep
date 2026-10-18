@@ -1,0 +1,1642 @@
+{
+ "1": {
+  "refs": [
+   [
+    "3.4",
+    "s2"
+   ],
+   [
+    "3.3",
+    "s3"
+   ]
+  ],
+  "tie": "Your Fairness Evaluations notes put SageMaker Clarify's bias metrics \u2014 DPPL, Disparate Impact, DCR \u2014 at the centre of measuring parity across demographic groups, which is exactly what this question is buying."
+ },
+ "2": {
+  "refs": [
+   [
+    "3.1",
+    "s1"
+   ],
+   [
+    "1.6",
+    "s2"
+   ]
+  ],
+  "tie": "Denied topics, custom word filters and the contextual grounding threshold are three of the regulated-domain Guardrails controls your notes list \u2014 one per correct option here."
+ },
+ "3": {
+  "refs": [
+   [
+    "1.1",
+    "s1"
+   ],
+   [
+    "2.5",
+    "s2"
+   ]
+  ],
+  "tie": "Your Entry & Networking notes name AppSync's 30-second integration timeout as the exact failure described here, with streaming as the documented fix."
+ },
+ "4": {
+  "refs": [
+   [
+    "2.4",
+    "s4"
+   ],
+   [
+    "2.3",
+    "s3"
+   ]
+  ],
+  "tie": "Static Configuration Routing in your Intelligent Model Routing notes is AppConfig holding the routing rules so models change without a deployment."
+ },
+ "5": {
+  "refs": [
+   [
+    "1.6",
+    "s4"
+   ],
+   [
+    "3.1",
+    "s1"
+   ]
+  ],
+  "tie": "Parameterized prompt templates with runtime injection \u2014 one template, many business units \u2014 is the prompt-drift fix in your Prompt Management and Governance notes."
+ },
+ "6": {
+  "refs": [
+   [
+    "1.4",
+    "s1"
+   ],
+   [
+    "1.1",
+    "s3"
+   ]
+  ],
+  "tie": "Your Vector Stores decision matrix makes OpenSearch Serverless the default low-latency engine with metadata filtering, which is what 10M embeddings across three languages needs."
+ },
+ "7": {
+  "refs": [
+   [
+    "1.5",
+    "s6"
+   ]
+  ],
+  "tie": "Hybrid search \u2014 dense vectors for concepts, sparse BM25 for exact terms \u2014 is your Advanced Search Architectures answer to 'misses exact acronyms, returns similar-but-irrelevant'."
+ },
+ "8": {
+  "refs": [
+   [
+    "3.2",
+    "s1"
+   ]
+  ],
+  "tie": "Interface VPC endpoints plus Lake Formation LF-tag column-level grants are the two controls your Protected AI Environments notes pair for private inference over a governed lake."
+ },
+ "9": {
+  "refs": [
+   [
+    "1.6",
+    "s4"
+   ]
+  ],
+  "tie": "Versioning with zero-code rollbacks, and the CloudTrail-versus-CloudWatch audit split, are exactly the governance mechanics in your Prompt Management notes."
+ },
+ "10": {
+  "refs": [
+   [
+    "2.4",
+    "s2"
+   ]
+  ],
+  "tie": "Token-by-token delivery over a WebSocket, backed by InvokeModelWithResponseStream, is the streaming transport pattern in your Real-Time Interaction Systems notes."
+ },
+ "11": {
+  "refs": [
+   [
+    "1.6",
+    "s7"
+   ],
+   [
+    "3.1",
+    "s2"
+   ]
+  ],
+  "tie": "A Bedrock flow built from prompt nodes, with a guardrail set to detect rather than block, draws on both your Prompt Flows notes and the filter-action distinction in Output Safety."
+ },
+ "12": {
+  "refs": [
+   [
+    "5.1",
+    "s5"
+   ],
+   [
+    "5.1",
+    "s1"
+   ]
+  ],
+  "tie": "Your RAG Evaluation notes pair automated LLM-as-a-judge screening with targeted human review \u2014 the hybrid pipeline this question describes."
+ },
+ "13": {
+  "refs": [
+   [
+    "3.3",
+    "s3"
+   ]
+  ],
+  "tie": "SCPs as a permission ceiling no account admin can bypass is the first of the Three Layers of Control in your Organisational Governance notes."
+ },
+ "14": {
+  "refs": [
+   [
+    "3.1",
+    "s2"
+   ],
+   [
+    "1.6",
+    "s2"
+   ]
+  ],
+  "tie": "Your notes' critical distinction \u2014 HIGH blocks only extreme content while LOW is strictest \u2014 plus mask-versus-block for PII, is what separates these guardrail configurations."
+ },
+ "15": {
+  "refs": [
+   [
+    "1.5",
+    "s8"
+   ],
+   [
+    "4.2",
+    "t1"
+   ]
+  ],
+  "tie": "Grounding recommendations in a knowledge base so the model cannot invent catalogue items is the RAG integration pattern in your notes; PerformanceConfigLatency is the latency lever."
+ },
+ "16": {
+  "refs": [
+   [
+    "2.1",
+    "s1"
+   ]
+  ],
+  "tie": "The three-tier memory hierarchy and the managed agent loop in your Autonomous Systems notes are what AgentCore supplies without custom orchestration."
+ },
+ "17": {
+  "refs": [
+   [
+    "1.5",
+    "s7"
+   ],
+   [
+    "1.1",
+    "s3"
+   ]
+  ],
+  "tie": "Neptune Analytics for multi-hop graph traversal appears in both your Query Handling notes and the vector-store decision matrix as the GraphRAG option."
+ },
+ "18": {
+  "refs": [
+   [
+    "4.3",
+    "s2"
+   ],
+   [
+    "3.1",
+    "s3"
+   ]
+  ],
+  "tie": "Your GenAI Monitoring notes make invocation logs plus CloudWatch anomaly detection the managed path, with contextual grounding checks as the hallucination detector."
+ },
+ "19": {
+  "refs": [
+   [
+    "3.3",
+    "s2"
+   ]
+  ],
+  "tie": "Glue Data Catalog as the authoritative registry with provider and licensing tags, audited by CloudTrail, is your Data Source Tracking architecture."
+ },
+ "20": {
+  "refs": [
+   [
+    "4.2",
+    "t1"
+   ]
+  ],
+  "tie": "Your Responsive AI Systems notes show a Step Functions Parallel state collapsing three sequential 2-second tasks into one \u2014 the same arithmetic as 45s down to under 10s."
+ },
+ "21": {
+  "refs": [
+   [
+    "3.1",
+    "s5"
+   ],
+   [
+    "3.1",
+    "s4"
+   ]
+  ],
+  "tie": "Defence in depth against prompt injection means layering WAF with guardrails, because your notes list WAF's blind spot as plain-English semantic attacks."
+ },
+ "22": {
+  "refs": [
+   [
+    "2.2",
+    "s2"
+   ],
+   [
+    "5.1",
+    "s2"
+   ]
+  ],
+  "tie": "Canary testing \u2014 a small traffic share, progressive scale-up on healthy metrics, automatic rollback \u2014 is defined in your Systematic Model Evaluation notes."
+ },
+ "23": {
+  "refs": [
+   [
+    "2.2",
+    "s2"
+   ],
+   [
+    "5.2",
+    "s2"
+   ]
+  ],
+  "tie": "Your Deployment Options notes explain provisioned throughput in Model Units; the bug here is invoking the base model ID instead of the provisioned ARN, so reserved capacity sits idle."
+ },
+ "24": {
+  "refs": [
+   [
+    "3.4",
+    "s1"
+   ],
+   [
+    "1.5",
+    "s8"
+   ]
+  ],
+  "tie": "Source attribution with verifiable anchors, carried through multi-step reasoning, is the core of your Transparent AI Systems notes."
+ },
+ "25": {
+  "refs": [
+   [
+    "4.1",
+    "s1"
+   ]
+  ],
+  "tie": "Pre-call token counting with tokenizer libraries, publishing InputTokenCount and OutputTokenCount to CloudWatch, is the opening pattern in your Token Efficiency notes."
+ },
+ "26": {
+  "refs": [
+   [
+    "2.1",
+    "s7"
+   ],
+   [
+    "3.4",
+    "s1"
+   ]
+  ],
+  "tie": "Action groups as OpenAPI schema plus Lambda, with a knowledge base attached and tracing enabled, is the managed agent anatomy in your Tool Integrations notes."
+ },
+ "27": {
+  "refs": [
+   [
+    "2.3",
+    "s2"
+   ]
+  ],
+  "tie": "Step Functions is the enterprise orchestrator in your Enterprise Connectivity notes; passing S3 references rather than payloads is how you stay under the state-payload quota."
+ },
+ "28": {
+  "refs": [
+   [
+    "1.4",
+    "s1"
+   ],
+   [
+    "1.5",
+    "s5"
+   ]
+  ],
+  "tie": "Your Vector Search Deployment notes weigh pgvector-in-Postgres against a dedicated engine \u2014 here the scale and latency budget push past what pgvector comfortably serves."
+ },
+ "29": {
+  "refs": [
+   [
+    "1.6",
+    "s5"
+   ],
+   [
+    "5.2",
+    "s3"
+   ]
+  ],
+  "tie": "Golden-dataset regression testing against versioned prompts is the QA mechanism in your Quality Assurance Systems notes."
+ },
+ "30": {
+  "refs": [
+   [
+    "1.5",
+    "s3"
+   ],
+   [
+    "1.6",
+    "s6"
+   ]
+  ],
+  "tie": "Semantic chunking from your Document Segmentation notes plus Chain-of-Thought from Enhancing FM Performance are the two levers this answer combines."
+ },
+ "31": {
+  "refs": [
+   [
+    "4.3",
+    "s2"
+   ],
+   [
+    "4.3",
+    "s1"
+   ]
+  ],
+  "tie": "CloudWatch anomaly detection with dynamic, seasonality-aware baselines is what your GenAI Monitoring notes prescribe over static thresholds."
+ },
+ "32": {
+  "refs": [
+   [
+    "1.5",
+    "s3"
+   ],
+   [
+    "5.2",
+    "s1"
+   ]
+  ],
+  "tie": "Silent truncation on context-window overflow is the exact failure in your Incomplete Responses notes, and semantic chunking is the documented fix."
+ },
+ "33": {
+  "refs": [
+   [
+    "4.2",
+    "t1"
+   ],
+   [
+    "2.2",
+    "s2"
+   ]
+  ],
+  "tie": "Latency-optimised Bedrock variants trade a margin of reasoning quality for speed \u2014 your Responsive AI Systems notes call this the SLA-bound workload choice."
+ },
+ "34": {
+  "refs": [
+   [
+    "5.1",
+    "s2"
+   ],
+   [
+    "1.2",
+    "s4"
+   ]
+  ],
+  "tie": "Bedrock evaluation jobs reading a custom dataset from S3 is the managed Tier 1 evaluation in your notes, as against building your own harness."
+ },
+ "35": {
+  "refs": [
+   [
+    "2.1",
+    "s6"
+   ],
+   [
+    "3.4",
+    "s3"
+   ]
+  ],
+  "tie": "Step Functions wait tokens pausing a workflow for human approval with state preserved is the Human-in-the-Loop pattern in your Collaborative AI Systems notes."
+ },
+ "36": {
+  "refs": [
+   [
+    "3.2",
+    "s3"
+   ],
+   [
+    "2.1",
+    "s6"
+   ]
+  ],
+  "tie": "Your De-identification notes separate masking from routing: A2I handles low-confidence human review in-Region while residency is enforced on the stored objects."
+ },
+ "37": {
+  "refs": [
+   [
+    "3.2",
+    "s1"
+   ],
+   [
+    "1.1",
+    "s7"
+   ]
+  ],
+  "tie": "Q Business is the turn-key enterprise search option in your Build vs. Buy matrix; its ACL file is how document-level permissions reach the index."
+ },
+ "38": {
+  "refs": [
+   [
+    "1.5",
+    "s8"
+   ]
+  ],
+  "tie": "RAG with mandatory citations \u2014 RetrieveAndGenerate returning sources natively \u2014 is the integration pattern your notes contrast with hand-built citation logic."
+ },
+ "39": {
+  "refs": [
+   [
+    "2.4",
+    "s2"
+   ],
+   [
+    "4.2",
+    "t1"
+   ]
+  ],
+  "tie": "Partial-result transcription feeding a streamed model response over a WebSocket is the end-to-end streaming chain your Real-Time Interaction notes describe."
+ },
+ "40": {
+  "refs": [
+   [
+    "3.1",
+    "s4"
+   ],
+   [
+    "3.1",
+    "s1"
+   ]
+  ],
+  "tie": "Your Defense in Depth notes give each modality its own control \u2014 guardrails for text, Comprehend for PII, Rekognition for images."
+ },
+ "41": {
+  "refs": [
+   [
+    "2.5",
+    "s4"
+   ]
+  ],
+  "tie": "Q Developer customizations indexing approved internal libraries is the account-level answer in your Developer Productivity notes, as opposed to per-project context."
+ },
+ "42": {
+  "refs": [
+   [
+    "4.1",
+    "s4"
+   ],
+   [
+    "4.2",
+    "t1"
+   ]
+  ],
+  "tie": "Prompt caching's cached prefix at roughly a 90% discount, and latency-optimised inference, are both named in your Intelligent Caching and Responsive Systems notes."
+ },
+ "43": {
+  "refs": [
+   [
+    "1.5",
+    "s3"
+   ]
+  ],
+  "tie": "Your chunking notes open with the clause-splitting example \u2014 fixed-size cuts invert legal meaning, and semantic boundaries with re-embedding are the fix."
+ },
+ "44": {
+  "refs": [
+   [
+    "1.6",
+    "s3"
+   ],
+   [
+    "2.3",
+    "s3"
+   ]
+  ],
+  "tie": "Clarification loops held open by a Step Functions state machine, with DynamoDB session state, is precisely the Interactive AI Systems architecture in your notes."
+ },
+ "45": {
+  "refs": [
+   [
+    "1.3",
+    "s2"
+   ]
+  ],
+  "tie": "Glue crawler, Glue ETL and Glue Data Quality with DQDL rules are the Stage 1 validation tools in your Data Preparation pipeline."
+ },
+ "46": {
+  "refs": [
+   [
+    "1.4",
+    "s2"
+   ],
+   [
+    "1.5",
+    "s3"
+   ]
+  ],
+  "tie": "Your Metadata Frameworks notes warn that vector search alone returns semantically similar but contextually dead results \u2014 metadata filtering is the scoping fix."
+ },
+ "47": {
+  "refs": [
+   [
+    "4.2",
+    "t2"
+   ],
+   [
+    "1.4",
+    "s1"
+   ]
+  ],
+  "tie": "Your Retrieval Performance notes compare exact against approximate indexes; a small, low-count index is where exact Flat search costs almost nothing and maximises recall."
+ },
+ "48": {
+  "refs": [
+   [
+    "1.3",
+    "s3"
+   ],
+   [
+    "3.2",
+    "s2"
+   ]
+  ],
+  "tie": "Step Functions orchestrating parallel modality processing is the Stage 2 pattern in your notes, chosen because Lambda's 15-minute ceiling breaks on long jobs."
+ },
+ "49": {
+  "refs": [
+   [
+    "2.4",
+    "s4"
+   ],
+   [
+    "2.3",
+    "s3"
+   ]
+  ],
+  "tie": "AppConfig feature flags with JSON Schema validators and the Agent's local cache is the static-configuration routing option in your notes."
+ },
+ "50": {
+  "refs": [
+   [
+    "4.2",
+    "t3"
+   ],
+   [
+    "2.4",
+    "s3"
+   ]
+  ],
+  "tie": "Cross-Region inference profiles pooling capacity across Regions is the throughput answer in your notes when one Region's quota is the ceiling."
+ },
+ "51": {
+  "refs": [
+   [
+    "4.1",
+    "s4"
+   ]
+  ],
+  "tie": "Semantic caching at an 85-95% similarity threshold is the exact mechanism in your Intelligent Caching notes for users who phrase the same question differently."
+ },
+ "52": {
+  "refs": [
+   [
+    "2.1",
+    "s8"
+   ]
+  ],
+  "tie": "Your MCP Servers notes distinguish local STDIO from remote transports; a remote server needs an HTTP transport and OAuth, not just IAM invoke rights."
+ },
+ "53": {
+  "refs": [
+   [
+    "2.1",
+    "s2"
+   ],
+   [
+    "2.1",
+    "s4"
+   ]
+  ],
+  "tie": "Retry and Catch branches per task is how your Workflow Architectures notes get graceful degradation instead of a whole-workflow failure."
+ },
+ "54": {
+  "refs": [
+   [
+    "2.3",
+    "s2"
+   ],
+   [
+    "1.6",
+    "s7"
+   ]
+  ],
+  "tie": "Step Functions direct SDK integrations for S3 and Bedrock remove the Lambda entirely \u2014 the deterministic path your notes prefer over agent reasoning for fixed steps."
+ },
+ "55": {
+  "refs": [
+   [
+    "5.1",
+    "s1"
+   ],
+   [
+    "5.1",
+    "s3"
+   ]
+  ],
+  "tie": "Your Assessment Frameworks notes define the hybrid pipeline: LLM-as-a-judge for scale, human expert annotation for authoritative ground truth."
+ },
+ "56": {
+  "refs": [
+   [
+    "2.1",
+    "s1"
+   ],
+   [
+    "1.4",
+    "s4"
+   ]
+  ],
+  "tie": "Supervisor plus specialised collaborators is the multi-agent architecture in your notes, chosen when domains are distinct enough that one agent's instructions would bloat."
+ },
+ "57": {
+  "refs": [
+   [
+    "2.3",
+    "s7"
+   ],
+   [
+    "2.2",
+    "s2"
+   ]
+  ],
+  "tie": "One CDK app with a pipeline stage per environment is the CI/CD shape in your notes; referencing a model by foundation-model ID keeps it swappable without provisioned capacity."
+ },
+ "58": {
+  "refs": [
+   [
+    "1.4",
+    "s4"
+   ],
+   [
+    "2.3",
+    "s4"
+   ]
+  ],
+  "tie": "Your Unified Router & Security Boundaries notes make client-matter isolation absolute \u2014 per-tenant stores beat filtering inside one shared index."
+ },
+ "59": {
+  "refs": [
+   [
+    "2.4",
+    "s4"
+   ],
+   [
+    "2.3",
+    "s7"
+   ]
+  ],
+  "tie": "AppConfig's gradual deployment, validators and automatic rollback on a CloudWatch alarm are the safe-rollout mechanics your routing notes call out."
+ },
+ "60": {
+  "refs": [
+   [
+    "2.4",
+    "s3"
+   ],
+   [
+    "5.2",
+    "s2"
+   ]
+  ],
+  "tie": "Exponential backoff with jitter, plus a circuit breaker at a 50% failure rate over a 10-request window, is the resilience recipe in your Resilient FM Systems notes."
+ },
+ "61": {
+  "refs": [
+   [
+    "3.1",
+    "s1"
+   ],
+   [
+    "3.2",
+    "s2"
+   ]
+  ],
+  "tie": "A sensitive-information policy and a topic policy, with invocation logging including image logging, are the native controls your Input Safety notes favour over hand-built regex."
+ },
+ "62": {
+  "refs": [
+   [
+    "3.4",
+    "s1"
+   ],
+   [
+    "1.5",
+    "s8"
+   ]
+  ],
+  "tie": "enableTrace on the agent exposes reasoning paths, retrievals and relevance scores \u2014 your Transparent AI Systems notes' definition of internal transparency."
+ },
+ "63": {
+  "refs": [
+   [
+    "1.4",
+    "s2"
+   ],
+   [
+    "1.3",
+    "s1"
+   ]
+  ],
+  "tie": "Your Metadata Frameworks notes split attributes by mechanism \u2014 taxonomies as tags, extracted entities as structured fields \u2014 which is how S3 metadata, tags and user metadata divide here."
+ },
+ "64": {
+  "refs": [
+   [
+    "3.2",
+    "s1"
+   ],
+   [
+    "1.1",
+    "s7"
+   ]
+  ],
+  "tie": "A Q Business data accessor lets the customer keep the index in their own account and grant revocable access \u2014 the ownership boundary your Protected AI Environments notes draw."
+ },
+ "65": {
+  "refs": [
+   [
+    "1.5",
+    "s6"
+   ]
+  ],
+  "tie": "Two-stage retrieval \u2014 hybrid search for recall, then a cross-encoder reranker for precision \u2014 is the exact architecture in your Advanced Search notes."
+ },
+ "66": {
+  "refs": [
+   [
+    "4.3",
+    "s2"
+   ],
+   [
+    "4.1",
+    "s1"
+   ]
+  ],
+  "tie": "Bedrock emits token counts as native CloudWatch metrics; your GenAI Monitoring notes build dashboards and alarms straight on those rather than a custom pipeline."
+ },
+ "67": {
+  "refs": [
+   [
+    "2.2",
+    "s2"
+   ],
+   [
+    "2.3",
+    "s6"
+   ]
+  ],
+  "tie": "Your Cross-Environment notes' rule \u2014 if the data cannot move to the cloud, move the model to the data \u2014 is why the on-premises half cannot be Bedrock."
+ },
+ "68": {
+  "refs": [
+   [
+    "2.3",
+    "s7"
+   ],
+   [
+    "3.3",
+    "s3"
+   ]
+  ],
+  "tie": "CloudFormation Guard inside the pipeline is policy-as-code enforcement before deployment, the governance posture your CI/CD notes describe."
+ },
+ "69": {
+  "refs": [
+   [
+    "5.1",
+    "s4"
+   ],
+   [
+    "5.1",
+    "s2"
+   ]
+  ],
+  "tie": "Automated quality gates in CodePipeline that trigger a RELEASE BLOCKED state on a threshold failure is the enforcement mechanism in your Quality Assurance notes."
+ },
+ "70": {
+  "refs": [
+   [
+    "4.3",
+    "s4"
+   ],
+   [
+    "4.3",
+    "s2"
+   ]
+  ],
+  "tie": "Metric filters extracting per-tool metrics, with anomaly detection learning each tool's own baseline, is your Tool Performance Frameworks answer to spike detection."
+ },
+ "71": {
+  "refs": [
+   [
+    "2.4",
+    "s3"
+   ],
+   [
+    "3.3",
+    "s1"
+   ]
+  ],
+  "tie": "Geographic cross-Region inference profiles keep traffic inside a bounded set of Regions \u2014 the resilience-plus-residency combination in your Resilient FM Systems notes."
+ },
+ "72": {
+  "refs": [
+   [
+    "2.4",
+    "s3"
+   ],
+   [
+    "3.2",
+    "s1"
+   ]
+  ],
+  "tie": "Your notes pair cross-Region inference profiles with in-Region knowledge bases so retrieval and inference both stay inside the geography."
+ },
+ "73": {
+  "refs": [
+   [
+    "2.4",
+    "s1"
+   ]
+  ],
+  "tie": "The Converse API gives one request shape across models and SDKs, with history passed in the messages array \u2014 the unified interaction pattern in your notes."
+ },
+ "74": {
+  "refs": [
+   [
+    "4.1",
+    "s2"
+   ],
+   [
+    "4.2",
+    "t3"
+   ]
+  ],
+  "tie": "Your Cost-Effective Model Selection notes make provisioned throughput a break-even calculation; rolling time-zone peaks never reach it, so cross-Region on-demand wins."
+ },
+ "75": {
+  "refs": [
+   [
+    "2.1",
+    "s8"
+   ]
+  ],
+  "tie": "Your MCP notes weigh hosting and transport together \u2014 Lambda for stateless short tasks, reached over a remote transport with IAM-based authorization."
+ },
+ "76": {
+  "refs": [
+   [
+    "5.2",
+    "s2"
+   ],
+   [
+    "2.4",
+    "s3"
+   ]
+  ],
+  "tie": "Your API Failures notes pair SDK standard retry mode with X-Ray annotations, the indexed fields that let you filter traces by model characteristics."
+ },
+ "77": {
+  "refs": [
+   [
+    "3.2",
+    "s1"
+   ]
+  ],
+  "tie": "IAM condition keys pinning GuardrailIdentifier and ModelId is the access-pattern control in your Protected AI Environments notes, beyond merely logging calls."
+ },
+ "78": {
+  "refs": [
+   [
+    "2.2",
+    "s2"
+   ],
+   [
+    "2.3",
+    "s7"
+   ]
+  ],
+  "tie": "Standard workflows for long-running work, with SageMaker Pipelines doing the retrain and redeploy, is the MLOps path your deployment notes describe."
+ },
+ "79": {
+  "refs": [
+   [
+    "5.1",
+    "s5"
+   ]
+  ],
+  "tie": "Your RAG Evaluation notes separate retrieve-only from retrieve-and-generate; comparing chunking strategies and two FMs together needs the end-to-end job."
+ },
+ "80": {
+  "refs": [
+   [
+    "1.1",
+    "s2"
+   ],
+   [
+    "1.3",
+    "s3"
+   ]
+  ],
+  "tie": "Normalising multimodal sources into summaries before indexing is the Core RAG pipeline shape in your notes, with guardrails then restraining speculation."
+ },
+ "81": {
+  "refs": [
+   [
+    "3.3",
+    "s3"
+   ],
+   [
+    "3.1",
+    "s1"
+   ]
+  ],
+  "tie": "Your Three Layers of Control notes put the organisation-wide mandate in an SCP, with the guardrail itself deployed by stack sets to every account."
+ },
+ "82": {
+  "refs": [
+   [
+    "2.4",
+    "s2"
+   ],
+   [
+    "2.5",
+    "s1"
+   ]
+  ],
+  "tie": "Your FM API Interfaces notes align timeouts across tiers and note that Lambda response streaming needs an HTTP API, not REST."
+ },
+ "83": {
+  "refs": [
+   [
+    "4.1",
+    "s2"
+   ]
+  ],
+  "tie": "Tiered routing by complexity is the single largest cost lever in your Cost-Effective Model Selection notes \u2014 up to 80%, against 10-20% from prompt work."
+ },
+ "84": {
+  "refs": [
+   [
+    "1.6",
+    "s4"
+   ],
+   [
+    "3.1",
+    "s2"
+   ]
+  ],
+  "tie": "Approval workflows over versioned prompts, plus guardrails on unsafe output, are the governance and safety halves of your Prompt Management notes."
+ },
+ "85": {
+  "refs": [
+   [
+    "3.3",
+    "s1"
+   ],
+   [
+    "3.2",
+    "s3"
+   ]
+  ],
+  "tie": "Processing in-Region by geographic origin, with Macie classifying and CloudTrail providing an immutable audit, is the compliance stack in your notes."
+ },
+ "86": {
+  "refs": [
+   [
+    "3.4",
+    "s3"
+   ],
+   [
+    "3.3",
+    "s4"
+   ]
+  ],
+  "tie": "Your Policy-Compliant AI Systems notes translate policy into automated controls \u2014 guardrails, evaluation thresholds, CloudWatch metrics and an audit trail."
+ },
+ "87": {
+  "refs": [
+   [
+    "3.2",
+    "s1"
+   ],
+   [
+    "3.3",
+    "s2"
+   ]
+  ],
+  "tie": "LF-Tag expressions scaling column-level grants across business units and Regions is the Lake Formation governance model in your notes."
+ },
+ "88": {
+  "refs": [
+   [
+    "1.5",
+    "s6"
+   ]
+  ],
+  "tie": "Your Advanced Search notes put the reranker in stage two for precisely this symptom \u2014 retrieval finds the document but ranks it below irrelevant near-matches."
+ },
+ "89": {
+  "refs": [
+   [
+    "3.1",
+    "s1"
+   ]
+  ],
+  "tie": "Your Input Safety notes run Comprehend checks ahead of the model, and in parallel, because every filter must finish before the expensive invocation."
+ },
+ "90": {
+  "refs": [
+   [
+    "1.5",
+    "s8"
+   ],
+   [
+    "3.1",
+    "s3"
+   ]
+  ],
+  "tie": "Text-to-SQL with a validation layer makes hallucination structurally impossible for numeric answers \u2014 the deterministic-output pattern in your notes."
+ },
+ "91": {
+  "refs": [
+   [
+    "3.1",
+    "s2"
+   ],
+   [
+    "3.2",
+    "s2"
+   ]
+  ],
+  "tie": "Mask mode during testing shows what the guardrail actually caught; your Output Safety notes contrast mask with block as the two execution modes."
+ },
+ "92": {
+  "refs": [
+   [
+    "1.4",
+    "s1"
+   ],
+   [
+    "1.5",
+    "s4"
+   ]
+  ],
+  "tie": "Titan embeddings into pgvector inside Aurora is the option your notes recommend when relational metadata and similarity have to be queried together."
+ },
+ "93": {
+  "refs": [
+   [
+    "2.3",
+    "s2"
+   ],
+   [
+    "1.3",
+    "s3"
+   ]
+  ],
+  "tie": "Your Enterprise Connectivity notes route S3 object events through EventBridge to start a Step Functions workflow \u2014 S3 cannot target a state machine directly."
+ },
+ "94": {
+  "refs": [
+   [
+    "3.1",
+    "s2"
+   ],
+   [
+    "3.2",
+    "s3"
+   ]
+  ],
+  "tie": "Applying a role-matched guardrail at query time beats maintaining two corpora \u2014 your De-identification notes keep masking at inference so one store serves both audiences."
+ },
+ "95": {
+  "refs": [
+   [
+    "4.3",
+    "s3"
+   ],
+   [
+    "4.3",
+    "s1"
+   ]
+  ],
+  "tie": "Your Integrated Observability notes put technical and business metrics side by side on one dashboard, with composite alarms correlating them."
+ },
+ "96": {
+  "refs": [
+   [
+    "3.3",
+    "s3"
+   ],
+   [
+    "2.4",
+    "s3"
+   ]
+  ],
+  "tie": "An eu.* inference profile keeps the call inside Europe while the request originates in an SCP-permitted Region \u2014 the residency mechanics in your governance notes."
+ },
+ "97": {
+  "refs": [
+   [
+    "1.5",
+    "s7"
+   ]
+  ],
+  "tie": "Query decomposition splitting a multi-part question into parallel sub-queries is the semantic-dilution fix in your Query Handling Systems notes."
+ },
+ "98": {
+  "refs": [
+   [
+    "5.1",
+    "s4"
+   ]
+  ],
+  "tie": "Evaluation jobs wired into CodePipeline as a hard threshold gate is the deployment enforcement in your Quality Assurance Processes notes."
+ },
+ "99": {
+  "refs": [
+   [
+    "1.6",
+    "s6"
+   ]
+  ],
+  "tie": "Output format specifications forcing the model to produce required fields is the Enhancing FM Performance lever your notes use, instead of bolting text on afterwards."
+ },
+ "100": {
+  "refs": [
+   [
+    "3.2",
+    "s1"
+   ]
+  ],
+  "tie": "SAML federation, per-department IAM restricted by ModelId, and PrivateLink endpoints are the three axes of restriction in your Protected AI Environments notes."
+ },
+ "101": {
+  "refs": [
+   [
+    "1.3",
+    "s4"
+   ],
+   [
+    "1.5",
+    "s4"
+   ]
+  ],
+  "tie": "Your Embedding Solutions notes warn that general models misread domain vocabulary; normalising language before embedding is the accuracy fix here."
+ },
+ "102": {
+  "refs": [
+   [
+    "4.2",
+    "t1"
+   ],
+   [
+    "2.2",
+    "s1"
+   ]
+  ],
+  "tie": "Cold starts and time-to-first-token are the two levers in your Responsive AI Systems notes \u2014 warm instances plus streaming, not a bigger GPU."
+ },
+ "103": {
+  "refs": [
+   [
+    "2.2",
+    "s2"
+   ],
+   [
+    "2.4",
+    "s4"
+   ]
+  ],
+  "tie": "AppConfig's linear deployment to 20% with automatic rollback on a CloudWatch alarm is the progressive-rollout mechanism in your notes."
+ },
+ "104": {
+  "refs": [
+   [
+    "5.2",
+    "s2"
+   ],
+   [
+    "1.4",
+    "s4"
+   ]
+  ],
+  "tie": "OpenSearch Serverless needs a data access policy alongside IAM \u2014 your troubleshooting notes treat an authorization failure as a two-sided check."
+ },
+ "105": {
+  "refs": [
+   [
+    "3.1",
+    "s2"
+   ],
+   [
+    "3.1",
+    "s3"
+   ]
+  ],
+  "tie": "Your Output Safety notes' text-to-SQL architecture puts a strict Lambda validation layer between generation and execution, which is what makes the pattern safe."
+ },
+ "106": {
+  "refs": [
+   [
+    "1.3",
+    "s3"
+   ],
+   [
+    "2.5",
+    "s3"
+   ]
+  ],
+  "tie": "Bedrock Data Automation is the managed version of the Stage 2 multimodal pipeline your notes otherwise build by hand from Textract, Rekognition and Transcribe."
+ },
+ "107": {
+  "refs": [
+   [
+    "1.1",
+    "s2"
+   ],
+   [
+    "5.1",
+    "s1"
+   ]
+  ],
+  "tie": "A small anonymised dataset, RAG grounding and a judge model scoring three candidates is the proof-of-concept shape your Architecture & PoC notes describe."
+ },
+ "108": {
+  "refs": [
+   [
+    "1.2",
+    "s4"
+   ],
+   [
+    "5.1",
+    "s2"
+   ]
+  ],
+  "tie": "Your Three-Tier Gate notes put automated scoring first and an LLM judge second when shortlisting candidate models \u2014 and Bedrock evaluation jobs take a JSONL dataset from S3 and write results back to S3."
+ },
+ "109": {
+  "refs": [
+   [
+    "2.4",
+    "s2"
+   ],
+   [
+    "2.5",
+    "s1"
+   ]
+  ],
+  "tie": "Streaming cuts time-to-first-token below the SLA while full generation continues \u2014 the perceived-versus-actual latency split in your notes."
+ },
+ "110": {
+  "refs": [
+   [
+    "1.6",
+    "s4"
+   ],
+   [
+    "1.6",
+    "s7"
+   ]
+  ],
+  "tie": "Prompt Management for versioned, parameterized prompts and Flows for composing them into workflows are the two halves of your governance notes."
+ },
+ "111": {
+  "refs": [
+   [
+    "2.1",
+    "s2"
+   ],
+   [
+    "2.3",
+    "s7"
+   ]
+  ],
+  "tie": "Map states fanning out parallel agent work, with AppConfig versioning the prompt flows for rollback, matches your Workflow Architectures notes."
+ },
+ "112": {
+  "refs": [
+   [
+    "4.3",
+    "s4"
+   ],
+   [
+    "4.3",
+    "s1"
+   ]
+  ],
+  "tie": "AgentCore Observability plus X-Ray traces is the built-in path in your Tool Performance notes, where a high tool failure rate usually means a bad tool description."
+ },
+ "113": {
+  "refs": [
+   [
+    "5.2",
+    "s1"
+   ],
+   [
+    "1.5",
+    "s3"
+   ]
+  ],
+  "tie": "Your Incomplete Responses notes name context-window overflow as the cause and RAG plus chunking as the durable fix, not a bigger window."
+ },
+ "114": {
+  "refs": [
+   [
+    "2.3",
+    "s2"
+   ],
+   [
+    "2.4",
+    "s4"
+   ]
+  ],
+  "tie": "Your Intelligent Model Routing notes separate cheap deterministic routing from content-based routing that needs real evaluation \u2014 this answer uses each where it fits."
+ },
+ "115": {
+  "refs": [
+   [
+    "5.1",
+    "s2"
+   ]
+  ],
+  "tie": "Comparing a new model version against the current one on a fixed prompt set is what Bedrock evaluation jobs are for in your Systematic Model Evaluation notes."
+ },
+ "116": {
+  "refs": [
+   [
+    "4.1",
+    "s3"
+   ],
+   [
+    "2.2",
+    "s3"
+   ]
+  ],
+  "tie": "Model cascading \u2014 cheap model first, escalate only on low confidence \u2014 is the cost pattern in your notes, and queues are what decouple the two stages."
+ },
+ "117": {
+  "refs": [
+   [
+    "3.1",
+    "s4"
+   ]
+  ],
+  "tie": "Pre-check, in-stream filter and post-check is the three-point enforcement your Defense in Depth notes require, since each layer has its own blind spot."
+ },
+ "118": {
+  "refs": [
+   [
+    "3.1",
+    "s2"
+   ],
+   [
+    "3.2",
+    "s2"
+   ]
+  ],
+  "tie": "A guardrail sensitive-information policy set to MASK is the native, configuration-only control in your notes, as against hand-built redaction."
+ },
+ "119": {
+  "refs": [
+   [
+    "5.1",
+    "s5"
+   ],
+   [
+    "3.1",
+    "s3"
+   ]
+  ],
+  "tie": "Your Accuracy Verification notes compare generated answers against reference sources; a validated question-answer set is the ground truth that makes it measurable."
+ },
+ "120": {
+  "refs": [
+   [
+    "5.1",
+    "s4"
+   ],
+   [
+    "4.3",
+    "s2"
+   ]
+  ],
+  "tie": "Scheduled evaluation runs publishing custom CloudWatch metrics is the continuous-evaluation loop in your Quality Assurance notes, and it scales by concurrency alone."
+ },
+ "121": {
+  "refs": [
+   [
+    "1.6",
+    "s4"
+   ],
+   [
+    "5.1",
+    "s4"
+   ]
+  ],
+  "tie": "Zero-touch promotion needs versioned prompts, automated LLM-judged scoring and a pipeline gate \u2014 the three pieces your governance notes assemble."
+ },
+ "122": {
+  "refs": [
+   [
+    "5.1",
+    "s3"
+   ],
+   [
+    "2.1",
+    "s6"
+   ]
+  ],
+  "tie": "Explicit user ratings, real-time problematic-response detection and A/B variants are the User-Centered Evaluation components in your notes."
+ },
+ "123": {
+  "refs": [
+   [
+    "1.4",
+    "s3"
+   ],
+   [
+    "4.3",
+    "s5"
+   ]
+  ],
+  "tie": "Your High-Performance Architecture notes handle scale with sharding and memory headroom; circuit breakers are what stop a memory exception taking a node down."
+ },
+ "124": {
+  "refs": [
+   [
+    "3.2",
+    "s3"
+   ],
+   [
+    "3.3",
+    "s1"
+   ]
+  ],
+  "tie": "Masking PHI on the logging path rather than in the source data is the distinction your De-identification notes draw between utility and compliance."
+ },
+ "125": {
+  "refs": [
+   [
+    "1.3",
+    "s5"
+   ],
+   [
+    "3.1",
+    "s1"
+   ]
+  ],
+  "tie": "Normalising format before inference and masking PII at inference are two different stages in your pipeline notes \u2014 few-shot examples then stabilise the output."
+ },
+ "126": {
+  "refs": [
+   [
+    "3.2",
+    "s1"
+   ],
+   [
+    "2.3",
+    "s4"
+   ]
+  ],
+  "tie": "Cross-account AssumeRole keeps each business unit's data in its own account with its own CloudTrail \u2014 the boundary model in your Secure Access notes."
+ },
+ "127": {
+  "refs": [
+   [
+    "3.1",
+    "s2"
+   ]
+  ],
+  "tie": "Your Output Safety notes put the sensitive-information filter on the response path, because PII the model reconstructs never appeared in the input."
+ },
+ "128": {
+  "refs": [
+   [
+    "3.1",
+    "s2"
+   ],
+   [
+    "1.3",
+    "s4"
+   ]
+  ],
+  "tie": "Content filters on responses plus a lower temperature is your notes' pairing for unsafe and inaccurate generation \u2014 filter the output, reduce the randomness."
+ },
+ "129": {
+  "refs": [
+   [
+    "1.5",
+    "s6"
+   ]
+  ],
+  "tie": "Your two-stage retrieval notes explain exactly this symptom: a bi-encoder ranks poorly, so a cross-encoder reranker reorders the top 50 into a usable top 10."
+ },
+ "130": {
+  "refs": [
+   [
+    "2.3",
+    "s6"
+   ],
+   [
+    "1.1",
+    "s1"
+   ]
+  ],
+  "tie": "Outposts for on-premises residency and Wavelength for 5G edge latency are two of the three edge options in your Cross-Environment notes."
+ },
+ "131": {
+  "refs": [
+   [
+    "5.2",
+    "s2"
+   ],
+   [
+    "2.4",
+    "s3"
+   ]
+  ],
+  "tie": "The circuit breaker in your API Failures notes trips on an error-rate threshold and recovers on its own \u2014 state that has to live somewhere the workflow can read."
+ },
+ "132": {
+  "refs": [
+   [
+    "1.3",
+    "s3"
+   ],
+   [
+    "1.4",
+    "s2"
+   ]
+  ],
+  "tie": "Your Stage 2 fusion notes bind modalities into one aligned structure; timestamps are what make the alignment, and a jump-to-moment search, possible."
+ },
+ "133": {
+  "refs": [
+   [
+    "3.2",
+    "s1"
+   ],
+   [
+    "3.3",
+    "s2"
+   ]
+  ],
+  "tie": "Lake Formation column-level permissions registered per source account is how your notes scale fine-grained PII control as more accounts onboard."
+ },
+ "134": {
+  "refs": [
+   [
+    "2.1",
+    "s1"
+   ],
+   [
+    "2.5",
+    "s5"
+   ]
+  ],
+  "tie": "A coordinating agent delegating to specialists is the multi-agent shape in your notes; Strands and AgentCore are the frameworks named for building it."
+ },
+ "135": {
+  "refs": [
+   [
+    "2.4",
+    "s3"
+   ],
+   [
+    "3.3",
+    "s3"
+   ]
+  ],
+  "tie": "Your Resilient FM Systems notes hold multi-Region topologies to data-residency boundaries, which is why the European half needs a geography-scoped profile."
+ },
+ "136": {
+  "refs": [
+   [
+    "5.2",
+    "s2"
+   ],
+   [
+    "3.2",
+    "s1"
+   ]
+  ],
+  "tie": "A permissions policy says what a role may do; a trust policy says who may assume it \u2014 the distinction your troubleshooting notes flag behind AccessDenied."
+ }
+}

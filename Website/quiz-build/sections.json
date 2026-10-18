@@ -1,0 +1,22 @@
+{
+"1.1":{"s1":"Entry, Networking & Authentication Layer","s2":"Core RAG & Knowledge Base Pipeline","s3":"Vector Stores & Storage Decision Matrix","s4":"Safety, Governance & Guardrails","s5":"Asynchronous Integration & Auditing Plane","s6":"Orchestration & Framework Patterns","s7":"Platform Selection: Build vs. Buy","s8":"GenAI Ops, Observability & Monitoring"},
+"1.2":{"s1":"Model Selection, Criteria & Capabilities","s2":"Dataset Preparation & HIPAA Security","s3":"LoRA Mechanics","s4":"Model Evaluation: The Three-Tier Gate","s5":"Limitations, Adversarial Testing, Drift & Tooling","s6":"Automatic Evaluation Metrics (BLEU & ROUGE)"},
+"1.3":{"s1":"Context & High-Level Architecture","s2":"Stage 1: Data Validation","s3":"Stage 2: Processing & Fusion","s4":"Stage 3: Formatting Input for FM Inference","s5":"Stages 4 & 5: Enhancement & Enrichment"},
+"1.4":{"s1":"Core Vector Store Architecture","s2":"Metadata Frameworks & Precedent Validation","s3":"High-Performance Architecture & Sharding","s4":"Unified Router & Security Boundaries"},
+"1.5":{"s1":"Scenario Overview","s2":"Task 1.4 vs. 1.5 Focus Comparison","s3":"Document Segmentation (Chunking)","s4":"Embedding Solutions","s5":"Vector Search Deployment","s6":"Advanced Search Architectures","s7":"Query Handling Systems","s8":"Integration with Foundation Models"},
+"1.6":{"s1":"Executive Architecture Overview","s2":"Model Instruction Frameworks","s3":"Interactive AI Systems","s4":"Prompt Management and Governance","s5":"Quality Assurance Systems","s6":"Enhancing FM Performance","s7":"Prompt Flows vs. Agents","s8":"Cross-Task Comparison","s9":"Key Outcome Metrics"},
+"2.1":{"s1":"Autonomous Systems, Agents & Memory Hierarchy","s2":"Problem-Solving & Workflow Architectures","s3":"Evaluating Reasoning Quality","s4":"Safeguarded AI Workflows: 5 Security Layers","s5":"Model Coordination & Dynamic Routing","s6":"Collaborative AI Systems (Human-in-the-Loop)","s7":"Tool Integrations & OpenAPI Design","s8":"Model Extension Frameworks (MCP Servers)"},
+"2.2":{"s1":"Traditional ML vs. LLM Deployment","s2":"AWS Deployment Options & Hosting Patterns","s3":"Optimization & Cost-Reduction Architecture","s4":"Multi-Model Endpoints vs. LLMs","s5":"Monitoring & Security","s6":"Exam Quick-Reference Cheat Sheet"},
+"2.3":{"s1":"The Use Case Background","s2":"Enterprise Connectivity","s3":"Integrated AI Capabilities","s4":"Secure Access Frameworks","s5":"The Layered Security Inspection","s6":"Cross-Environment AI Solutions","s7":"CI/CD and the GenAI Gateway","s8":"The GenAI Gateway"},
+"2.4":{"s1":"Flexible Model Interaction Systems","s2":"Real-Time Interaction Systems (Streaming, WebSockets, SSE)","s3":"Resilient FM Systems","s4":"Intelligent Model Routing"},
+"2.5":{"s1":"FM API Interfaces","s2":"Accessible AI Interfaces (ARIA & Frontend)","s3":"Business System Enhancements","s4":"Developer Productivity with Amazon Q Developer","s5":"Advanced GenAI Applications","s6":"Troubleshooting Efficiency"},
+"3.1":{"s1":"Input Safety Controls","s2":"Output Safety Controls","s3":"Accuracy Verification Systems","s4":"Defense in Depth","s5":"Advanced Threat Detection"},
+"3.2":{"s1":"Protected AI Environments","s2":"Privacy-Preserving Systems","s3":"De-identification & Privacy-Focused AI"},
+"3.3":{"s1":"Compliance Frameworks","s2":"Data Source Tracking","s3":"Organisational Governance Systems","s4":"Continuous Monitoring & Advanced Controls"},
+"3.4":{"s1":"Transparent AI Systems","s2":"Fairness Evaluations","s3":"Policy-Compliant AI Systems"},
+"4.1":{"s1":"Token Efficiency Systems","s2":"Cost-Effective Model Selection","s3":"High-Performance FM Systems","s4":"Intelligent Caching Systems"},
+"4.2":{"t1":"Responsive AI Systems","t2":"Retrieval Performance","t3":"Throughput Optimisation","t4":"FM Parameter Tuning","t5":"Efficient Resource Allocation","t6":"System Performance Optimisation"},
+"4.3":{"s1":"Holistic Observability","s2":"GenAI Monitoring Systems","s3":"Integrated Observability","s4":"Tool Performance Frameworks","s5":"Vector Store Operational Management"},
+"5.1":{"s1":"Assessment Frameworks","s2":"Systematic Model Evaluation","s3":"User-Centered Evaluation","s4":"Quality Assurance Processes","s5":"RAG Evaluation"},
+"5.2":{"s1":"Content Handling: Incomplete Responses","s2":"FM Integration: API Failures","s3":"Prompt Engineering: Inconsistent Responses","s4":"Retrieval System: Slow or Irrelevant Results","s5":"Prompt Maintenance"}
+}

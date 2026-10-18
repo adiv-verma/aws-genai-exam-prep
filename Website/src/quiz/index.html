@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Practice Quiz | AIP-C01 Guide</title>
-<meta name="description" content="Password-protected AIP-C01 practice quiz — 136 questions in nine sets, with explanations and links back to the matching study notes.">
+<meta name="description" content="Password-protected AIP-C01 practice quiz — 136 questions in nine sets, each explained and linked to the exact section of the study notes that covers it.">
 <meta name="robots" content="noindex, nofollow">
 <style>
   :root{
@@ -170,6 +170,10 @@
   .ref .tnum{font-weight:800;color:var(--navy);font-variant-numeric:tabular-nums;}
   .ref .tname{color:var(--ink);}
   .ref .dname{font-size:12.5px;color:var(--ink-soft);}
+  .ref .sec{font-size:12.5px;font-weight:700;color:var(--navy-2);background:#e7edf6;
+    border:1px solid #d3deee;padding:1px 8px;border-radius:999px;}
+  .refbox .tie{margin:0 0 13px;font-size:14px;line-height:1.6;color:var(--ink);
+    padding-left:11px;border-left:3px solid var(--accent);}
   .ref a{font-weight:700;text-decoration:none;border-bottom:1px solid currentColor;}
   .ref .soon{font-size:12px;color:#8a6616;background:#fff8e6;border:1px solid #f0dca8;padding:1px 7px;border-radius:999px;font-weight:700;}
   .provenance{margin-top:12px;font-size:12px;color:#7b8798;font-style:italic;}
@@ -238,15 +242,15 @@
         <span class="eyebrow">AIP-C01 Practice</span>
         <h1>Nine question sets</h1>
         <p class="lead">136 exam-style questions — the complete set — 15 to a set. Pick an answer and the explanation opens straight away —
-          right or wrong — along with a pointer to the task where that topic was studied.</p>
+          right or wrong — along with the exact section of your own notes that covers it.</p>
       </div>
     </header>
     <section>
       <div class="wrap">
         <p class="kicker">Choose a set</p>
         <h2 class="h">Question sets</h2>
-        <p class="section-lead">Each set mixes domains the way the real exam does. Progress is saved in this browser,
-          so you can stop part-way through and pick the same set back up.</p>
+        <p class="section-lead">Each set mixes domains the way the real exam does. Every question links to the section of your
+          notes that covers it. Progress is saved in this browser, so you can pick a set back up.</p>
         <div class="set-grid" id="setGrid"></div>
         <div style="margin-top:22px;display:flex;gap:10px;flex-wrap:wrap;">
           <button class="btn ghost" id="resetAll">Clear all saved progress</button>
@@ -551,11 +555,12 @@
 
       var refs = q.refs.map(function(rf){
         var link = rf.url
-          ? '<a href="' + rf.url + '">Open these notes &rarr;</a>'
+          ? '<a href="' + rf.url + '">Open this section &rarr;</a>'
           : '<span class="soon">Notes not written yet</span>';
         return '<div class="ref">' +
           '<span class="tnum">Task ' + rf.task + '</span>' +
           '<span class="tname">' + esc(rf.name) + '</span>' +
+          (rf.secName ? '<span class="sec">' + esc(rf.secName) + '</span>' : '') +
           '<span class="dname">Domain ' + rf.domain + " — " + esc(rf.domainName) + '</span>' +
           link + '</div>';
       }).join("");
@@ -571,6 +576,7 @@
           '<div class="exp"><h4>Why</h4>' + paras + '</div>' +
           '<div class="refbox">' +
             '<h4>Where this was studied</h4>' +
+            (q.tie ? '<p class="tie">' + esc(q.tie) + '</p>' : '') +
             '<div class="refs">' + refs + '</div>' +
             '<p class="provenance">' + (q.expSrc === "pdf"
               ? "Explanation as published with the question."
@@ -620,6 +626,7 @@
         '<td>' + (i+1) + '</td>' +
         '<td class="st ' + (ok ? "ok" : "no") + '">' + (ok ? "✓" : "✗") + '</td>' +
         '<td>Task ' + rf.task + " — " + esc(rf.name) +
+          (rf.secName ? ' <span class="muted">· ' + esc(rf.secName) + '</span>' : '') +
           (rf.url ? ' <a href="' + rf.url + '">notes</a>' : '') + '</td>' +
         '<td><button type="button">Review</button></td>';
       tr.querySelector("button").addEventListener("click", function(){
