@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Domain 4 Map | AIP-C01 Guide</title>
+<meta name="description" content="One diagram of how all three tasks in Domain 4 of the AWS Certified Generative AI Developer (AIP-C01) exam fit together, in plain English.">
+<style>
+  :root{
+    --ink:#0b1524; --ink-soft:#3a4a5e; --paper:#f7f8fa; --card:#ffffff; --line:#e3e7ee;
+    --accent:#e8622c; --accent-dark:#c94f1f; --navy:#0f2540; --navy-2:#16345c;
+    --t41:#1f4e79; --t42:#1d6f68; --t43:#6b4c9a;
+    color-scheme: light;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{margin:0;background:var(--paper);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;line-height:1.65;}
+  a{color:var(--accent-dark);}
+  code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;background:#eef1f6;padding:1px 5px;border-radius:4px;font-size:.92em;}
+  img,svg{max-width:100%;}
+  .wrap{max-width:1000px;margin:0 auto;padding:0 24px;}
+  .wrap-wide{max-width:1380px;margin:0 auto;padding:0 24px;}
+
+  .nav{position:sticky;top:0;z-index:50;background:rgba(15,37,64,.96);backdrop-filter:blur(6px);border-bottom:1px solid rgba(255,255,255,.08);}
+  .nav .wrap{display:flex;align-items:center;justify-content:space-between;height:56px;}
+  .nav-brand{color:#fff;font-weight:700;font-size:14px;letter-spacing:.02em;text-decoration:none;}
+  .nav-brand span{color:var(--accent);}
+  .nav-links{display:flex;gap:22px;list-style:none;margin:0;padding:0;}
+  .nav-links a{color:#cdd8e6;text-decoration:none;font-size:13.5px;font-weight:500;}
+  .nav-links a:hover{color:#fff;}
+  @media (max-width:720px){
+    .nav .wrap{gap:12px;}
+    .nav-links{gap:16px;overflow-x:auto;scrollbar-width:none;-ms-overflow-style:none;
+      flex:1;justify-content:flex-end;}
+    .nav-links::-webkit-scrollbar{display:none;}
+    .nav-links a{white-space:nowrap;font-size:13px;}
+  }
+
+  header.hero{background:linear-gradient(180deg,var(--navy) 0%, var(--navy-2) 100%);color:#fff;padding:36px 0 30px;}
+  .eyebrow{display:inline-block;font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#ffd8c4;background:rgba(232,98,44,.18);border:1px solid rgba(232,98,44,.4);padding:5px 10px;border-radius:999px;margin-bottom:14px;}
+  h1{font-size:clamp(23px,3.4vw,31px);line-height:1.15;margin:0;font-weight:800;}
+  header.hero p{font-size:15.5px;color:#c9d5e3;max-width:680px;margin:12px 0 0;}
+
+  section{padding:34px 0;}
+  h2.sh{font-size:20px;font-weight:800;margin:0 0 6px;}
+  p.sl{font-size:14.5px;color:var(--ink-soft);margin:0 0 22px;max-width:700px;}
+
+  figure.map{margin:0;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px;}
+  .scroller{overflow-x:auto;-webkit-overflow-scrolling:touch;}
+  .scroller svg{display:block;min-width:1150px;width:100%;height:auto;}
+  .scroller svg a text{cursor:pointer;}
+  .scroller svg a:hover text{text-decoration:underline;}
+  figure.map figcaption{margin-top:14px;font-size:13px;color:var(--ink-soft);text-align:center;}
+  .hint{display:none;font-size:12.5px;color:var(--ink-soft);margin:0 0 8px;font-style:italic;}
+  @media (max-width:1200px){ .hint{display:block;} }
+
+  .tcard{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:20px 22px;margin-bottom:14px;border-left:4px solid var(--line);}
+  .tcard .th{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:8px;}
+  .tnum{color:#fff;font-size:11.5px;font-weight:700;border-radius:8px;padding:3px 9px;}
+  .tcard h3{margin:0;font-size:16.5px;font-weight:800;}
+  .tcard .one{margin:0 0 12px;font-size:14.5px;color:var(--ink);}
+  .tcard ul{margin:0 0 14px;padding-left:19px;}
+  .tcard li{font-size:14px;color:var(--ink-soft);margin-bottom:6px;}
+  .tcard li b{color:var(--ink);font-weight:700;}
+  .jump{display:flex;flex-wrap:wrap;align-items:center;gap:7px;margin:0 0 14px;}
+  .jump span{font-size:12.5px;font-weight:700;color:var(--ink-soft);}
+  .jump a{font-size:12.5px;text-decoration:none;background:#f2f5f9;border:1px solid var(--line);border-radius:7px;padding:4px 10px;color:var(--ink-soft);font-weight:600;}
+  .jump a:hover{border-color:var(--accent);color:var(--accent-dark);}
+  .tcard a.go{font-size:13px;font-weight:700;text-decoration:none;border:1px solid var(--line);border-radius:8px;padding:7px 13px;display:inline-block;}
+  .tcard a.go:hover{border-color:var(--accent);}
+  .tc41{border-left-color:var(--t41);} .tc42{border-left-color:var(--t42);}
+  .tc43{border-left-color:var(--t43);}
+
+  .ov{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:6px 22px;}
+  .ov dt{font-size:14.5px;font-weight:700;margin:16px 0 3px;}
+  .ov dd{margin:0 0 16px;font-size:14px;color:var(--ink-soft);}
+  .ov dd .pill{display:inline-block;color:#fff;font-size:10.5px;font-weight:700;border-radius:7px;padding:1px 7px;margin-right:2px;text-decoration:none;}
+
+  .more{background:#eef1f6;border:1px solid var(--line);border-radius:12px;padding:18px 22px;font-size:14px;color:var(--ink-soft);}
+  .more b{color:var(--ink);}
+
+  footer{padding:32px 0 48px;color:#8b96a5;font-size:12.5px;}
+  footer .wrap{border-top:1px solid var(--line);padding-top:22px;}
+  footer a{color:#6b7686;}
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="wrap">
+    <a class="nav-brand" href="../index.html">AIP-C01 <span>Guide</span></a>
+    <ul class="nav-links">
+      <li><a href="index.html">All Study Notes</a></li>
+      <li><a href="domain-1.html">Domain 1 Map</a></li>
+      <li><a href="domain-2.html">Domain 2 Map</a></li>
+      <li><a href="domain-3.html">Domain 3 Map</a></li>
+      <li><a href="../tasks/index.html">Build Log</a></li>
+    </ul>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="wrap">
+    <span class="eyebrow">Domain 4 &middot; The Map</span>
+    <h1>All Three Tasks, One Picture</h1>
+    <p>Domains 1 to 3 get the thing built, integrated and kept out of trouble. Domain 4 is the part that runs afterwards, and it is the same system asked three questions: what does it cost, how fast does it feel, and how would you know if either answer changed? Each box says what it does, lists the concepts it teaches, and links straight to the section of the notes that covers it.</p>
+  </div>
+</header>
+
+<section style="padding-bottom:10px;">
+  <div class="wrap-wide">
+    <p class="hint">Scroll the diagram sideways if it does not fit.</p>
+    <figure class="map">
+      <div class="scroller">
+<svg viewBox="0 0 1282 859" role="img" aria-label="Domain 4 in three steps. Step one, make it cost less, biggest lever first: count the tokens before the call and break usage down by query type; send less context by summarising once and reusing it many times; trim the prompt and cap the answer with max_tokens, because output tokens cost more; route by difficulty so a light classifier sends each question to the cheapest model tier that can answer it, worth up to eighty percent; and prove it per dollar by setting the quality bar first, picking the cheapest model that clears it, and batching anything that is not real-time for about half price. Step two, make it feel fast, covering both actual time and the time the user feels: streaming leaves the eight-second job unchanged but delivers the first token in half a second; predictable questions get pre-computed overnight and read back from ElastiCache or DynamoDB instead of the model; retrieval is tuned by picking HNSW for speed and recall or IVF for memory, then reranking the results; throughput trades against latency, where batching serves more people but makes each wait longer and MaxConcurrency stops the endpoint throttling; and the fleet is sized by load-testing instance types with Inference Recommender and scaling predictively, because GPUs boot too slowly to react. Step three, know whether any of it worked: CPU, memory and HTTP 200s can look perfect while the model hallucinates; prompt tracing follows one request across retrieval, tools and the model so you can tell which step produced the bad answer; Bedrock model invocation logs are off by default and hold full prompts and responses, so they carry a PII risk; hallucination is not a built-in metric, so a second model marks answers against a golden set and an alarm watches that score; and CloudWatch RUM plus correlation IDs show what the user actually saw, where an HTTP 200 followed by a request for a human is a failure. A closing band notes the loop: what step three measures is what tells you whether steps one and two worked, and a cost spike is usually a bug rather than a billing problem. Each box lists the concepts it teaches and links to the matching section of the task notes." xmlns="http://www.w3.org/2000/svg">
+<defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#5a6a7e"/></marker></defs>
+<rect width="1282" height="859" fill="#f7f8fa"/>
+<g font-family="-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica,Arial,sans-serif">
+<rect x="34" y="16" width="452" height="27" rx="13.5" fill="#0f2540"/>
+<text x="49" y="34.5" font-size="12.5" font-weight="800" fill="#fff" letter-spacing=".04em">STEP 1</text>
+<text x="117.4" y="34.5" font-size="12.5" font-weight="600" fill="#fff" opacity=".85">Make it cost less  ·  biggest lever first</text>
+<rect x="34" y="61" width="222" height="186" rx="12" fill="#ffffff" stroke="#d7dee8" stroke-width="1.5"/>
+<rect x="45" y="62" width="200" height="4" fill="#1f4e79"/>
+<text x="145.0" y="90" text-anchor="middle" font-size="15" font-weight="700" fill="#0b1524">Count before you call</text>
+<text x="145.0" y="111" text-anchor="middle" font-size="11.8" fill="#5a6a7e">Work out the token count before the</text>
+<text x="145.0" y="128" text-anchor="middle" font-size="11.8" fill="#5a6a7e">API call, then break usage down by</text>
+<text x="145.0" y="145" text-anchor="middle" font-size="11.8" fill="#5a6a7e">query type in CloudWatch.</text>
+<rect x="61.1" y="161" width="63.2" height="16" rx="6" fill="#eef2f7"/>
+<text x="92.7" y="172.5" text-anchor="middle" font-size="9.6" font-weight="600" fill="#4a5a70">tiktoken</text>
+<rect x="130.3" y="161" width="98.6" height="16" rx="6" fill="#eef2f7"/>
+<text x="179.6" y="172.5" text-anchor="middle" font-size="9.6" font-weight="600" fill="#4a5a70">pre-call count</text>
+<rect x="95.7" y="181" width="98.6" height="16" rx="6" fill="#eef2f7"/>
+<text x="145.0" y="192.5" text-anchor="middle" font-size="9.6" font-weight="600" fill="#4a5a70">context window</text>
+<rect x="129.0" y="201" width="32" height="16" rx="8" fill="#1f4e79"/>
+<text x="145.0" y="213" text-anchor="middle" font-size="10.5" font-weight="700" fill="#fff">4.1</text>
+<line x1="50" y1="223" x2="240" y2="223" stroke="#d7dee8" stroke-width="1"/>
+<a href="task-4-1.html#s1"><text x="145.0" y="239" text-anchor="middle" font-size="11.2" font-weight="700" fill="#c94f1f">Notes 4.1 · Section 1 &#8594;</text></a>
+<line x1="260" y1="154" x2="275" y2="154" stroke="#5a6a7e" stroke-width="1.8" marker-end="url(#a)"/>
+<rect x="282" y="61" width="222" height="186" rx="12" fill="#ffffff" stroke="#d7dee8" stroke-width="1.5"/>
+<rect x="293" y="62" width="200" height="4" fill="#1f4e79"/>
+<text x="393.0" y="90" text-anchor="middle" font-size="15" font-weight="700" fill="#0b1524">Send less context</text>
+<text x="393.0" y="111" text-anchor="middle" font-size="11.8" fill="#5a6a7e">Summarise once and reuse it many</text>
+<text x="393.0" y="128" text-anchor="middle" font-size="11.8" fill="#5a6a7e">times. Chunk for cost, not just</text>
+<text x="393.0" y="145" text-anchor="middle" font-size="11.8" fill="#5a6a7e">recall. Put key instructions first.</text>
+<rect x="303.2" y="161" width="98.6" height="16" rx="6" fill="#eef2f7"/>
+<text x="352.5" y="172.5" text-anchor="middle" font-size="9.6" font-weight="600" fill="#4a5a70">summarise once</text>
+<rect x="407.8" y="161" width="75.0" height="16" rx="6" fill="#eef2f7"/>
+<text x="445.3" y="172.5" text-anchor="middle" font-size="9.6" font-weight="600" fill="#4a5a70">reuse many</text>
+<rect x="343.7" y="181" width="98.6" height="16" rx="6" fill="#eef2f7"/>
+<text x="393.0" y="192.5" text-anchor="middle" font-size="9.6" font-weight="600" fill="#4a5a70">lost in middle</text>
+<rect x="377.0" y="201" width="32" height="16" rx="8" fill="#1f4e79"/>
+<text x="393.0" y="213" text-anchor="middle" font-size="10.5" font-weight="700" fill="#fff">4.1</text>
+<line x1="298" y1="223" x2="488" y2="223" stroke="#d7dee8" stroke-width="1"/>
+<a href="task-4-1.html#s1"><text x="393.0" y="239" text-anchor="middle" font-size="11.2" font-weight="700" fill="#c94f1f">Notes 4.1 · Section 1 &#8594;</text></a>
+<line x1="508" y1="154" x2="523" y2="154" stroke="#5a6a7e" stroke-width="1.8" marker-end="url(#a)"/>
+<rect x="530" y="61" width="222" height="186" rx="12" fill="#ffffff" stroke="#d7dee8" stroke-width="1.5"/>
+<rect x="541" y="62" width="200" height="4" fill="#1f4e79"/>
+<text x="641.0" y="90" text-anchor="middle" font-size="15" font-weight="700" fill="#0b1524">Trim it, then cap it</text>
+<text x="641.0" y="111" text-anchor="middle" font-size="11.8" fill="#5a6a7e">Strip filler and weak RAG chunks</text>
+<text x="641.0" y="128" text-anchor="middle" font-size="11.8" fill="#5a6a7e">going in; set max_tokens and ask</text>
+<text x="641.0" y="145" text-anchor="middle" font-size="11.8" fill="#5a6a7e">for brevity. Output costs more.</text>
+<rect x="545.3" y="161" width="104.5" height="16" rx="6" fill="#eef2f7"/>
+<text x="597.5" y="172.5" text-anchor="middle" font-size="9.6" font-weight="600" fill="#4a5a70">context pruning</text>
+<rect x="655.8" y="161" width="80.9" height="16" rx="6" fill="#eef2f7"/>
+<text x="696.2" y="172.5" text-anchor="middle" font-size="9.6" font-weight="600" fill="#4a5a70">compression</text>
+<rect x="603.5" y="181" width="75.0" height="16" rx="6" fill="#eef2f7"/>
+<text x="641.0" y="192.5" text-anchor="middle" font-size="9.6" font-weight="600" fill="#4a5a70">max_tokens</text>
+<rect x="625.0" y="201" width="32" height="16" rx="8" fill="#1f4e79"/>
+<text x="641.0" y="213" text-anchor="middle" font-size="10.5" font-weight="700" fill="#fff">4.1</text>
+<line x1="546" y1="223" x2="736" y2="223" stroke="#d7dee8" stroke-width="1"/>
+<a href="task-4-1.html#s1"><text x="641.0" y="239" text-anchor="middle" font-size="11.2" font-weight="700" fill="#c94f1f">Notes 4.1 · Section 1 &#8594;</text></a>
+<line x1="756" y1="154" x2="771" y2="154" stroke="#5a6a7e" stroke-width="1.8" marker-end="url(#a)"/>
+<rect x="778" y="61" width="222" height="186" rx="12" fill="#ffffff" stroke="#d7dee8" stroke-width="1.5"/>
+<rect x="789" y="62" width="200" height="4" fill="#1f4e79"/>
+<text x="889.0" y="90" text-anchor="middle" font-size="15" font-weight="700" fill="#0b1524">Route by difficulty</text>
+<text x="889.0" y="111" text-anchor="middle" font-size="11.8" fill="#5a6a7e">A light classifier reads the</text>
+<text x="889.0" y="128" text-anchor="middle" font-size="11.8" fill="#5a6a7e">question and routes it to the</text>
+<text x="889.0" y="145" text-anchor="middle" font-size="11.8" fill="#5a6a7e">cheapest tier. Up to 80% off.</text>
+<rect x="839.7" y="161" width="98.6" height="16" rx="6" fill="#eef2f7"/>
+<text x="889.0" y="172.5" text-anchor="middle" font-size="9.6" font-weight="600" fill="#4a5a70">Query Analyzer</text>
+<rect x="802.1" y="181" width="98.6" height="16" rx="6" fill="#eef2f7"/>
+<text x="851.4" y="192.5" text-anchor="middle" font-size="9.6" font-weight="600" fill="#4a5a70">tiered routing</text>
+<rect x="906.8" y="181" width="69.1" height="16" rx="6" fill="#eef2f7"/>
+<text x="941.3" y="192.5" text-anchor="middle" font-size="9.6" font-weight="600" fill="#4a5a70">cascading</text>
+<rect x="873.0" y="201" width="32" height="16" rx="8" fill="#1f4e79"/>
+<text x="889.0" y="213" text-anchor="middle" font-size="10.5" font-weight="700" fill="#fff">4.1</text>
+<line x1="794" y1="223" x2="984" y2="223" stroke="#d7dee8" stroke-width="1"/>
+<a href="task-4-1.html#s2"><text x="889.0" y="239" text-anchor="middle" font-size="11.2" font-weight="700" fill="#c94f1f">Notes 4.1 · Section 2 &#8594;</text></a>
+<line x1="1004" y1="154" x2="1019" y2="154" stroke="#5a6a7e" stroke-width="1.8" marker-end="url(#a)"/>
+<rect x="1026" y="61" width="222" height="186" rx="12" fill="#ffffff" stroke="#d7dee8" stroke-width="1.5"/>
+<rect x="1037" y="62" width="200" height="4" fill="#1f4e79"/>
+<text x="1137.0" y="90" text-anchor="middle" font-size="15" font-weight="700" fill="#0b1524">Prove it per dollar</text>
+<text x="1137.0" y="111" text-anchor="middle" font-size="11.8" fill="#5a6a7e">Set the quality bar first, then</text>
+<text x="1137.0" y="128" text-anchor="middle" font-size="11.8" fill="#5a6a7e">pick the cheapest model that</text>
+<text x="1137.0" y="145" text-anchor="middle" font-size="11.8" fill="#5a6a7e">clears it. Batch the rest.</text>
+<rect x="1078.8" y="161" width="116.3" height="16" rx="6" fill="#eef2f7"/>
+<text x="1137.0" y="172.5" text-anchor="middle" font-size="9.6" font-weight="600" fill="#4a5a70">price/performance</text>
+<rect x="1053.1" y="181" width="92.7" height="16" rx="6" fill="#eef2f7"/>
+<text x="1099.4" y="192.5" text-anchor="middle" font-size="9.6" font-weight="600" fill="#4a5a70">Bedrock Batch</text>
+<rect x="1151.8" y="181" width="69.1" height="16" rx="6" fill="#eef2f7"/>
+<text x="1186.3" y="192.5" text-anchor="middle" font-size="9.6" font-weight="600" fill="#4a5a70">cost tags</text>
+<rect x="1121.0" y="201" width="32" height="16" rx="8" fill="#1f4e79"/>
+<text x="1137.0" y="213" text-anchor="middle" font-size="10.5" font-weight="700" fill="#fff">4.1</text>
+<line x1="1042" y1="223" x2="1232" y2="223" stroke="#d7dee8" stroke-width="1"/>
+<a href="task-4-1.html#s2"><text x="1137.0" y="239" text-anchor="middle" font-size="11.2" font-weight="700" fill="#c94f1f">Notes 4.1 · Section 2 &#8594;</text></a>
+<rect x="34" y="275" width="560" height="27" rx="13.5" fill="#0f2540"/>
+<text x="49" y="293.5" font-size="12.5" font-weight="800" fill="#fff" letter-spacing=".04em">STEP 2</text>
+<text x="117.4" y="293.5" font-size="12.5" font-weight="600" fill="#fff" opacity=".85">Make it feel fast  ·  actual time, and time the user feels</text>
+<rect x="34" y="320" width="222" height="186" rx="12" fill="#ffffff" stroke="#d7dee8" stroke-width="1.5"/>
+<rect x="45" y="321" width="200" height="4" fill="#1d6f68"/>
+<text x="145.0" y="349" text-anchor="middle" font-size="15" font-weight="700" fill="#0b1524">Two kinds of slow</text>
+<text x="145.0" y="370" text-anchor="middle" font-size="11.8" fill="#5a6a7e">The job still takes eight seconds,</text>
+<text x="145.0" y="387" text-anchor="middle" font-size="11.8" fill="#5a6a7e">but the first token lands in half</text>
+<text x="145.0" y="404" text-anchor="middle" font-size="11.8" fill="#5a6a7e">of one. Nothing else changes.</text>
+<rect x="80.9" y="420" width="128.1" height="16" rx="6" fill="#eef2f7"/>
+<text x="145.0" y="431.5" text-anchor="middle" font-size="9.6" font-weight="600" fill="#4a5a70">actual vs perceived</text>
+<rect x="70.0" y="440" width="104.5" height="16" rx="6" fill="#eef2f7"/>
+<text x="122.2" y="451.5" text-anchor="middle" font-size="9.6" font-weight="600" fill="#4a5a70">streaming / SSE</text>
+<rect x="180.4" y="440" width="39.6" height="16" rx="6" fill="#eef2f7"/>
+<text x="200.2" y="451.5" text-anchor="middle" font-size="9.6" font-weight="600" fill="#4a5a70">TTFT</text>
+<rect x="129.0" y="460" width="32" height="16" rx="8" fill="#1d6f68"/>
+<text x="145.0" y="472" text-anchor="middle" font-size="10.5" font-weight="700" fill="#fff">4.2</text>
+<line x1="50" y1="482" x2="240" y2="482" stroke="#d7dee8" stroke-width="1"/>
+<a href="task-4-2.html#t1"><text x="145.0" y="498" text-anchor="middle" font-size="11.2" font-weight="700" fill="#c94f1f">Notes 4.2 · Topic 1 &#8594;</text></a>
+<line x1="260" y1="413" x2="275" y2="413" stroke="#5a6a7e" stroke-width="1.8" marker-end="url(#a)"/>
+<rect x="282" y="320" width="222" height="186" rx="12" fill="#ffffff" stroke="#d7dee8" stroke-width="1.5"/>
+<rect x="293" y="321" width="200" height="4" fill="#1d6f68"/>
+<text x="393.0" y="349" text-anchor="middle" font-size="15" font-weight="700" fill="#0b1524">Answer it in advance</text>
+<text x="393.0" y="370" text-anchor="middle" font-size="11.8" fill="#5a6a7e">Predictable questions get computed</text>
+<text x="393.0" y="387" text-anchor="middle" font-size="11.8" fill="#5a6a7e">overnight and read back from a</text>
+<text x="393.0" y="404" text-anchor="middle" font-size="11.8" fill="#5a6a7e">key-value store, not the model.</text>
+<rect x="337.8" y="420" width="110.4" height="16" rx="6" fill="#eef2f7"/>
+<text x="393.0" y="431.5" text-anchor="middle" font-size="9.6" font-weight="600" fill="#4a5a70">ElastiCache &lt;1ms</text>
+<rect x="300.2" y="440" width="98.6" height="16" rx="6" fill="#eef2f7"/>
+<text x="349.6" y="451.5" text-anchor="middle" font-size="9.6" font-weight="600" fill="#4a5a70">DynamoDB &lt;10ms</text>
+<rect x="404.9" y="440" width="80.9" height="16" rx="6" fill="#eef2f7"/>
+<text x="445.3" y="451.5" text-anchor="middle" font-size="9.6" font-weight="600" fill="#4a5a70">pre-compute</text>
+<rect x="377.0" y="460" width="32" height="16" rx="8" fill="#1d6f68"/>
+<text x="393.0" y="472" text-anchor="middle" font-size="10.5" font-weight="700" fill="#fff">4.2</text>
+<line x1="298" y1="482" x2="488" y2="482" stroke="#d7dee8" stroke-width="1"/>
+<a href="task-4-2.html#t1"><text x="393.0" y="498" text-anchor="middle" font-size="11.2" font-weight="700" fill="#c94f1f">Notes 4.2 · Topic 1 &#8594;</text></a>
+<line x1="508" y1="413" x2="523" y2="413" stroke="#5a6a7e" stroke-width="1.8" marker-end="url(#a)"/>
+<rect x="530" y="320" width="222" height="186" rx="12" fill="#ffffff" stroke="#d7dee8" stroke-width="1.5"/>
+<rect x="541" y="321" width="200" height="4" fill="#1d6f68"/>
+<text x="641.0" y="349" text-anchor="middle" font-size="15" font-weight="700" fill="#0b1524">Make the lookup quick</text>
+<text x="641.0" y="370" text-anchor="middle" font-size="11.8" fill="#5a6a7e">Pick the index for the constraint</text>
+<text x="641.0" y="387" text-anchor="middle" font-size="11.8" fill="#5a6a7e">you have: speed and recall, or</text>
+<text x="641.0" y="404" text-anchor="middle" font-size="11.8" fill="#5a6a7e">memory. Then rerank the results.</text>
+<rect x="563.0" y="420" width="80.9" height="16" rx="6" fill="#eef2f7"/>
+<text x="603.5" y="431.5" text-anchor="middle" font-size="9.6" font-weight="600" fill="#4a5a70">HNSW vs IVF</text>
+<rect x="649.9" y="420" width="69.1" height="16" rx="6" fill="#eef2f7"/>
+<text x="684.4" y="431.5" text-anchor="middle" font-size="9.6" font-weight="600" fill="#4a5a70">ef_search</text>
+<rect x="588.8" y="440" width="104.5" height="16" rx="6" fill="#eef2f7"/>
+<text x="641.0" y="451.5" text-anchor="middle" font-size="9.6" font-weight="600" fill="#4a5a70">hybrid + rerank</text>
+<rect x="625.0" y="460" width="32" height="16" rx="8" fill="#1d6f68"/>
+<text x="641.0" y="472" text-anchor="middle" font-size="10.5" font-weight="700" fill="#fff">4.2</text>
+<line x1="546" y1="482" x2="736" y2="482" stroke="#d7dee8" stroke-width="1"/>
+<a href="task-4-2.html#t2"><text x="641.0" y="498" text-anchor="middle" font-size="11.2" font-weight="700" fill="#c94f1f">Notes 4.2 · Topic 2 &#8594;</text></a>
+<line x1="756" y1="413" x2="771" y2="413" stroke="#5a6a7e" stroke-width="1.8" marker-end="url(#a)"/>
+<rect x="778" y="320" width="222" height="186" rx="12" fill="#ffffff" stroke="#d7dee8" stroke-width="1.5"/>
+<rect x="789" y="321" width="200" height="4" fill="#1d6f68"/>
+<text x="889.0" y="349" text-anchor="middle" font-size="15" font-weight="700" fill="#0b1524">Throughput vs latency</text>
+<text x="889.0" y="370" text-anchor="middle" font-size="11.8" fill="#5a6a7e">Batching serves more people and</text>
+<text x="889.0" y="387" text-anchor="middle" font-size="11.8" fill="#5a6a7e">makes each one wait longer. Cap</text>
+<text x="889.0" y="404" text-anchor="middle" font-size="11.8" fill="#5a6a7e">concurrency or you get throttled.</text>
+<rect x="790.4" y="420" width="92.7" height="16" rx="6" fill="#eef2f7"/>
+<text x="836.7" y="431.5" text-anchor="middle" font-size="9.6" font-weight="600" fill="#4a5a70">SQS buffering</text>
+<rect x="889.1" y="420" width="98.6" height="16" rx="6" fill="#eef2f7"/>
+<text x="938.4" y="431.5" text-anchor="middle" font-size="9.6" font-weight="600" fill="#4a5a70">MaxConcurrency</text>
+<rect x="836.8" y="440" width="104.5" height="16" rx="6" fill="#eef2f7"/>
+<text x="889.0" y="451.5" text-anchor="middle" font-size="9.6" font-weight="600" fill="#4a5a70">priority queues</text>
+<rect x="873.0" y="460" width="32" height="16" rx="8" fill="#1d6f68"/>
+<text x="889.0" y="472" text-anchor="middle" font-size="10.5" font-weight="700" fill="#fff">4.2</text>
+<line x1="794" y1="482" x2="984" y2="482" stroke="#d7dee8" stroke-width="1"/>
+<a href="task-4-2.html#t3"><text x="889.0" y="498" text-anchor="middle" font-size="11.2" font-weight="700" fill="#c94f1f">Notes 4.2 · Topic 3 &#8594;</text></a>
+<line x1="1004" y1="413" x2="1019" y2="413" stroke="#5a6a7e" stroke-width="1.8" marker-end="url(#a)"/>
+<rect x="1026" y="320" width="222" height="186" rx="12" fill="#ffffff" stroke="#d7dee8" stroke-width="1.5"/>
+<rect x="1037" y="321" width="200" height="4" fill="#1d6f68"/>
+<text x="1137.0" y="349" text-anchor="middle" font-size="15" font-weight="700" fill="#0b1524">Size the fleet</text>
+<text x="1137.0" y="370" text-anchor="middle" font-size="11.8" fill="#5a6a7e">Load-test the instance types</text>
+<text x="1137.0" y="387" text-anchor="middle" font-size="11.8" fill="#5a6a7e">instead of guessing, and scale</text>
+<text x="1137.0" y="404" text-anchor="middle" font-size="11.8" fill="#5a6a7e">early — GPUs boot too slowly.</text>
+<rect x="1067.0" y="420" width="139.9" height="16" rx="6" fill="#eef2f7"/>
+<text x="1137.0" y="431.5" text-anchor="middle" font-size="9.6" font-weight="600" fill="#4a5a70">Inference Recommender</text>
+<rect x="1075.9" y="440" width="122.2" height="16" rx="6" fill="#eef2f7"/>
+<text x="1137.0" y="451.5" text-anchor="middle" font-size="9.6" font-weight="600" fill="#4a5a70">predictive scaling</text>
+<rect x="1121.0" y="460" width="32" height="16" rx="8" fill="#1d6f68"/>
+<text x="1137.0" y="472" text-anchor="middle" font-size="10.5" font-weight="700" fill="#fff">4.2</text>
+<line x1="1042" y1="482" x2="1232" y2="482" stroke="#d7dee8" stroke-width="1"/>
+<a href="task-4-2.html#t5"><text x="1137.0" y="498" text-anchor="middle" font-size="11.2" font-weight="700" fill="#c94f1f">Notes 4.2 · Topic 5 &#8594;</text></a>
+<rect x="34" y="534" width="600" height="27" rx="13.5" fill="#0f2540"/>
+<text x="49" y="552.5" font-size="12.5" font-weight="800" fill="#fff" letter-spacing=".04em">STEP 3</text>
+<text x="117.4" y="552.5" font-size="12.5" font-weight="600" fill="#fff" opacity=".85">Know whether any of it worked  ·  and catch it when it drifts</text>
+<rect x="34" y="579" width="222" height="186" rx="12" fill="#ffffff" stroke="#d7dee8" stroke-width="1.5"/>
+<rect x="45" y="580" width="200" height="4" fill="#6b4c9a"/>
+<text x="145.0" y="608" text-anchor="middle" font-size="15" font-weight="700" fill="#0b1524">All green, still wrong</text>
+<text x="145.0" y="629" text-anchor="middle" font-size="11.8" fill="#5a6a7e">CPU, memory and HTTP 200s can</text>
+<text x="145.0" y="646" text-anchor="middle" font-size="11.8" fill="#5a6a7e">look perfect while the model</text>
+<text x="145.0" y="663" text-anchor="middle" font-size="11.8" fill="#5a6a7e">hallucinates. That is not quality.</text>
+<rect x="61.1" y="679" width="92.7" height="16" rx="6" fill="#eef2f7"/>
+<text x="107.4" y="690.5" text-anchor="middle" font-size="9.6" font-weight="600" fill="#4a5a70">observability</text>
+<rect x="159.8" y="679" width="69.1" height="16" rx="6" fill="#eef2f7"/>
+<text x="194.4" y="690.5" text-anchor="middle" font-size="9.6" font-weight="600" fill="#4a5a70">AgentCore</text>
+<rect x="98.7" y="699" width="92.7" height="16" rx="6" fill="#eef2f7"/>
+<text x="145.0" y="710.5" text-anchor="middle" font-size="9.6" font-weight="600" fill="#4a5a70">unified views</text>
+<rect x="129.0" y="719" width="32" height="16" rx="8" fill="#6b4c9a"/>
+<text x="145.0" y="731" text-anchor="middle" font-size="10.5" font-weight="700" fill="#fff">4.3</text>
+<line x1="50" y1="741" x2="240" y2="741" stroke="#d7dee8" stroke-width="1"/>
+<a href="task-4-3.html#s1"><text x="145.0" y="757" text-anchor="middle" font-size="11.2" font-weight="700" fill="#c94f1f">Notes 4.3 · Section 1 &#8594;</text></a>
+<line x1="260" y1="672" x2="275" y2="672" stroke="#5a6a7e" stroke-width="1.8" marker-end="url(#a)"/>
+<rect x="282" y="579" width="222" height="186" rx="12" fill="#ffffff" stroke="#d7dee8" stroke-width="1.5"/>
+<rect x="293" y="580" width="200" height="4" fill="#6b4c9a"/>
+<text x="393.0" y="608" text-anchor="middle" font-size="15" font-weight="700" fill="#0b1524">Follow one prompt</text>
+<text x="393.0" y="629" text-anchor="middle" font-size="11.8" fill="#5a6a7e">Trace one request across retrieval,</text>
+<text x="393.0" y="646" text-anchor="middle" font-size="11.8" fill="#5a6a7e">tools and the model, to see which</text>
+<text x="393.0" y="663" text-anchor="middle" font-size="11.8" fill="#5a6a7e">step produced the bad answer.</text>
+<rect x="343.7" y="679" width="98.6" height="16" rx="6" fill="#eef2f7"/>
+<text x="393.0" y="690.5" text-anchor="middle" font-size="9.6" font-weight="600" fill="#4a5a70">prompt tracing</text>
+<rect x="309.1" y="699" width="116.3" height="16" rx="6" fill="#eef2f7"/>
+<text x="367.2" y="710.5" text-anchor="middle" font-size="9.6" font-weight="600" fill="#4a5a70">blame attribution</text>
+<rect x="431.4" y="699" width="45.5" height="16" rx="6" fill="#eef2f7"/>
+<text x="454.2" y="710.5" text-anchor="middle" font-size="9.6" font-weight="600" fill="#4a5a70">X-Ray</text>
+<rect x="377.0" y="719" width="32" height="16" rx="8" fill="#6b4c9a"/>
+<text x="393.0" y="731" text-anchor="middle" font-size="10.5" font-weight="700" fill="#fff">4.3</text>
+<line x1="298" y1="741" x2="488" y2="741" stroke="#d7dee8" stroke-width="1"/>
+<a href="task-4-3.html#s1"><text x="393.0" y="757" text-anchor="middle" font-size="11.2" font-weight="700" fill="#c94f1f">Notes 4.3 · Section 1 &#8594;</text></a>
+<line x1="508" y1="672" x2="523" y2="672" stroke="#5a6a7e" stroke-width="1.8" marker-end="url(#a)"/>
+<rect x="530" y="579" width="222" height="186" rx="12" fill="#ffffff" stroke="#d7dee8" stroke-width="1.5"/>
+<rect x="541" y="580" width="200" height="4" fill="#6b4c9a"/>
+<text x="641.0" y="608" text-anchor="middle" font-size="15" font-weight="700" fill="#0b1524">Turn the logs on</text>
+<text x="641.0" y="629" text-anchor="middle" font-size="11.8" fill="#5a6a7e">Bedrock model invocation logs are</text>
+<text x="641.0" y="646" text-anchor="middle" font-size="11.8" fill="#5a6a7e">off by default. They hold full</text>
+<text x="641.0" y="663" text-anchor="middle" font-size="11.8" fill="#5a6a7e">prompts and responses — mind PII.</text>
+<rect x="545.3" y="679" width="98.6" height="16" rx="6" fill="#eef2f7"/>
+<text x="594.6" y="690.5" text-anchor="middle" font-size="9.6" font-weight="600" fill="#4a5a70">off by default</text>
+<rect x="649.9" y="679" width="86.8" height="16" rx="6" fill="#eef2f7"/>
+<text x="693.3" y="690.5" text-anchor="middle" font-size="9.6" font-weight="600" fill="#4a5a70">S3 / CW Logs</text>
+<rect x="609.4" y="699" width="63.2" height="16" rx="6" fill="#eef2f7"/>
+<text x="641.0" y="710.5" text-anchor="middle" font-size="9.6" font-weight="600" fill="#4a5a70">PII risk</text>
+<rect x="625.0" y="719" width="32" height="16" rx="8" fill="#6b4c9a"/>
+<text x="641.0" y="731" text-anchor="middle" font-size="10.5" font-weight="700" fill="#fff">4.3</text>
+<line x1="546" y1="741" x2="736" y2="741" stroke="#d7dee8" stroke-width="1"/>
+<a href="task-4-3.html#s2"><text x="641.0" y="757" text-anchor="middle" font-size="11.2" font-weight="700" fill="#c94f1f">Notes 4.3 · Section 2 &#8594;</text></a>
+<line x1="756" y1="672" x2="771" y2="672" stroke="#5a6a7e" stroke-width="1.8" marker-end="url(#a)"/>
+<rect x="778" y="579" width="222" height="186" rx="12" fill="#ffffff" stroke="#d7dee8" stroke-width="1.5"/>
+<rect x="789" y="580" width="200" height="4" fill="#6b4c9a"/>
+<text x="889.0" y="608" text-anchor="middle" font-size="15" font-weight="700" fill="#0b1524">Make quality a number</text>
+<text x="889.0" y="629" text-anchor="middle" font-size="11.8" fill="#5a6a7e">Hallucination is not built in. A</text>
+<text x="889.0" y="646" text-anchor="middle" font-size="11.8" fill="#5a6a7e">second model marks answers against</text>
+<text x="889.0" y="663" text-anchor="middle" font-size="11.8" fill="#5a6a7e">a golden set. Alarm on that.</text>
+<rect x="793.3" y="679" width="98.6" height="16" rx="6" fill="#eef2f7"/>
+<text x="842.6" y="690.5" text-anchor="middle" font-size="9.6" font-weight="600" fill="#4a5a70">custom metrics</text>
+<rect x="897.9" y="679" width="86.8" height="16" rx="6" fill="#eef2f7"/>
+<text x="941.3" y="690.5" text-anchor="middle" font-size="9.6" font-weight="600" fill="#4a5a70">LLM-as-judge</text>
+<rect x="851.5" y="699" width="75.0" height="16" rx="6" fill="#eef2f7"/>
+<text x="889.0" y="710.5" text-anchor="middle" font-size="9.6" font-weight="600" fill="#4a5a70">golden set</text>
+<rect x="873.0" y="719" width="32" height="16" rx="8" fill="#6b4c9a"/>
+<text x="889.0" y="731" text-anchor="middle" font-size="10.5" font-weight="700" fill="#fff">4.3</text>
+<line x1="794" y1="741" x2="984" y2="741" stroke="#d7dee8" stroke-width="1"/>
+<a href="task-4-3.html#s2"><text x="889.0" y="757" text-anchor="middle" font-size="11.2" font-weight="700" fill="#c94f1f">Notes 4.3 · Section 2 &#8594;</text></a>
+<line x1="1004" y1="672" x2="1019" y2="672" stroke="#5a6a7e" stroke-width="1.8" marker-end="url(#a)"/>
+<rect x="1026" y="579" width="222" height="186" rx="12" fill="#ffffff" stroke="#d7dee8" stroke-width="1.5"/>
+<rect x="1037" y="580" width="200" height="4" fill="#6b4c9a"/>
+<text x="1137.0" y="608" text-anchor="middle" font-size="15" font-weight="700" fill="#0b1524">What the user saw</text>
+<text x="1137.0" y="629" text-anchor="middle" font-size="11.8" fill="#5a6a7e">The server says 2s, the screen</text>
+<text x="1137.0" y="646" text-anchor="middle" font-size="11.8" fill="#5a6a7e">says 5s. And a 200 followed by</text>
+<text x="1137.0" y="663" text-anchor="middle" font-size="11.8" fill="#5a6a7e">“talk to a human” is a failure.</text>
+<rect x="1087.7" y="679" width="98.6" height="16" rx="6" fill="#eef2f7"/>
+<text x="1137.0" y="690.5" text-anchor="middle" font-size="9.6" font-weight="600" fill="#4a5a70">CloudWatch RUM</text>
+<rect x="1044.2" y="699" width="104.5" height="16" rx="6" fill="#eef2f7"/>
+<text x="1096.5" y="710.5" text-anchor="middle" font-size="9.6" font-weight="600" fill="#4a5a70">correlation IDs</text>
+<rect x="1154.8" y="699" width="75.0" height="16" rx="6" fill="#eef2f7"/>
+<text x="1192.2" y="710.5" text-anchor="middle" font-size="9.6" font-weight="600" fill="#4a5a70">CloudTrail</text>
+<rect x="1121.0" y="719" width="32" height="16" rx="8" fill="#6b4c9a"/>
+<text x="1137.0" y="731" text-anchor="middle" font-size="10.5" font-weight="700" fill="#fff">4.3</text>
+<line x1="1042" y1="741" x2="1232" y2="741" stroke="#d7dee8" stroke-width="1"/>
+<a href="task-4-3.html#s3"><text x="1137.0" y="757" text-anchor="middle" font-size="11.2" font-weight="700" fill="#c94f1f">Notes 4.3 · Section 3 &#8594;</text></a>
+<rect x="34" y="791" width="1214" height="46" rx="12" fill="#eef2f7" stroke="#d7dee8" stroke-width="1.5"/>
+<text x="56" y="819" font-size="12.6" font-weight="700" fill="#0b1524">The loop:</text>
+<text x="126" y="819" font-size="12.6" fill="#4a5a70">what Step 3 measures is what tells you whether Step 1 and Step 2 actually worked — and a cost spike is usually a bug, not a billing problem.</text>
+</g>
+</svg>
+      </div>
+      <figcaption>Three passes over one running system &mdash; cheaper, faster, and measured. The last one is what tells you the first two worked.</figcaption>
+    </figure>
+  </div>
+</section>
+
+<section style="padding-top:20px;">
+  <div class="wrap">
+    <h2 class="sh">What each task is actually about</h2>
+    <p class="sl">One line each, then the few things most worth remembering.</p>
+
+    <div class="tcard tc41">
+      <div class="th"><span class="tnum" style="background:var(--t41)">4.1</span><h3>Cost Optimization &amp; Resource Efficiency</h3></div>
+      <p class="one">Paying for the answer you need, and not for the one you don't.</p>
+      <ul><li><b>You are billed twice, unevenly.</b> Input tokens and output tokens are charged separately, and output costs more per token. Capping the answer is the cheapest change you can make.</li><li><b>Model choice beats everything else.</b> Prompt work and caching get you 10&ndash;20%. Routing the easy questions to a smaller model gets you up to 80%.</li><li><b>Summarising can cost more than it saves.</b> A summary is itself a model call. It only pays off if the summary gets reused &mdash; summarise once, read many times.</li><li><b>Quality bar first, then price.</b> Pick the cheapest model that clears the bar, not the best model you can afford. 89% at a fifth of the price usually wins.</li><li><b>Not real-time? Batch it.</b> Bedrock Batch is roughly half price for work that can wait, like overnight description generation.</li></ul>
+      <div class="jump"><span>Jump into the notes:</span><a href="task-4-1.html#s1">1 &middot; Token efficiency</a><a href="task-4-1.html#s2">2 &middot; Model selection</a></div>
+      <a class="go" href="task-4-1.html">Open the whole page &rarr;</a>
+    </div>
+
+    <div class="tcard tc42">
+      <div class="th"><span class="tnum" style="background:var(--t42)">4.2</span><h3>Performance Optimisation</h3></div>
+      <p class="one">Making it quick, and &mdash; separately &mdash; making it feel quick.</p>
+      <ul><li><b>Streaming changes nothing and everything.</b> The job still takes eight seconds. The user sees the first token in half a second, and that is the number they remember.</li><li><b>The fastest model call is the one you skip.</b> Pre-compute predictable answers and read them back in milliseconds instead of seconds.</li><li><b>Parallel only works if the steps are independent.</b> Three two-second calls become two seconds &mdash; unless B needs A's output.</li><li><b>Throughput and latency pull against each other.</b> Batching serves more people and makes each of them wait longer. Pick which one the workload needs.</li><li><b>Scale before the spike, not during it.</b> GPU instances take too long to start for reactive scaling; requests time out before the capacity lands.</li><li><b>Tune temperature or top-p, never both.</b> They interact and the result stops being predictable.</li></ul>
+      <div class="jump"><span>Jump into the notes:</span><a href="task-4-2.html#t1">1 &middot; Responsive systems</a><a href="task-4-2.html#t2">2 &middot; Retrieval</a><a href="task-4-2.html#t3">3 &middot; Throughput</a><a href="task-4-2.html#t4">4 &middot; Parameters</a><a href="task-4-2.html#t5">5 &middot; Resources</a><a href="task-4-2.html#t6">6 &middot; System perf</a></div>
+      <a class="go" href="task-4-2.html">Open the whole page &rarr;</a>
+    </div>
+
+    <div class="tcard tc43">
+      <div class="th"><span class="tnum" style="background:var(--t43)">4.3</span><h3>Monitoring</h3></div>
+      <p class="one">Noticing that the answers got worse, before a customer does.</p>
+      <ul><li><b>Every dashboard can be green while the model lies.</b> CPU, memory and HTTP 200s say nothing about whether the answer was right.</li><li><b>Trace the prompt, not just the request.</b> When the answer is wrong you need to know whether retrieval, a tool, or the model itself caused it.</li><li><b>The logs you need are off.</b> Bedrock model invocation logs are disabled by default &mdash; and once on, they hold full prompts and responses, so PII becomes your problem.</li><li><b>Hallucination has to be made into a metric.</b> Nothing ships it out of the box. A second model marks answers against a golden set, and that score is what the alarm watches.</li><li><b>HTTP 200 is not success.</b> If the user clicks &ldquo;talk to a human&rdquo; straight after the answer, the request succeeded and the system failed.</li><li><b>A cost spike is a bug report.</b> Runaway agents, recursive loops and denial-of-wallet attacks all show up on the bill first.</li></ul>
+      <div class="jump"><span>Jump into the notes:</span><a href="task-4-3.html#s1">1 &middot; Holistic observability</a><a href="task-4-3.html#s2">2 &middot; GenAI monitoring</a><a href="task-4-3.html#s3">3 &middot; Integrated</a><a href="task-4-3.html#s4">4 &middot; Tool performance</a><a href="task-4-3.html#s5">5 &middot; Vector stores</a></div>
+      <a class="go" href="task-4-3.html">Open the whole page &rarr;</a>
+    </div>
+  </div>
+</section>
+
+<section style="padding-top:0;">
+  <div class="wrap">
+    <h2 class="sh">Why the same thing keeps coming up</h2>
+    <p class="sl">Domain 4 reuses a small set of levers across all three tasks. The lever is the same; the reason for pulling it is what changes &mdash; and that reason is usually what the exam is testing.</p>
+    <dl class="ov">
+      <dt>Tokens, for three different reasons</dt>
+      <dd><a class="pill" style="background:var(--t41)" href="task-4-1.html#s1">4.1</a> cuts tokens because they are the bill. <a class="pill" style="background:var(--t42)" href="task-4-2.html#t3">4.2</a> cuts the same tokens because shorter prompts execute faster and free up concurrency. <a class="pill" style="background:var(--t43)" href="task-4-3.html#s2">4.3</a> watches token counts because a sudden 10&times; spike means context leakage or an agent stuck in a loop.</dd>
+      <dt>Batching, a cost feature and a throughput feature</dt>
+      <dd><a class="pill" style="background:var(--t41)" href="task-4-1.html#s2">4.1</a> uses Bedrock Batch for the ~50% discount on offline work. <a class="pill" style="background:var(--t42)" href="task-4-2.html#t3">4.2</a> uses runtime request batching to keep the GPU busy &mdash; which raises throughput and raises per-request latency at the same time.</dd>
+      <dt>Caching, at four different distances</dt>
+      <dd><a class="pill" style="background:var(--t42)" href="task-4-2.html#t1">4.2</a> keeps pre-computed answers in ElastiCache and DynamoDB, and hot query embeddings in the retrieval layer. Both exist to avoid a model call you have already paid for once.</dd>
+      <dt>Chunking, asked three ways</dt>
+      <dd>Task 1.5 chunks for retrieval quality. <a class="pill" style="background:var(--t41)" href="task-4-1.html#s1">4.1</a> chunks to minimise cost. <a class="pill" style="background:var(--t42)" href="task-4-2.html#t2">4.2</a> picks the index &mdash; HNSW or IVF &mdash; for latency and memory. Same corpus, three different questions.</dd>
+      <dt>CloudWatch, doing four jobs</dt>
+      <dd><a class="pill" style="background:var(--t41)" href="task-4-1.html#s1">4.1</a> segments token spend by query type. <a class="pill" style="background:var(--t42)" href="task-4-2.html#t1">4.2</a> tracks latency percentiles and runs A/B tests through Evidently. <a class="pill" style="background:var(--t43)" href="task-4-3.html#s2">4.3</a> holds the custom quality metrics and anomaly detection, and <a class="pill" style="background:var(--t43)" href="task-4-3.html#s3">4.3</a> again adds RUM for what the browser actually rendered.</dd>
+      <dt>Stopping conditions, cost and correctness at once</dt>
+      <dd><a class="pill" style="background:var(--t41)" href="task-4-1.html#s2">4.1</a> caps agent loop iterations to stop runaway spend. <a class="pill" style="background:var(--t42)" href="task-4-2.html#t3">4.2</a> caps concurrency to stop HTTP 429 throttling. <a class="pill" style="background:var(--t43)" href="task-4-3.html#s4">4.3</a> alarms when a tool that normally fires 100 times a day fires 5,000 &mdash; the same failure, caught from the other end.</dd>
+      <dt>Technical numbers vs. the numbers anyone asks for</dt>
+      <dd><a class="pill" style="background:var(--t43)" href="task-4-3.html#s1">4.3</a> is blunt about it: latency dropping from 2.0s to 1.8s matters to engineering. &ldquo;Escalation rate down 20%&rdquo; is what proves the system was worth building. Put both on the same dashboard.</dd>
+    </dl>
+  </div>
+</section>
+
+<section style="padding-top:0;">
+  <div class="wrap">
+    <p class="more"><b>Coming from the other maps?</b> <a href="domain-1.html">Domain 1</a> builds the system &mdash; documents in, answer out. <a href="domain-2.html">Domain 2</a> puts that system inside a company and keeps it running. <a href="domain-3.html">Domain 3</a> keeps it out of trouble. Domain 4 is what you do once it is live and someone is paying for it: make it cheaper, make it quicker, and be able to tell when it quietly stops being either.</p>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <p>This is an independent, unofficial study resource and is not affiliated with, endorsed by, or sponsored by Amazon Web Services, Inc. AWS, Amazon Bedrock, and all related marks are trademarks of Amazon.com, Inc. or its affiliates.</p>
+    <p>Hosted on Amazon S3 + Amazon CloudFront. &middot; <a href="index.html">&larr; Back to Study Notes</a></p>
+  </div>
+</footer>
+
+</body>
+</html>

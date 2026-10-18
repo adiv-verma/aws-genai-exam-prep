@@ -148,3 +148,36 @@ Measures idle wait times when Agent A depends on output from Agent B.
 Validates state data and payload integrity across agent handoffs (reinforcing validation principles from Task 2.5).
 
 
+Section 5: Vector Store Operational Management
+Vector databases store dense vector embeddings to perform approximate nearest neighbor (k-NN) vector searches for Retrieval-Augmented Generation (RAG) pipelines. Managing vector stores operationalizes the design principles of Task 1.4 by focusing on query performance, indexing health, ingestion data hygiene, and automated disaster recovery.
+1. Amazon OpenSearch Service Monitoring
+Because vector similarity searches are compute-heavy and memory-intensive, OpenSearch vector indexes require dedicated Amazon CloudWatch dashboards tracking:
+Query Latency: Time spent processing vector similarity computations (k-NN graph traversals).
+Throughput: Search and indexing operations per second (QPS/TPS).
+Error Rates: Failed vector read/write operations, thread pool rejections, and memory exceptions.
+2. Automated Index Optimization
+As new documents are embedded and existing records are updated or deleted, vector indexes experience index fragmentation and embedding drift, leading to degraded search relevance and higher latency.
+[ Scheduled EventBridge Rule ]
+               │
+               ▼
+   [ AWS Lambda Function ]
+               │
+               ▼
+[ OpenSearch Index Optimization ]  ► (Defragments segments & optimizes HNSW graph)
+Automated Maintenance: Scheduled AWS Lambda functions periodically run index optimization and segment merging jobs, automating the rebuild lifecycle discussed in Task 1.4.
+3. Data Quality Controls Before Indexing
+Once flawed, unformatted, or duplicate data is embedded and stored in a high-dimensional vector space, filtering it out retroactively is exceptionally difficult and expensive.
+AWS Service	Primary Role in Vector Pipeline
+AWS Glue	Serverless ETL data preparation, validation, and schema enforcement before embedding.
+SageMaker Data Wrangler	Low-code data cleaning, document chunking, and validation checks prior to model vectorization.
+4. Long-Term Vector Store Degradation Metrics
+Certain performance degradations accumulate gradually over time and are invisible during day-to-day operations:
+Index Fragmentation: Accumulation of deleted document markers that degrade segment search efficiency.
+Storage & Memory Growth: Unchecked vector size expansion impacting RAM allocation for k-NN HNSW graph caching.
+Query Latency Drift: Subtle increase in retrieval response times as the vector space expands.
+5. Automated Backup vs. Re-Embedding Recovery
+A robust backup and recovery strategy is vital for operational resilience in RAG systems.
+Re-embedding Corpus (Worst Case): Re-building an unbacked-up vector store requires pulling raw text, passing every document through an embedding model, and re-indexing. This takes hours or days and incurs massive model inference costs.
+Snapshot Restoration (Best Practice): Restoring directly from automated OpenSearch point-in-time snapshots takes minutes, preserving embeddings without incurring model API charges.
+
+
