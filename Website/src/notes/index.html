@@ -4,17 +4,22 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Study Notes | AIP-C01 Guide</title>
-<meta name="description" content="Personal cheat sheets and reference architecture diagrams for the AWS Certified Generative AI Developer - Professional (AIP-C01) exam, organized by domain and task.">
+<meta name="description" content="Personal cheat sheets, domain maps and a cross-domain concept index for the AWS Certified Generative AI Developer - Professional (AIP-C01) exam, organized by domain and task.">
 <style>
   :root{
     --ink:#0b1524; --ink-soft:#3a4a5e; --paper:#f7f8fa; --card:#ffffff; --line:#e3e7ee;
     --accent:#e8622c; --accent-dark:#c94f1f; --navy:#0f2540; --navy-2:#16345c;
+    --d1:#1f4e79; --d2:#6b4c9a; --d3:#1d6f68; --d4:#c94f1f; --d5:#a03453;
     color-scheme: light;
   }
   *{box-sizing:border-box;}
-  body{margin:0;background:var(--paper);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;line-height:1.55;}
+  html{scroll-behavior:smooth;}
+  body{margin:0;background:var(--paper);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;line-height:1.65;}
   a{color:var(--accent-dark);}
-  .wrap{max-width:1080px;margin:0 auto;padding:0 24px;}
+  code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;background:#eef1f6;padding:1px 5px;border-radius:4px;font-size:.92em;}
+  img,svg{max-width:100%;}
+  .wrap{max-width:1000px;margin:0 auto;padding:0 24px;}
+  .wrap-wide{max-width:1380px;margin:0 auto;padding:0 24px;}
 
   .nav{position:sticky;top:0;z-index:50;background:rgba(15,37,64,.96);backdrop-filter:blur(6px);border-bottom:1px solid rgba(255,255,255,.08);}
   .nav .wrap{display:flex;align-items:center;justify-content:space-between;height:56px;}
@@ -25,47 +30,69 @@
   .nav-links a:hover{color:#fff;}
   @media (max-width:720px){
     .nav .wrap{gap:12px;}
-    .nav-links{gap:16px;overflow-x:auto;scrollbar-width:none;-ms-overflow-style:none;
-      flex:1;justify-content:flex-end;}
+    .nav-links{gap:16px;overflow-x:auto;scrollbar-width:none;-ms-overflow-style:none;flex:1;justify-content:flex-end;}
     .nav-links::-webkit-scrollbar{display:none;}
     .nav-links a{white-space:nowrap;font-size:13px;}
   }
 
-  header.hero{background:linear-gradient(180deg,var(--navy) 0%, var(--navy-2) 100%);color:#fff;padding:48px 0 36px;}
-  .eyebrow{display:inline-block;font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#ffd8c4;background:rgba(232,98,44,.18);border:1px solid rgba(232,98,44,.4);padding:5px 10px;border-radius:999px;margin-bottom:16px;}
-  h1{font-size:clamp(24px,3.6vw,36px);line-height:1.15;margin:0 0 10px;font-weight:800;}
-  header.hero p{font-size:16px;color:#c9d5e3;max-width:680px;margin:0;}
+  header.hero{background:linear-gradient(180deg,var(--navy) 0%, var(--navy-2) 100%);color:#fff;padding:40px 0 32px;}
+  .eyebrow{display:inline-block;font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#ffd8c4;background:rgba(232,98,44,.18);border:1px solid rgba(232,98,44,.4);padding:5px 10px;border-radius:999px;margin-bottom:14px;}
+  h1{font-size:clamp(24px,3.6vw,34px);line-height:1.15;margin:0;font-weight:800;}
+  header.hero p{font-size:15.5px;color:#c9d5e3;max-width:720px;margin:12px 0 0;}
   header.hero p a{color:#ffd8c4;}
 
-  section{padding:44px 0;}
-
-  .domain-head{display:flex;align-items:center;gap:12px;margin:36px 0 16px;}
-  .domain-head:first-child{margin-top:0;}
-  .domain-head .dnum{
-    font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px;font-weight:700;
-    color:#fff;background:var(--navy);padding:5px 11px;border-radius:7px;white-space:nowrap;
-  }
-  .domain-head h2{margin:0;font-size:17px;font-weight:800;color:var(--ink);}
-  .domain-head .dline{flex:1;height:1px;background:var(--line);}
-
-  .task-card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:20px 22px;margin-bottom:12px;display:block;text-decoration:none;color:inherit;transition:border-color .15s;}
-  .task-card:hover{border-color:var(--accent);}
-  .task-card h3{margin:0 0 6px;font-size:15.5px;font-weight:700;color:var(--ink);}
-  .task-card p{margin:0;font-size:13.5px;color:var(--ink-soft);}
-  .task-card .tref{display:block;margin-top:8px;font-size:12px;color:var(--accent-dark);font-weight:600;}
-
-  .task-card.master{background:linear-gradient(135deg,#132b4b 0%,#1b3c68 100%);border-color:#1b3c68;color:#fff;}
-  .task-card.master:hover{border-color:var(--accent);}
-  .task-card.master h3{color:#fff;}
-  .task-card.master p{color:#c9d5e3;}
-  .task-card.master .tref{color:#ffd8c4;}
-  .task-card.master .mtag{display:inline-block;font-size:10.5px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:#ffd8c4;background:rgba(232,98,44,.22);border:1px solid rgba(232,98,44,.45);padding:3px 8px;border-radius:999px;margin-bottom:8px;}
-
-  .empty-note{font-size:14px;color:var(--ink-soft);font-style:italic;padding:4px 2px 28px;}
+  section{padding:34px 0;}
+  h2.sh{font-size:20px;font-weight:800;margin:0 0 6px;}
+  p.sl{font-size:14.5px;color:var(--ink-soft);margin:0 0 22px;max-width:760px;}
 
   footer{padding:32px 0 48px;color:#8b96a5;font-size:12.5px;}
   footer .wrap{border-top:1px solid var(--line);padding-top:22px;}
   footer a{color:#6b7686;}
+
+  .start{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:14px;margin-bottom:10px;}
+  .scard{display:block;text-decoration:none;color:inherit;border-radius:14px;padding:20px 22px;border:1px solid var(--line);background:var(--card);transition:border-color .15s;}
+  .scard:hover{border-color:var(--accent);}
+  .scard .k{display:inline-block;font-size:10.5px;font-weight:800;letter-spacing:.07em;text-transform:uppercase;padding:3px 9px;border-radius:999px;margin-bottom:9px;}
+  .scard h3{margin:0 0 6px;font-size:16px;font-weight:800;}
+  .scard p{margin:0;font-size:13.5px;color:var(--ink-soft);}
+  .scard .tref{display:block;margin-top:10px;font-size:12.5px;color:var(--accent-dark);font-weight:700;}
+  .scard.hi{background:linear-gradient(135deg,#132b4b 0%,#1b3c68 100%);border-color:#1b3c68;color:#fff;}
+  .scard.hi h3{color:#fff;} .scard.hi p{color:#c9d5e3;} .scard.hi .tref{color:#ffd8c4;}
+  .scard.hi .k{color:#ffd8c4;background:rgba(232,98,44,.22);border:1px solid rgba(232,98,44,.45);}
+  .scard .k{color:var(--navy-2);background:#eef1f6;}
+
+  .weights{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-bottom:6px;}
+  @media (max-width:760px){ .weights{grid-template-columns:repeat(2,1fr);} }
+  .w{display:block;text-decoration:none;color:inherit;background:var(--card);border:1px solid var(--line);border-top:4px solid var(--line);border-radius:12px;padding:14px 15px;transition:border-color .15s;}
+  .w:hover{border-color:var(--accent);}
+  .w .pct{font-size:24px;font-weight:800;line-height:1;}
+  .w .dn{font-size:11.5px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:#8b96a5;margin-bottom:7px;}
+  .w .tk{font-size:12.5px;color:var(--ink-soft);margin-top:5px;}
+  .w1{border-top-color:var(--d1);} .w2{border-top-color:var(--d2);} .w3{border-top-color:var(--d3);}
+  .w4{border-top-color:var(--d4);} .w5{border-top-color:var(--d5);}
+  .w1 .pct{color:var(--d1);} .w2 .pct{color:var(--d2);} .w3 .pct{color:var(--d3);}
+  .w4 .pct{color:var(--d4);} .w5 .pct{color:var(--d5);}
+
+  .domain-head{display:flex;align-items:center;gap:12px;margin:38px 0 16px;}
+  .domain-head .dnum{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px;font-weight:700;color:#fff;background:var(--navy);padding:5px 11px;border-radius:7px;white-space:nowrap;}
+  .domain-head h2{margin:0;font-size:17px;font-weight:800;color:var(--ink);}
+  .domain-head .wt{font-size:12px;font-weight:700;color:var(--ink-soft);background:#eef1f6;border-radius:999px;padding:3px 9px;}
+  .domain-head .dline{flex:1;height:1px;background:var(--line);}
+
+  .task-card{background:var(--card);border:1px solid var(--line);border-radius:14px;border-left:4px solid var(--line);padding:18px 22px;margin-bottom:11px;display:block;text-decoration:none;color:inherit;transition:border-color .15s;}
+  .task-card:hover{border-color:var(--accent);}
+  .task-card h3{margin:0 0 5px;font-size:15.5px;font-weight:700;color:var(--ink);}
+  .task-card p{margin:0;font-size:13.5px;color:var(--ink-soft);}
+  .task-card .cg{display:flex;flex-wrap:wrap;gap:6px;margin-top:11px;}
+  .task-card .cg span{font-size:11px;font-weight:600;color:#4a5a70;background:#eef2f7;border:1px solid #e3e8ef;border-radius:6px;padding:2px 8px;}
+  .task-card .tref{display:block;margin-top:10px;font-size:12px;color:var(--accent-dark);font-weight:600;}
+  .tl1{border-left-color:var(--d1);} .tl2{border-left-color:var(--d2);} .tl3{border-left-color:var(--d3);}
+  .tl4{border-left-color:var(--d4);} .tl5{border-left-color:var(--d5);}
+
+  .task-card.master{background:linear-gradient(135deg,#132b4b 0%,#1b3c68 100%);border-color:#1b3c68;border-left-color:var(--accent);color:#fff;}
+  .task-card.master:hover{border-color:var(--accent);}
+  .task-card.master h3{color:#fff;} .task-card.master p{color:#c9d5e3;} .task-card.master .tref{color:#ffd8c4;}
+  .task-card.master .mtag{display:inline-block;font-size:10.5px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:#ffd8c4;background:rgba(232,98,44,.22);border:1px solid rgba(232,98,44,.45);padding:3px 8px;border-radius:999px;margin-bottom:8px;}
 </style>
 </head>
 <body>
@@ -75,8 +102,10 @@
     <a class="nav-brand" href="../index.html">AIP-C01 <span>Guide</span></a>
     <ul class="nav-links">
       <li><a href="../index.html#domains">Domains</a></li>
-      <li><a href="../tasks/index.html">Build Log</a></li>
+      <li><a href="map.html">The Whole Map</a></li>
+      <li><a href="concepts.html">Concept Index</a></li>
       <li><a href="index.html">Study Notes</a></li>
+      <li><a href="../tasks/index.html">Build Log</a></li>
       <li><a href="../quiz/index.html">Quiz</a></li>
     </ul>
   </div>
@@ -86,175 +115,283 @@
   <div class="wrap">
     <span class="eyebrow">Personal Cheat Sheets</span>
     <h1>Study Notes</h1>
-    <p>Notes, one page per task, organized by domain.</p>
+    <p>Twenty tasks across five domains, written out in full &mdash; plus a map per domain, a map of the whole exam,
+    and a cross-domain index for the ideas that appear in a dozen places at once.</p>
   </div>
 </header>
 
-<section>
+<section style="padding-bottom:6px;">
+  <div class="wrap">
+    <h2 class="sh">Start here</h2>
+    <p class="sl">Three ways in, depending on what you are trying to do right now.</p>
+    <div class="start">
+      <a class="scard hi" href="map.html">
+        <span class="k">Level 1</span>
+        <h3>The whole exam, one picture</h3>
+        <p>All five domains as a single request being designed, built, guarded, run and proved. Read this first if the 20 pages below feel like a pile.</p>
+        <span class="tref">Open the map &rarr;</span>
+      </a>
+      <a class="scard" href="concepts.html">
+        <span class="k">Sideways</span>
+        <h3>Concept index</h3>
+        <p>54 recurring ideas, each naming the one task that owns the detail and what every other task adds. For when two pages seem to disagree.</p>
+        <span class="tref">Open the index &rarr;</span>
+      </a>
+      <a class="scard" href="#d1">
+        <span class="k">Level 2 &amp; 3</span>
+        <h3>Straight to the notes</h3>
+        <p>Domain by domain below, each with its own map followed by the task pages. Every task card says what that task is actually about.</p>
+        <span class="tref">Jump to Domain 1 &rarr;</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<section style="padding-top:20px;padding-bottom:6px;">
+  <div class="wrap">
+    <h2 class="sh">Where the marks are</h2>
+    <p class="sl">Domains 1 and 2 are 57% of the exam between them. Domain 4 carries only 12% but the densest
+    notes on cost, which is worth knowing before you budget your revision.</p>
+    <div class="weights">
+      <a class="w w1" href="domain-1.html">
+        <div class="dn">Domain 1</div>
+        <div class="pct">31%</div>
+        <div class="tk">6 tasks</div>
+      </a>
+      <a class="w w2" href="domain-2.html">
+        <div class="dn">Domain 2</div>
+        <div class="pct">26%</div>
+        <div class="tk">5 tasks</div>
+      </a>
+      <a class="w w3" href="domain-3.html">
+        <div class="dn">Domain 3</div>
+        <div class="pct">20%</div>
+        <div class="tk">4 tasks</div>
+      </a>
+      <a class="w w4" href="domain-4.html">
+        <div class="dn">Domain 4</div>
+        <div class="pct">12%</div>
+        <div class="tk">3 tasks</div>
+      </a>
+      <a class="w w5" href="domain-5.html">
+        <div class="dn">Domain 5</div>
+        <div class="pct">11%</div>
+        <div class="tk">2 tasks</div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<section style="padding-top:14px;">
   <div class="wrap">
 
-    <div class="domain-head">
+    <div class="domain-head" id="d1">
       <span class="dnum">Domain 1</span>
       <h2>Foundation Model Integration, Data Management &amp; Compliance</h2>
+      <span class="wt">31%</span>
       <span class="dline"></span>
     </div>
 
     <a class="task-card master" href="domain-1.html">
       <span class="mtag">Start here</span>
       <h3>Domain 1 &#8212; The Map</h3>
-      <p>How all six tasks fit together, in three steps and one picture &#8212; plus a plain-English summary of what each task is actually about.</p>
+      <p>How all six tasks fit together, in three steps and one picture &mdash; plus a plain-English summary of what each task is actually about.</p>
       <span class="tref">View the map &rarr;</span>
     </a>
 
-    <a class="task-card" href="task-1-1.html">
+    <a class="task-card tl1" href="task-1-1.html">
       <h3>Task 1.1 &#8212; Architecture &amp; PoC</h3>
+      <p>The overall shape of the system &mdash; how a question gets in, which AWS service does each job, and how the answer comes back.</p>
+      <div class="cg"><span>build vs buy</span><span>vector store matrix</span><span>Flows vs Agents</span><span>grounding checks</span></div>
       <span class="tref">View notes &rarr;</span>
     </a>
 
-    <a class="task-card" href="task-1-2.html">
+    <a class="task-card tl1" href="task-1-2.html">
       <h3>Task 1.2 &#8212; FM Selection &amp; Lifecycle</h3>
+      <p>Choosing which model to use, teaching it your house style, and proving it is good enough before it goes live.</p>
+      <div class="cg"><span>LoRA</span><span>three-tier eval gate</span><span>BLEU vs ROUGE</span><span>red teaming</span><span>data drift</span></div>
       <span class="tref">View notes &rarr;</span>
     </a>
 
-    <a class="task-card" href="task-1-3.html">
+    <a class="task-card tl1" href="task-1-3.html">
       <h3>Task 1.3 &#8212; Data Preparation</h3>
+      <p>Cleaning up messy input &mdash; forms, photos, phone calls &mdash; before any of it reaches the model.</p>
+      <div class="cg"><span>validation</span><span>multimodal fusion</span><span>temperature 0.0&ndash;0.2</span><span>sliding window</span></div>
       <span class="tref">View notes &rarr;</span>
     </a>
 
-    <a class="task-card" href="task-1-4.html">
+    <a class="task-card tl1" href="task-1-4.html">
       <h3>Task 1.4 &#8212; Vector Stores</h3>
+      <p>Picking the right database for your vectors, making it fast at scale, and making sure one client cannot see another client&rsquo;s files.</p>
+      <div class="cg"><span>sharding</span><span>metadata graphs</span><span>fan-out</span><span>fine-grained access</span></div>
       <span class="tref">View notes &rarr;</span>
     </a>
 
-    <a class="task-card" href="task-1-5.html">
+    <a class="task-card tl1" href="task-1-5.html">
       <h3>Task 1.5 &#8212; Retrieval Design</h3>
+      <p>The quality side of search: how documents are cut up, how they become numbers, and how the best few are chosen.</p>
+      <div class="cg"><span>chunking</span><span>embeddings</span><span>hybrid search</span><span>reranking</span><span>MCP</span></div>
       <span class="tref">View notes &rarr;</span>
     </a>
 
-    <a class="task-card" href="task-1-6.html">
+    <a class="task-card tl1" href="task-1-6.html">
       <h3>Task 1.6 &#8212; Prompt Engineering &amp; Governance</h3>
+      <p>Treating the prompt as real production code: reviewed, versioned, tested, and provable after the fact.</p>
+      <div class="cg"><span>prompt versioning</span><span>golden datasets</span><span>JSON Schema</span><span>CoT</span><span>TTL as policy</span></div>
       <span class="tref">View notes &rarr;</span>
     </a>
 
-    <div class="domain-head">
+    <div class="domain-head" id="d2">
       <span class="dnum">Domain 2</span>
       <h2>Implementation and Integration</h2>
+      <span class="wt">26%</span>
       <span class="dline"></span>
     </div>
 
     <a class="task-card master" href="domain-2.html">
       <span class="mtag">Start here</span>
       <h3>Domain 2 &#8212; The Map</h3>
-      <p>How all five tasks fit together as one request &#8212; getting in, deciding what to do, and the work that never stops.</p>
+      <p>How all five tasks fit together as one request &mdash; getting in, deciding what to do, and the work that never stops.</p>
       <span class="tref">View the map &rarr;</span>
     </a>
 
-    <a class="task-card" href="task-2-1.html">
+    <a class="task-card tl2" href="task-2-1.html">
       <h3>Task 2.1 &#8212; Agentic AI &amp; Tool Integrations</h3>
+      <p>When the system has to work out its own next step &mdash; agents that reason, call tools, and know when to stop.</p>
+      <div class="cg"><span>ReAct loop</span><span>memory tiers</span><span>5 safety layers</span><span>OpenAPI tools</span><span>wait tokens</span></div>
       <span class="tref">View notes &rarr;</span>
     </a>
 
-    <a class="task-card" href="task-2-2.html">
+    <a class="task-card tl2" href="task-2-2.html">
       <h3>Task 2.2 &#8212; Deployment Strategies</h3>
+      <p>Where the model physically runs, what that costs, and why deploying an LLM breaks every habit from traditional ML.</p>
+      <div class="cg"><span>Model Units</span><span>the timeout trap</span><span>quantization</span><span>cascading</span><span>MMEs</span></div>
       <span class="tref">View notes &rarr;</span>
     </a>
 
-    <a class="task-card" href="task-2-3.html">
+    <a class="task-card tl2" href="task-2-3.html">
       <h3>Task 2.3 &#8212; Enterprise Integration Architectures</h3>
+      <p>Plugging GenAI into a bank that cannot be rewritten &mdash; legacy protocols, private networks, and one governed way in.</p>
+      <div class="cg"><span>GenAI Gateway</span><span>Cedar</span><span>idempotency</span><span>Outposts</span><span>black-hole routes</span></div>
       <span class="tref">View notes &rarr;</span>
     </a>
 
-    <a class="task-card" href="task-2-4.html">
+    <a class="task-card tl2" href="task-2-4.html">
       <h3>Task 2.4 &#8212; Foundation Model API Integrations</h3>
+      <p>Calling the model like a production dependency: timeouts, retries, streaming, and what happens on a bad day.</p>
+      <div class="cg"><span>backoff + jitter</span><span>circuit breaker</span><span>SSE vs WebSockets</span><span>p50/p90/p99</span></div>
       <span class="tref">View notes &rarr;</span>
     </a>
 
-    <a class="task-card" href="task-2-5.html">
+    <a class="task-card tl2" href="task-2-5.html">
       <h3>Task 2.5 &#8212; Application Patterns &amp; Developer Tools</h3>
+      <p>The parts people actually touch &mdash; the interface, the business system behind it, and the tooling around both.</p>
+      <div class="cg"><span>timeout tiers</span><span>ARIA live regions</span><span>prompt registry</span><span>dynamic RAG</span><span>Q Developer</span></div>
       <span class="tref">View notes &rarr;</span>
     </a>
 
-    <div class="domain-head">
+    <div class="domain-head" id="d3">
       <span class="dnum">Domain 3</span>
       <h2>Safety, Security &amp; Governance</h2>
+      <span class="wt">20%</span>
       <span class="dline"></span>
     </div>
 
     <a class="task-card master" href="domain-3.html">
       <span class="mtag">Start here</span>
       <h3>Domain 3 &#8212; The Map</h3>
-      <p>How all four tasks fit together &#8212; what gets checked before the model, what gets checked after it, and what you write down either way.</p>
+      <p>How all four tasks fit together &mdash; what gets checked before the model, what gets checked after it, and what you write down either way.</p>
       <span class="tref">View the map &rarr;</span>
     </a>
 
-    <a class="task-card" href="task-3-1.html">
+    <a class="task-card tl3" href="task-3-1.html">
       <h3>Task 3.1 &#8212; Input &amp; Output Safety</h3>
+      <p>Stopping the bad thing going in, and the bad thing coming out.</p>
+      <div class="cg"><span>defense in depth</span><span>guardrail modes</span><span>injection vs jailbreak</span><span>text-to-SQL</span></div>
       <span class="tref">View notes &rarr;</span>
     </a>
 
-    <a class="task-card" href="task-3-2.html">
+    <a class="task-card tl3" href="task-3-2.html">
       <h3>Task 3.2 &#8212; Data Security &amp; Privacy Controls</h3>
+      <p>Keeping the data inside, and keeping the person out of it.</p>
+      <div class="cg"><span>VPC endpoints</span><span>masking table</span><span>differential privacy</span><span>k-anonymity</span><span>ABAC</span></div>
       <span class="tref">View notes &rarr;</span>
     </a>
 
-    <a class="task-card" href="task-3-3.html">
+    <a class="task-card tl3" href="task-3-3.html">
       <h3>Task 3.3 &#8212; Governance &amp; Compliance</h3>
+      <p>Being able to prove, a year later, how a model was built and who said yes.</p>
+      <div class="cg"><span>Model Cards</span><span>lineage DAG</span><span>data events</span><span>Clarify DPPL/DI</span><span>drift modules</span></div>
       <span class="tref">View notes &rarr;</span>
     </a>
 
-    <a class="task-card" href="task-3-4.html">
+    <a class="task-card tl3" href="task-3-4.html">
       <h3>Task 3.4 &#8212; Responsible AI</h3>
+      <p>Showing your working, checking it is fair, and turning written rules into code.</p>
+      <div class="cg"><span>agent tracing</span><span>fairness metrics</span><span>completeness bias</span><span>policy translation</span></div>
       <span class="tref">View notes &rarr;</span>
     </a>
 
-    <div class="domain-head">
+    <div class="domain-head" id="d4">
       <span class="dnum">Domain 4</span>
       <h2>Operational Efficiency</h2>
+      <span class="wt">12%</span>
       <span class="dline"></span>
     </div>
 
     <a class="task-card master" href="domain-4.html">
       <span class="mtag">Start here</span>
       <h3>Domain 4 &#8212; The Map</h3>
-      <p>How all three tasks fit together as one running system &#8212; what it costs, how fast it feels, and how you would know if either changed.</p>
+      <p>How all three tasks fit together as one running system &mdash; what it costs, how fast it feels, and how you would know if either changed.</p>
       <span class="tref">View the map &rarr;</span>
     </a>
 
-    <a class="task-card" href="task-4-1.html">
+    <a class="task-card tl4" href="task-4-1.html">
       <h3>Task 4.1 &#8212; Cost Optimization &amp; Resource Efficiency</h3>
+      <p>Paying for the answer you need, and not for the one you don't.</p>
+      <div class="cg"><span>token economics</span><span>semantic caching</span><span>prompt caching</span><span>break-even</span><span>batch</span></div>
       <span class="tref">View notes &rarr;</span>
     </a>
 
-    <a class="task-card" href="task-4-2.html">
+    <a class="task-card tl4" href="task-4-2.html">
       <h3>Task 4.2 &#8212; Performance Optimisation</h3>
+      <p>Making it quick, and &mdash; separately &mdash; making it feel quick.</p>
+      <div class="cg"><span>perceived latency</span><span>HNSW tuning</span><span>MaxConcurrency</span><span>top-k vs top-p</span><span>Inferentia</span></div>
       <span class="tref">View notes &rarr;</span>
     </a>
 
-    <a class="task-card" href="task-4-3.html">
+    <a class="task-card tl4" href="task-4-3.html">
       <h3>Task 4.3 &#8212; Monitoring</h3>
+      <p>Noticing that the answers got worse, before a customer does.</p>
+      <div class="cg"><span>prompt tracing</span><span>invocation logs</span><span>anomaly detection</span><span>RUM</span><span>correlation IDs</span></div>
       <span class="tref">View notes &rarr;</span>
     </a>
 
-    <div class="domain-head">
+    <div class="domain-head" id="d5">
       <span class="dnum">Domain 5</span>
       <h2>Testing, Validation &amp; Troubleshooting</h2>
+      <span class="wt">11%</span>
       <span class="dline"></span>
     </div>
 
     <a class="task-card master" href="domain-5.html">
       <span class="mtag">Start here</span>
       <h3>Domain 5 &#8212; The Map</h3>
-      <p>How both tasks fit together &#8212; judging whether it is good enough to ship, and working out which part broke once it has.</p>
+      <p>How both tasks fit together &mdash; judging whether it is good enough to ship, and working out which part broke once it has.</p>
       <span class="tref">View the map &rarr;</span>
     </a>
 
-    <a class="task-card" href="task-5-1.html">
+    <a class="task-card tl5" href="task-5-1.html">
       <h3>Task 5.1 &#8212; Evaluation Systems</h3>
+      <p>Deciding whether the thing is good enough, without a single right answer to check against.</p>
+      <div class="cg"><span>four dimensions</span><span>LLM-as-a-judge</span><span>quality gates</span><span>retrieve-only vs e2e</span></div>
       <span class="tref">View notes &rarr;</span>
     </a>
 
-    <a class="task-card" href="task-5-2.html">
+    <a class="task-card tl5" href="task-5-2.html">
       <h3>Task 5.2 &#8212; Troubleshooting</h3>
+      <p>Five symptoms in a live clinical assistant, and where the fault actually turned out to be.</p>
+      <div class="cg"><span>silent truncation</span><span>error classes</span><span>ANN comparison</span><span>embedding drift</span></div>
       <span class="tref">View notes &rarr;</span>
     </a>
 
