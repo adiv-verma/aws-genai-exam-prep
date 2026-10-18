@@ -68,10 +68,18 @@ aws s3 sync Website/src/ s3://adi-genai-exam-site-269737522732/ --profile awsgen
 aws cloudfront create-invalidation --distribution-id E3883M6668QGYO --paths "/*" --profile awsgenai
 ```
 
-## Known gaps
+## Source-text recovery
 
-Four questions from the source PDF (2, 15, 29, 30) are **excluded**: the PDF is
-missing their option text, so they cannot be answered. Two more (8, 21) are
-included but have a missing scenario paragraph — the UI flags these with a
-"Scenario text incomplete in source" badge. If a cleaner export of the PDF turns
-up, those six can be added or repaired in `bank.json`.
+Some pages of `AWS AIP C01.pdf` set text in `MicrosoftSansSerif` subsets that
+carry **no ToUnicode map** (`pdffonts` shows `uni = no`). `pdftotext` silently
+drops those runs, so eight questions came out with a missing scenario
+paragraph or missing options — with no error to signal it.
+
+These were recovered by rasterising the pages (`pdftoppm -r 300`) and running
+Apple's Vision OCR (`ocr.swift`), then hand-correcting the OCR's systematic
+`t`->`l` confusion on exactly those runs. All 136 questions are now complete.
+
+If you re-import the PDF, do not trust `pdftotext` alone. Check for loss by
+comparing each question's text-layer length against its OCR length — that is
+how questions 7, 26 and the option-level truncations in 8 and 21 were found,
+none of which looked damaged on their own.
