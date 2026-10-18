@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Task 4.1 Notes | AIP-C01 Guide</title>
+<meta name="description" content="Domain 4, Task 4.1 study notes: Cost Optimization and Resource Efficiency">
+<style>
+  :root{
+    --ink:#0b1524; --ink-soft:#3a4a5e; --paper:#f7f8fa; --card:#ffffff; --line:#e3e7ee;
+    --accent:#e8622c; --accent-dark:#c94f1f; --navy:#0f2540; --navy-2:#16345c;
+    color-scheme: light;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{margin:0;background:var(--paper);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;line-height:1.6;}
+  a{color:var(--accent-dark);}
+  img{max-width:100%;}
+  .wrap{max-width:1080px;margin:0 auto;padding:0 24px;}
+
+  .nav{position:sticky;top:0;z-index:50;background:rgba(15,37,64,.96);backdrop-filter:blur(6px);border-bottom:1px solid rgba(255,255,255,.08);}
+  .nav .wrap{display:flex;align-items:center;justify-content:space-between;height:56px;}
+  .nav-brand{color:#fff;font-weight:700;font-size:14px;letter-spacing:.02em;text-decoration:none;}
+  .nav-brand span{color:var(--accent);}
+  .nav-links{display:flex;gap:22px;list-style:none;margin:0;padding:0;}
+  .nav-links a{color:#cdd8e6;text-decoration:none;font-size:13.5px;font-weight:500;}
+  .nav-links a:hover{color:#fff;}
+  @media (max-width:720px){
+    .nav .wrap{gap:12px;}
+    .nav-links{gap:16px;overflow-x:auto;scrollbar-width:none;-ms-overflow-style:none;
+      flex:1;justify-content:flex-end;}
+    .nav-links::-webkit-scrollbar{display:none;}
+    .nav-links a{white-space:nowrap;font-size:13px;}
+  }
+
+  header.hero{background:linear-gradient(180deg,var(--navy) 0%, var(--navy-2) 100%);color:#fff;padding:36px 0 28px;}
+  .eyebrow{display:inline-block;font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#ffd8c4;background:rgba(232,98,44,.18);border:1px solid rgba(232,98,44,.4);padding:5px 10px;border-radius:999px;margin-bottom:14px;}
+  h1{font-size:clamp(20px,3vw,27px);line-height:1.2;margin:0;font-weight:800;}
+
+  section{padding:36px 0;}
+
+  figure.arch{margin:0 0 24px;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px;}
+  figure.arch img{display:block;border-radius:8px;width:100%;height:auto;}
+  figure.arch figcaption{margin-top:10px;font-size:12.5px;color:var(--ink-soft);text-align:center;}
+
+  .note-card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:18px 22px 22px;margin-bottom:16px;}
+  .note-card h4{scroll-margin-top:78px;margin:0 0 14px;font-size:13px;font-weight:800;color:var(--navy-2);}
+  .note-card h4:target{color:var(--accent-dark);}
+  .note-card h4:target::after{content:" \2190";color:var(--accent);}
+
+  .lead{font-size:13.5px;font-weight:700;color:var(--ink);margin:18px 0 8px;}
+  .lead:first-of-type{margin-top:0;}
+  .lead.num{color:var(--navy-2);}
+  .txt{font-size:13px;color:var(--ink-soft);line-height:1.6;margin:0 0 8px;}
+  .kv{font-size:13px;color:var(--ink-soft);line-height:1.6;margin:0 0 8px;padding-left:14px;border-left:2px solid var(--line);}
+  .kv strong{color:var(--ink);font-weight:700;}
+
+  .codelabel{font-size:10.5px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:#8b96a5;margin:14px 0 6px;}
+  pre.code{margin:0 0 10px;padding:12px 14px;background:#0f2540;color:#dbe6f3;border-radius:9px;overflow-x:auto;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px;line-height:1.55;}
+
+  footer{padding:32px 0 48px;color:#8b96a5;font-size:12.5px;}
+  footer .wrap{border-top:1px solid var(--line);padding-top:22px;}
+  footer a{color:#6b7686;}
+  table.cmp{width:100%;border-collapse:collapse;margin:4px 0 12px;font-size:12.5px;display:block;overflow-x:auto;}
+  table.cmp th{text-align:left;padding:8px 10px;background:#0f2540;color:#fff;font-weight:700;font-size:11.5px;letter-spacing:.02em;border:1px solid #0f2540;}
+  table.cmp td{padding:8px 10px;border:1px solid var(--line);color:var(--ink-soft);vertical-align:top;}
+  table.cmp tbody tr:nth-child(even){background:#fafbfc;}
+  table.cmp td:first-child{color:var(--ink);font-weight:600;}
+
+  pre.art{margin:4px 0 12px;padding:14px 16px;background:#0f2540;color:#dbe6f3;border-radius:9px;overflow-x:auto;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:11.5px;line-height:1.45;white-space:pre;}
+
+  .step{display:flex;gap:11px;align-items:flex-start;margin:0 0 10px;}
+  .step .stepn{flex:none;width:22px;height:22px;border-radius:7px;background:var(--navy);color:#fff;font-size:11.5px;font-weight:700;display:flex;align-items:center;justify-content:center;margin-top:1px;}
+  .step .stept{margin:0;font-size:13.5px;font-weight:700;color:var(--ink);}
+  .step .steps{margin:0;font-size:11.5px;font-weight:600;letter-spacing:.03em;text-transform:uppercase;color:#8b96a5;}
+
+  .chain{margin:4px 0 12px;padding:11px 14px;background:#f3f7fd;border:1px solid #dbe6f5;border-radius:9px;font-size:12.5px;font-weight:600;color:var(--navy-2);text-align:center;overflow-x:auto;}
+  .cardeyebrow{margin:0 0 4px;font-size:10.5px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:#8b96a5;}
+  .fracwrap{text-align:center;margin:6px 0 14px;}
+  .frac{display:inline-grid;grid-template-columns:auto auto;align-items:center;column-gap:11px;
+        padding:12px 20px;background:#f3f7fd;border:1px solid #dbe6f5;border-radius:9px;}
+  .frac p{margin:0;line-height:1.3;}
+  .frac .fl{grid-column:1;grid-row:1 / span 2;font-size:15.5px;font-weight:700;color:var(--navy-2);}
+  .frac .fn{grid-column:2;grid-row:1;text-align:center;font-size:14.5px;font-style:italic;color:var(--navy-2);padding:0 8px 3px;}
+  .frac .fd{grid-column:2;grid-row:2;text-align:center;font-size:14.5px;font-style:italic;color:var(--navy-2);border-top:1.4px solid var(--navy-2);padding:3px 8px 0;}
+  .frac .fz{grid-column:1;grid-row:3;height:0;overflow:hidden;}
+
+  .cardeyebrow{margin:0 0 4px;font-size:10.5px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:#8b96a5;}
+  .cardeyebrow{margin:0 0 4px;font-size:10.5px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:#8b96a5;}
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="wrap">
+    <a class="nav-brand" href="../index.html">AIP-C01 <span>Guide</span></a>
+    <ul class="nav-links">
+      <li><a href="index.html">All Study Notes</a></li>
+      <li><a href="../tasks/index.html">Build Log</a></li>
+    </ul>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="wrap">
+    <span class="eyebrow">Domain 4 &middot; Task 4.1</span>
+    <h1>Domain 4, Task 4.1 &mdash; Cost Optimization &amp; Resource Efficiency (Detailed Revision Notes)</h1>
+  </div>
+</header>
+
+<section>
+  <div class="wrap">
+
+    <figure class="arch">
+      <img src="../assets/task-4-1-architecture.jpg" alt="AWS Gen AI cost optimization and resource efficiency architecture, drawn as four panels a request passes through. Panel 1, Token Efficiency Systems: user requests reach a Lambda function doing pre-call token counting, which emits input and output token counts as CloudWatch metrics onto a dashboard, and feeds a prompt engineering and pruning stage covering recursive summarization, max_tokens and concise prompting - the result is a small prompt rather than a large one before it reaches Bedrock. Panel 2, Cost-Effective Model Selection: a Query Analyzer acting as a router splits traffic three ways by complexity - simple goes to a small inexpensive model such as Haiku, medium to a mid-tier model such as Sonnet, complex to the most capable and most expensive model such as Opus. Beside it, a systematic evaluation box plots price against performance with a quality threshold line, and an AWS Cost Explorer attribution box breaks spend down by team and by feature tag. Panel 3, High-Performance FM Systems: batch inference through Bedrock Batch at roughly fifty percent cheaper, bursts absorbed by an SQS queue for real-time request batching and runtime GPU efficiency, provisioning sized for average rather than peak load, and a triangle showing the latency, cost and throughput trade-off between a bare queue and queue plus batching. Panel 4, Intelligent Caching Systems: CloudFront edge caching serves non-personalized FAQs; below it a cache layer does fingerprinting and deterministic hashing to normalize queries, then semantic caching that generates an embedding and matches it against an OpenSearch vector store above a similarity threshold; below that, prompt caching keeps a cached static system instruction at a ninety percent discount ahead of the user query, and any cache hit bypasses the model invocation entirely.">
+      <figcaption>The four cost levers in order of how much they save: shrink the prompt, route to the cheapest model that clears the quality bar, batch what isn&rsquo;t real-time, and never pay twice for the same answer.</figcaption>
+    </figure>
+
+    <div class="note-card">
+      <h4 id="s1">Section 1: Token Efficiency Systems</h4>
+        <p class="txt">In Amazon Bedrock, billing is strictly token-based. You are charged separately for:</p>
+        <p class="kv"><strong>Input Tokens:</strong> Text, system prompts, context, and examples sent to the model.</p>
+        <p class="kv"><strong>Output Tokens:</strong> Text generated by the model (significantly more expensive per token than input tokens).</p>
+        <p class="txt">Token efficiency is the practice of minimizing token volume without degrading model response quality.</p>
+
+        <p class="lead num">1. Token Counting &amp; Monitoring</p>
+        <p class="txt">Before making LLM requests, you must establish mechanisms to measure and track token usage programmatically.</p>
+        <p class="lead">Pre-Call Token Counting</p>
+        <p class="kv"><strong>Mechanism:</strong> Calculate the precise token count before making an API call using tokenizer libraries (e.g., tiktoken or Bedrock model-specific tokenizers).</p>
+        <p class="lead">Primary Benefits:</p>
+        <p class="kv"><strong>Cost Prediction:</strong> Estimates the input cost before committing to an API execution.</p>
+        <p class="kv"><strong>Context Window Validation:</strong> Prevents runtime API errors by verifying that the input prompt does not exceed the foundation model's context length limit.</p>
+        <p class="lead">Granular CloudWatch Tracking</p>
+        <p class="txt">Track metrics like InputTokenCount and OutputTokenCount in Amazon CloudWatch.</p>
+        <p class="kv"><strong>Best Practice:</strong> Segment and breakdown token usage by query type, feature, or workload component.</p>
+        <p class="kv"><strong>Impact:</strong> Identifies high-consumption query patterns across the system, directing cost-optimization efforts where ROI is highest.</p>
+
+        <p class="lead num">2. Context Window Optimization</p>
+        <p class="txt">Including excessive data within a prompt increases cost linearly. Context window optimization ensures only actionable context is submitted to the model.</p>
+        <p class="lead">Strategic Summarization</p>
+        <p class="kv"><strong>Cost Rule:</strong> Generating a summary incurs an LLM call. Summarizing single-use documents increases total costs rather than reducing them.</p>
+        <p class="kv"><strong>Optimal Pattern:</strong> &ldquo;Summarize once, reuse many times.&rdquo; Pre-summarize documents or content that will serve as reference context across multiple user requests.</p>
+        <p class="lead">Efficient Chunking</p>
+        <p class="kv"><strong>Purpose:</strong> Balances retrieval precision and token economy.</p>
+        <p class="kv"><strong>Too Large:</strong> Includes irrelevant text (noise), wasting input tokens.</p>
+        <p class="kv"><strong>Too Small:</strong> Loses semantic context, requiring multiple chunks and adding prompt overhead.</p>
+        <p class="kv"><strong>Exam Distinction:</strong> Task 1.5 addresses chunking for retrieval quality; Task 4.1 addresses chunking for cost minimization.</p>
+        <p class="lead">Recursive Summarization Pipeline</p>
+        <p class="txt">For massive documents (e.g., 50&ndash;100 pages):</p>
+        <p class="kv"><strong>Pipeline:</strong> Implemented using AWS Lambda functions.</p>
+        <p class="kv"><strong>Execution:</strong> Document &rarr; Split into chunks &rarr; Summarize individual chunks &rarr; Aggregate chunk summaries &rarr; Generate final consolidated summary.</p>
+        <p class="kv"><strong>Efficiency Gain:</strong> Reduces a 50-page document down to ~2 pages, achieving up to a 25&times; reduction in input tokens.</p>
+        <p class="lead">Relevant Information First (Mitigating &ldquo;Lost in the Middle&rdquo;)</p>
+        <p class="kv"><strong>Model Behavior:</strong> LLMs attend more strongly to tokens at the beginning and end of a prompt, often ignoring tokens in the middle.</p>
+        <p class="kv"><strong>Best Practice:</strong> Place critical context, key instructions, and system rules at the very beginning of the prompt.</p>
+        <p class="kv"><strong>Benefit:</strong> Ensures crucial instructions survive potential truncation and maximizes prompt efficacy.</p>
+
+        <p class="lead num">3. Prompt Compression, Response Control &amp; Context Pruning</p>
+        <pre class="art">Raw Prompt Data  ---&gt; [ Context Pruning ] ---&gt; [ Prompt Compression ] ---&gt; [ Response Control ] ---&gt; Bedrock Model
+(Noise &amp; History)     (Drop low-relevance)     (Trim verbosity)           (Enforce max_tokens)</pre>
+        <table class="cmp">
+          <thead><tr><th>Strategy</th><th>Mechanism / Implementation</th><th>Cost &amp; Quality Impact</th></tr></thead>
+          <tbody>
+            <tr>
+              <td>Prompt Compression</td>
+              <td>Remove redundant instructions, filler words, and unnecessary few-shot examples. Compress systematically using AWS Step Functions to automate test iterations.</td>
+              <td>Reduces input token volume. Must be tested iteratively until output quality begins to drop.</td>
+            </tr>
+            <tr>
+              <td>Response Size Control</td>
+              <td>1. Set explicit max_tokens parameters in the Bedrock API call.<br>2. Instruct brevity directly in the system prompt (&ldquo;Provide a 2-sentence summary&rdquo;).</td>
+              <td>Direct control over output tokens (the most expensive billing component).</td>
+            </tr>
+            <tr>
+              <td>Context Pruning</td>
+              <td>Filter out low-value data before prompt construction:<br>&bull; Rank RAG chunks by similarity score and drop those below a threshold (e.g., send top 3 instead of top 10).<br>&bull; Trim outdated conversation turns from chat history.<br>&bull; Strip structural headers and boilerplate.</td>
+              <td>Direct Cost Correlation: Removing 30% of prompt noise yields a direct 30% reduction in input token costs.</td>
+            </tr>
+          </tbody>
+        </table>
+    </div>
+
+    <div class="note-card">
+      <h4 id="s2">Section 2: Cost-Effective Model Selection</h4>
+        <p class="txt">Selecting the appropriate foundation model is the single largest cost-optimization lever in Amazon Bedrock. While prompt engineering and caching may yield 10&ndash;20% savings, routing tasks to a lighter, less expensive model can yield up to 80% cost reduction.</p>
+        <p class="kv"><strong>Key Rule:</strong> Always define the minimum acceptable quality threshold first, then select the cheapest model that meets or exceeds that threshold.</p>
+
+        <p class="lead num">1. Tiered Model Usage &amp; Routing Strategies</p>
+        <p class="txt">Using high-parameter, highly capable models for basic tasks leads to significant waste. Implement a Query Analyzer to evaluate incoming prompt complexity and route requests appropriately.</p>
+        <pre class="art">                  ┌──────────────────────┐
+                  │    User Request      │
+                  └──────────┬───────────┘
+                             │
+                  ┌──────────▼───────────┐
+                  │    Query Analyzer    │
+                  └──────┬─────┬─────┬───┘
+                         │     │     │
+          ┌──────────────┘     │     └──────────────┐
+          │ Simple             │ Medium             │ Complex
+┌─────────▼──────────┐ ┌───────▼──────────┐ ┌───────▼──────────┐
+│ Small / Cheap Model│ │  Mid-Tier Model  │ │ Powerful Model   │
+│ (e.g., Haiku)      │ │  (e.g., Sonnet)  │ │ (e.g., Opus)     │
+└────────────────────┘ └──────────────────┘ └──────────────────┘</pre>
+        <p class="lead">Architectural Approaches to Routing</p>
+        <table class="cmp">
+          <thead><tr><th>Approach</th><th>Routing Mechanism</th><th>Trade-offs &amp; Cost Impact</th></tr></thead>
+          <tbody>
+            <tr>
+              <td>Tiered Routing</td>
+              <td>A lightweight classifier assesses request complexity first, then dispatches directly to the targeted model tier.</td>
+              <td>Single API call overhead. Low cost, fast execution, highly efficient for predictable query types.</td>
+            </tr>
+            <tr>
+              <td>Model Cascading</td>
+              <td>Attempts execution on a small, inexpensive model first. Evaluates response confidence; escalates to a larger model only if confidence is low.</td>
+              <td>Multiple API calls when escalating. Extremely cost-effective for high-volume workloads where most queries succeed on Tier 1.</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <p class="lead num">2. Systematic Model Evaluation &amp; Price-to-Performance Ratio</p>
+        <p class="txt">To select models objectively, establish a formal evaluation pipeline tracking cost alongside response metrics.</p>
+        <p class="lead">Evaluation Workflow</p>
+        <p class="kv"><strong>Define Acceptable Quality:</strong> Set specific performance thresholds (e.g., accuracy, BLEU/ROUGE scores, or domain correctness metrics).</p>
+        <p class="kv"><strong>Comparative Testing:</strong> Use Amazon Bedrock Model Evaluation to run benchmarking workloads across different candidate models while measuring token spend.</p>
+        <p class="kv"><strong>Price-to-Performance Metric Calculation:</strong> Calculate the cost required per unit of performance to find the optimal trade-off.</p>
+        <p class="lead">Price-to-Performance Calculation Example</p>
+        <div class="fracwrap"><div class="frac"><p class="fl">Cost Per Accuracy Point =</p><p class="fn">Cost Per Query</p><p class="fd">Accuracy Rate</p><p class="fz">​</p></div></div>
+        <p class="kv"><strong>Model A (Large FM):</strong> 94% accuracy at $0.015 / query &#10230; $0.016 per accuracy point.</p>
+        <p class="kv"><strong>Model B (Small FM):</strong> 89% accuracy at $0.003 / query &#10230; $0.003 per accuracy point.</p>
+        <div class="fracwrap"><div class="frac"><p class="fl">Value Ratio =</p><p class="fn">$0.016</p><p class="fd">$0.003</p><p class="fz">​</p></div></div>
+        <p class="txt" style="text-align:center;">&asymp; 5.33&times; higher value per dollar</p>
+        <p class="kv"><strong>Decision Rule:</strong> Model B delivers roughly 5&times; more value per dollar. If 89% accuracy satisfies the business requirement, Model B must be selected over Model A.</p>
+
+        <p class="lead num">3. Inference Patterns, Fallbacks &amp; Guardrails</p>
+        <p class="lead">Batch Inference (Bedrock Batch)</p>
+        <p class="kv"><strong>Real-time vs. Offline:</strong> For workloads that do not require real-time responses (e.g., generating product descriptions overnight, document analysis jobs), use Bedrock Batch Inference.</p>
+        <p class="kv"><strong>Cost Advantage:</strong> Offers approximately a 50% discount compared to standard on-demand pricing.</p>
+        <p class="lead">Cost Attribution via AWS Cost Explorer</p>
+        <p class="kv"><strong>Allocation Tags:</strong> Apply inference-level cost allocation tags (e.g., Team, Environment, FeatureID) to Bedrock API calls and resources.</p>
+        <p class="kv"><strong>Breakdown:</strong> Use AWS Cost Explorer to break down GenAI spend by department, preventing unmonitored budget consumption across business units.</p>
+        <p class="lead">Stopping Conditions &amp; Graceful Fallbacks</p>
+        <p class="kv"><strong>Agent Safeguards:</strong> Implement hard stopping conditions (e.g., max loop iterations, token limits) to prevent autonomous AI agents from getting stuck in recursive loops and generating runaway costs.</p>
+        <p class="kv"><strong>Cost-driven Fallbacks:</strong> During peak traffic or service degradation, fall back to lower-tier, cheaper models to maintain throughput without exceeding budget caps.</p>
+    </div>
+
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <p>This is an independent, unofficial study resource and is not affiliated with, endorsed by, or sponsored by Amazon Web Services, Inc. AWS, Amazon Bedrock, and all related marks are trademarks of Amazon.com, Inc. or its affiliates.</p>
+    <p>Hosted on Amazon S3 + Amazon CloudFront. &middot; <a href="index.html">&larr; Back to Study Notes</a></p>
+  </div>
+</footer>
+
+</body>
+</html>
