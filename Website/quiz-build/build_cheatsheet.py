@@ -109,6 +109,7 @@ def build():
     <a class="nav-brand" href="../index.html">AIP-C01 <span>Guide</span></a>
     <ul class="nav-links">
       <li><a href="index.html">Quiz</a></li>
+      <li><a href="exam.html">Mock Exam</a></li>
       <li><a href="cheatsheet.html">Cheat Sheet</a></li>
       <li><a href="../notes/index.html">Study Notes</a></li>
       <li><a href="../notes/map.html">The Map</a></li>
