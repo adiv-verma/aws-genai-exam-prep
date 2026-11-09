@@ -62,12 +62,12 @@
   section{padding:30px 0;}
 
   .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:22px 24px;}
-  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
-  @media (max-width:800px){ .grid2{grid-template-columns:1fr;} }
+  .grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:14px;}
 
   .exam-card{text-align:left;border:1px solid var(--line);border-radius:14px;padding:20px 22px;background:#fff;}
   .exam-card h3{margin:0 0 4px;font-size:17px;font-weight:800;}
   .exam-card .st{font-size:12.5px;font-weight:700;color:var(--ink-soft);margin-bottom:12px;}
+  .exam-card .note{font-size:13px;color:var(--ink-soft);margin:0 0 12px;}
   .exam-card .mix{display:flex;flex-wrap:wrap;gap:5px;margin:0 0 14px;}
   .exam-card .mix span{font-size:11px;font-weight:600;color:#4a5a70;background:#eef2f7;
                        border:1px solid #e3e8ef;border-radius:6px;padding:2px 8px;}
@@ -205,9 +205,10 @@
   <header class="hero">
     <div class="wrap">
       <span class="eyebrow">Timed Practice</span>
-      <h1>Two mock exams</h1>
-      <p class="lead">The 136 questions dealt into two papers of 68, each balanced across the five domains.
-      Two hours on the clock, no feedback until you submit &mdash; unless you decide otherwise before you start.</p>
+      <h1>Mock exams</h1>
+      <p class="lead">Two full papers of 68, dealt from the 136 questions and balanced across the five
+      domains, plus a shorter review paper of the questions you picked out. No feedback until you
+      submit &mdash; unless you decide otherwise before you start.</p>
     </div>
   </header>
 
@@ -339,7 +340,21 @@
   "use strict";
 
   var STORE = "aipc01.exam.v1";
-  var MINUTES = 120;
+  var MINUTES = 120;              // full-length papers
+  // Hand-picked review paper: question ids, taken by position within each set.
+  var PICKED = [2,4,14,15, 16,18,21,22,24,27,28,29,30, 36,38,40,41,42,
+                46,47,50,52,53, 62,63,67,71,72,75, 77,78,81,82,90,
+                91,92,99,105, 110,114,120, 127,131,132,134,135];
+  var PAPERS = [
+    { key:"A", title:"Exam A", note:"Half the bank, balanced across the five domains.", mins:MINUTES },
+    { key:"B", title:"Exam B", note:"The other half, same domain balance.", mins:MINUTES },
+    { key:"C", title:"Paper C", note:"The questions you picked out, in bank order.", mins:80 }
+  ];
+  function paper(k){
+    for (var i=0;i<PAPERS.length;i++) if (PAPERS[i].key === k) return PAPERS[i];
+    return PAPERS[0];
+  }
+  function minsOf(k){ return paper(k).mins; }
   var bank = null, all = [], exams = {}, st = null, tick = null;
 
   var $ = function(id){ return document.getElementById(id); };
@@ -388,6 +403,9 @@
     srt.forEach(function(q,i){ exams[i % 2 === 0 ? "A" : "B"].push(q); });
     // present each paper in bank order rather than grouped by domain
     ["A","B"].forEach(function(k){ exams[k].sort(function(a,b){ return a.id - b.id; }); });
+    var byId = {};
+    all.forEach(function(q){ byId[q.id] = q; });
+    exams.C = PICKED.map(function(id){ return byId[id]; }).filter(Boolean);
   }
   function mixOf(list){
     var c = {};
@@ -413,8 +431,8 @@
   function renderStart(){
     var host = $("examCards");
     host.innerHTML = "";
-    ["A","B"].forEach(function(k){
-      var list = exams[k], rec = store[k], mix = mixOf(list);
+    PAPERS.forEach(function(pp){
+      var k = pp.key, list = exams[k], rec = store[k], mix = mixOf(list);
       var card = document.createElement("div");
       card.className = "exam-card";
       var chips = Object.keys(mix).sort().map(function(d){
@@ -431,8 +449,9 @@
                  (leftMs > 0 ? fmt(leftMs) + " left" : "time expired") + "</div>";
       }
       card.innerHTML =
-        "<h3>Exam " + k + "</h3>" +
-        '<div class="st">' + list.length + " questions &middot; " + MINUTES + " minutes</div>" +
+        "<h3>" + pp.title + "</h3>" +
+        '<div class="st">' + list.length + " questions &middot; " + pp.mins + " minutes</div>" +
+        '<p class="note">' + pp.note + "</p>" +
         status +
         '<div class="mix">' + chips + "</div>";
       var row = document.createElement("div");
@@ -457,7 +476,7 @@
         row.appendChild(ab);
       } else {
         var sb = document.createElement("button");
-        sb.className = "btn"; sb.textContent = "Start Exam " + k;
+        sb.className = "btn"; sb.textContent = "Start " + pp.title;
         sb.onclick = function(){ begin(k, false); };
         row.appendChild(sb);
       }
@@ -472,10 +491,11 @@
   }
 
   function begin(k, confirmFirst){
-    if (confirmFirst && !confirm("Start Exam " + k + " again? Your previous attempt on this paper is cleared.")) return;
+    if (confirmFirst && !confirm("Start " + paper(k).title + " again? Your previous attempt on this paper is cleared.")) return;
+    var mins = minsOf(k);
     st = {
-      key: k, mode: chosenMode(), idx: 0, answers: {}, flags: {},
-      started: Date.now(), endsAt: Date.now() + MINUTES*60*1000, submitted: false
+      key: k, mode: chosenMode(), idx: 0, answers: {}, flags: {}, mins: mins,
+      started: Date.now(), endsAt: Date.now() + mins*60*1000, submitted: false
     };
     store[k] = st; save();
     enterRun();
@@ -483,7 +503,7 @@
 
   function enterRun(){
     show("viewRun");
-    $("runWho").textContent = "Exam " + st.key;
+    $("runWho").textContent = paper(st.key).title;
     $("runMode").textContent = st.mode === "practice" ? "Answers shown as you go" : "Exam conditions";
     startClock();
     renderQ();
@@ -618,7 +638,7 @@
     var qs = list();
     var answered = qs.filter(function(q){ return st.answers[q.id]; }).length;
     var flagged = qs.filter(function(q){ return st.flags[q.id]; }).length;
-    $("revLead").textContent = "Exam " + st.key + " — " + fmt(st.endsAt - Date.now()) + " remaining.";
+    $("revLead").textContent = paper(st.key).title + " — " + fmt(st.endsAt - Date.now()) + " remaining.";
     $("revStats").innerHTML =
       "<div><b>" + answered + "</b><span>Answered</span></div>" +
       "<div><b>" + (qs.length - answered) + "</b><span>Not answered</span></div>" +
@@ -658,9 +678,9 @@
     stopClock();
     var qs = exams[st.key];
     var pct = Math.round(st.correct / qs.length * 100);
-    var used = Math.min(st.finished - st.started, MINUTES*60*1000);
+    var used = Math.min(st.finished - st.started, (st.mins || MINUTES)*60*1000);
 
-    $("resEyebrow").textContent = "Exam " + st.key;
+    $("resEyebrow").textContent = paper(st.key).title;
     $("resTitle").textContent = st.auto ? "Time expired — submitted automatically" : "Exam complete";
     $("resStats").innerHTML =
       '<div><b class="score ' + (pct >= 72 ? "ok" : "no") + '">' + pct + "%</b><span>" +
