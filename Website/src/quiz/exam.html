@@ -207,7 +207,7 @@
       <span class="eyebrow">Timed Practice</span>
       <h1>Mock exams</h1>
       <p class="lead">Two full papers of 68, dealt from the 136 questions and balanced across the five
-      domains, plus a shorter review paper of the questions you picked out. No feedback until you
+      domains, plus shorter review papers drilling the ones you got wrong. No feedback until you
       submit &mdash; unless you decide otherwise before you start.</p>
     </div>
   </header>
@@ -345,10 +345,13 @@
   var PICKED = [2,4,14,15, 16,18,21,22,24,27,28,29,30, 36,38,40,41,42,
                 46,47,50,52,53, 62,63,67,71,72,75, 77,78,81,82,90,
                 91,92,99,105, 110,114,120, 127,131,132,134,135];
+  // Wrong on Paper C, by position in that paper.
+  var PICKED_D = [28,36,38,40,62,63,71,72,92,131];
   var PAPERS = [
     { key:"A", title:"Exam A", note:"Half the bank, balanced across the five domains.", mins:MINUTES },
     { key:"B", title:"Exam B", note:"The other half, same domain balance.", mins:MINUTES },
-    { key:"C", title:"Paper C", note:"The questions you picked out, in bank order.", mins:80 }
+    { key:"C", title:"Paper C", note:"The questions you picked out, in bank order.", mins:80 },
+    { key:"D", title:"Paper D", note:"The ten you got wrong on Paper C.", mins:20 }
   ];
   function paper(k){
     for (var i=0;i<PAPERS.length;i++) if (PAPERS[i].key === k) return PAPERS[i];
@@ -406,6 +409,7 @@
     var byId = {};
     all.forEach(function(q){ byId[q.id] = q; });
     exams.C = PICKED.map(function(id){ return byId[id]; }).filter(Boolean);
+    exams.D = PICKED_D.map(function(id){ return byId[id]; }).filter(Boolean);
   }
   function mixOf(list){
     var c = {};
