@@ -342,16 +342,16 @@
   var STORE = "aipc01.exam.v1";
   var MINUTES = 120;              // full-length papers
   // Hand-picked review paper: question ids, taken by position within each set.
-  var PICKED = [2,4,14,15, 16,18,21,22,24,27,28,29,30, 36,38,40,41,42,
-                46,47,50,52,53, 62,63,67,71,72,75, 77,78,81,82,83,90,
-                91,92,99,105, 110,114,120, 123,126,127,129,131,132,134,135];
-  // Wrong so far: Paper C misses plus Exam A misses, merged and de-duplicated.
-  var PICKED_D = [28,36,38,40,46,53,62,63,71,72,83,90,92,123,126,129,131,134];
+  var PICKED = [2,4,13,14,15, 16,18,21,22,24,27,28,29,30,31, 36,38,40,41,42,45,
+                46,47,50,52,53,54, 62,63,67,71,72,75, 77,78,81,82,83,90,
+                91,92,95,99,105, 110,114,117,120, 123,126,127,129,131,132,134,135];
+  // Wrong so far: Paper C, Exam A and Exam B misses, merged and de-duplicated.
+  var PICKED_D = [13,28,29,31,36,38,40,45,46,53,54,62,63,71,72,83,90,92,95,117,123,126,129,131,134];
   var PAPERS = [
     { key:"A", title:"Exam A", note:"Half the bank, balanced across the five domains.", mins:MINUTES },
     { key:"B", title:"Exam B", note:"The other half, same domain balance.", mins:MINUTES },
-    { key:"C", title:"Paper C", note:"The questions you picked out, plus misses from Exam A.", mins:90 },
-    { key:"D", title:"Paper D", note:"Everything you have got wrong so far, across Paper C and Exam A.", mins:30 }
+    { key:"C", title:"Paper C", note:"The questions you picked out, plus misses from Exams A and B.", mins:100 },
+    { key:"D", title:"Paper D", note:"Everything you have got wrong so far, across Paper C and Exams A and B.", mins:45 }
   ];
   function paper(k){
     for (var i=0;i<PAPERS.length;i++) if (PAPERS[i].key === k) return PAPERS[i];
