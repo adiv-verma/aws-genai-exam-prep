@@ -192,8 +192,9 @@ def build_map():
         counts[ph] += len(items)
     total = sum(counts.values())
 
-    body = [nav([("All Study Notes", "index.html"), ("The Map", "map.html"),
-                 ("Build Log", "../tasks/index.html"), ("Quiz", "../quiz/index.html")]),
+    body = [nav([("All Study Notes", "index.html"), ("Revision Sheet", "cheatsheet.html"),
+                 ("The Map", "map.html"), ("Build Log", "../tasks/index.html"),
+                 ("Quiz", "../quiz/index.html")]),
             f"""
 <header class="hero">
   <div class="wrap">
@@ -360,9 +361,9 @@ def build_index(total):
     for t in sorted(TASKS):
         by_dom.setdefault(t[0], []).append(t)
 
-    body = [nav([("Domains", "../index.html#domains"), ("The Map", "map.html"),
-                 ("Study Notes", "index.html"), ("Build Log", "../tasks/index.html"),
-                 ("Quiz", "../quiz/index.html")]),
+    body = [nav([("Domains", "../index.html#domains"), ("Revision Sheet", "cheatsheet.html"),
+                 ("The Map", "map.html"), ("Study Notes", "index.html"),
+                 ("Build Log", "../tasks/index.html"), ("Quiz", "../quiz/index.html")]),
             f"""
 <header class="hero">
   <div class="wrap">
@@ -382,6 +383,13 @@ def build_index(total):
         <p>All {total} concepts from these notes as one AI system being built end to end, in nine
         phases. Searchable. Every item links straight to the section that explains it.</p>
         <span class="tref">Open the map &rarr;</span>
+      </a>
+      <a class="scard" href="cheatsheet.html">
+        <span class="k">Revise</span>
+        <h3>Revision sheet &mdash; the whole thing on one page</h3>
+        <p>The key points from all 20 tasks in plain English, with the hard rules and common traps
+        called out. For the last pass before the exam.</p>
+        <span class="tref">Open the revision sheet &rarr;</span>
       </a>
       <a class="scard" href="#d1">
         <span class="k">The notes</span>
